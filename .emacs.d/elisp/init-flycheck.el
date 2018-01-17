@@ -14,6 +14,12 @@
   ;; Enable C++11 support for gcc
   (add-hook 'c++-mode-hook (lambda () (setq flycheck-gcc-language-standard "c++11")))
 
+  (require 'flycheck)
+  (bind-keys
+   :map flycheck-mode-map
+   ("M-n" . flycheck-next-error)
+   ("M-p" . flycheck-previous-error))
+
   ;; Disable clang check, gcc check works better
   (setq-default flycheck-disabled-checkers '(c/c++-clang))
 
