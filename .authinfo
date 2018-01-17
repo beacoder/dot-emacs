@@ -1,0 +1,2 @@
+machine imap.gmail.com login chenhuming@gmail.com password ******
+machine smtp.gmail.com login chenhuming@gmail.com password ******
