@@ -80,6 +80,7 @@
       (add-hook 'c-mode-common-hook
                 (lambda () (sanityinc/local-push-company-backend 'company-c-headers)))))
 
+
   ;; flycheck
   (add-hook 'c++-mode-hook
             (lambda () (setq flycheck-gcc-include-path
