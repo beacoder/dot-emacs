@@ -2,6 +2,22 @@
 ;; c/c++ programming mode setting
 ;;----------------------------------------------------------------------------
 
+;;; useful key-bindings
+;;----------------------------------------------------------------------------
+;;; Find tag
+;;
+;; ggtags-find-tag-dwim
+;; ggtags-find-reference
+;;
+;;; Grep tag
+;; ag-project
+;; counsel-git-grep
+;; ggtags-grep
+
+;;; Find file
+;; counsel-git
+;; counsel-locate
+
 ;; avoid default "gnu" style, use more popular one
 (setq c-default-style "linux")
 
