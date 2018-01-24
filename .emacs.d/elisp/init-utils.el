@@ -163,19 +163,6 @@ White space here is any of: space, tab, emacs newline (line feed, ASCII 10)."
     `(eval-after-load ,feature
        '(progn ,@body))))
 
-;;; elisp version of try...catch...finally
-;;; @see https://curiousprogrammer.wordpress.com/2009/06/08/error-handling-in-emacs-lisp/
-(defmacro safe-wrap (fn &rest clean-up)
-  `(unwind-protect
-       (let (retval)
-         (condition-case ex
-             (setq retval (progn ,fn))
-           ('error
-            (message (format "Caught exception: [%s]" ex))
-            (setq retval (cons 'exception (list ex)))))
-         retval)
-     ,@clean-up))
-
 
 ;;; steal from ag/dwim-at-point
 (defun smart/dwim-at-point ()
