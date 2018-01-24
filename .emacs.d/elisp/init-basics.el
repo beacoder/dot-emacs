@@ -53,8 +53,6 @@ The argument has the same meaning as in `apropos'."
         (set-marker (mark-marker) pos)
         (setq mark-ring (nbutlast mark-ring))
         (goto-char (marker-position (car (last mark-ring))))))))
-(global-set-key (kbd "C-c p") 'pop-to-mark-command)        
-(global-set-key (kbd "C-c n") 'unpop-to-mark-command)
 (setq set-mark-command-repeat-pop t)
 
 ;; bind goto-line command
