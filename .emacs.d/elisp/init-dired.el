@@ -9,7 +9,6 @@
 (require-package 'dired-details)
 (require-package 'dired-details+)
 (require-package 'dired+)
-(require-package 'dired-sort)
 (require-package 'dired-subtree)
 
 ;; In a file, how to go to its directory and place cursor on the file name
@@ -44,7 +43,6 @@
 
 (after-load 'dired
   (require 'dired+)
-  (require 'dired-sort)
   (require 'dired-subtree)
   ;; the background color is awful, disable it.
   (setq dired-subtree-use-backgrounds nil)

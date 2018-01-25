@@ -24,7 +24,7 @@ URL `https://sites.google.com/site/steveyegge2/effective-emacs'"
     (define-key esc-map "." #'xref-find-definitions)
     (define-key esc-map "?" #'xref-pop-marker-stack)
     (define-key esc-map "]" #'xref-find-apropos)
-    
+
     ;; don't prompt if we have candiddates at point
     (defun xref-find-apropos (pattern)
       "Find all meaningful symbols that match PATTERN.
@@ -317,7 +317,7 @@ Use in `isearch-mode-end-hook'."
 
 
 ;; show elisp error backtrace
-;; (setq debug-on-error t)
+(setq debug-on-error t)
 
 ;; enable flyspell in text-mode
 ;;(dolist (hook '(text-mode-hook))
@@ -329,8 +329,8 @@ Use in `isearch-mode-end-hook'."
 
 ;; fix Error: No word lists can be found for the language "zh_CN"
 ;; use apsell as ispell backend
-(setq-default ispell-program-name "aspell")  
-;; use American English as ispell default dictionary  
+(setq-default ispell-program-name "aspell")
+;; use American English as ispell default dictionary
 (ispell-change-dictionary "american" t)
 
 ;;----------------------------------------------------------------------------
