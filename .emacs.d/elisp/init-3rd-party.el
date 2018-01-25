@@ -206,6 +206,12 @@
   (add-hook 'yaml-mode-hook 'goto-address-prog-mode))
 
 
+;;; Call-graph
+(when (and (maybe-require-package 'hierarchy)
+           (maybe-require-package 'tree-mode))
+  (require 'call-graph))
+
+
 ;;; other setting
 (require 'init-hydra)
 (require 'init-git)
