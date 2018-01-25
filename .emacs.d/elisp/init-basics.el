@@ -74,7 +74,8 @@ The argument has the same meaning as in `apropos'."
 ;; @see http://stackoverflow.com/questions/2068697/emacs-is-slow-opening-recent-files
 (setq recentf-keep '(file-remote-p file-readable-p))
 
-(global-set-key (kbd "\C-cl") 'list-matching-lines)
+;; isearch-occur is better
+;; (global-set-key (kbd "\C-cl") 'list-matching-lines)
 
 ;;----------------------------------------------------------------------------
 ;; mode setting
