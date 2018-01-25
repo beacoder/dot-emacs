@@ -6,9 +6,6 @@
 ;; "Q"   => dired-do-find-regexp-and-replace
 ;; "M-q" => dired-do-query-replace-regexp
 
-(require-package 'dired-details)
-(require-package 'dired-details+)
-(require-package 'dired+)
 (require-package 'dired-subtree)
 
 ;; In a file, how to go to its directory and place cursor on the file name
@@ -42,7 +39,6 @@
 ;;     (diredfl-global-mode)))
 
 (after-load 'dired
-  (require 'dired+)
   (require 'dired-subtree)
   ;; the background color is awful, disable it.
   (setq dired-subtree-use-backgrounds nil)
