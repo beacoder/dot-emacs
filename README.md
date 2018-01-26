@@ -1,3 +1,3 @@
 # emacs.d
 
-Emacs configuration focuses on c++ development.
+Emacs configuration with a focus on c++ development.
