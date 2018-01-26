@@ -212,6 +212,10 @@
   (require 'call-graph))
 
 
+;;; package-lint
+(maybe-require-package 'package-lint)
+
+
 ;;; other setting
 (require 'init-hydra)
 (require 'init-git)
