@@ -9,12 +9,13 @@
                "Rakefile\\'" "\\.rake\\'" "\\.rxml\\'"
                "\\.rjs\\'" "\\.irbrc\\'" "\\.pryrc\\'" "\\.builder\\'" "\\.ru\\'"
                "\\.gemspec\\'" "Gemfile\\'" "Kirkfile\\'")
+(add-auto-mode 'conf-mode "Gemfile\\.lock\\'")
 
-(setq ruby-use-encoding-map nil)
+(setq-default
+ ruby-use-encoding-map nil
+ ruby-insert-encoding-magic-comment nil)
 
 (after-load 'ruby-mode
-  (define-key ruby-mode-map (kbd "TAB") 'indent-for-tab-command)
-
   ;; Stupidly the non-bundled ruby-mode isn't a derived mode of
   ;; prog-mode: we run the latter's hooks anyway in that case.
   (add-hook 'ruby-mode-hook
@@ -24,15 +25,21 @@
 
 (add-hook 'ruby-mode-hook 'subword-mode)
 
-;; TODO: hippie-expand ignoring : for names in ruby-mode
-;; TODO: hippie-expand adaptor for auto-complete sources
-
 (after-load 'page-break-lines
   (push 'ruby-mode page-break-lines-modes))
+
+(require-package 'rspec-mode)
+
+
+(define-derived-mode brewfile-mode ruby-mode "Brewfile"
+  "A major mode for Brewfiles, used by homebrew-bundle on MacOS.")
+
+(add-auto-mode 'brewfile-mode "Brewfile\\'")
 
 
 ;;; Inferior ruby
 (require-package 'inf-ruby)
+
 
 
 ;;; Ruby compilation
@@ -47,23 +54,16 @@
   (defalias 'rake 'ruby-compilation-rake))
 
 
-;;; Robe -> need to add "pry" into gem file first
-(require-package 'robe)
-(after-load 'ruby-mode
-  (add-hook 'ruby-mode-hook 'robe-mode))
 
-(after-load 'company
-  (dolist (hook '(ruby-mode-hook inf-ruby-mode-hook html-erb-mode-hook haml-mode))
-    (add-hook hook
-              (lambda () (sanityinc/local-push-company-backend 'company-robe)))))
+;;; Robe
+(when (maybe-require-package 'robe)
+  (after-load 'ruby-mode
+    (add-hook 'ruby-mode-hook 'robe-mode))
+  (after-load 'company
+    (dolist (hook (mapcar 'derived-mode-hook-name '(ruby-mode inf-ruby-mode html-erb-mode haml-mode)))
+      (add-hook hook
+                (lambda () (sanityinc/local-push-company-backend 'company-robe))))))
 
-
-;;; Customise highlight-symbol to not highlight do/end/class/def etc.
-(defun sanityinc/suppress-ruby-mode-keyword-highlights ()
-  "Suppress highlight-symbol for do/end etc."
-  (set (make-local-variable 'highlight-symbol-ignore-list)
-       (list (concat "\\_<" (regexp-opt '("do" "end")) "\\_>"))))
-(add-hook 'ruby-mode-hook 'sanityinc/suppress-ruby-mode-keyword-highlights)
 
 
 ;;; ri support
@@ -71,10 +71,17 @@
 (defalias 'ri 'yari)
 
 
-;;; YAML
 
-;; (maybe-require-package 'yaml-mode)
-;; (add-auto-mode 'yaml-mode "\\.yml\\.erb\\'")
+(require-package 'goto-gem)
+
+
+(require-package 'bundler)
+
+
+(when (maybe-require-package 'yard-mode)
+  (add-hook 'ruby-mode-hook 'yard-mode)
+  (after-load 'yard-mode
+    (diminish 'yard-mode)))
 
 
 ;;; ERB
@@ -89,11 +96,10 @@
   (mmm-add-mode-ext-class mode "\\.erb\\'" 'erb))
 
 (let ((html-erb-modes '(html-mode html-erb-mode nxml-mode)))
- (dolist (mode html-erb-modes)
-  ;; (sanityinc/set-up-mode-for-erb mode)
-  ;;  (mmm-add-mode-ext-class mode "\\.r?html\\(\\.erb\\)?\\'" 'html-js)
-  ;;  (mmm-add-mode-ext-class mode "\\.r?html\\(\\.erb\\)?\\'" 'html-css)
-  ))
+  (dolist (mode html-erb-modes)
+    (sanityinc/set-up-mode-for-erb mode)
+    (mmm-add-mode-ext-class mode "\\.r?html\\(\\.erb\\)?\\'" 'html-js)
+    (mmm-add-mode-ext-class mode "\\.r?html\\(\\.erb\\)?\\'" 'html-css)))
 
 (mapc 'sanityinc/set-up-mode-for-erb
       '(coffee-mode js-mode js2-mode js3-mode markdown-mode textile-mode))
@@ -102,7 +108,9 @@
 
 (add-auto-mode 'html-erb-mode "\\.rhtml\\'" "\\.html\\.erb\\'")
 (add-to-list 'auto-mode-alist '("\\.jst\\.ejs\\'"  . html-erb-mode))
+
 (mmm-add-mode-ext-class 'yaml-mode "\\.yaml\\(\\.erb\\)?\\'" 'erb)
+(sanityinc/set-up-mode-for-erb 'yaml-mode)
 
 (dolist (mode (list 'js-mode 'js2-mode 'js3-mode))
   (mmm-add-mode-ext-class mode "\\.js\\.erb\\'" 'erb))
@@ -130,14 +138,18 @@
 ;(add-to-list 'mmm-set-file-name-for-modes 'ruby-mode)
 
 
-(require-package 'rinari)
-(after-load 'rinari
-  (diminish 'rinari-minor-mode "Rin"))
-(global-rinari-mode)
+;;----------------------------------------------------------------------------
+;; rails settings
+;;----------------------------------------------------------------------------
 
-(defun update-rails-ctags ()
-  (interactive)
-  (let ((default-directory (or (rinari-root) default-directory)))
-    (shell-command (concat "ctags -a -e -f " rinari-tags-file-name " --tag-relative -R app lib vendor test"))))
+(when (maybe-require-package 'projectile-rails)
+  (add-hook 'projectile-mode-hook
+            (lambda () (projectile-rails-global-mode projectile-mode)))
+  (after-load 'projectile
+    (after-load 'guide-key
+      (add-to-list 'guide-key/guide-key-sequence "C-c r")
+      (add-to-list 'guide-key/guide-key-sequence "C-c r !")
+      (add-to-list 'guide-key/guide-key-sequence "C-c r g"))))
+
 
 (provide 'init-ruby)
