@@ -209,7 +209,8 @@
 ;;; Call-graph
 (when (and (maybe-require-package 'hierarchy)
            (maybe-require-package 'tree-mode))
-  (require 'call-graph))
+  (require 'call-graph)
+  (global-set-key (kbd "C-c g") 'call-graph))
 
 
 ;;; package-lint
