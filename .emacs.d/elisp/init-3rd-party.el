@@ -121,20 +121,21 @@
 
 
 ;;; key-binding reminder
-(require-package 'guide-key)
-(setq guide-key/guide-key-sequence '("C-c"    ;; general
-                                     "C-x r"  ;; register
-                                     "C-x t"  ;; ttcn3
-                                     "C-c M"  ;; ggtags
-                                     "C-c r"  ;; rtags
-                                     ))
-(add-hook 'after-init-hook 'guide-key-mode)
-(after-load 'guide-key
-  (diminish 'guide-key-mode))
+(when (maybe-require-package 'guide-key)
+  (setq guide-key/guide-key-sequence '("C-c"    ;; general
+                                       "C-x r"  ;; register
+                                       "C-x t"  ;; ttcn3
+                                       "C-c M"  ;; ggtags
+                                       "C-c r"  ;; rtags
+                                       ))
+  (add-hook 'after-init-hook 'guide-key-mode)
+  (require 'guide-key))
 
 
 ;;; diminish
 (require-package 'diminish)
+(after-load 'guide-key
+  (diminish 'guide-key-mode))
 
 
 ;;; ggtags setting
