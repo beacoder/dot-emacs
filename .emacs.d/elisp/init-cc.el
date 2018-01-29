@@ -60,7 +60,6 @@
   (local-set-key (kbd "C-c o") 'ff-find-other-file)
   (local-set-key (kbd "C-M-a") 'c-beginning-of-defun)
   (local-set-key (kbd "C-M-e") 'c-end-of-defun)
-  (local-set-key (kbd "C-c C-j") 'imenu)
 
   ;; we like auto-newline and hungry-delete
   (c-toggle-auto-hungry-state 1)
