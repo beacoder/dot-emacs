@@ -9,8 +9,8 @@
   (dolist (var '("SSH_AUTH_SOCK" "SSH_AGENT_PID" "GPG_AGENT_INFO" "LANG" "LC_CTYPE" "GTAGSLIBPATH"))
     (add-to-list 'exec-path-from-shell-variables var)))
 
-(require 'exec-path-from-shell)
-(exec-path-from-shell-initialize)
+(when (memq window-system '(mac ns x))
+  (exec-path-from-shell-initialize))
 
 ;; kill the buffer after the ansi-term is exited
 (defadvice term-sentinel (around my-advice-term-sentinel (proc msg))
