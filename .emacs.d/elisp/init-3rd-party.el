@@ -210,7 +210,6 @@
 ;;; Call-graph
 (when (and (maybe-require-package 'hierarchy)
            (maybe-require-package 'tree-mode))
-  (require 'call-graph)
   (global-set-key (kbd "C-c g") 'call-graph))
 
 
@@ -220,7 +219,6 @@
 
 ;;; find-file-in-project
 (when (maybe-require-package 'find-file-in-project)
-  (require 'find-file-in-project)
   (global-set-key (kbd "C-c f") 'find-file-in-project-by-selected))
 
 
