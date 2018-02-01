@@ -210,6 +210,7 @@
 ;;; Call-graph
 (when (and (maybe-require-package 'hierarchy)
            (maybe-require-package 'tree-mode))
+  (require 'call-graph) ; remove this when call-graph make its way to melpa.
   (global-set-key (kbd "C-c g") 'call-graph))
 
 
