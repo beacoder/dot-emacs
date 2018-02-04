@@ -19,7 +19,8 @@ URL `https://sites.google.com/site/steveyegge2/effective-emacs'"
 
 (after-load "xref"
   (progn
-    (define-key esc-map "]" #'xref-find-apropos)
+    (define-key esc-map "?" #'xref-find-apropos)
+    (define-key esc-map "]" #'xref-find-references)
 
     ;; Don't prompt if we have candiddates at point
     (defun xref-find-apropos (pattern)
