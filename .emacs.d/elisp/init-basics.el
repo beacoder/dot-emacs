@@ -19,11 +19,9 @@ URL `https://sites.google.com/site/steveyegge2/effective-emacs'"
 
 (after-load "xref"
   (progn
-    (define-key esc-map "." #'xref-find-definitions)
-    (define-key esc-map "?" #'xref-pop-marker-stack)
     (define-key esc-map "]" #'xref-find-apropos)
 
-    ;; don't prompt if we have candiddates at point
+    ;; Don't prompt if we have candiddates at point
     (defun xref-find-apropos (pattern)
       "Find all meaningful symbols that match PATTERN.
 The argument has the same meaning as in `apropos'."
