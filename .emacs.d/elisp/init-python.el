@@ -36,10 +36,10 @@
   (after-load 'anaconda-mode
     (bind-keys
      :map anaconda-mode-map
-     ("M-?" . anaconda-mode-go-back)
+     ("M-," . anaconda-mode-go-back)
      ("M-]" . anaconda-mode-find-references)
      ("M-=" . anaconda-mode-find-assignments)
-     ("M-," . anaconda-mode-show-doc)))
+     ("M-?" . anaconda-mode-show-doc)))
 
   (when (maybe-require-package 'company-anaconda)
     (after-load 'company

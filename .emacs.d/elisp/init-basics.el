@@ -16,8 +16,6 @@ URL `https://sites.google.com/site/steveyegge2/effective-emacs'"
     (backward-kill-word 1)))
 (global-set-key (kbd "C-w") 'backward-kill-word-or-region)
 
-;; bind pop-tag-mark
-(global-set-key (kbd "M-?") 'pop-tag-mark)
 
 (after-load "xref"
   (progn

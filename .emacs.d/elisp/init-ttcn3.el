@@ -29,7 +29,7 @@
           (message "TTCN3 tags has been updated..."))))))
 
 (after-load 'ttcn3
-  ;; Allow my global binding of M-? to work when paredit is active
+  ;; Don't shadow global key-bindings
   (define-key ttcn3-mode-map (kbd "M-?") nil)
   (define-key ttcn3-mode-map (kbd ",") nil)
   (define-key ttcn3-mode-map (kbd "C-c C-s") nil)
