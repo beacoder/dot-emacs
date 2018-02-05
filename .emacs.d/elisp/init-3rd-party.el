@@ -218,11 +218,6 @@
 (maybe-require-package 'package-lint)
 
 
-;;; find-file-in-project
-(when (maybe-require-package 'find-file-in-project)
-  (global-set-key (kbd "C-c f") 'find-file-in-project-by-selected))
-
-
 ;;; other setting
 (require 'init-hydra)
 (require 'init-git)
