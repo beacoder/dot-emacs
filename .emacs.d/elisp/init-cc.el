@@ -16,7 +16,6 @@
 ;;; Find file
 ;; counsel-git
 ;; ggtags-find-file
-;; find-file-in-project-by-selected
 ;; counsel-locate
 
 ;; avoid default "gnu" style, use more popular one
