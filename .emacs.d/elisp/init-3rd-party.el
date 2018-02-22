@@ -207,10 +207,8 @@
 
 
 ;;; Call-graph
-(when (and (maybe-require-package 'queue)
-           (maybe-require-package 'hierarchy)
+(when (and (maybe-require-package 'hierarchy)
            (maybe-require-package 'tree-mode))
-  (require 'call-graph) ; remove this when call-graph makes its way into melpa.
   (global-set-key (kbd "C-c g") 'call-graph)
   (setq call-graph-path-to-global "~/private/gtags-6.5.7/bin/")
   (dolist (filter '("grep -v \"Test/\""
