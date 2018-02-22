@@ -207,10 +207,9 @@
 
 
 ;;; Call-graph
-(when (and (maybe-require-package 'hierarchy)
-           (maybe-require-package 'tree-mode))
+(when (maybe-require-package 'call-graph)
   (global-set-key (kbd "C-c g") 'call-graph)
-  (setq call-graph-path-to-global "~/private/gtags-6.5.7/bin/")
+  ;; (setq call-graph-path-to-global "~/private/gtags-6.5.7/bin/")
   (dolist (filter '("grep -v \"Test/\""
                     "grep -v \"_SUITE/\""
                     "grep -v \"/test-src/\""
