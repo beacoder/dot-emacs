@@ -221,6 +221,18 @@
 (maybe-require-package 'package-lint)
 
 
+;;; diff-hl
+(when (maybe-require-package 'diff-hl)
+  (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh)
+  (add-hook 'after-init-hook 'global-diff-hl-mode)
+
+  (after-load 'diff-hl
+    (define-key diff-hl-mode-map
+      (kbd "<left-fringe> <mouse-1>")
+      'diff-hl-diff-goto-hunk)))
+(maybe-require-package 'browse-at-remote)
+
+
 ;;; other setting
 (require 'init-hydra)
 (require 'init-git)
@@ -238,3 +250,4 @@
 (require-package 'buffer-move)
 
 (provide 'init-3rd-party)
+;;; init-3rd-party.el ends here

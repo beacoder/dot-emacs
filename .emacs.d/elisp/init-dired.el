@@ -51,11 +51,8 @@
   (define-key dired-mode-map "l" 'dired-subtree-insert)
   (define-key dired-mode-map "L" 'dired-subtree-remove)
   (define-key dired-mode-map (kbd "M-b") nil)
-  (define-key dired-mode-map (kbd "M-r") nil)
-  (define-key dired-mode-map (kbd "M-s") nil))
-
-(when (maybe-require-package 'diff-hl)
-  (after-load 'dired
-    (add-hook 'dired-mode-hook 'diff-hl-dired-mode)))
+  (define-key dired-mode-map (kbd "M-s") nil)
+  (define-key dired-mode-map (kbd "M-r") nil))
 
 (provide 'init-dired)
+;;; init-dired.el ends here
