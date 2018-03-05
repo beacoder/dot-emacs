@@ -11,8 +11,7 @@
 (setq desktop-path (list user-emacs-directory)
       desktop-auto-save-timeout 600)
 
-(when (fboundp 'desktop-save-mode)
-    (desktop-save-mode 1))
+(desktop-save-mode 1)
 
 (defadvice desktop-read (around time-restore activate)
   (let ((start-time (current-time)))
@@ -39,9 +38,9 @@
 (setq history-length 1000)
 (add-hook 'after-init-hook 'savehist-mode)
 
-(require 'session)
+(require-package 'session)
 
-;; (setq session-save-file (expand-file-name "~/.emacs.d/.session"))
+(setq session-save-file (expand-file-name ".session" user-emacs-directory))
 (setq session-name-disable-regexp "\\(?:\\`'/tmp\\|\\.git/[A-Z_]+\\'\\)"
       session-save-file-coding-system 'utf-8)
 (add-hook 'after-init-hook 'session-initialize)
