@@ -15,7 +15,7 @@
     ;; (define-key company-mode-map (kbd "M-/") 'company-complete)
     ;; (define-key company-active-map (kbd "M-/") 'company-select-next)
     (setq-default company-backends
-                 '((company-capf company-dabbrev-code company-dabbrev)
+                 '((company-capf company-dabbrev-code company-dabbrev) ; changes for c++
                    (company-gtags company-etags company-keywords)
                    company-files company-cmake)
                  company-dabbrev-other-buffers 'all
