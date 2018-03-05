@@ -233,6 +233,12 @@
 (maybe-require-package 'browse-at-remote)
 
 
+;;; csv-mode
+(require-package 'csv-mode)
+(add-auto-mode 'csv-mode "\\.[Cc][Ss][Vv]\\'")
+(setq csv-separators '("," ";" "|" " "))
+
+
 ;;; other setting
 (require 'init-hydra)
 (require 'init-git)
