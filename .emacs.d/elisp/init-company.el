@@ -2,7 +2,7 @@
 ;; company-mode setting
 ;;----------------------------------------------------------------------------
 
-;; (setq tab-always-indent 'complete)  ;; use 't when company is disabled
+(setq tab-always-indent 'complete)
 (add-to-list 'completion-styles 'initials t)
 (setq completion-cycle-threshold 5
       company-show-numbers t)
