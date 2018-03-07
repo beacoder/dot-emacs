@@ -220,7 +220,7 @@
                     "grep -v \"_SUITE/\""
                     "grep -v \"/test-src/\""
                     "grep -v \"/TestPkg/\""))
-    (add-to-list 'call-graph-filters filter)))
+    (add-to-list 'call-graph-search-filters filter)))
 
 
 ;;; package-lint
