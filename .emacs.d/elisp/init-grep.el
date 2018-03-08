@@ -11,7 +11,6 @@
 ;; install the_silver_searcher(ag) first
 (when (and (executable-find "ag")
            (maybe-require-package 'ag))
-  (require-package 'ag)
   (require-package 'wgrep-ag)
   (setq-default ag-highlight-search t)
   (global-set-key (kbd "M-s") 'ag-project)
