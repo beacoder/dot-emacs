@@ -215,12 +215,12 @@
 ;;; Call-graph
 (when (maybe-require-package 'call-graph)
   (global-set-key (kbd "C-c g") 'call-graph)
-  ;; (setq call-graph-path-to-global "~/private/gtags-6.5.7/bin/")
+  ;; (setq cg-path-to-global "~/private/gtags-6.5.7/bin/")
   (dolist (filter '("grep -v \"Test/\""
                     "grep -v \"_SUITE/\""
                     "grep -v \"/test-src/\""
                     "grep -v \"/TestPkg/\""))
-    (add-to-list 'call-graph-search-filters filter)))
+    (add-to-list 'cg-search-filters filter)))
 
 
 ;;; package-lint
