@@ -14,7 +14,7 @@
 (defhydra hydra-multiple-cursors (:hint nil)
   "
                  ^Commands^
-----------------------------------------------
+--------------------------------------------
 [_p_]   Next    [_n_]   Next    [_q_] Quit
 [_P_]   Skip    [_N_]   Skip
 [_M-p_] Unmark  [_M-n_] Unmark
@@ -32,7 +32,7 @@
 (defhydra hydra-window (:hint nil)
   "
                  ^Commands^
--------------------------------------------------------------
+--------------------------------------------
 [_s_] split-window            [_q_] quit
 [_d_] dedicate-current-window
 "
@@ -44,7 +44,7 @@
 (defhydra hydra-quickness (:hint nil)
   "
                  ^Commands^
------------------------------------------
+--------------------------------------------
 [_a_] Swiper-at-point [_s_] Counsel-git-grep   [_g_] Counsel-git     [_l_] Counsel-locate
 [_u_] Update-GTAGS    [_c_] Mode-Compile       [_C_] Compile         [_r_] Recompile
 [_e_] Eww-Open-File   [_w_] Google-Search-Word [_k_] Google-Lucky    [_p_] Previous-mark
