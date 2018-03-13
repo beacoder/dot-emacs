@@ -13,7 +13,7 @@
 
 (defhydra hydra-multiple-cursors (:hint nil)
   "
-     ^Up^            ^Down^        ^Other^
+                 ^Commands^
 ----------------------------------------------
 [_p_]   Next    [_n_]   Next    [_q_] Quit
 [_P_]   Skip    [_N_]   Skip
@@ -30,38 +30,15 @@
 (global-set-key (kbd "C-x m")  'hydra-multiple-cursors/body)
 
 (defhydra hydra-window (:hint nil)
-   "
-    ^Move^        ^Split^             ^Switch^          ^Other^
+  "
+                 ^Commands^
 -------------------------------------------------------------
-[_h_] ←       [_v_] vertical      [_b_] buffer      [_q_] quit
-[_j_] ↓       [_x_] horizontal    [_f_] find files
-[_k_] ↑       [_z_] undo          [_S_] save
-[_l_] →       [_Z_] reset         [_d_] delete
-[_F_] follow  [_o_] only this
+[_s_] split-window            [_q_] quit
+[_d_] dedicate-current-window
 "
-   ("h" windmove-left)
-   ("j" windmove-down)
-   ("k" windmove-up)
-   ("l" windmove-right)
-   ("b" helm-mini)
-   ("f" helm-find-files)
-   ("F" follow-mode)
-   ("v" (lambda ()
-          (interactive)
-          (split-window-right)
-          (windmove-right)))
-   ("x" (lambda ()
-          (interactive)
-          (split-window-below)
-          (windmove-down)))
-   ("S" save-buffer)
-   ("d" delete-window)
-   ("o" delete-other-windows)
-   ("z" (progn
-          (winner-undo)
-          (setq this-command 'winner-undo)))
-   ("Z" winner-redo)
-   ("q" nil))
+  ("s" sanityinc/split-window)
+  ("d" sanityinc/toggle-current-window-dedication :exit t)
+  ("q" nil))
 (global-set-key (kbd "C-x w") 'hydra-window/body)
 
 (defhydra hydra-quickness (:hint nil)
@@ -92,3 +69,4 @@
 
 
 (provide 'init-hydra)
+;;; init-hydra.el ends here

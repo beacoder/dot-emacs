@@ -76,9 +76,6 @@ Call a second time to restore the original window configuration."
     (window-configuration-to-register :sanityinc/split-window)
     (switch-to-buffer-other-window nil)))
 
-(global-set-key (kbd "<f7>") 'sanityinc/split-window)
-
-
 (defun sanityinc/toggle-current-window-dedication ()
   "Toggle whether the current window is dedicated to its current buffer."
   (interactive)
@@ -88,8 +85,6 @@ Call a second time to restore the original window configuration."
     (message "Window %sdedicated to %s"
              (if was-dedicated "no longer " "")
              (buffer-name))))
-
-(global-set-key (kbd "C-c <down>") 'sanityinc/toggle-current-window-dedication)
 
 
 (unless (memq window-system '(nt w32))
