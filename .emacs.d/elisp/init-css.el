@@ -54,7 +54,7 @@
 
 ;;; company-css
 (after-load 'company
-  (add-hook 'nxml-mode-hook (λ () (sanityinc/local-push-company-backend 'company-css))))
+  (add-hook 'nxml-mode-hook (lambda () (sanityinc/local-push-company-backend 'company-css))))
 
 
 (provide 'init-css)
