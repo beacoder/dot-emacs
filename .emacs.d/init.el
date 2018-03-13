@@ -19,14 +19,6 @@
 (when (is-modern-emacs) (require 'init-elpa))
 
 
-;;; Multiple major modes
-(when (is-modern-emacs)
-  (require-package 'mmm-mode)
-  (require 'mmm-auto)
-  (setq mmm-global-mode 'buffers-with-submode-classes
-        mmm-submode-decoration-level 2))
-
-
 ;;----------------------------------------------------------------------------
 ;; key-bindings for specific mode in emacs
 ;;----------------------------------------------------------------------------
