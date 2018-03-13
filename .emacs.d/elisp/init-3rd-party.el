@@ -245,6 +245,13 @@
 (setq csv-separators '("," ";" "|" " "))
 
 
+;;; Multiple major modes
+(require-package 'mmm-mode)
+(require 'mmm-auto)
+(setq mmm-global-mode 'buffers-with-submode-classes
+      mmm-submode-decoration-level 2)
+
+
 ;;; other setting
 (require 'init-hydra)
 (require 'init-git)
