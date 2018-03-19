@@ -114,10 +114,10 @@
 ;;; regex-tool setting
 ;; "C-c C-c" => force an update
 ;; "C-c C-k" => quit regex-tool
-(require-package 'regex-tool)
-;; use pcre instead of emacs
-(setq regex-tool-backend 'perl)
-(global-set-key (kbd "C-c C-r") 'regex-tool)
+(when (maybe-require-package 'regex-tool)
+  ;; use pcre instead of emacs
+  (set-default regex-tool-backend 'perl)
+  (global-set-key (kbd "C-c C-r") 'regex-tool))
 
 
 ;;; zenburn setting
