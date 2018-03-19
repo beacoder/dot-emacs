@@ -115,7 +115,7 @@
 ;; "C-c C-c" => force an update
 ;; "C-c C-k" => quit regex-tool
 (when (maybe-require-package 'regex-tool)
-  ;; use pcre instead of emacs
+  (require 'regex-tool)
   (set-default regex-tool-backend 'perl)
   (global-set-key (kbd "C-c C-r") 'regex-tool))
 
