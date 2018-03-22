@@ -214,6 +214,7 @@
 
 ;;; Call-graph
 (when (maybe-require-package 'call-graph)
+  (require 'call-graph)
   (global-set-key (kbd "C-c g") 'call-graph)
   ;; (setq cg-path-to-global "~/private/gtags-6.5.7/bin/")
   (dolist (filter '("grep -v \"Test/\""
