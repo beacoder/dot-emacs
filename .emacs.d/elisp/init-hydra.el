@@ -33,11 +33,14 @@
   "
                  ^Commands^
 --------------------------------------------
-[_s_] split-window            [_q_] quit
-[_d_] dedicate-current-window
+[_s_] split-window    [_d_] dedicate-current-window
+[_p_] winner-undo     [_n_] winner-redo
+[_q_] quit
 "
   ("s" sanityinc/split-window)
   ("d" sanityinc/toggle-current-window-dedication :exit t)
+  ("p" winner-undo)
+  ("n" winner-redo)
   ("q" nil))
 (global-set-key (kbd "C-x w") 'hydra-window/body)
 
