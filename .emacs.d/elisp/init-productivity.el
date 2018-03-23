@@ -56,7 +56,7 @@ See also: `xah-copy-to-register-1', `insert-register'."
 (defun bright-point-to-register-3()
   "Save current point to register 3."
   (interactive)
-  (when (yes-or-no-p "Overwite register 3 ?")
+  (when (yes-or-no-p "Override register 3")
     (point-to-register ?3)
     (message "Point saved to register 3")))
 
@@ -68,7 +68,7 @@ See also: `xah-copy-to-register-1', `insert-register'."
 (defun bright-point-to-register-5 ()
   "Save current point to register 5."
   (interactive)
-  (when (yes-or-no-p "Overwite register 5 ?")
+  (when (yes-or-no-p "Override register 5")
     (point-to-register ?5)
     (message "Point saved to register 5")))
 
