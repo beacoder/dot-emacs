@@ -11,7 +11,6 @@
 ;; '<TAB>' => Re-align the table, needed by above commands
 ;; 'C-c |' => create a table, or convert region into a table.
 
-(maybe-require-package 'org-fstree)
 (when *is-a-mac*
   (maybe-require-package 'grab-mac-link))
 
