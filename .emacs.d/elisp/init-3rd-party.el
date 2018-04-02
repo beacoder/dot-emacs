@@ -253,6 +253,13 @@
       mmm-submode-decoration-level 2)
 
 
+;;; nyan-mode
+(when (maybe-require-package 'nyan-mode)
+  (setq-default nyan-animate-nyancat t
+                nyan-wavy-trail t)
+  (add-hook 'after-init-hook 'nyan-mode))
+
+
 ;;; other setting
 (require 'init-hydra)
 (require 'init-git)
