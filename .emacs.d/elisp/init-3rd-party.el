@@ -255,7 +255,7 @@
 
 ;;; nyan-mode
 (when (maybe-require-package 'nyan-mode)
-  (setq-default nyan-animate-nyancat t
+  (setq-default nyan-animate-nyancat nil
                 nyan-wavy-trail t)
   (add-hook 'after-init-hook 'nyan-mode))
 
