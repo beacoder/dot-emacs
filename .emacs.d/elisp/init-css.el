@@ -36,14 +36,18 @@
 
 ;;; SASS and SCSS
 (require-package 'sass-mode)
-(require-package 'scss-mode)
+(unless (fboundp 'scss-mode)
+  ;; Prefer the scss-mode built into Emacs
+  (require-package 'scss-mode))
 (setq-default scss-compile-at-save nil)
 
 
 ;;; LESS
-(require-package 'less-css-mode)
-(when (featurep 'js2-mode)
-  (require-package 'skewer-less))
+(unless (fboundp 'less-css-mode)
+  ;; Prefer the scss-mode built into Emacs
+  (require-package 'less-css-mode))
+(when (maybe-require-package 'skewer-less)
+  (add-hook 'less-css-mode-hook 'skewer-less-mode))
 
 
 ;;; Use eldoc for syntax hints
