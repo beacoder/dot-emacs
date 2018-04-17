@@ -7,6 +7,13 @@
 (require-package 'git-blamed)
 (require-package 'gitignore-mode)
 (require-package 'gitconfig-mode)
+
+
+;; "M-x git-timemachine" => git-timemachine
+;; "p"                   => previous historic version
+;; "n"                   => next historic version
+;; "g"                   => nth revision
+;; "q"                   => quit time machine
 (require-package 'git-timemachine)
 
 
