@@ -88,6 +88,9 @@ The argument has the same meaning as in `apropos'."
 (add-hook 'after-init-hook 'global-auto-revert-mode)
 ;; I use this mode for log files (Emacs’s version of tail -f) to easily search through the logs.
 (add-to-list 'auto-mode-alist '("\\.log\\'" . auto-revert-mode))
+;; Auto refresh dired, but be quiet about it
+(setq global-auto-revert-non-file-buffers t
+      auto-revert-verbose nil)
 
 ;; enable ibuffer-mode
 (when (fboundp 'ibuffer-mode)
