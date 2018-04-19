@@ -26,10 +26,6 @@
   (interactive)
   (save-excursion ad-do-it))
 
-;; Auto refresh dired, but be quiet about it
-(setq global-auto-revert-non-file-buffers t
-      auto-revert-verbose nil)
-
 ;; Prefer g-prefixed coreutils version of standard utilities when available
 (let ((gls (executable-find "gls")))
   (when gls (setq insert-directory-program gls)))
