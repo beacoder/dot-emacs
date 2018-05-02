@@ -42,8 +42,6 @@
     (global-dired-hide-details-mode -1))
   (setq dired-recursive-deletes 'top)
   (define-key dired-mode-map [mouse-2] 'dired-find-file)
-  (add-hook 'dired-mode-hook
-            (lambda () (guide-key/add-local-guide-key-sequence "%")))
   (define-key dired-mode-map "l" 'dired-subtree-insert)
   (define-key dired-mode-map "L" 'dired-subtree-remove)
   (define-key dired-mode-map (kbd "M-b") nil)
