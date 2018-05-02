@@ -144,7 +144,7 @@
 
 (when (maybe-require-package 'projectile-rails)
   (add-hook 'projectile-mode-hook
-            (λ () (projectile-rails-global-mode projectile-mode))))
+            (lambda () (projectile-rails-global-mode projectile-mode))))
 
 
 (provide 'init-ruby)
