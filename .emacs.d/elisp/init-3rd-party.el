@@ -128,12 +128,7 @@
 
 ;;; key-binding reminder
 (when (maybe-require-package 'guide-key)
-  (setq guide-key/guide-key-sequence '("C-c"    ;; general
-                                       "C-x r"  ;; register
-                                       "C-x t"  ;; ttcn3
-                                       "C-c M"  ;; ggtags
-                                       "C-c r"  ;; rtags
-                                       ))
+  (setq guide-key/guide-key-sequence t)
   (add-hook 'after-init-hook 'guide-key-mode)
   (require 'guide-key))
 
