@@ -9,8 +9,8 @@
 ;; ggtags-find-reference
 ;;
 ;;; Grep tag
-;; counsel-git-grep
 ;; ag-project
+;; counsel-git-grep
 ;; ggtags-grep
 
 ;;; Find file
