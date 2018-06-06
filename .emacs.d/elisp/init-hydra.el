@@ -15,9 +15,10 @@
   "
                  ^Commands^
 --------------------------------------------
-[_p_]   Next          [_n_]   Next             [_q_] Quit
-[_P_]   Skip          [_N_]   Skip
-[_M-p_] Unmark        [_M-n_] Unmark
+[_p_]   Next    [_n_]   Next    [_a_] All
+[_P_]   Skip    [_N_]   Skip    [_e_] Edit
+[_M-p_] Unmark  [_M-n_] Unmark  [_q_] Quit
+^ ^             ^ ^
 "
   ("n" mc/mark-next-like-this)
   ("N" mc/skip-to-next-like-this)
@@ -25,6 +26,8 @@
   ("p" mc/mark-previous-like-this)
   ("P" mc/skip-to-previous-like-this)
   ("M-p" mc/unmark-previous-like-this)
+  ("a" mc/mark-all-like-this)
+  ("e" mc/edit-lines)
   ("q" nil))
 (global-set-key (kbd "C-x m")  'hydra-multiple-cursors/body)
 
