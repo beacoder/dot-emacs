@@ -9,15 +9,15 @@
 (require-package 'gitconfig-mode)
 
 
-;; "M-x git-timemachine" => git-timemachine
-;; "p"                   => previous historic version
-;; "n"                   => next historic version
-;; "g"                   => nth revision
-;; "q"                   => quit time machine
+;; "git-timemachine" => git-timemachine
+;; "p"               => previous historic version
+;; "n"               => next historic version
+;; "g"               => nth revision
+;; "q"               => quit time machine
 (require-package 'git-timemachine)
 
 
-;; "magit-blame"         => for each line show the revision in which it was added
+;; "magit-blame"     => for each line show the revision in which it was added
 (when (maybe-require-package 'magit)
   (setq-default magit-diff-refine-hunk t)
 
