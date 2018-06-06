@@ -28,8 +28,6 @@
 
 ;;; multiple-cursors setting
 (require-package 'multiple-cursors)
-(global-set-key (kbd "C-c C-s") 'mc/mark-all-like-this)
-(global-set-key (kbd "C-c C-e") 'mc/edit-lines)
 
 
 ;;; undo-tree setting
