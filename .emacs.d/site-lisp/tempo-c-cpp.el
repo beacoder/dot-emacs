@@ -311,7 +311,7 @@
                        'c++-tempo-tags)
 
 (tempo-define-template "c++-for-container"
-                       '(> "for (" (if (y-or-n-p "const_iterator? ") "const auto " "auto ")
+                       '(> "for (" "auto "
                            (p "iterator: " iter) " = " (p "container: " container) ".begin(); " (s iter) " != " (s container) ".end(); ++" (s iter) ")" n
                            > "{" > n> r n "}" > n>
                            )
