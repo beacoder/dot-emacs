@@ -70,6 +70,7 @@
 ;;            getset                  accessor/mutator
 ;;            cfor                    for (auto it = container.begin(); it != container.end(); ++it) { }
 ;;            rfor                    for (auto var : range) { }
+;;            ptr                     std::unique_ptr<...> ...
 
 (require 'tempo)
 (setq tempo-interactive t)
@@ -388,6 +389,14 @@
                            )
                        "copy"
                        "C++ STL copy"
+                       'c++-tempo-tags)
+
+(tempo-define-template "c++-smart_ptr"
+                       '(> "std::" (if (y-or-n-p "unique? ") "unique_ptr" "shared_ptr")
+                           "<" (p "type: " type) "> " (p "name: " name) ";" > n>
+                           )
+                       "ptr"
+                       "C++ smart_ptr"
                        'c++-tempo-tags)
 
 (provide 'tempo-c-cpp)
