@@ -47,37 +47,37 @@
 (require 'nnir)
 
 ;; add this to configure gmail imap
-(add-to-list 'gnus-secondary-select-methods '(nnimap "gmail"
-                                             (nnimap-address "imap.gmail.com")
-                                             (nnimap-server-port 993)
-                                             (nnimap-stream ssl)
-				             (nnir-search-engine imap)
-				             (nnimap-authinfo-file "~/.authinfo")
-				             ))
+(add-to-list 'gnus-secondary-select-methods
+             '(nnimap "gmail"
+                      (nnimap-address "imap.gmail.com")
+                      (nnimap-server-port 993)
+                      (nnimap-stream ssl)
+                      (nnir-search-engine imap)
+                      (nnimap-authinfo-file "~/.authinfo")))
 
 ;; send mails using huatek's smtp server
 ;; (setq smtpmail-auth-credentials
-;;     '(("smtp.ee-post.com"                      ;; smtp used to send mails
-;;	      25                                ;; port
-;;    	"bright_chen@huatek.com"                ;; user name
-;;	      "********"                        ;; password
+;;     '(("smtp.ee-post.com"         ;; smtp used to send mails
+;;	      25                     ;; port
+;;    	"bright_chen@huatek.com"     ;; user name
+;;	      "********"             ;; password
 ;;	    ))
 ;;      smtpmail-default-smtp-server "smtp.ee-post.com"
 ;;      smtpmail-smtp-server "smtp.ee-post.com")
-      
+
 ;; send mails using gmail's smtp server
-(setq ;; message-send-mail-function 'smtpmail-send-it
-      smtpmail-starttls-credentials '(("smtp.gmail.com" 587 nil nil))
+(setq smtpmail-starttls-credentials '(("smtp.gmail.com" 587 nil nil))
       smtpmail-auth-credentials '(("smtp.gmail.com" 587 "chenhuming@gmail.com" nil))
       smtpmail-default-smtp-server "smtp.gmail.com"
       smtpmail-smtp-server "smtp.gmail.com"
       smtpmail-smtp-service 587
+      ;; message-send-mail-function 'smtpmail-send-it
       ;; smtpmail-local-domain "yourcompany.com"
       )
 
 ;; function used to send mail
 (setq send-mail-function 'smtpmail-send-it
-;;      message-send-mail-function 'smtpmail-send-it
+      ;; message-send-mail-function 'smtpmail-send-it
       )
 
 ;; show debug info where sending mails failed 
@@ -92,3 +92,4 @@
 
 ;; load smtpmail library
 (require 'smtpmail)
+;;; .gnus ends here
