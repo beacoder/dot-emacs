@@ -46,7 +46,7 @@
 ;; "G G" => search in *Group*
 (require 'nnir)
 
-;; add this to configure gmail imap
+;; receive gmail
 (add-to-list 'gnus-secondary-select-methods
              '(nnimap "gmail"
                       (nnimap-address "imap.gmail.com")
@@ -55,17 +55,17 @@
                       (nnir-search-engine imap)
                       (nnimap-authinfo-file "~/.authinfo")))
 
-;; send mails using huatek's smtp server
+;; send mails with huatek's smtp server
 ;; (setq smtpmail-auth-credentials
-;;     '(("smtp.ee-post.com"         ;; smtp used to send mails
-;;	      25                     ;; port
+;;     '(("smtp.ee-post.com"             ;; smtp used to send mails
+;;	      25                           ;; port
 ;;    	"bright_chen@huatek.com"     ;; user name
-;;	      "********"             ;; password
+;;	      "********"                   ;; password
 ;;	    ))
 ;;      smtpmail-default-smtp-server "smtp.ee-post.com"
 ;;      smtpmail-smtp-server "smtp.ee-post.com")
 
-;; send mails using gmail's smtp server
+;; send mails with gmail's smtp server
 (setq smtpmail-starttls-credentials '(("smtp.gmail.com" 587 nil nil))
       smtpmail-auth-credentials '(("smtp.gmail.com" 587 "chenhuming@gmail.com" nil))
       smtpmail-default-smtp-server "smtp.gmail.com"
