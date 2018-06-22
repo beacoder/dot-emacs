@@ -2,6 +2,10 @@
 ;; libraries with little to no configuration stay here
 ;;----------------------------------------------------------------------------
 
+;;; use-package
+(require-package 'use-package)
+
+
 ;; bind-key
 ;; https://github.com/jwiegley/use-package/blob/master/bind-key.el
 (require-package 'bind-key)
@@ -262,6 +266,49 @@
     (define-key symbol-overlay-mode-map (kbd "M-i") 'symbol-overlay-put)
     (define-key symbol-overlay-mode-map (kbd "M-n") 'symbol-overlay-jump-next)
     (define-key symbol-overlay-mode-map (kbd "M-p") 'symbol-overlay-jump-prev)))
+
+
+;;; selected => operations on active region
+(when (maybe-require-package 'selected)
+  (use-package selected
+    :demand t
+    :diminish selected-minor-mode
+    :bind (:map selected-keymap
+                ("[" . align-code)
+                ("f" . fill-region)
+                ("U" . unfill-region)
+                ("d" . downcase-region)
+                ("u" . upcase-region)
+                ("r" . reverse-region)
+                ("s" . sort-lines))
+    :config
+    (selected-global-mode 1)))
+
+
+;;; biblio => search books
+(when (maybe-require-package 'biblio)
+  (use-package biblio
+    :commands biblio-lookup))
+
+
+;;; elfeed => web feeds client
+(when (maybe-require-package 'elfeed)
+  (use-package elfeed
+    :bind ("M-F" . elfeed)
+    :config
+    (add-hook 'elfeed-search-update-hook
+              #'(lambda () (selected-minor-mode -1)))))
+
+
+;;; emojify
+(when (maybe-require-package 'emojify)
+  (use-package emojify
+    :disabled t
+    :defer 15
+    :config
+    (global-emojify-mode)
+    ;; (global-emojify-mode-line-mode -1)
+    ))
 
 
 ;;; other setting
