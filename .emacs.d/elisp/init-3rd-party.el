@@ -291,15 +291,6 @@
     :commands biblio-lookup))
 
 
-;;; elfeed => web feeds client
-(when (maybe-require-package 'elfeed)
-  (use-package elfeed
-    :bind ("M-F" . elfeed)
-    :config
-    (add-hook 'elfeed-search-update-hook
-              #'(lambda () (selected-minor-mode -1)))))
-
-
 ;;; emojify
 (when (maybe-require-package 'emojify)
   (use-package emojify
@@ -327,6 +318,7 @@
 (require 'init-flycheck)
 (require-package 'buffer-move)
 (require 'init-http)
+(require 'init-elfeed)
 
 
 (provide 'init-3rd-party)
