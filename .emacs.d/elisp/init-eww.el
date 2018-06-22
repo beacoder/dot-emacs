@@ -26,7 +26,8 @@
  ("k" . eww-im-feeling-lucky)
  ("w" . modi/eww-search-words)
  ("c" . modi/eww-copy-url-dwim)
- ("/" . highlight-regexp))
+ ("/" . highlight-regexp)
+ ("q" . kill-this-buffer))
 
 ;; Make the binding for `revert-buffer' do `eww-reload' in eww-mode
 (define-key eww-mode-map [remap revert-buffer] #'eww-reload)
