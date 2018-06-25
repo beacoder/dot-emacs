@@ -50,14 +50,14 @@
   "
                  ^Commands^
 --------------------------------------------
-[_a_] Swiper-at-point [_s_] Counsel-git-grep   [_g_] Counsel-git     [_l_] Counsel-locate
+[_a_] Swiper-at-point [_g_] Counsel-git-grep   [_f_] Counsel-git     [_l_] Counsel-locate
 [_u_] Update-GTAGS    [_c_] Mode-Compile       [_C_] Compile         [_r_] Recompile
 [_e_] Eww-Open-File   [_w_] Google-Search-Word [_k_] Google-Lucky    [_p_] Previous-mark
-[_n_] Next-mark       [_i_] Pyim               [_q_] Quit
+[_n_] Next-mark       [_i_] Pyim               [_s_] Sort-Lines      [_q_] Quit
 "
   ("a" smart/swiper-at-point :exit t)
-  ("s" counsel-git-grep :exit t)
-  ("g" counsel-git :exit t)
+  ("g" counsel-git-grep :exit t)
+  ("f" counsel-git :exit t)
   ("l" counsel-locate :exit t)
   ("u" ggtags-update-tags :exit t)
   ("c" mode-compile :exit t)
@@ -69,6 +69,7 @@
   ("i" hydra-pyim-start :exit t)
   ("p" pop-to-mark-command)
   ("n" unpop-to-mark-command)
+  ("s" sort-lines :exit t)
   ("q" nil))
 (global-set-key (kbd "C-x q")  'hydra-quickness/body)
 
