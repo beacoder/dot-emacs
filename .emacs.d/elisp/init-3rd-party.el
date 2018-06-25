@@ -268,23 +268,6 @@
     (define-key symbol-overlay-mode-map (kbd "M-p") 'symbol-overlay-jump-prev)))
 
 
-;;; selected => operations on active region
-(when (maybe-require-package 'selected)
-  (use-package selected
-    :demand t
-    :diminish selected-minor-mode
-    :bind (:map selected-keymap
-                ("[" . align-code)
-                ("f" . fill-region)
-                ("U" . unfill-region)
-                ("d" . downcase-region)
-                ("u" . upcase-region)
-                ("r" . reverse-region)
-                ("s" . sort-lines))
-    :config
-    (selected-global-mode 1)))
-
-
 ;;; emojify
 (when (maybe-require-package 'emojify)
   (use-package emojify
