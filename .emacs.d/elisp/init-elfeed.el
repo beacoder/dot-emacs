@@ -55,7 +55,7 @@
                  "http://blog.well-typed.com/feed/"
                  "http://feeds.bahai.org/bwns/rss"
                  "http://www.bahairights.org/feed/"
-                 "https://stackoverflow.com/feeds/tag?tagnames=c++&sort=newest"
+                 "https://stackoverflow.com/feeds/tag?tagnames=c%2b%2b&sort=newest"
                  "http://mukeshiiitm.wordpress.com/feed/"
                  "http://poleiro.info/atom.xml"
                  "http://pigworker.wordpress.com/feed/"
