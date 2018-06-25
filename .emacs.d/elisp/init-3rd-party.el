@@ -285,12 +285,6 @@
     (selected-global-mode 1)))
 
 
-;;; biblio => search books
-(when (maybe-require-package 'biblio)
-  (use-package biblio
-    :commands biblio-lookup))
-
-
 ;;; emojify
 (when (maybe-require-package 'emojify)
   (use-package emojify
