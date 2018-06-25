@@ -66,7 +66,6 @@
                  "http://www.carloangiuli.com/blog/feed/"
                  "http://syntaxexclamation.wordpress.com/feed/"
                  "http://feeds.feedburner.com/CoolTools"
-                 "http://motherboard.vice.com/rss?trk_source=motherboard"
                  "http://feeds.arstechnica.com/arstechnica/gadgets")))))
 
 (provide 'init-elfeed)
