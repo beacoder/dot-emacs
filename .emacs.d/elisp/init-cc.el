@@ -132,6 +132,8 @@
 ;;               (delete-trailing-whitespace))))
 
 
+;;; custom refactoring
+;;----------------------------------------------------------------------------
 (defun sort-include-files ()
   "Sort include files in alphabetically order."
   (interactive)
