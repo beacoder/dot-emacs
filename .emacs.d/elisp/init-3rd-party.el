@@ -214,6 +214,7 @@
   (require 'call-graph)
   (global-set-key (kbd "C-c g") 'call-graph)
   ;; (setq cg-path-to-global "~/private/gtags-6.5.7/bin/")
+  (setq imenu-max-item-length "Unlimited")
   (dolist (filter '("grep -v \"Test/\""
                     "grep -v \"_SUITE/\""
                     "grep -v \"/test-src/\""
