@@ -157,13 +157,6 @@ The argument has the same meaning as in `apropos'."
   (redraw-display))
 (global-set-key (kbd "C-c C-SPC") 'tf-toggle-show-trailing-whitespace)
 
-;; remove useless whitespaces before saving a file
-;; (add-hook 'before-save-hook
-;;           (lambda()
-;;             (when (member major-mode '(c-mode c++-mode))
-;;               (whitespace-cleanup)
-;;               (delete-trailing-whitespace))))
-
 ;; disable formatting in text-mode
 (add-hook 'text-mode-hook (lambda() (electric-indent-mode 0)))
 
