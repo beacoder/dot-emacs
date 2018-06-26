@@ -141,12 +141,12 @@
     (save-excursion
       (let* ((beg-region nil) (end-region nil))
         (goto-char (point-min))
-        (while (re-search-forward "^ *#include +.*$" nil t)
+        (while (re-search-forward "^\\s-*#include\\s-+.*$" nil t)
           (beginning-of-line)
           (setq beg-region (point))
           (while (and (< (point) (point-max)) ;; Not end of buffer
-                      (or (string-match-p "^ *#include +.*$" (thing-at-point 'line)) ;; Match includes
-                          (string-match-p "^\s-*$" (thing-at-point 'line)))) ;; Match blank line
+                      (or (string-match-p "^\\s-*#include\\s-+.*$" (thing-at-point 'line)) ;; Match includes
+                          (= 0 (string-match-p "^\\s-*$" (thing-at-point 'line))))) ;; Match blank line
             (end-of-line)
             (setq end-region (point))
             (forward-line))
