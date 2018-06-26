@@ -76,6 +76,7 @@ The argument has the same meaning as in `apropos'."
 
 ;; imenu
 (global-set-key (kbd "C-c C-j") 'imenu)
+(setq imenu-max-item-length "Unlimited")
 
 ;;----------------------------------------------------------------------------
 ;; mode setting
