@@ -124,4 +124,30 @@
   (set-process-query-on-exit-flag ad-return-value nil))
 
 
+;; remove useless whitespaces before saving a file
+;; (add-hook 'before-save-hook
+;;           (lambda()
+;;             (when (member major-mode '(c-mode c++-mode))
+;;               (whitespace-cleanup)
+;;               (delete-trailing-whitespace))))
+
+
+;; (defun sort-include-files ()
+;;   (interactive)
+;;   (save-match-data
+;;     (save-excursion
+;;       (let* ((beg-region nil)
+;;              (end-region nil))
+;;         (goto-char (point-min))
+;;         (while (re-search-forward "^ *#include +.*$" nil t)
+;;           (beginning-of-line)
+;;           (setq beg-region (point))
+;;           (while (and (< (point) (point-max)) ;; Not end of buffer
+;;                       (or (string-match "^ *#include +.*$" (thing-at-point 'line)) ;; Match includes
+;;                           (string-match "^\s-*$" (thing-at-point 'line)))) ;; Match blank line
+;;             (setq end-region (match-end 0))
+;;             (forward-line))
+;;           (sort-lines nil beg-region end-region))))))
+
+
 (provide 'init-cc)
