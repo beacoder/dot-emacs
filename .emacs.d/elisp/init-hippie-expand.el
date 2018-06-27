@@ -4,7 +4,7 @@
 
 (require 'etags)
 
-(global-set-key (kbd "M-/") 'hippie-expand)
+(global-set-key (kbd "M-/") #'hippie-expand)
 
 ;; let hippie-expand support tag files
 ;; shamelessly copied from http://emacswiki.org/emacs/HippieExpand
@@ -67,3 +67,4 @@
 	try-complete-lisp-symbol))
 
 (provide 'init-hippie-expand)
+;;; init-hippie-expand.el ends here
