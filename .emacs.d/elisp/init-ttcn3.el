@@ -38,7 +38,8 @@
   ;; key-bindings used in ttcn3-mode
   (define-prefix-command 'ttcn3-map)
   (define-key ttcn3-mode-map "\C-xt" ttcn3-map)
-  (define-key ttcn3-map (kbd "u") 'async-update-ttcn3-tags))
+  (define-key ttcn3-map (kbd "u") #'async-update-ttcn3-tags))
 
 
 (provide 'init-ttcn3)
+;;; init-ttcn3.el ends here
