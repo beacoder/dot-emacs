@@ -13,7 +13,7 @@
 (require-package 'switch-window)
 (setq-default switch-window-shortcut-style 'alphabet
               switch-window-timeout nil)
-(global-set-key (kbd "C-x o") 'switch-window)
+(global-set-key (kbd "C-x o") #'switch-window)
 
 
 ;;----------------------------------------------------------------------------
@@ -40,7 +40,7 @@
       (winner-undo)
     (delete-other-windows)))
 
-(global-set-key (kbd "C-x 1") 'sanityinc/toggle-delete-other-windows)
+(global-set-key (kbd "C-x 1") #'sanityinc/toggle-delete-other-windows)
 
 
 ;;----------------------------------------------------------------------------
@@ -64,8 +64,8 @@
     (when other-buffer
       (set-window-buffer (next-window) other-buffer))))
 
-(global-set-key (kbd "C-x |") 'split-window-horizontally-instead)
-(global-set-key (kbd "C-x _") 'split-window-vertically-instead)
+(global-set-key (kbd "C-x |") #'split-window-horizontally-instead)
+(global-set-key (kbd "C-x _") #'split-window-vertically-instead)
 
 
 ;; Borrowed from http://postmomentum.ch/blog/201304/blog-on-emacs
