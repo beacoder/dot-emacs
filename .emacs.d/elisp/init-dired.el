@@ -9,7 +9,7 @@
 (require-package 'dired-subtree)
 
 ;; In a file, how to go to its directory and place cursor on the file name
-(global-set-key (kbd "C-x C-j") 'dired-jump)
+(global-set-key (kbd "C-x C-j") #'dired-jump)
 
 ;; allow dired to be able to delete or copy a whole dir.
 ;; "always" means no asking. "top" means ask once.
