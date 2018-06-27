@@ -4,7 +4,7 @@
 
 ;; @see http://steve.yegge.googlepages.com/effective-emacs
 ;; M-x may not be avalible everywhere, e.g: In term-char-mode, or when there is no Meta key.
-(global-set-key (kbd "C-x C-m") 'execute-extended-command)
+(global-set-key (kbd "C-x C-m") #'execute-extended-command)
 
 (defun backward-kill-word-or-region ()
   "do backward-kill-word or kill-region.
@@ -14,7 +14,7 @@ URL `https://sites.google.com/site/steveyegge2/effective-emacs'"
   (if (use-region-p)
       (kill-region (region-beginning) (region-end))
     (backward-kill-word 1)))
-(global-set-key (kbd "C-w") 'backward-kill-word-or-region)
+(global-set-key (kbd "C-w") #'backward-kill-word-or-region)
 
 
 (after-load "xref"
@@ -53,7 +53,7 @@ The argument has the same meaning as in `apropos'."
 (setq set-mark-command-repeat-pop t)
 
 ;; bind goto-line command
-(global-set-key (kbd "M-g M-g") 'goto-line)
+(global-set-key (kbd "M-g M-g") #'goto-line)
 
 ;; enable recentf-mode
 (require 'recentf)
@@ -66,16 +66,16 @@ The argument has the same meaning as in `apropos'."
                         "/sudo:"
                      ;; "/home/[a-z]\+/\\."
                         ))
-(global-set-key (kbd "C-x C-r") 'recentf-open-files)
+(global-set-key (kbd "C-x C-r") #'recentf-open-files)
 
 ;; @see http://stackoverflow.com/questions/2068697/emacs-is-slow-opening-recent-files
 (setq recentf-keep '(file-remote-p file-readable-p))
 
 ;; isearch-occur is better
-;; (global-set-key (kbd "\C-cl") 'list-matching-lines)
+;; (global-set-key (kbd "\C-cl") #'list-matching-lines)
 
 ;; imenu
-(global-set-key (kbd "C-c C-j") 'imenu)
+(global-set-key (kbd "C-c C-j") #'imenu)
 
 ;;----------------------------------------------------------------------------
 ;; mode setting
@@ -155,7 +155,7 @@ The argument has the same meaning as in `apropos'."
   (interactive)
   (setq show-trailing-whitespace (not show-trailing-whitespace))
   (redraw-display))
-(global-set-key (kbd "C-c C-SPC") 'tf-toggle-show-trailing-whitespace)
+(global-set-key (kbd "C-c C-SPC") #'tf-toggle-show-trailing-whitespace)
 
 ;; disable formatting in text-mode
 (add-hook 'text-mode-hook (lambda() (electric-indent-mode 0)))
@@ -175,8 +175,8 @@ The argument has the same meaning as in `apropos'."
             (require 'view)
             (and buffer-read-only (setq view-exit-action 'kill-buffer-if-not-modified))))
 (after-load 'view
-  (define-key view-mode-map (kbd "p") 'View-scroll-line-backward)
-  (define-key view-mode-map (kbd "n") 'View-scroll-line-forward))
+  (define-key view-mode-map (kbd "p") #'View-scroll-line-backward)
+  (define-key view-mode-map (kbd "n") #'View-scroll-line-forward))
 
 ;;----------------------------------------------------------------------------
 ;; setting locales
@@ -375,8 +375,8 @@ Use in `isearch-mode-end-hook'."
   (list-buffers))
 
 (after-load 'ibuffer
-  (define-key ibuffer-mode-map (kbd "(") 'switch-ibuffer-format)
-  (define-key ibuffer-mode-map (kbd ")") 'switch-ibuffer-format))
+  (define-key ibuffer-mode-map (kbd "(") #'switch-ibuffer-format)
+  (define-key ibuffer-mode-map (kbd ")") #'switch-ibuffer-format))
 
 ;;----------------------------------------------------------------------------
 ;; Nicer naming of buffers for files with identical names
