@@ -84,33 +84,33 @@
       (indent-region (region-beginning) (region-end) nil)
     (c-indent-command)))
 
-(add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
-(add-hook 'c-mode-common-hook (lambda () (local-set-key [(tab)] 'fledermaus-maybe-tab)))
+(add-hook 'c-mode-common-hook #'my-c-mode-common-hook)
+(add-hook 'c-mode-common-hook #'(lambda () (local-set-key [(tab)] #'fledermaus-maybe-tab)))
 
 
 (when (is-modern-emacs)
   ;; google-c-style
   (require-package 'google-c-style)
-  (add-hook 'c-mode-common-hook 'google-set-c-style)
-  (add-hook 'c-mode-common-hook 'google-make-newline-indent)
+  (add-hook 'c-mode-common-hook #'google-set-c-style)
+  (add-hook 'c-mode-common-hook #'google-make-newline-indent)
 
   ;; company-c-headers
   (when (maybe-require-package 'company-c-headers)
     (after-load 'company
       (add-hook 'c-mode-common-hook
-                (lambda () (sanityinc/local-push-company-backend 'company-c-headers)))))
+                #'(lambda () (sanityinc/local-push-company-backend 'company-c-headers)))))
 
 
   ;; flycheck
   (add-hook 'c++-mode-hook
-            (lambda () (setq flycheck-gcc-include-path
-                        '("."
-                          "../include/*"
-                          "../src/*"
-                          "/usr/include"
-                          "/usr/local/include/*"
-                          "/usr/include/c++/4.8.5/*"
-                          "/usr/include/boost/*")))))
+            #'(lambda () (setq flycheck-gcc-include-path
+                          '("."
+                            "../include/*"
+                            "../src/*"
+                            "/usr/include"
+                            "/usr/local/include/*"
+                            "/usr/include/c++/4.8.5/*"
+                            "/usr/include/boost/*")))))
 
 
 ;; @see https://stackoverflow.com/questions/7299893/getting-rid-of-buffer-has-running-process-confirmation-when-the-process-is-a-f
