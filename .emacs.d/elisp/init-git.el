@@ -21,11 +21,11 @@
 (when (maybe-require-package 'magit)
   (setq-default magit-diff-refine-hunk t)
 
-  (global-set-key (kbd "C-x g") 'magit-status)
-  (global-set-key (kbd "C-x M-g") 'magit-dispatch-popup))
+  (global-set-key (kbd "C-x g") #'magit-status)
+  (global-set-key (kbd "C-x M-g") #'magit-dispatch-popup))
 
 (after-load 'magit
-  (define-key magit-status-mode-map (kbd "C-M-<up>") 'magit-section-up)
+  (define-key magit-status-mode-map (kbd "C-M-<up>") #'magit-section-up)
   (add-hook 'magit-popup-mode-hook 'sanityinc/no-trailing-whitespace)
 
   ;; change magit diff colors
@@ -60,3 +60,4 @@
   (global-set-key (kbd "C-x v p") #'git-messenger:popup-message))
 
 (provide 'init-git)
+;;; init-git.el ends here
