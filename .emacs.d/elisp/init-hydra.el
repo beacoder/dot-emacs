@@ -29,7 +29,7 @@
   ("a" mc/mark-all-like-this)
   ("e" mc/edit-lines)
   ("q" nil))
-(global-set-key (kbd "C-x m")  'hydra-multiple-cursors/body)
+(global-set-key (kbd "C-x m") #'hydra-multiple-cursors/body)
 
 (defhydra hydra-window (:hint nil)
   "
@@ -44,7 +44,7 @@
   ("p" winner-undo)
   ("n" winner-redo)
   ("q" nil))
-(global-set-key (kbd "C-x w") 'hydra-window/body)
+(global-set-key (kbd "C-x w") #'hydra-window/body)
 
 (defhydra hydra-quickness (:hint nil)
   "
@@ -71,7 +71,7 @@
   ("n" unpop-to-mark-command)
   ("s" sort-lines :exit t)
   ("q" nil))
-(global-set-key (kbd "C-x q")  'hydra-quickness/body)
+(global-set-key (kbd "C-x q") #'hydra-quickness/body)
 
 
 (provide 'init-hydra)
