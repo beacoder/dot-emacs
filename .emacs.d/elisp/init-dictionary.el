@@ -27,7 +27,8 @@
 (put 'dictionary       'custom-loads '(dictionary))
 (put 'dictionary-group 'custom-loads '(dictionary))
 
-(global-set-key (kbd "\C-cs") 'dictionary-search)
-(global-set-key (kbd "\C-cm") 'dictionary-match-words)
+(global-set-key (kbd "\C-cs") #'dictionary-search)
+(global-set-key (kbd "\C-cm") #'dictionary-match-words)
 
 (provide 'init-dictionary)
+;;; init-dictionary.el ends here
