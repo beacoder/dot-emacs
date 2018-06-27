@@ -16,8 +16,8 @@
 
 (maybe-require-package 'org-cliplink)
 
-(define-key global-map (kbd "C-c l") 'org-store-link)
-(define-key global-map (kbd "C-c a") 'org-agenda)
+(define-key global-map (kbd "C-c l") #'org-store-link)
+(define-key global-map (kbd "C-c a") #'org-agenda)
 
 ;; Various preferences
 (setq org-log-done t
@@ -66,10 +66,6 @@
     (unless (file-exists-p org-plantuml-jar-path)
       (url-copy-file url org-plantuml-jar-path))))
 
-
-
-
-
 (maybe-require-package 'writeroom-mode)
 
 (define-minor-mode prose-mode
@@ -115,7 +111,7 @@ typical word processor."
 
 ;;; Capturing
 
-(global-set-key (kbd "C-c c") 'org-capture)
+(global-set-key (kbd "C-c c") #'org-capture)
 
 (setq org-capture-templates
       `(("t" "todo" entry (file "")  ; "" => `org-default-notes-file'
@@ -306,8 +302,8 @@ typical word processor."
 (add-hook 'org-clock-cancel-hook 'sanityinc/hide-org-clock-from-header-line)
 
 (after-load 'org-clock
-  (define-key org-clock-mode-line-map [header-line mouse-2] 'org-clock-goto)
-  (define-key org-clock-mode-line-map [header-line mouse-1] 'org-clock-menu))
+  (define-key org-clock-mode-line-map [header-line mouse-2] #'org-clock-goto)
+  (define-key org-clock-mode-line-map [header-line mouse-1] #'org-clock-menu))
 
 
 
@@ -335,7 +331,7 @@ typical word processor."
 (require-package 'org-pomodoro)
 (setq org-pomodoro-keep-killed-pomodoro-time t)
 (after-load 'org-agenda
-  (define-key org-agenda-mode-map (kbd "P") 'org-pomodoro))
+  (define-key org-agenda-mode-map (kbd "P") #'org-pomodoro))
 
 
 ;; ;; Show iCal calendars in the org agenda
@@ -360,10 +356,10 @@ typical word processor."
 
 
 (after-load 'org
-  (define-key org-mode-map (kbd "C-M-<up>") 'org-up-element)
+  (define-key org-mode-map (kbd "C-M-<up>") #'org-up-element)
   (when *is-a-mac*
     (define-key org-mode-map (kbd "M-h") nil)
-    (define-key org-mode-map (kbd "C-c g") 'org-mac-grab-link)))
+    (define-key org-mode-map (kbd "C-c g") #'org-mac-grab-link)))
 
 (after-load 'org
   (org-babel-do-load-languages
@@ -388,3 +384,4 @@ typical word processor."
 
 
 (provide 'init-org)
+;;; init-org.el ends here
