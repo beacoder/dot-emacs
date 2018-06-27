@@ -47,7 +47,7 @@
 ;;; browse-kill-ring
 (require-package 'browse-kill-ring)
 (setq browse-kill-ring-separator "\f")
-(global-set-key (kbd "M-Y") 'browse-kill-ring)
+(global-set-key (kbd "M-Y") #'browse-kill-ring)
 
 
 ;;; slime setting
@@ -84,7 +84,7 @@
 (when (maybe-require-package 'smex)
   ;; Change path for ~/.smex-items
   (setq smex-save-file (expand-file-name ".smex-items" user-emacs-directory))
-  (global-set-key [remap execute-extended-command] 'smex))
+  (global-set-key [remap execute-extended-command] #'smex))
 
 
 ;;; markdown-mode
@@ -119,7 +119,7 @@
 (when (maybe-require-package 'regex-tool)
   (require 'regex-tool)
   (set-default regex-tool-backend 'perl)
-  (global-set-key (kbd "C-c C-r") 'regex-tool))
+  (global-set-key (kbd "C-c C-r") #'regex-tool))
 
 
 ;;; zenburn setting
@@ -131,7 +131,7 @@
 ;;; key-binding reminder
 (when (maybe-require-package 'guide-key)
   (setq guide-key/guide-key-sequence t)
-  (add-hook 'after-init-hook 'guide-key-mode)
+  (add-hook 'after-init-hook #'guide-key-mode)
   (require 'guide-key))
 
 
@@ -200,7 +200,7 @@
 
 ;;; Expand region
 (require-package 'expand-region)
-(global-set-key (kbd "M-8") 'er/expand-region)
+(global-set-key (kbd "M-8") #'er/expand-region)
 
 
 ;;; Yaml mode
@@ -212,7 +212,7 @@
 ;;; Call-graph
 (when (maybe-require-package 'call-graph)
   (require 'call-graph)
-  (global-set-key (kbd "C-c g") 'call-graph)
+  (global-set-key (kbd "C-c g") #'call-graph)
   ;; (setq cg-path-to-global "~/private/gtags-6.5.7/bin/")
   (setq imenu-max-item-length "Unlimited")
   (dolist (filter '("grep -v \"Test/\""
@@ -234,7 +234,7 @@
   (after-load 'diff-hl
     (define-key diff-hl-mode-map
       (kbd "<left-fringe> <mouse-1>")
-      'diff-hl-diff-goto-hunk)))
+      #'diff-hl-diff-goto-hunk)))
 (maybe-require-package 'browse-at-remote)
 
 
@@ -264,9 +264,9 @@
     (add-hook hook 'symbol-overlay-mode))
   (after-load 'symbol-overlay
     (diminish 'symbol-overlay-mode)
-    (define-key symbol-overlay-mode-map (kbd "M-i") 'symbol-overlay-put)
-    (define-key symbol-overlay-mode-map (kbd "M-n") 'symbol-overlay-jump-next)
-    (define-key symbol-overlay-mode-map (kbd "M-p") 'symbol-overlay-jump-prev)))
+    (define-key symbol-overlay-mode-map (kbd "M-i") #'symbol-overlay-put)
+    (define-key symbol-overlay-mode-map (kbd "M-n") #'symbol-overlay-jump-next)
+    (define-key symbol-overlay-mode-map (kbd "M-p") #'symbol-overlay-jump-prev)))
 
 
 ;;; emojify
