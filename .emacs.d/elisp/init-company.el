@@ -20,7 +20,7 @@
                    company-files company-cmake)
                  company-dabbrev-other-buffers 'all
                  company-tooltip-align-annotations t))
-  (global-set-key (kbd "\C-c TAB") 'company-complete)
+  (global-set-key (kbd "\C-c TAB") #'company-complete)
   ;; (when (maybe-require-package 'company-quickhelp)
   ;;  (add-hook 'after-init-hook 'company-quickhelp-mode))
 
