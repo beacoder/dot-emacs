@@ -6,16 +6,16 @@
 (when (maybe-require-package 'anzu)
   (add-hook 'after-init-hook 'global-anzu-mode)
   (setq anzu-mode-lighter "")
-  (global-set-key [remap query-replace-regexp] 'anzu-query-replace-regexp)
-  (global-set-key [remap query-replace] 'anzu-query-replace))
+  (global-set-key [remap query-replace-regexp] #'anzu-query-replace-regexp)
+  (global-set-key [remap query-replace] #'anzu-query-replace))
 
 ;; DEL during isearch should edit the search string, not jump back to the previous result
-(define-key isearch-mode-map [remap isearch-delete-char] 'isearch-del-char)
+(define-key isearch-mode-map [remap isearch-delete-char] #'isearch-del-char)
 
 ;; Activate occur easily inside isearch
 (when (fboundp 'isearch-occur)
   ;; to match ivy conventions
-  (define-key isearch-mode-map (kbd "C-c C-o") 'isearch-occur))
+  (define-key isearch-mode-map (kbd "C-c C-o") #'isearch-occur))
 
 ;; Search back/forth for the symbol at point
 ;; See http://www.emacswiki.org/emacs/SearchAtPoint
@@ -32,7 +32,7 @@
       (ding)))
   (isearch-search-and-update))
 
-(define-key isearch-mode-map "\C-\M-w" 'isearch-yank-symbol)
+(define-key isearch-mode-map "\C-\M-w" #'isearch-yank-symbol)
 
 
 ;; http://www.emacswiki.org/emacs/ZapToISearch
@@ -43,7 +43,7 @@ This is useful when followed by an immediate kill."
   (isearch-exit)
   (goto-char isearch-other-end))
 
-(define-key isearch-mode-map [(control return)] 'sanityinc/isearch-exit-other-end)
+(define-key isearch-mode-map [(control return)] #'sanityinc/isearch-exit-other-end)
 
 
 (provide 'init-isearch)
