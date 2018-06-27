@@ -92,7 +92,7 @@
 (require 'derived)
 
 (defun sanityinc/set-up-mode-for-erb (mode)
-  (add-hook (derived-mode-hook-name mode) 'sanityinc/ensure-mmm-erb-loaded)
+  (add-hook (derived-mode-hook-name mode) #'sanityinc/ensure-mmm-erb-loaded)
   (mmm-add-mode-ext-class mode "\\.erb\\'" 'erb))
 
 (let ((html-erb-modes '(html-mode html-erb-mode nxml-mode)))
