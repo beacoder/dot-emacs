@@ -13,8 +13,8 @@
            (maybe-require-package 'ag))
   (require-package 'wgrep-ag)
   (setq-default ag-highlight-search t)
-  (global-set-key (kbd "M-s") 'ag-project)
-  (global-set-key (kbd "M-r") 'ag-project-regexp))
+  (global-set-key (kbd "M-s") #'ag-project)
+  (global-set-key (kbd "M-r") #'ag-project-regexp))
 
 (after-load "ag"
   (progn
@@ -24,7 +24,8 @@
 ;; install rg first
 (when (and (executable-find "rg")
            (maybe-require-package 'rg))
-  (global-set-key (kbd "M-?") 'rg-project))
+  (global-set-key (kbd "M-?") #'rg-project))
 
 
 (provide 'init-grep)
+;;; init-grep.el ends here
