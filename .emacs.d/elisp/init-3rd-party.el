@@ -265,8 +265,8 @@
   (after-load 'symbol-overlay
     (diminish 'symbol-overlay-mode)
     (define-key symbol-overlay-mode-map (kbd "M-i") #'symbol-overlay-put)
-    (define-key symbol-overlay-mode-map (kbd "M-n") #'symbol-overlay-jump-next)
-    (define-key symbol-overlay-mode-map (kbd "M-p") #'symbol-overlay-jump-prev)))
+    (define-key symbol-overlay-mode-map (kbd "M-n") #'symbol-overlay-switch-forward)
+    (define-key symbol-overlay-mode-map (kbd "M-p") #'symbol-overlay-switch-backward)))
 
 
 ;;; emojify
