@@ -7,8 +7,8 @@
   (use-package elfeed
     :bind ("M-F" . elfeed)
     :config
-    (add-hook 'elfeed-search-update-hook
-              #'(lambda () (selected-minor-mode -1)))
+    ;; (add-hook 'elfeed-search-update-hook
+    ;;           #'(lambda () (selected-minor-mode -1)))
     (setq      elfeed-db-directory "~/.emacs.d/data/elfeed"
                elfeed-enclosure-default-dir "~/Downloads/elfeed"
                elfeed-feeds
