@@ -279,6 +279,10 @@
   (which-key-mode +1))
 
 
+;;; move-text
+(require-package 'move-text)
+
+
 ;;; other setting
 (require 'init-hydra)
 (require 'init-git)
