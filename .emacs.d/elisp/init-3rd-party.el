@@ -280,6 +280,11 @@
     ))
 
 
+;;; which-key
+(require 'which-key)
+(which-key-mode +1)
+
+
 ;;; other setting
 (require 'init-hydra)
 (require 'init-git)
