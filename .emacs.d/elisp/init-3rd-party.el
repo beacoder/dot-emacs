@@ -128,13 +128,6 @@
 (load-theme 'zenburn t)
 
 
-;;; key-binding reminder
-(when (maybe-require-package 'guide-key)
-  (setq guide-key/guide-key-sequence t)
-  (add-hook 'after-init-hook #'guide-key-mode)
-  (require 'guide-key))
-
-
 ;;; diminish
 (require-package 'diminish)
 (after-load 'guide-key
@@ -281,8 +274,9 @@
 
 
 ;;; which-key
-(require 'which-key)
-(which-key-mode +1)
+(when (maybe-require-package 'which-key)
+  (require 'which-key)
+  (which-key-mode +1))
 
 
 ;;; other setting
