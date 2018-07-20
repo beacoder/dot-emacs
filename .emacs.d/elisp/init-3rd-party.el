@@ -130,8 +130,6 @@
 
 ;;; diminish
 (require-package 'diminish)
-(after-load 'guide-key
-  (diminish 'guide-key-mode))
 
 
 ;;; ggtags setting
