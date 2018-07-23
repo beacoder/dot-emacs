@@ -281,6 +281,11 @@
 (require-package 'move-text)
 
 
+;;; smart-mode-line
+(when (maybe-require-package 'smart-mode-line)
+  (sml/setup))
+
+
 ;;; other setting
 (require 'init-hydra)
 (require 'init-git)
