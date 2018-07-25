@@ -31,22 +31,6 @@
 ;;     (lambda ()
 ;;         (define-key coffee-mode-map (kbd "C-c c" 'coffee-compile-file))))
 
-;;----------------------------------------------------------------------------
-;; compilation setting
-;;----------------------------------------------------------------------------
-;;  (setq compilation-read-command nil
-;;    compile-command "make clobber")
-(defun mode-compile ()
-  "compile with mode specific commands."
-  (interactive)
-  (setq command "make debug")
-  (when (eq major-mode 'c++-mode)
-    (setq command (concat (getenv "WS_ROOT") "/tools/bin/build -v -c Linux_x86_64")))
-  (when (eq major-mode 'ttcn-3-mode)
-    (setq command
-          (concat (getenv "TTCN3_GGSN_ROOT_PATH") "/scripts/compile_ttcn.sh build" " && "
-                  (getenv "TTCN3_GGSN_ROOT_PATH") "/scripts/copy_ttcn3.sh")))
-  (compile command))
 
 ;;; create tags
 ;; requires 'Exuberant Ctags' installed
@@ -162,6 +146,7 @@
 (require 'init-productivity)
 
 (provide 'init)
+;;; init.el ends here
 
 ;; Local Variables:
 ;; coding: utf-8
