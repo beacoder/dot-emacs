@@ -1,11 +1,22 @@
 ;;----------------------------------------------------------------------------
 ;; compile command setting
 ;;----------------------------------------------------------------------------
+
 (setq-default compilation-scroll-output t)
 
 (require-package 'alert)
 
-;; Customize `alert-default-style' to get messages after compilation
+;;; compilation setting
+(defun mode-compile ()
+  "Compile with mode specific commands."
+  (interactive)
+  (let ((command "make debug"))
+    (case major-mode
+      ('c++-mode (setq command (concat (getenv "WS_ROOT") "/tools/bin/build -v -c Linux_x86_64")))
+      ('ttcn-3-mode (setq command
+                          (concat (getenv "TTCN3_GGSN_ROOT_PATH") "/scripts/compile_ttcn.sh build" " && "
+                                  (getenv "TTCN3_GGSN_ROOT_PATH") "/scripts/copy_ttcn3.sh"))))
+    (compile command)))
 
 (defun sanityinc/alert-after-compilation-finish (buf result)
   "Use `alert' to report compilation RESULT if BUF is hidden."
@@ -50,7 +61,6 @@
     (with-current-buffer "*Shell Command Output*"
       (view-mode 1))))
 
-
 (after-load 'compile
   (require 'ansi-color)
   (defun sanityinc/colourise-compilation-buffer ()
@@ -58,8 +68,8 @@
       (ansi-color-apply-on-region compilation-filter-start (point-max))))
   (add-hook 'compilation-filter-hook 'sanityinc/colourise-compilation-buffer))
 
-
 (maybe-require-package 'cmd-to-echo)
 
 
 (provide 'init-compile)
+;;; init-compile.el ends here
