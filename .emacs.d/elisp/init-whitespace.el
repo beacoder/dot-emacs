@@ -3,8 +3,11 @@
 ;;----------------------------------------------------------------------------
 
 ;; "M-SPC" => cycle-spacing
+(global-set-key [remap just-one-space] #'cycle-spacing)
+
 
 ;;; Whitespace
+(setq-default show-trailing-whitespace t)
 (defun sanityinc/no-trailing-whitespace ()
   "Turn off display of trailing whitespace in this buffer."
   (setq show-trailing-whitespace nil))
@@ -24,11 +27,8 @@
 
 (require-package 'whitespace-cleanup-mode)
 (add-hook 'after-init-hook #'global-whitespace-cleanup-mode)
-
-(global-set-key [remap just-one-space] #'cycle-spacing)
-
-(setq-default show-trailing-whitespace t)
-
+(after-load 'whitespace-cleanup-mode
+  (diminish 'whitespace-cleanup-mode))
 
 (provide 'init-whitespace)
 ;;; init-whitespace.el ends here
