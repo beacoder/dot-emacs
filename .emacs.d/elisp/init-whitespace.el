@@ -2,7 +2,7 @@
 ;; whitespace setting
 ;;----------------------------------------------------------------------------
 
-;; "M-SPC" => cycle-spacing
+;;; "M-SPC" => cycle-spacing
 (global-set-key [remap just-one-space] #'cycle-spacing)
 
 
