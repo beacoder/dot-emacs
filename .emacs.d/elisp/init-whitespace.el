@@ -30,5 +30,6 @@
 (after-load 'whitespace-cleanup-mode
   (diminish 'whitespace-cleanup-mode))
 
+
 (provide 'init-whitespace)
 ;;; init-whitespace.el ends here
