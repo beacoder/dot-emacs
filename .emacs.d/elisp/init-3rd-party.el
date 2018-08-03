@@ -302,7 +302,6 @@
 (require 'init-flycheck)
 (require-package 'buffer-move)
 (require 'init-http)
-(require 'init-elfeed)
 
 
 (provide 'init-3rd-party)
