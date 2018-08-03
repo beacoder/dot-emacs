@@ -286,6 +286,18 @@
   (sml/setup))
 
 
+;;; gist
+;;
+;; git config --global github.user <your-github-user-name>
+;; git config --global github.oauth-token <your-personal-access-token-with-gist-scope>
+;;
+;; "gist-list"                     => Lists your gists in a new buffer
+;; "gist-region-or-buffer"         => Post region/buffer to gist.github.com and copy URL to kill-ring
+;; "gist-region-or-buffer-private" => Same as gist-region-or-buffer but create a private gist
+(when (maybe-require-package 'gist)
+  (setq gist-view-gist nil))
+
+
 ;;; other setting
 (require 'init-hydra)
 (require 'init-git)
