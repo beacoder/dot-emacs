@@ -41,6 +41,11 @@
    '(magit-diff-removed-highlight ((t (:background "black" :foreground "red3"))))))
 
 
+(when (maybe-require-package 'magit-todos)
+  (after-load 'magit
+    (magit-todos-mode)))
+
+
 (require-package 'fullframe)
 (after-load 'magit
   (fullframe magit-status magit-mode-quit-window))
