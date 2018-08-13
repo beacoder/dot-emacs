@@ -24,6 +24,7 @@
 ;; install rg first
 (when (and (executable-find "rg")
            (maybe-require-package 'rg))
+  (maybe-require-package 'deadgrep)
   (global-set-key (kbd "M-?") #'rg-project))
 
 
