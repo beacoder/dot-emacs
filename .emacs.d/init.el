@@ -9,8 +9,8 @@
 ;; @see https://www.diycode.cc/topics/738
 ;; Buy VPS and setup SS on bandwagonhost
 ;; Install SS-GUI and config SS address, pwd..
-(setq url-gateway-method 'socks
-      socks-server '("Default server" "127.0.0.1" 1080 5))
+;; (setq url-gateway-method 'socks
+;;       socks-server '("Default server" "127.0.0.1" 1080 5))
 
 
 ;;; Directory structure
