@@ -2,13 +2,18 @@
 ;; Entry file for emacs configuration 
 ;;----------------------------------------------------------------------------
 
-;; Use socks proxy for downloading packages from melpa
-;; (setq url-gateway-local-host-regexp
-;;       (concat "\\`" (regexp-opt '("localhost" "127.0.0.1")) "\\'")
-;;       url-gateway-method 'socks
-;;       socks-server '("Default server" "xx.xx.xx.xx" port 5))
+;;; Use SS for crossing GFW
+;;
+;; Packet-Route: Emacs <-> SS-local <-> SS-server <-> internet
+;;
+;; @see https://www.diycode.cc/topics/738
+;; Buy VPS and setup SS on bandwagonhost
+;; Install SS-GUI and config SS address, pwd..
+(setq url-gateway-method 'socks
+      socks-server '("Default server" "127.0.0.1" 1080 5))
 
 
+;;; Directory structure
 (setq emacs-load-start-time (current-time))
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/elisp"))
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/site-lisp"))
