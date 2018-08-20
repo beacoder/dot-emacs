@@ -2,13 +2,17 @@
 ;; Entry file for emacs configuration 
 ;;----------------------------------------------------------------------------
 
-;;; Use SS for crossing GFW
-;;
-;; Packet-Route: Emacs <-> SS-local <-> SS-server <-> internet
+;;; Shadowsocks
+;;                                      GFW
+;;                                       |
+;; Emacs <-> SS-local (localhost:1080) <-|-> SS-server <-> Internet
+;;                                       |
 ;;
 ;; @see https://www.diycode.cc/topics/738
+;;
 ;; Buy VPS and setup SS on bandwagonhost
 ;; Install SS-GUI and config SS address, pwd..
+;;
 ;; (setq url-gateway-method 'socks
 ;;       socks-server '("Default server" "127.0.0.1" 1080 5))
 
