@@ -21,7 +21,7 @@ LOAD-DURATION is the time taken in milliseconds to load FEATURE.")
                        (list feature require-start-time time)
                        t))))))
 
-
+
 (define-derived-mode sanityinc/require-times-mode tabulated-list-mode "Require-Times"
   "Show times taken to `require' packages."
   (setq tabulated-list-format
@@ -32,7 +32,8 @@ LOAD-DURATION is the time taken in milliseconds to load FEATURE.")
   ;; (setq tabulated-list-padding 2)
   (setq tabulated-list-entries #'sanityinc/require-times-tabulated-list-entries)
   (tabulated-list-init-header)
-  (tablist-minor-mode))
+  (when (fboundp 'tablist-minor-mode)
+    (tablist-minor-mode)))
 
 (defun sanityinc/require-times-sort-by-start-time-pred (entry1 entry2)
   (< (string-to-number (elt (nth 1 entry1) 0))
@@ -59,8 +60,6 @@ LOAD-DURATION is the time taken in milliseconds to load FEATURE.")
     (sanityinc/require-times-mode)
     (tabulated-list-revert)
     (display-buffer (current-buffer))))
-
-
 
 
 (defun sanityinc/show-init-time ()
