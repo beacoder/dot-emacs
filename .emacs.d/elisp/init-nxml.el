@@ -32,7 +32,7 @@ by using nxml's indentation rules."
     (message "Ah, much better!"))
 
 ;; prettify the xml in the active region
-(defalias 'pt 'bf-pretty-print-xml-region)
+(defalias 'prt 'bf-pretty-print-xml-region)
 
 ;;----------------------------------------------------------------------------
 ;; Integration with tidy for html + xml
