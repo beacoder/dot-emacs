@@ -142,9 +142,13 @@ When `universal-argument' is called first, kill whole buffer (respects `narrow-t
 (global-set-key (kbd "M-7") #'select-whole-line)
 
 (defun show-buffer-name ()
-  "Show the full path file name in the minibuffer."
+  "Show the full path file name in the minibuffer.
+And save to `kill-ring', if it's a valid path."
   (interactive)
-  (message (buffer-file-name)))
+  (let ((file-name (buffer-file-name)))
+    (message file-name)
+    (when (file-exists-p file-name)
+      (kill-new file-name))))
 (global-set-key (kbd "C-c C-f") #'show-buffer-name)
 
 ;;----------------------------------------------------------------------------
