@@ -31,7 +31,8 @@
      ("C-c i" . python-skeleton-if)
      ("C-c m" . python-skeleton-import)
      ("C-c t" . python-skeleton-try)
-     ("C-c w" . python-skeleton-while)))
+     ("C-c w" . python-skeleton-while)
+     ("C-c C-f" . nil))) ;; allow global binding for "C-c C-f"
 
   (after-load 'anaconda-mode
     (bind-keys
