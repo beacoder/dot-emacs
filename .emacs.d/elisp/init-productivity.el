@@ -147,7 +147,7 @@ And save to `kill-ring', if it's a valid path."
   (interactive)
   (let ((file-name (buffer-file-name)))
     (message file-name)
-    (when (file-exists-p file-name)
+    (when (and file-name (file-exists-p file-name))
       (kill-new file-name))))
 (global-set-key (kbd "C-c C-f") #'show-buffer-name)
 
