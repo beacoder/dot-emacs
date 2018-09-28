@@ -37,6 +37,7 @@
 (when (maybe-require-package 'ivy-historian)
   (add-hook 'after-init-hook (lambda () (ivy-historian-mode t))))
 
+
 (when (maybe-require-package 'counsel)
   (after-load 'counsel
     ;; don't override pop-to-mark-command
@@ -48,26 +49,20 @@
   (add-hook 'after-init-hook 'counsel-mode)
 
   (when (maybe-require-package 'projectile)
-    (defun sanityinc/counsel-search-project (initial-input &optional use-current-dir)
-      "Search using `counsel-rg' or similar from the project root for INITIAL-INPUT.
-If there is no project root, or if the prefix argument
-USE-CURRENT-DIR is set, then search from the current directory
-instead."
-      (interactive (list (thing-at-point 'symbol)
-                         current-prefix-arg))
-      (let ((current-prefix-arg)
-            (dir (if use-current-dir
-                     default-directory
-                   (condition-case err
-                       (projectile-project-root)
-                     (error default-directory)))))
-        (when-let ((search-function
-                    (cond
-                     ((executable-find "rg") 'counsel-rg)
-                     ((executable-find "ag") 'counsel-ag)
-                     ((executable-find "pt") 'counsel-pt)
-                     ((executable-find "ack") 'counsel-ack))))
-          (funcall search-function initial-input dir))))))
+    (defun smart/counsel-ag (initial-input)
+      "Search using `counsel-rg' from the project root for INITIAL-INPUT.
+If there is no project root, search from the current directory instead.
+With prefix args, read directory from minibuffer."
+      (interactive (list (smart/dwim-at-point)))
+      (let* ((dir
+              (if current-prefix-arg
+                  (read-directory-name "Execute `ag' in directory: ")
+                (condition-case err
+                    (projectile-project-root)
+                  (error default-directory))))
+             ;; eat current-prefix-arg before calling counsel-ag
+             (current-prefix-arg))
+        (counsel-ag initial-input dir)))))
 
 
 (when (maybe-require-package 'swiper)
