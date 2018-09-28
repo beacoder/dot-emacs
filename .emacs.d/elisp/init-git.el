@@ -17,7 +17,8 @@
 (require-package 'git-timemachine)
 
 
-;; "magit-blame"     => for each line show the revision in which it was added
+;; "magit-blame"           => for each line show the revision in which it was added
+;; "magit-log-buffer-file" => git history of current file
 (when (maybe-require-package 'magit)
   (setq-default magit-diff-refine-hunk t)
 
