@@ -10,6 +10,7 @@
 ;;
 ;;; Grep tag
 ;;  ag-project
+;;  counsel-ag
 ;;  counsel-git-grep
 ;;  ggtags-grep
 
