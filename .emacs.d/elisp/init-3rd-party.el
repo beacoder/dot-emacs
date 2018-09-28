@@ -303,6 +303,14 @@
   (setq gist-view-gist nil))
 
 
+;;; super-save-mode
+(when (maybe-require-package 'super-save)
+  (super-save-mode +1)
+  (setq super-save-auto-save-when-idle t
+        auto-save-default nil
+        super-save-remote-files nil))
+
+
 ;;; other setting
 (require 'init-hydra)
 (require 'init-git)
