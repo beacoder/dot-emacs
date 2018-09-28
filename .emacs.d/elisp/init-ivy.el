@@ -45,7 +45,30 @@
   (when (maybe-require-package 'diminish)
     (after-load 'counsel
       (diminish 'counsel-mode)))
-  (add-hook 'after-init-hook 'counsel-mode))
+  (add-hook 'after-init-hook 'counsel-mode)
+
+  (when (maybe-require-package 'projectile)
+    (defun sanityinc/counsel-search-project (initial-input &optional use-current-dir)
+      "Search using `counsel-rg' or similar from the project root for INITIAL-INPUT.
+If there is no project root, or if the prefix argument
+USE-CURRENT-DIR is set, then search from the current directory
+instead."
+      (interactive (list (thing-at-point 'symbol)
+                         current-prefix-arg))
+      (let ((current-prefix-arg)
+            (dir (if use-current-dir
+                     default-directory
+                   (condition-case err
+                       (projectile-project-root)
+                     (error default-directory)))))
+        (let ((search-function
+               (cond
+                ((executable-find "rg") 'counsel-rg)
+                ((executable-find "ag") 'counsel-ag)
+                ((executable-find "pt") 'counsel-pt)
+                ((executable-find "ack") 'counsel-ack))))
+          (when search-function
+            (funcall search-function initial-input dir)))))))
 
 
 (when (maybe-require-package 'swiper)
