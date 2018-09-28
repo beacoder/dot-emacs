@@ -61,14 +61,13 @@ instead."
                    (condition-case err
                        (projectile-project-root)
                      (error default-directory)))))
-        (let ((search-function
-               (cond
-                ((executable-find "rg") 'counsel-rg)
-                ((executable-find "ag") 'counsel-ag)
-                ((executable-find "pt") 'counsel-pt)
-                ((executable-find "ack") 'counsel-ack))))
-          (when search-function
-            (funcall search-function initial-input dir)))))))
+        (when-let ((search-function
+                    (cond
+                     ((executable-find "rg") 'counsel-rg)
+                     ((executable-find "ag") 'counsel-ag)
+                     ((executable-find "pt") 'counsel-pt)
+                     ((executable-find "ack") 'counsel-ack))))
+          (funcall search-function initial-input dir))))))
 
 
 (when (maybe-require-package 'swiper)
