@@ -57,7 +57,7 @@
 [_w_] Google-Search-Word [_k_] Google-Lucky     [_p_] Previous-mark   [_n_] Next-mark          [_i_] Pyim
 [_s_] Sort-Lines         [_q_] Quit
 "
-  ("a" sanityinc/counsel-search-project :exit t)
+  ("a" smart/counsel-ag :exit t)
   ("g" counsel-git-grep :exit t)
   ("f" counsel-git :exit t)
   ("l" counsel-locate :exit t)
