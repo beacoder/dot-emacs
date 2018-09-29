@@ -5,8 +5,17 @@
 (setq-default grep-highlight-matches t
               grep-scroll-output t)
 
+
 (when *is-a-mac*
   (setq-default locate-command "mdfind"))
+
+
+(when (maybe-require-package 'ag)
+  (require 'ag)
+  (after-load "ag"
+    (progn
+      (defalias #'ag/read-from-minibuffer #'smart/read-from-minibuffer))))
+
 
 ;; install the_silver_searcher(ag) first
 (when (and (executable-find "ag")
@@ -15,10 +24,6 @@
   (setq-default ag-highlight-search t)
   (global-set-key (kbd "M-s") #'ag-project)
   (global-set-key (kbd "M-r") #'ag-project-regexp))
-
-(after-load "ag"
-  (progn
-    (defalias #'ag/read-from-minibuffer #'smart/read-from-minibuffer)))
 
 
 ;; install rg first
