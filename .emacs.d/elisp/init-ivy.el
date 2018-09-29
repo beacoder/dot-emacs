@@ -48,7 +48,7 @@
       (diminish 'counsel-mode)))
   (add-hook 'after-init-hook 'counsel-mode)
 
-  (when (maybe-require-package 'projectile)
+  (when (maybe-require-package 'ag)
     (defun smart/counsel-ag (initial-input)
       "Search using `counsel-rg' from the project root for INITIAL-INPUT.
 If there is no project root, search from the current directory instead.
@@ -57,9 +57,7 @@ With prefix args, read directory from minibuffer."
       (let* ((dir
               (if current-prefix-arg
                   (read-directory-name "Execute `ag' in directory: ")
-                (condition-case err
-                    (projectile-project-root)
-                  (error default-directory))))
+                (ag/project-root default-directory)))
              ;; eat current-prefix-arg before calling counsel-ag
              (current-prefix-arg))
         (counsel-ag initial-input dir)))))
