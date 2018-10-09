@@ -35,14 +35,16 @@
   "
                  ^Commands^
 --------------------------------------------
-[_s_] split-window    [_d_] dedicate-current-window    [_]_] enlarge-window-horizontally
-[_p_] winner-undo     [_n_] winner-redo                [_[_] shrink-window-horizontally
+[_s_] split-window    [_d_] dedicate-current-window    [_]_] enlarge-window-horizontally    [_)_] enlarge-window-vertically
+[_p_] winner-undo     [_n_] winner-redo                [_[_] shrink-window-horizontally     [_(_] shrink-window-vertically
 [_q_] quit
 "
   ("s" sanityinc/split-window)
   ("d" sanityinc/toggle-current-window-dedication :exit t)
   ("]" enlarge-window-horizontally)
   ("[" shrink-window-horizontally)
+  (")" enlarge-window-vertically)
+  ("(" shrink-window-vertically)
   ("p" winner-undo)
   ("n" winner-redo)
   ("q" nil))
