@@ -95,5 +95,25 @@ Call a second time to restore the original window configuration."
   (windmove-default-keybindings 'control))
 
 
+;;----------------------------------------------------------------------------
+;; Enlarge/Shrink windows vertically
+;;----------------------------------------------------------------------------
+(unless (fboundp 'enlarge-window-vertically)
+  (defun enlarge-window-vertically (delta)
+    "Make selected window DELTA columns wider.
+Interactively, if no argument is given, make selected window one
+column wider."
+    (interactive "p")
+    (enlarge-window delta nil)))
+
+(unless (fboundp 'shrink-window-vertically)
+  (defun shrink-window-vertically (delta)
+    "Make selected window DELTA columns narrower.
+Interactively, if no argument is given, make selected window one
+column narrower."
+    (interactive "p")
+    (shrink-window delta nil)))
+
+
 (provide 'init-windows)
 ;;; init-windows.el ends here
