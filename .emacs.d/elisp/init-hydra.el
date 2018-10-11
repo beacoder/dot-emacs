@@ -15,9 +15,9 @@
   "
                  ^Commands^
 --------------------------------------------
-[_p_]   Next          [_n_]   Next             [_a_] All
-[_P_]   Skip          [_N_]   Skip             [_e_] Edit
-[_M-p_] Unmark        [_M-n_] Unmark           [_q_] Quit
+[_p_]   Previous      [_n_]   Next          [_a_] All
+[_P_]   Skip-Previous [_N_]   Skip-Next     [_e_] Edit
+[_M-p_] Unmark-Prev   [_M-n_] Unmark-Next   [_q_] Quit
 ^ ^                   ^ ^
 "
   ("n" mc/mark-next-like-this)
