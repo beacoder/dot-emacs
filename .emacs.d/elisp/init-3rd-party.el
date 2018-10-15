@@ -318,6 +318,13 @@
         avy-style 'at-full))
 
 
+;;; rainbow-delimiters
+(when (require-package 'rainbow-delimiters)
+  (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
+  (after-load 'rainbow-delimiters
+    (diminish 'rainbow-delimiters-mode)))
+
+
 ;;; other setting
 (require 'init-hydra)
 (require 'init-git)
