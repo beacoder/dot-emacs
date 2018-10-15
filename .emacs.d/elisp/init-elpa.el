@@ -12,6 +12,7 @@
   (setq package-user-dir versioned-package-dir))
 
 
+
 ;;; Standard package repositories
 
 (let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
@@ -32,20 +33,24 @@
 (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/"))
 
 
+
 ;;; On-demand installation of packages
 
-(defvar sanityinc/required-packages nil)
+(require 'cl-lib)
 
 (defun require-package (package &optional min-version no-refresh)
   "Install given PACKAGE, optionally requiring MIN-VERSION.
 If NO-REFRESH is non-nil, the available package lists will not be
 re-downloaded in order to locate PACKAGE."
   (or (package-installed-p package min-version)
-      (if (or no-refresh (assoc package package-archive-contents))
-          (package-install package)
-        (progn
-          (package-refresh-contents)
-          (require-package package min-version t)))))
+      (let* ((known (cdr (assoc package package-archive-contents)))
+             (versions (mapcar #'package-desc-version known)))
+        (if (cl-find-if (λ (v) (version-list-<= min-version v)) versions)
+            (package-install package)
+          (if no-refresh
+              (error "No version of %s >= %S is available" package min-version)
+            (package-refresh-contents)
+            (require-package package min-version t))))))
 
 (defun maybe-require-package (package &optional min-version no-refresh)
   "Try to install PACKAGE, and return non-nil if successful.
@@ -69,6 +74,8 @@ locate PACKAGE."
 ;; after custom-file has been loaded, which is a bug. We work around this by adding
 ;; the required packages to package-selected-packages after startup is complete.
 
+(defvar sanityinc/required-packages nil)
+
 (defun sanityinc/note-selected-package (oldfun package &rest args)
   "If OLDFUN reports PACKAGE was successfully installed, note it in `sanityinc/required-packages'."
   (let ((available (apply oldfun package args)))
@@ -81,16 +88,13 @@ locate PACKAGE."
 (when (fboundp 'package--save-selected-packages)
   (require-package 'seq)
   (add-hook 'after-init-hook
-            (lambda () (package--save-selected-packages
+            (λ () (package--save-selected-packages
                    (seq-uniq (append sanityinc/required-packages package-selected-packages))))))
 
 
 (require-package 'fullframe)
 (fullframe list-packages quit-window)
 
-
-(require-package 'cl-lib)
-(require 'cl-lib)
 
 (defun sanityinc/set-tabulated-list-column-width (col-name width)
   "Set any column with name COL-NAME to the given WIDTH."
