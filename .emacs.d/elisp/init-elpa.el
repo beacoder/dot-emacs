@@ -12,7 +12,6 @@
   (setq package-user-dir versioned-package-dir))
 
 
-
 ;;; Standard package repositories
 
 (let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
@@ -33,7 +32,6 @@
 (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/"))
 
 
-
 ;;; On-demand installation of packages
 
 (require 'cl-lib)
@@ -45,7 +43,7 @@ re-downloaded in order to locate PACKAGE."
   (or (package-installed-p package min-version)
       (let* ((known (cdr (assoc package package-archive-contents)))
              (versions (mapcar #'package-desc-version known)))
-        (if (cl-find-if (λ (v) (version-list-<= min-version v)) versions)
+        (if (cl-find-if (lambda (v) (version-list-<= min-version v)) versions)
             (package-install package)
           (if no-refresh
               (error "No version of %s >= %S is available" package min-version)
@@ -88,7 +86,7 @@ locate PACKAGE."
 (when (fboundp 'package--save-selected-packages)
   (require-package 'seq)
   (add-hook 'after-init-hook
-            (λ () (package--save-selected-packages
+            (lambda () (package--save-selected-packages
                    (seq-uniq (append sanityinc/required-packages package-selected-packages))))))
 
 
