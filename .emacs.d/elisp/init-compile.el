@@ -32,7 +32,20 @@
 
 (after-load 'compile
   (add-hook 'compilation-finish-functions
-            'sanityinc/alert-after-compilation-finish))
+            'sanityinc/alert-after-compilation-finish)
+  (setq compilation-window-height 8)
+  ;; @see http://xugx2007.blogspot.com.au/2007/06/benjamin-rutts-emacs-c-development-tips.html
+  (add-hook 'compilation-finish-functions
+            #'(λ (buf str)
+                (if (string-match "exited abnormally" str)
+                    ;;there were errors
+                    (message "compilation errors, press C-x ` to visit")
+                  ;;no errors, make the compilation window go away in 0.5 seconds
+                  (when (string-match "*compilation*" (buffer-name buf))
+                    ;; @see http://emacswiki.org/emacs/ModeCompile#toc2
+                    (bury-buffer "*compilation*")
+                    (winner-undo)
+                    (message "NO COMPILATION ERRORS!"))))))
 
 (defvar sanityinc/last-compilation-buffer nil
   "The last buffer in which compilation took place.")
