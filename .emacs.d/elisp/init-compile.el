@@ -36,7 +36,7 @@
   (setq compilation-window-height 8)
   ;; @see http://xugx2007.blogspot.com.au/2007/06/benjamin-rutts-emacs-c-development-tips.html
   (add-hook 'compilation-finish-functions
-            #'(λ (buf str)
+            #'(lambda (buf str)
                 (if (string-match "exited abnormally" str)
                     ;;there were errors
                     (message "compilation errors, press C-x ` to visit")
