@@ -37,20 +37,6 @@
 (defun my-c-mode-common-hook ()
   ;; give me NO newline automatically after electric expressions are entered
   (setq c-auto-newline nil)
-  ;; @see http://xugx2007.blogspot.com.au/2007/06/benjamin-rutts-emacs-c-development-tips.html
-  (setq compilation-window-height 8)
-  (setq compilation-finish-function
-        (lambda (buf str)
-          (if (string-match "exited abnormally" str)
-              ;;there were errors
-              (message "compilation errors, press C-x ` to visit")
-            ;;no errors, make the compilation window go away in 0.5 seconds
-            (when (string-match "*compilation*" (buffer-name buf))
-              ;; @see http://emacswiki.org/emacs/ModeCompile#toc2
-              (bury-buffer "*compilation*")
-              (winner-undo)
-              (message "NO COMPILATION ERRORS!")))))
-
   ;; other customizations
   (setq c-basic-offset 4)
   (setq tab-width 8)
