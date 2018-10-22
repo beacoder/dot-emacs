@@ -85,8 +85,7 @@
   (when (maybe-require-package 'company-c-headers)
     (after-load 'company
       (add-hook 'c-mode-common-hook
-                #'(lambda () (sanityinc/local-push-company-backend 'company-c-headers)))))
-
+                #'(λ () (push 'company-c-headers company-backends)))))
 
   ;; flycheck
   (add-hook 'c++-mode-hook
