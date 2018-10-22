@@ -10,8 +10,8 @@
 
 (when (maybe-require-package 'company)
   (add-hook 'after-init-hook 'global-company-mode)
-  (after-load 'company
-    (diminish 'company-mode "CMP")
+  (after-load 'company    
+    (diminish 'company-mode)
     ;; (define-key company-mode-map (kbd "M-/") 'company-complete)
     ;; (define-key company-active-map (kbd "M-/") 'company-select-next)
     (setq-default company-backends
