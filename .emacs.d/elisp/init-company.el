@@ -20,14 +20,7 @@
                    company-files company-cmake)
                  company-dabbrev-other-buffers 'all
                  company-tooltip-align-annotations t))
-  (global-set-key (kbd "\C-c TAB") #'company-complete)
-  ;; (when (maybe-require-package 'company-quickhelp)
-  ;;  (add-hook 'after-init-hook 'company-quickhelp-mode))
-
-  (defun sanityinc/local-push-company-backend (backend)
-    "Add BACKEND to a buffer-local version of `company-backends'."
-    (make-local-variable 'company-backends)
-    (push backend company-backends)))
+  (global-set-key (kbd "\C-c TAB") #'company-complete))
 
 
 ;; Suspend page-break-lines-mode while company menu is active
