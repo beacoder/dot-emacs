@@ -84,8 +84,7 @@
   ;; company-c-headers
   (when (maybe-require-package 'company-c-headers)
     (after-load 'company
-      (add-hook 'c-mode-common-hook
-                #'(lambda () (push 'company-c-headers company-backends)))))
+      (after-load 'cc-mode (push 'company-c-headers company-backends))))
 
   ;; flycheck
   (add-hook 'c++-mode-hook
