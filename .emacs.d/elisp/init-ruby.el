@@ -41,7 +41,6 @@
 (require-package 'inf-ruby)
 
 
-
 ;;; Ruby compilation
 (require-package 'ruby-compilation)
 
@@ -54,22 +53,18 @@
   (defalias 'rake 'ruby-compilation-rake))
 
 
-
 ;;; Robe
 (when (maybe-require-package 'robe)
   (after-load 'ruby-mode
     (add-hook 'ruby-mode-hook 'robe-mode))
-  (after-load 'company
-    (dolist (hook (mapcar 'derived-mode-hook-name '(ruby-mode inf-ruby-mode html-erb-mode haml-mode)))
-      (add-hook hook
-                (lambda () (sanityinc/local-push-company-backend 'company-robe))))))
-
+  (after-load 'robe
+    (after-load 'company
+      (push 'company-robe company-backends))))
 
 
 ;;; ri support
 (require-package 'yari)
 (defalias 'ri 'yari)
-
 
 
 (require-package 'goto-gem)
