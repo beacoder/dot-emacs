@@ -49,6 +49,8 @@ by using nxml's indentation rules."
 
 ;; company-nxml
 (after-load 'company
-  (add-hook 'nxml-mode-hook (lambda () (sanityinc/local-push-company-backend 'company-nxml))))
+  (after-load 'nxml
+    (push 'company-nxml company-backends)))
 
 (provide 'init-nxml)
+;;; init-nxml.el ends here
