@@ -40,7 +40,6 @@
                 (if (string-match "exited abnormally" str)
                     ;;there were errors
                     (message "compilation errors, press C-x ` to visit")
-                  ;;no errors, make the compilation window go away in 0.5 seconds
                   (when-let ((buf-name (buffer-name buf))
                              (is-exist (string-match "*compilation*" buf-name)))
                     ;; @see http://emacswiki.org/emacs/ModeCompile#toc2
