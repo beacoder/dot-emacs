@@ -41,7 +41,8 @@
                     ;;there were errors
                     (message "compilation errors, press C-x ` to visit")
                   ;;no errors, make the compilation window go away in 0.5 seconds
-                  (when (string-match "*compilation*" (buffer-name buf))
+                  (when-let ((buf-name (buffer-name buf))
+                             (is-exist (string-match "*compilation*" buf-name)))
                     ;; @see http://emacswiki.org/emacs/ModeCompile#toc2
                     (bury-buffer "*compilation*")
                     (winner-undo)
