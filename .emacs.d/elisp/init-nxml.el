@@ -50,8 +50,7 @@ indentation rules."
 
 ;; company-nxml
 (after-load 'company
-  (after-load 'nxml
-    (push 'company-nxml company-backends)))
+  (after-load 'nxml (push 'company-nxml company-backends)))
 
 (provide 'init-nxml)
 ;;; init-nxml.el ends here
