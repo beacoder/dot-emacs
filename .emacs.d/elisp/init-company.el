@@ -2,9 +2,9 @@
 ;; company-mode setting
 ;;----------------------------------------------------------------------------
 
-(setq tab-always-indent 'complete)
 (add-to-list 'completion-styles 'initials t)
-(setq completion-cycle-threshold 5
+(setq tab-always-indent 'complete
+      completion-cycle-threshold 5
       company-show-numbers t)
 
 
@@ -12,14 +12,14 @@
   (add-hook 'after-init-hook 'global-company-mode)
   (after-load 'company
     (diminish 'company-mode)
-    ;; (define-key company-mode-map (kbd "M-/") 'company-complete)
-    ;; (define-key company-active-map (kbd "M-/") 'company-select-next)
     (setq-default company-backends
                  '((company-capf company-dabbrev-code company-dabbrev) ; changes for c++
                    (company-gtags company-etags company-keywords)
                    company-files company-cmake)
                  company-dabbrev-other-buffers 'all
                  company-tooltip-align-annotations t))
+  (when (maybe-require-package 'company-quickhelp)
+    (add-hook 'after-init-hook 'company-quickhelp-mode))
   (global-set-key (kbd "\C-c TAB") #'company-complete))
 
 
