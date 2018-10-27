@@ -55,4 +55,9 @@
 
 (defalias 'cc 'clone-indirect-buffer)
 
+;; prettify the xml in the active region
+(defalias 'prt 'sanityinc/pp-xml-region)
+(defalias 'tidy 'sanityinc/tidy-buffer-xml)
+
 (provide 'init-alias)
+;;; init-alias.el ends here
