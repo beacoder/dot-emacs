@@ -1,6 +1,7 @@
 ;;----------------------------------------------------------------------------
 ;; benchmarking utils
 ;;----------------------------------------------------------------------------
+
 (defun sanityinc/time-subtract-millis (b a)
   (* 1000.0 (float-time (time-subtract b a))))
 
@@ -9,18 +10,19 @@
   "A list of (FEATURE LOAD-START-TIME LOAD-DURATION).
 LOAD-DURATION is the time taken in milliseconds to load FEATURE.")
 
-(defadvice require (around sanityinc/build-require-times (feature &optional filename noerror) activate)
+(defun sanityinc/require-times-wrapper (orig feature &rest args)
   "Note in `sanityinc/require-times' the time taken to require each feature."
   (let* ((already-loaded (memq feature features))
          (require-start-time (and (not already-loaded) (current-time))))
     (prog1
-        ad-do-it
+        (apply orig feature args)
       (when (and (not already-loaded) (memq feature features))
         (let ((time (sanityinc/time-subtract-millis (current-time) require-start-time)))
           (add-to-list 'sanityinc/require-times
                        (list feature require-start-time time)
                        t))))))
 
+(advice-add 'require :around 'sanityinc/require-times-wrapper)
 
 (define-derived-mode sanityinc/require-times-mode tabulated-list-mode "Require-Times"
   "Show times taken to `require' packages."
@@ -70,3 +72,4 @@ LOAD-DURATION is the time taken in milliseconds to load FEATURE.")
 
 
 (provide 'init-benchmarking)
+;;; init-benchmarking.el ends here
