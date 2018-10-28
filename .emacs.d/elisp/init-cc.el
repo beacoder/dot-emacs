@@ -7,6 +7,7 @@
 ;;; Find tag
 ;;  ggtags-find-tag-dwim
 ;;  ggtags-find-reference
+;;  dumb-jump
 ;;
 ;;; Grep tag
 ;;  ag-project
