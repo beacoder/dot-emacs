@@ -12,7 +12,7 @@
   (add-hook 'after-init-hook 'global-company-mode)
   (after-load 'company
       (diminish 'company-mode)
-      (dolist (backend '(company-eclim company-semantic))
+      (dolist (backend '(company-eclim company-semantic company-clang)) ;; Tags over Clang for efficiency
         (delq backend company-backends))
       (setq-default company-dabbrev-other-buffers 'all
                     company-tooltip-align-annotations t))
