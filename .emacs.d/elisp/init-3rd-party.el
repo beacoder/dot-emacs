@@ -325,6 +325,14 @@
     (diminish 'rainbow-delimiters-mode)))
 
 
+;;; dumb-jump - Ag for code navigation
+(when (require-package 'dumb-jump)
+  (dumb-jump-mode)
+  (define-key dumb-jump-mode-map (kbd "C-M-p") nil)
+  (setq dumb-jump-selector 'ivy
+        dumb-jump-prefer-searcher 'ag))
+
+
 ;;; other setting
 (require 'init-hydra)
 (require 'init-git)
