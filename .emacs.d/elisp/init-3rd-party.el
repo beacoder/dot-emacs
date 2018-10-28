@@ -311,7 +311,7 @@
         super-save-remote-files nil))
 
 
-;;; avy-mode - Effective navigation
+;;; avy-mode - Efficient cursor movement
 (when (maybe-require-package 'avy)
   (global-set-key (kbd "M-:") 'avy-goto-char-timer)
   (setq avy-background t
@@ -325,7 +325,7 @@
     (diminish 'rainbow-delimiters-mode)))
 
 
-;;; dumb-jump - Ag for code navigation
+;;; dumb-jump - Find tag with Ag/Git-grep/Grep
 (when (require-package 'dumb-jump)
   (dumb-jump-mode)
   (define-key dumb-jump-mode-map (kbd "C-M-p") nil)
