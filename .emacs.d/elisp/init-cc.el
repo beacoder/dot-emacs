@@ -5,25 +5,25 @@
 ;;; useful key-bindings
 ;;----------------------------------------------------------------------------
 ;;; Find tag
-;;  ggtags-find-tag-dwim
-;;  ggtags-find-reference
-;;  dumb-jump
+;;  ggtags-find-tag-dwim  (M-.)
+;;  ggtags-find-reference (M-])
+;;  dumb-jump             (C-M-g)
 ;;
 ;;; Grep tag
-;;  ag-project
-;;  counsel-ag
-;;  counsel-git-grep
-;;  ggtags-grep
+;;  ag-project            (M-s|M-r)
+;;  counsel-ag            (C-x q a)
+;;  counsel-git-grep      (C-x q g)
+;;  ggtags-grep           (C-c M-g)
 
 ;;; Find file
-;;  counsel-git
-;;  ggtags-find-file
-;;  counsel-locate
+;;  counsel-git           (C-x q f)
+;;  ggtags-find-file      (C-c M-f)
+;;  counsel-locate        (C-x q l)
 
 ;;; useful commands
 ;;----------------------------------------------------------------------------
 ;;; Keep #includes in alphabetical order
-;;  sort-lines
+;;  sort-lines            (C-x q s)
 
 ;; avoid default "gnu" style, use more popular one
 (setq c-default-style "linux")
