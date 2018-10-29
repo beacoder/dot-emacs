@@ -19,7 +19,7 @@
 [_P_]   Skip-Prev     [_N_]   Skip-Next     [_e_] Edit
 [_M-p_] Unmark-Prev   [_M-n_] Unmark-Next   [_q_] Quit
 ^ ^                   ^ ^
-"
+  "
   ("n" mc/mark-next-like-this)
   ("N" mc/skip-to-next-like-this)
   ("M-n" mc/unmark-next-like-this)
@@ -38,7 +38,7 @@
 [_s_] split-window    [_d_] dedicate-current-window    [_]_] enlarge-window-horizontally    [_)_] enlarge-window-vertically
 [_p_] winner-undo     [_n_] winner-redo                [_[_] shrink-window-horizontally     [_(_] shrink-window-vertically
 [_q_] quit
-"
+  "
   ("s" sanityinc/split-window)
   ("d" sanityinc/toggle-current-window-dedication :exit t)
   ("]" enlarge-window-horizontally)
@@ -58,7 +58,7 @@
 [_u_] Update-GTAGS       [_c_] Mode-Compile     [_C_] Compile         [_r_] Recompile          [_N_] Move-Text-Down
 [_w_] Google-Search-Word [_k_] Google-Lucky     [_p_] Previous-mark   [_n_] Next-mark          [_j_] Dumb-Jump
 [_i_] Pyim               [_s_] Sort-Lines       [_q_] Quit
-"
+  "
   ("a" smart/counsel-ag :exit t)
   ("g" counsel-git-grep :exit t)
   ("f" counsel-git :exit t)
