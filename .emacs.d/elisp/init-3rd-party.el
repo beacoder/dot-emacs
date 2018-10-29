@@ -330,7 +330,8 @@
   (dumb-jump-mode)
   (define-key dumb-jump-mode-map (kbd "C-M-p") nil)
   (setq dumb-jump-selector 'ivy
-        dumb-jump-prefer-searcher 'ag))
+        ;; dumb-jump-prefer-searcher 'ag
+        dumb-jump-force-searcher 'ag)) ;; Use Ag only
 
 
 ;;; other setting
