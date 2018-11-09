@@ -45,9 +45,9 @@
 
 
 ;;; browse-kill-ring
-(require-package 'browse-kill-ring)
-(setq browse-kill-ring-separator "\f")
-(global-set-key (kbd "C-c y") #'browse-kill-ring)
+(when (require-package 'browse-kill-ring)
+  (setq browse-kill-ring-separator "\f")
+  (global-set-key (kbd "C-M-y") #'browse-kill-ring))
 
 
 ;;; slime setting
