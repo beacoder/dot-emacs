@@ -35,7 +35,7 @@
   "
                  ^Commands^
 --------------------------------------------
-[_s_] swap-windows       [_d_] dedicate-current-window    [_]_] enlarge-window-horizontally    [_)_] enlarge-window-vertically
+[_s_] swap-window        [_d_] dedicate-current-window    [_]_] enlarge-window-horizontally    [_)_] enlarge-window-vertically
 [_p_] winner-undo        [_n_] winner-redo                [_[_] shrink-window-horizontally     [_(_] shrink-window-vertically
 [_v_] preview-window     [_q_] quit
 "
