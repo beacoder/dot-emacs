@@ -35,18 +35,19 @@
   "
                  ^Commands^
 --------------------------------------------
-[_s_] split-window    [_d_] dedicate-current-window    [_]_] enlarge-window-horizontally    [_)_] enlarge-window-vertically
-[_p_] winner-undo     [_n_] winner-redo                [_[_] shrink-window-horizontally     [_(_] shrink-window-vertically
-[_q_] quit
-  "
-  ("s" sanityinc/split-window)
+[_s_] swap-windows       [_d_] dedicate-current-window    [_]_] enlarge-window-horizontally    [_)_] enlarge-window-vertically
+[_p_] winner-undo        [_n_] winner-redo                [_[_] shrink-window-horizontally     [_(_] shrink-window-vertically
+[_v_] preview-window     [_q_] quit
+"
+  ("s" transpose-windows)
   ("d" sanityinc/toggle-current-window-dedication :exit t)
   ("]" enlarge-window-horizontally)
-  ("[" shrink-window-horizontally)
   (")" enlarge-window-vertically)
-  ("(" shrink-window-vertically)
   ("p" winner-undo)
   ("n" winner-redo)
+  ("[" shrink-window-horizontally)
+  ("(" shrink-window-vertically)
+  ("v" sanityinc/split-window)
   ("q" nil))
 (global-set-key (kbd "C-x w") #'hydra-window/body)
 
