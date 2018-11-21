@@ -5,7 +5,8 @@
 (when (maybe-require-package 'ivy)
   (add-hook 'after-init-hook 'ivy-mode)
   (after-load 'ivy
-    (setq-default ivy-use-virtual-buffers t
+    (setq-default ivy-height 20
+                  ivy-use-virtual-buffers t
                   ivy-virtual-abbreviate 'fullpath
                   ivy-count-format ""
                   projectile-completion-system 'ivy
@@ -27,7 +28,8 @@
       (diminish 'ivy-mode))
 
     ;; show more results in counsel-ag
-    (add-to-list 'ivy-height-alist (cons 'counsel-ag 20)))
+    ;; (add-to-list 'ivy-height-alist (cons 'counsel-ag 20))
+    )
 
   (defun sanityinc/enable-ivy-flx-matching ()
     "Make `ivy' matching work more like IDO."
