@@ -24,7 +24,10 @@
     (define-key ivy-minibuffer-map (kbd "<up>") #'ivy-previous-line-or-history)
 
     (when (maybe-require-package 'diminish)
-      (diminish 'ivy-mode)))
+      (diminish 'ivy-mode))
+
+    ;; show more results in counsel-ag
+    (add-to-list 'ivy-height-alist (cons 'counsel-ag 20)))
 
   (defun sanityinc/enable-ivy-flx-matching ()
     "Make `ivy' matching work more like IDO."
