@@ -86,7 +86,8 @@
 ;;              "\\(<[^>]+>\\)?"                     ; possibly explicitly specialized
 ;;              "\\)"
 ;;              "\\([ \t\n]\\|\\\\\n\\)*[:{]"
-;;              ) 3))))
+;;              ) 3))
+;;         cc-imenu-c-generic-expression cc-imenu-c++-generic-expression))
 
 
 ;; @see https://weilin2015.wordpress.com/2016/05/30/create-imenu-index-for-gtest/
@@ -99,7 +100,7 @@
   (defun xwl-skip-gtest/imenu--make-index-alist (orig-fun &rest args)
     (let ((orig-ret (apply orig-fun args)))
       (when (derived-mode-p 'c++-mode)
-        (setq orig-ret (remove-if (λ (el) (member (car el) '("TEST" "TEST_F"))) orig-ret)))
+        (setq orig-ret (remove-if (lambda (el) (member (car el) '("TEST" "TEST_F"))) orig-ret)))
       orig-ret))
   (advice-add 'imenu--make-index-alist :around 'xwl-skip-gtest/imenu--make-index-alist))
 
