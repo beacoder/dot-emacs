@@ -74,9 +74,6 @@ The argument has the same meaning as in `apropos'."
 ;; isearch-occur is better
 ;; (global-set-key (kbd "\C-cl") #'list-matching-lines)
 
-;; imenu
-(global-set-key (kbd "C-c C-j") #'imenu)
-
 ;;----------------------------------------------------------------------------
 ;; mode setting
 ;;----------------------------------------------------------------------------
