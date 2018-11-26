@@ -150,6 +150,7 @@
   (require 'init-grep)
   (require 'init-compile))
 (require 'init-basics)
+(require 'init-imenu)
 (require 'init-session)
 (require 'init-cperl)
 (require 'init-productivity)
