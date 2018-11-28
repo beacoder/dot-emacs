@@ -38,7 +38,7 @@
               " "
               (size-h 9 -1 :right)
               " "
-              (mode 16 16 :left :elide)
+              (mode 12 12 :left :elide)
               " "
               filename-and-process)
         (mark modified read-only vc-status-mini " "
@@ -46,9 +46,9 @@
               " "
               (size-h 9 -1 :right)
               " "
-              (mode 16 16 :left :elide)
+              (mode 14 14 :left :elide)
               " "
-              (vc-status 16 16 :left)
+              (vc-status 12 12 :left)
               " "
               filename-and-process)))
 
