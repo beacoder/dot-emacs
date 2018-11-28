@@ -27,11 +27,6 @@
      (t (format "%8d" (buffer-size))))))
 
 
-;; Explicitly require ibuffer-vc to get its column definitions, which
-;; can't be autoloaded
-(after-load 'ibuffer
-  (require 'ibuffer-vc))
-
 ;; Don't block these key-bindings
 (after-load 'ibuffer
   (bind-keys
