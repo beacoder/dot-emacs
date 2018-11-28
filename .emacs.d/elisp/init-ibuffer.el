@@ -34,19 +34,19 @@
 ;; Modify the default ibuffer-formats (toggle with `)
 (setq ibuffer-formats
       '((mark modified read-only vc-status-mini " "
-              (name 22 22 :left :elide)
+              (name 30 30 :left :elide)
               " "
               (size-h 9 -1 :right)
               " "
-              (mode 12 12 :left :elide)
+              (mode 16 16 :left :elide)
               " "
               filename-and-process)
         (mark modified read-only vc-status-mini " "
-              (name 22 22 :left :elide)
+              (name 30 30 :left :elide)
               " "
               (size-h 9 -1 :right)
               " "
-              (mode 14 14 :left :elide)
+              (mode 16 16 :left :elide)
               " "
               (vc-status 12 12 :left)
               " "
