@@ -25,7 +25,7 @@
             "[^()]*\\(([^()]*)[^()]*\\)*"         ; Maybe function pointer arguments
             "\\)?)\\)"                            ; END OF 2ND-GROUP
             "\\([ \t\n]\\|\\\\\n\\)*[^ \t\n;(]"
-            ) 2)
+            ) 2)                                  ; USE 2ND-GROUP AS IMENU ITEM
         cc-imenu-c-generic-expression cc-imenu-c++-generic-expression)
 
   ;; @see https://weilin2015.wordpress.com/2016/05/30/create-imenu-index-for-gtest/
