@@ -320,11 +320,15 @@ Use in `isearch-mode-end-hook'."
 ;; improve performance
 ;;(setq flyspell-issue-message-flag nil)
 
-;; fix Error: No word lists can be found for the language "zh_CN"
-;; use apsell as ispell backend
+(require 'ispell)
 (setq-default ispell-program-name "aspell")
-;; use American English as ispell default dictionary
 (ispell-change-dictionary "american" t)
+(when (executable-find ispell-program-name)
+  ;; Add spell-checking in comments for all programming language modes
+  (add-hook 'prog-mode-hook 'flyspell-prog-mode)
+  (after-load 'flyspell
+    (define-key flyspell-mode-map (kbd "C-;") nil)
+    (add-to-list 'flyspell-prog-text-faces 'nxml-text-face)))
 
 ;;----------------------------------------------------------------------------
 ;; Switch ibuffer format
