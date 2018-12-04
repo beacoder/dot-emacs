@@ -83,8 +83,8 @@ The argument has the same meaning as in `apropos'."
 
 ;; auto-refresh all buffers when files have changed on disk.
 (add-hook 'after-init-hook 'global-auto-revert-mode)
-;; auto-refresh imenu items
-(add-hook 'global-auto-revert-mode-hook
+;; auto-refresh imenu items after auto-revert
+(add-hook 'after-revert-hook
           #'(λ () (when (derived-mode-p 'prog-mode)
                     (setq imenu--index-alist nil))))
 ;; I use this mode for log files (Emacs’s version of tail -f) to easily search through the logs.
