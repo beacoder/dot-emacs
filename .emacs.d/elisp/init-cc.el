@@ -34,6 +34,11 @@
   ;; new value
   (add-to-list 'c-offsets-alist '(key . val)))
 
+(defun my-refresh-imenu ()
+  "Refresh imenu items."
+  (when (derived-mode-p 'prog-mode)
+    (setq imenu--index-alist nil)))
+
 ;; personal settings
 (defun my-c-mode-common-hook ()
   ;; give me NO newline automatically after electric expressions are entered
@@ -57,6 +62,10 @@
   (c-toggle-auto-hungry-state 1)
   (fix-c-indent-offset-according-to-syntax-context 'substatement 0)
   (fix-c-indent-offset-according-to-syntax-context 'func-decl-cont 0)
+
+  ;; auto-refresh imenu items after auto-revert
+  (remove-hook 'after-revert-hook 'my-refresh-imenu t)
+  (add-hook 'after-revert-hook 'my-refresh-imenu nil t)
 
   ;; allow global binding to work when c/c++-mode is active
   (define-key c++-mode-map (kbd "C-c C-e") nil)
