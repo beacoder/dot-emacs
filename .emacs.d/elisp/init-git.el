@@ -42,9 +42,7 @@
    '(magit-diff-removed-highlight ((t (:background "black" :foreground "red3"))))))
 
 
-(when (maybe-require-package 'magit-todos)
-  (after-load 'magit
-    (magit-todos-mode)))
+(maybe-require-package 'magit-todos)
 
 
 (require-package 'fullframe)
