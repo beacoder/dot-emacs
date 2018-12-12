@@ -17,13 +17,14 @@
 (require-package 'git-timemachine)
 
 
-;; "magit-blame-addition"  => for each line show the revision in which it was added
-;; "magit-log-buffer-file" => git history of current file
+;; "magit-blame-addition" => for each line show the revision in which it was added
+;; "C-x v p"              => last commit for current thing-at-point
+;; "C-x v l"              => git history of current file
 (when (maybe-require-package 'magit)
   (setq-default magit-diff-refine-hunk t)
 
   (global-set-key (kbd "C-x g") #'magit-status)
-  (global-set-key (kbd "C-x M-g") #'magit-dispatch-popup))
+  (global-set-key (kbd "C-x M-g") #'magit-dispatch-popup)
 
   (defun sanityinc/magit-or-vc-log-file (&optional prompt)
     (interactive "P")
