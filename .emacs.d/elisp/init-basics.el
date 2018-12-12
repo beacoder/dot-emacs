@@ -390,6 +390,20 @@ Use in `isearch-mode-end-hook'."
 (setq uniquify-ignore-buffers-re "^\\*")
 
 ;;----------------------------------------------------------------------------
+;; Fix backward-up-list to understand quotes, see http://bit.ly/h7mdIL
+;;----------------------------------------------------------------------------
+(defun sanityinc/backward-up-sexp (arg)
+  "Jump up to the start of the ARG'th enclosing sexp."
+  (interactive "p")
+  (let ((ppss (syntax-ppss)))
+    (cond ((elt ppss 3)
+           (goto-char (elt ppss 8))
+           (sanityinc/backward-up-sexp (1- arg)))
+          ((backward-up-list arg)))))
+
+(global-set-key [remap backward-up-list] 'sanityinc/backward-up-sexp) ; C-M-u, C-M-up
+
+;;----------------------------------------------------------------------------
 ;; Measure startup time
 ;;----------------------------------------------------------------------------
 (require 'init-benchmarking)
