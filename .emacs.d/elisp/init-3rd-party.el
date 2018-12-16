@@ -335,11 +335,6 @@
         dumb-jump-max-find-time 60)) ;; for big project, wait one minute
 
 
-;;; peg - recursive-descent parser generators
-(when (maybe-require-package 'peg)
-  (require 'peg))
-
-
 ;;; other setting
 (require 'init-hydra)
 (require 'init-git)
