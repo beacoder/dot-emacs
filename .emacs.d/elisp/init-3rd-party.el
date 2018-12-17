@@ -133,7 +133,7 @@
 
 
 ;;; ggtags setting
-;; install "GNU Global" with "Exuberant Ctags" support
+;; install "GNU Global" with universal-ctags support
 ;; "cd /path/to/project && gtags"
 ;;
 ;; "M-."     => ggtags-find-tag-dwim
