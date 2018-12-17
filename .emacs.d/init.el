@@ -41,18 +41,15 @@
 ;;         (define-key coffee-mode-map (kbd "C-c c" 'coffee-compile-file))))
 
 
-;;; create tags
-;; requires 'Exuberant Ctags' installed
+;;; create tags with 'universal-ctags'
 (defun create-tags (dir-name1 tag-file-name dir-name2)
   "Create tags file."
   (interactive
-   "DDirectory where tag-file will be saved: \
-    \nsName of the tag-file (TAGS): \
-    \nDDirectory to be taged: ")
+   "DDirectory to save tag-file: \nsName of tag-file (TAGS): \nDDirectory to be taged: ")
   (if (string= "" tag-file-name) (setq tag-file-name "TAGS"))
   (shell-command
-   ;; use Exuberant Ctags instead of emacs ctags
-   (format "/usr/bin/ctags -f %s/%s -e -R %s" dir-name1 tag-file-name (directory-file-name dir-name2)))
+   ;; use universal-ctags instead of emacs ctags
+   (format "~/private/universal-ctags/bin/ctags -f %s/%s -e -R %s" dir-name1 tag-file-name (directory-file-name dir-name2)))
   (message "create-tags succeed !"))
 (defalias 'ct 'create-tags)
 
