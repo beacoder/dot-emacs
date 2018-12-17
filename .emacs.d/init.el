@@ -43,7 +43,7 @@
 
 ;;; create tags with 'universal-ctags'
 (defun create-tags (dir-name1 tag-file-name dir-name2)
-  "Create tags file."
+  "Create tags file TAG-FILE-NAME for directory DIR-NAME2 in directory DIR-NAME1."
   (interactive
    "DDirectory to save tag-file: \nsName of tag-file (TAGS): \nDDirectory to be taged: ")
   (if (string= "" tag-file-name) (setq tag-file-name "TAGS"))
