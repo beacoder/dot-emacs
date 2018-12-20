@@ -47,7 +47,7 @@
   ;; TODO: add more code in call-graph to use arg-list to make better judgement.
   (setq which-func-cleanup-function
         #'(lambda (imenu-item)
-            (trim-string (nth 0 (split-string imenu-item "("))))))
+            (trim-string (car (split-string imenu-item "("))))))
 
 
 (provide 'init-imenu)
