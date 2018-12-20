@@ -36,12 +36,12 @@
 
 ;;; undo-tree setting
 ;; "C-x u" => open the undo-tree-visualizer
-(require-package 'undo-tree)
-(add-hook 'after-init-hook 'global-undo-tree-mode)
-(after-load 'undo-tree
-  (diminish 'undo-tree-mode))
-;; undo-buffer limit -> 100 MB                                                       |
-(setq undo-outer-limit (* 100 (expt 1024 2)))
+(when (require-package 'undo-tree)
+  (add-hook 'after-init-hook 'global-undo-tree-mode)
+  (after-load 'undo-tree
+    (diminish 'undo-tree-mode)
+    ;; undo-buffer limit -> 100 MB                                                       |
+    (setq undo-outer-limit (* 100 (expt 1024 2)))))
 
 
 ;;; browse-kill-ring
