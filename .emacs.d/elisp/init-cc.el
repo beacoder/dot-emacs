@@ -157,7 +157,7 @@
         ("{[^{}]*}"     " curly-brace ")
         ("\\[[^][]*\\]" " brackets-2 ")))
 
-(defun number_of_function_args(func-with-args)
+(defun number-of-function-args(func-with-args)
   "Count number of arguments of FUNC-WITH-ARGS."
   (condition-case nil
       (with-temp-buffer
