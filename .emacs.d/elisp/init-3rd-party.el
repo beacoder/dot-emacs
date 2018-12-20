@@ -141,16 +141,16 @@
 ;; "C-c M-r" => ggtags-find-tag-regexp
 ;; "C-c M-f" => ggtags-find-file
 ;; "C-c M-g" => ggtags-grep
-(require-package 'ggtags)
-(after-load 'ggtags
-  (define-key ggtags-mode-prefix-map "\M-r" 'ggtags-find-tag-regexp))
-(add-hook 'c-mode-common-hook
-          (lambda () (when (and (executable-find "global")
-                                ;; check existence of GTAGS
-                                (not (string-match-p "GTAGS not found" (shell-command-to-string "global -p")))
-                                (not (member major-mode ggtags-exclude-modes)))
-                       (setq gtags-suggested-key-mapping t)
-                       (ggtags-mode 1))))
+(when (require-package 'ggtags)
+  (after-load 'ggtags
+    (define-key ggtags-mode-prefix-map "\M-r" #'ggtags-find-tag-regexp))
+  (add-hook 'c-mode-common-hook
+            (lambda () (when (and (executable-find "global")
+                             ;; check existence of GTAGS
+                             (not (string-match-p "GTAGS not found" (shell-command-to-string "global -p")))
+                             (not (member major-mode ggtags-exclude-modes)))
+                    (setq gtags-suggested-key-mapping t)
+                    (ggtags-mode 1)))))
 
 
 ;;; weather report
