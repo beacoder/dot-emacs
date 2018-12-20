@@ -148,5 +148,43 @@
           (sort-lines nil beg-region end-region))))))
 
 
+;;; facility to count function args, to be used to improve call-graph accuracy
+;;----------------------------------------------------------------------------
+(setq pattern-replace-alist
+      '(("\"[^\"]*\""   " quoted-string ") ;; get rid of quoted-string first
+        ("([^()]*)"     " parens ")
+        ("<[^<>]*>"     " brackets ")
+        ("{[^{}]*}"     " curly-brace ")
+        ("\\[[^][]*\\]" " brackets-2 ")))
+
+(defun number_of_function_args(func-with-args)
+  "Count number of arguments of FUNC-WITH-ARGS."
+  (condition-case nil
+      (with-temp-buffer
+        (insert func-with-args)
+        (check-parens) ;; check parentheses balance
+        (delete-region (point-min) (with-no-warnings (goto-char (point-min)) (search-forward "(" nil t) (point)))
+        (delete-region (with-no-warnings (goto-char (point-max)) (search-backward ")" nil t) (point)) (point-max))
+        ;; (message (buffer-string))
+        (unwind-protect ;; refer to imenu--generic-function
+            (save-match-data ;; save previous match-data
+              ;; Map over the elements of pattern-replace-alist
+              ;; (pattern, replace)
+              (dolist (pair pattern-replace-alist)
+                (let ((pattern (car pair))
+                      (replace (cadr pair)))
+                  (goto-char (point-min))
+                  (while (re-search-forward pattern nil t) ;; patttern exists
+                    (goto-char (point-min)) ;; start from begining
+                    (while (re-search-forward pattern nil t) ;; start replacing
+                      (replace-match replace t nil))
+                    (goto-char (point-min))))) ;; go over and do match-replace again
+              ;; all noise cleared, count number of args
+              (length (split-string (buffer-string) ",")))))
+    (error nil)))
+
+(assert (= (number_of_function_args "func(template<p1,p2>(a),[a,b](a,b){a,b,c;},(a,b))") 3))
+
+
 (provide 'init-cc)
 ;;; init-cc.el ends here
