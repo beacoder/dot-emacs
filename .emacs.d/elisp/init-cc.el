@@ -183,7 +183,7 @@
               (length (split-string (buffer-string) ",")))))
     (error nil)))
 
-(cl-assert (= (number_of_function_args "func(template<p1,p2>(a),[a,b](a,b){a,b,c;},(a,b))") 3))
+(cl-assert (= (number-of-function-args "func(template<p1,p2>(a),[a,b](a,b){a,b,c;},(a,b))") 3))
 
 
 (provide 'init-cc)
