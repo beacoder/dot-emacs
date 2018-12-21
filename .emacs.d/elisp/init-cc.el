@@ -158,7 +158,7 @@
         ("\\[[^][]*\\]" " brackets-2 ")))
 
 (defun number-of-function-args(func-with-args)
-  "Count number of arguments of FUNC-WITH-ARGS."
+  "Count number of C++ function arguments of FUNC-WITH-ARGS."
   (condition-case nil
       (with-temp-buffer
         (insert func-with-args)
@@ -180,8 +180,15 @@
                       (replace-match replace t nil))
                     (goto-char (point-min))))) ;; go over and do match-replace again
               ;; all noise cleared, count number of args
-              (length (split-string (buffer-string) ",")))))
+              (let ((args-string (trim-string (buffer-string))))
+                (cond ((string= "" args-string) 0)
+                      ((not (string= "" args-string)) (length (split-string args-string ","))))))))
     (error nil)))
+
+(defun get-number-of-function-args(func-with-args)
+  "Interactive get number of arguments of FUNC-WITH-ARGS."
+  (interactive (list (smart/read-from-minibuffer "Input C++ function with args:")))
+  (message "number of args is: %d" (number-of-function-args func-with-args)))
 
 (cl-assert (= (number-of-function-args "func(template<p1,p2>(a),[a,b](a,b){a,b,c;},(a,b))") 3))
 
