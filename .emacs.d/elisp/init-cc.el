@@ -187,6 +187,7 @@
 (defun get-number-of-function-args(func-with-args)
   "Interactive get number of arguments of FUNC-WITH-ARGS."
   (interactive (list (smart/read-from-minibuffer "Input C++ function with args:")))
+  (deactivate-mark)
   (message "number of args is: %d" (number-of-function-args func-with-args)))
 
 (cl-assert (= (number-of-function-args "func(template<p1,p2>(a),[a,b](a,b){a,b,c;},(a,b))") 3))
