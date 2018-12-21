@@ -166,23 +166,22 @@
         (delete-region (point-min) (with-no-warnings (goto-char (point-min)) (search-forward "(" nil t) (point)))
         (delete-region (with-no-warnings (goto-char (point-max)) (search-backward ")" nil t) (point)) (point-max))
         ;; (message (buffer-string))
-        (unwind-protect ;; refer to imenu--generic-function
-            (save-match-data ;; save previous match-data
-              ;; Map over the elements of pattern-replace-alist
-              ;; (pattern, replace)
-              (dolist (pair pattern-replace-alist)
-                (let ((pattern (car pair))
-                      (replace (cadr pair)))
-                  (goto-char (point-min))
-                  (while (re-search-forward pattern nil t) ;; patttern exists
-                    (goto-char (point-min)) ;; start from begining
-                    (while (re-search-forward pattern nil t) ;; start replacing
-                      (replace-match replace t nil))
-                    (goto-char (point-min))))) ;; go over and do match-replace again
-              ;; all noise cleared, count number of args
-              (let ((args-string (trim-string (buffer-string))))
-                (cond ((string= "" args-string) 0)
-                      ((not (string= "" args-string)) (length (split-string args-string ","))))))))
+        (save-match-data ;; save previous match-data and restore later
+          ;; Map over the elements of pattern-replace-alist
+          ;; (pattern, replace)
+          (dolist (pair pattern-replace-alist)
+            (let ((pattern (car pair))
+                  (replace (cadr pair)))
+              (goto-char (point-min))
+              (while (re-search-forward pattern nil t) ;; patttern exists
+                (goto-char (point-min)) ;; start from begining
+                (while (re-search-forward pattern nil t) ;; start replacing
+                  (replace-match replace t nil))
+                (goto-char (point-min))))) ;; go over and do match-replace again
+          ;; all noise cleared, count number of args
+          (let ((args-string (trim-string (buffer-string))))
+            (cond ((string= "" args-string) 0)
+                  ((not (string= "" args-string)) (length (split-string args-string ",")))))))
     (error nil)))
 
 (defun get-number-of-function-args(func-with-args)
