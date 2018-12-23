@@ -150,12 +150,14 @@
 
 ;;; facility to count function args, to be used to improve call-graph accuracy
 ;;----------------------------------------------------------------------------
-(setq pattern-replace-alist
-      '(("\"[^\"]*\""   " quoted-string ") ;; get rid of quoted-string first
-        ("([^()]*)"     " parens ")
-        ("<[^<>]*>"     " brackets ")
-        ("{[^{}]*}"     " curly-brace ")
-        ("\\[[^][]*\\]" " brackets-2 ")))
+(defvar pattern-replace-alist
+  '(("\"[^\"]*\""   " quoted-string ") ;; get rid of quoted-string first
+    ("([^()]*)"     " parens ")
+    ("<[^<>]*>"     " brackets ")
+    ("{[^{}]*}"     " curly-brace ")
+    ("\\[[^][]*\\]" " brackets-2 ")
+    ("void"         ""))
+  "Replace PATTERN with REPLACE for better argument parsing.")
 
 (defun number-of-function-args(func-with-args)
   "Count number of C++ function arguments of FUNC-WITH-ARGS."
@@ -186,7 +188,7 @@
 
 (defun get-number-of-function-args(func-with-args)
   "Interactive get number of arguments of FUNC-WITH-ARGS."
-  (interactive (list (smart/read-from-minibuffer "Input C++ function with args:")))
+  (interactive (list (smart/read-from-minibuffer "Input C++ function with args")))
   (deactivate-mark)
   (message "number of args is: %d" (number-of-function-args func-with-args)))
 
