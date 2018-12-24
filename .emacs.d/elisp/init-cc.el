@@ -148,52 +148,5 @@
           (sort-lines nil beg-region end-region))))))
 
 
-;;; facility to count function args, to be used to improve call-graph accuracy
-;;----------------------------------------------------------------------------
-(defvar pattern-replace-alist
-  '(("\"[^\"]*\""   " quoted-string ") ;; get rid of quoted-string first
-    ("([^()]*)"     " parens ")
-    ("<[^<>]*>"     " brackets ")
-    ("{[^{}]*}"     " curly-brace ")
-    ("\\[[^][]*\\]" " brackets-2 ")
-    ("void"         ""))
-  "Replace PATTERN with REPLACE for better argument parsing.")
-
-(defun number-of-function-args(func-with-args)
-  "Count number of C++ function arguments of FUNC-WITH-ARGS."
-  (condition-case nil
-      (with-temp-buffer
-        (insert func-with-args)
-        (check-parens) ;; check parentheses balance
-        (delete-region (point-min) (with-no-warnings (goto-char (point-min)) (search-forward "(" nil t) (point)))
-        (delete-region (with-no-warnings (goto-char (point-max)) (search-backward ")" nil t) (point)) (point-max))
-        ;; (message (buffer-string))
-        (save-match-data ;; save previous match-data and restore later
-          ;; Map over the elements of pattern-replace-alist
-          ;; (pattern, replace)
-          (dolist (pair pattern-replace-alist)
-            (let ((pattern (car pair))
-                  (replace (cadr pair)))
-              (goto-char (point-min))
-              (while (re-search-forward pattern nil t) ;; patttern exists
-                (goto-char (point-min)) ;; start from begining
-                (while (re-search-forward pattern nil t) ;; start replacing
-                  (replace-match replace t nil))
-                (goto-char (point-min))))) ;; go over and do match-replace again
-          ;; all noise cleared, count number of args
-          (let ((args-string (trim-string (buffer-string))))
-            (cond ((string= "" args-string) 0)
-                  ((not (string= "" args-string)) (length (split-string args-string ",")))))))
-    (error nil)))
-
-(defun get-number-of-function-args(func-with-args)
-  "Interactive get number of arguments of FUNC-WITH-ARGS."
-  (interactive (list (smart/read-from-minibuffer "Input C++ function with args")))
-  (deactivate-mark)
-  (message "number of args is: %d" (number-of-function-args func-with-args)))
-
-(cl-assert (= (number-of-function-args "func(template<p1,p2>(a),[a,b](a,b){a,b,c;},(a,b))") 3))
-
-
 (provide 'init-cc)
 ;;; init-cc.el ends here
