@@ -14,12 +14,14 @@
 ;; "n"               => next historic version
 ;; "g"               => nth revision
 ;; "q"               => quit time machine
-(require-package 'git-timemachine)
+(when (maybe-require-package 'git-timemachine)
+  (global-set-key (kbd "C-x v t") 'git-timemachine-toggle))
 
 
 ;; "magit-blame-addition" => for each line show the revision in which it was added
 ;; "C-x v p"              => last commit for current thing-at-point
 ;; "C-x v l"              => git history of current file
+;; "C-x v t"              => git timemachine
 (when (maybe-require-package 'magit)
   (setq-default magit-diff-refine-hunk t)
 
