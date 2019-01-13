@@ -39,10 +39,6 @@
                   '((t . ivy--regex-fuzzy)))))
 
 
-(when (maybe-require-package 'ivy-historian)
-  (add-hook 'after-init-hook (lambda () (ivy-historian-mode t))))
-
-
 (when (maybe-require-package 'counsel)
   (after-load 'counsel
     ;; don't override pop-to-mark-command
