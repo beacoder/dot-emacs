@@ -1,4 +1,6 @@
-;; save register definitions
+;;----------------------------------------------------------------------------
+;; register setting
+;;----------------------------------------------------------------------------
 
 ;; "C-x r j d" to open directory ".emacs.d"
 (set-register ?d '(file . "~/.emacs.d"))
@@ -14,3 +16,4 @@
 (set-register ?w '(file . "~/workspace"))
 
 (provide 'init-register)
+;;; init-register.el ends here
