@@ -59,3 +59,4 @@
                                            (rtags-select-other-window))))
 
 (provide 'init-rtags)
+;;; init-rtags.el ends here
