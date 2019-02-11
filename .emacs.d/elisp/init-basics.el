@@ -409,3 +409,4 @@ Use in `isearch-mode-end-hook'."
 (require 'init-benchmarking)
 
 (provide 'init-basics)
+;;; init-basics.el ends here
