@@ -53,8 +53,4 @@
            (ansi-color-apply-on-region (point-min) (point-max))))))
 
 (provide 'init-shell)
-
-;; Local Variables:
-;; coding: utf-8
-;; no-byte-compile: t
-;; End:
+;;; init-shell.el ends here
