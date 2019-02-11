@@ -195,3 +195,4 @@ If there's a string at point, use it instead of prompt."
 
 
 (provide 'init-utils)
+;;; init-utils.el ends here
