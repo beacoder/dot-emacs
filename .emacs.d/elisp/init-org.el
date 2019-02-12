@@ -87,7 +87,7 @@ typical word processor."
         (setq-local blink-cursor-interval 0.6)
         (setq-local show-trailing-whitespace nil)
         (setq-local line-spacing 0.2)
-        (setq-local electric-pair-mode nil)        
+        (setq-local electric-pair-mode nil)
         (ignore-errors (flyspell-mode 1))
         (visual-line-mode 1))
     (kill-local-variable 'truncate-lines)
