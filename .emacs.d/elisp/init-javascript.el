@@ -1,6 +1,6 @@
-;;----------------------------------------------------------------------------
-;; javascript settings
-;;----------------------------------------------------------------------------
+;;; init-javascript.el --- Support for Javascript and derivatives -*- lexical-binding: t -*-
+;;; Commentary:
+;;; Code:
 
 (maybe-require-package 'json-mode)
 (maybe-require-package 'js2-mode)
@@ -8,23 +8,10 @@
 (maybe-require-package 'typescript-mode)
 (maybe-require-package 'prettier-js)
 
-(defcustom preferred-javascript-mode
-  (first (remove-if-not #'fboundp '(js2-mode js-mode)))
-  "Javascript mode to use for .js files."
-  :type 'symbol
-  :group 'programming
-  :options '(js2-mode js-mode))
-
-(defconst preferred-javascript-indent-level 2)
-
 ;; Need to first remove from list if present, since elpa adds entries too, which
 ;; may be in an arbitrary order
-(eval-when-compile (require 'cl))
-(setq auto-mode-alist (cons `("\\.\\(js\\|es6\\)\\(\\.erb\\)?\\'" . ,preferred-javascript-mode)
-                            (loop for entry in auto-mode-alist
-                                  unless (eq preferred-javascript-mode (cdr entry))
-                                  collect entry)))
 
+(add-to-list 'auto-mode-alist '("\\.\\(js\\|es6\\)\\(\\.erb\\)?\\'" . js2-mode))
 
 ;; js2-mode
 
@@ -36,21 +23,20 @@
                 js2-mode-show-strict-warnings nil)
   ;; ... but enable it if flycheck can't handle javascript
   (autoload 'flycheck-get-checker-for-buffer "flycheck")
-  (defun sanityinc/disable-js2-checks-if-flycheck-active ()
+  (defun sanityinc/enable-js2-checks-if-flycheck-inactive ()
     (unless (flycheck-get-checker-for-buffer)
-      (set (make-local-variable 'js2-mode-show-parse-errors) t)
-      (set (make-local-variable 'js2-mode-show-strict-warnings) t)))
-  (add-hook 'js2-mode-hook 'sanityinc/disable-js2-checks-if-flycheck-active)
+      (setq-local js2-mode-show-parse-errors t)
+      (setq-local js2-mode-show-strict-warnings t)))
+  (add-hook 'js2-mode-hook 'sanityinc/enable-js2-checks-if-flycheck-inactive)
 
   (add-hook 'js2-mode-hook (lambda () (setq mode-name "JS2")))
 
   (js2-imenu-extras-setup))
 
-;; js-mode
-(setq-default js-indent-level preferred-javascript-indent-level)
+(setq-default js-indent-level 2)
 
 
-(add-to-list 'interpreter-mode-alist (cons "node" preferred-javascript-mode))
+(add-to-list 'interpreter-mode-alist (cons "node" 'js2-mode))
 
 
 
@@ -66,8 +52,8 @@
 ;;; Coffeescript
 
 (after-load 'coffee-mode
-  (setq coffee-js-mode preferred-javascript-mode
-        coffee-tab-width preferred-javascript-indent-level))
+  (setq-default coffee-js-mode js2-mode
+                coffee-tab-width js-indent-level))
 
 (when (fboundp 'coffee-mode)
   (add-to-list 'auto-mode-alist '("\\.coffee\\.erb\\'" . coffee-mode)))
@@ -77,14 +63,11 @@
 ;; ---------------------------------------------------------------------------
 
 (when (maybe-require-package 'js-comint)
-  (setq inferior-js-program-command "node")
+  (setq js-comint-program-command "node")
 
   (defvar inferior-js-minor-mode-map (make-sparse-keymap))
   (define-key inferior-js-minor-mode-map "\C-x\C-e" 'js-send-last-sexp)
-  (define-key inferior-js-minor-mode-map "\C-\M-x" 'js-send-last-sexp-and-go)
   (define-key inferior-js-minor-mode-map "\C-cb" 'js-send-buffer)
-  (define-key inferior-js-minor-mode-map "\C-c\C-b" 'js-send-buffer-and-go)
-  (define-key inferior-js-minor-mode-map "\C-cl" 'js-load-file-and-go)
 
   (define-minor-mode inferior-js-keys-mode
     "Bindings for communicating with an inferior js interpreter."
