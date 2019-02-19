@@ -1,6 +1,7 @@
-;;----------------------------------------------------------------------------
-;; Magit setting
-;;----------------------------------------------------------------------------
+;;; init-git.el --- Git SCM support -*- lexical-binding: t -*-
+;;; Commentary:
+
+;;; Code:
 
 ;; TODO: link commits from vc-log to magit-show-commit
 ;; TODO: smerge-mode
