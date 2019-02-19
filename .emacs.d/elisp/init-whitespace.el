@@ -15,11 +15,11 @@
   (setq-local show-trailing-whitespace t))
 
 (dolist (hook '(prog-mode-hook text-mode-hook conf-mode-hook))
-  (add-hook hook 'sanityinc/show-trailing-whitespace))
+  (add-hook hook #'sanityinc/show-trailing-whitespace))
 
 
 (require-package 'whitespace-cleanup-mode)
-(add-hook 'after-init-hook 'global-whitespace-cleanup-mode)
+(add-hook 'after-init-hook #'global-whitespace-cleanup-mode)
 (after-load 'whitespace-cleanup-mode
   (diminish 'whitespace-cleanup-mode))
 
