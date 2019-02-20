@@ -27,7 +27,7 @@
   (setq-default magit-diff-refine-hunk t)
 
   (global-set-key (kbd "C-x g") #'magit-status)
-  (global-set-key (kbd "C-x M-g") #'magit-dispatch-popup)
+  (global-set-key (kbd "C-x M-g") 'magit-dispatch)
 
   (defun sanityinc/magit-or-vc-log-file (&optional prompt)
     (interactive "P")
