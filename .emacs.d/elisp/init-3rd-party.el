@@ -39,7 +39,6 @@
 (when (require-package 'undo-tree)
   (add-hook 'after-init-hook 'global-undo-tree-mode)
   (after-load 'undo-tree
-    (diminish 'undo-tree-mode)
     ;; undo-buffer limit -> 100 MB                                                       |
     (setq undo-outer-limit (* 100 (expt 1024 2)))))
 
@@ -254,7 +253,6 @@
   (dolist (hook '(prog-mode-hook html-mode-hook css-mode-hook yaml-mode-hook conf-mode-hook))
     (add-hook hook 'symbol-overlay-mode))
   (after-load 'symbol-overlay
-    (diminish 'symbol-overlay-mode)
     (define-key symbol-overlay-mode-map (kbd "M-i") #'symbol-overlay-put)
     (define-key symbol-overlay-mode-map (kbd "M-n") #'symbol-overlay-switch-forward)
     (define-key symbol-overlay-mode-map (kbd "M-p") #'symbol-overlay-switch-backward)))
@@ -333,6 +331,27 @@
         ;; dumb-jump-prefer-searcher 'ag
         dumb-jump-force-searcher 'ag
         dumb-jump-max-find-time 60)) ;; for big project, wait one minute
+
+
+;;; diminish modes
+(after-load 'eldoc
+  (diminish 'eldoc-mode))
+(after-load 'undo-tree
+  (diminish 'undo-tree-mode))
+(after-load 'ggtags
+  (diminish 'ggtags-mode))
+(after-load 'symbol-overlay
+  (diminish 'symbol-overlay-mode))
+(after-load 'super-save
+  (diminish 'super-save-mode))
+(after-load 'rainbow-delimiters
+  (diminish 'rainbow-delimiters-mode))
+(after-load 'which-key
+  (diminish 'which-key-mode))
+(after-load 'abbrev
+  (diminish 'abbrev-mode))
+(after-load 'flycheck
+  (diminish 'flycheck-mode))
 
 
 ;;; other setting
