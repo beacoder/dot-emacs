@@ -2,8 +2,8 @@
   org-mode can do outline.
 ** Hotkeys
    <TAB>       => switch between FOLDED, CHILDREN and SUBTREE.
-   <C-RETURN>  => insert new headings with same level as previous.
    <S-TAB>     => switch between OVERVIEW, CONTENTS and SHOW-ALL.
+   <C-RETURN>  => insert new headings with same level as previous.
 
 * Markup
   org-mode can do markup.
