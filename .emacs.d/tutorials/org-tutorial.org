@@ -1,3 +1,5 @@
+#+title: A Brief Tutorial for org-mode
+
 * Outline
   org-mode can do outline.
 ** Hotkeys
