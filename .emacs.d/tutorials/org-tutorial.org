@@ -12,7 +12,7 @@
 *** *bold*
     * bold *           => *bold*
 *** /italic/
-    // italic /        => /italic/
+    / italic /         => /italic/
 *** =verbatim=
     = verbatim =       => =verbatim=
 *** +strikethrough+
