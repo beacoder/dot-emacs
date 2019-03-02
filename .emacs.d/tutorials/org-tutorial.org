@@ -1,0 +1,54 @@
+* Outliner
+  org-mode can do outline.
+** Hotkeys
+   <TAB>       => switch between FOLDED, CHILDREN and SUBTREE.
+   <C-RETURN>  => insert new headings with same level as previous.
+   <S-TAB>     => switch between OVERVIEW, CONTENTS and SHOW-ALL.
+
+* Markup
+  org-mode can do markup.
+** Font styles
+   *bold* /italic/ =verbatim= +strikethrough+
+*** *bold*
+    * bold *           => *bold*
+*** /italic/
+    // italic /         => /italic/
+*** =verbatim=
+    = verbatim =       ==> =verbatim=
+*** +strikethrough+
+    + strikethrough +  => +strikethrough+
+** Bulleted list items
+   - bulleted
+   - list
+   - items
+** Links
+   [[https://orgmode.org][link-to-web: orgmode.org]]
+   [[file:init-org.el::;;; Code][link-to-file-position: init-org.el]]
+*** Hotkeys
+   <C-c C-l>  => insert all kinds of links.
+   <C-c C-o>  => open thing at point.
+
+* Tables
+  org-mode can do tables
+** Sample table
+  |------+----------------|
+  | Some | Data           |
+  |------+----------------|
+  |   12 | buckle my shoe |
+  |------+----------------|
+  |   34 | shut the door  |
+  |------+----------------|
+** Hotkeys
+   <C-c |>    => create a table, or convert region into a table.
+   <TAB>      => re-align the table
+   <M-UP>     => move row up.
+   <M-DOWN>   => move row down.
+   <M-LEFT>   => move column lef.
+   <M-RIGHT>  => move column right.
+   <|>        => starts a row
+   <|->       => starts a horizontal separator line
+
+* Export to other formats
+  org-mode can export to HTML, LaTeX, PDF etc.
+** Hotkeys
+   <C-c C-e>  => org-export
