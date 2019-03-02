@@ -24,9 +24,6 @@
 
     (define-key ivy-minibuffer-map (kbd "<up>") #'ivy-previous-line-or-history)
 
-    (when (maybe-require-package 'diminish)
-      (diminish 'ivy-mode))
-
     ;; show more results in counsel-ag
     ;; (add-to-list 'ivy-height-alist (cons 'counsel-ag 20))
     )
@@ -44,9 +41,6 @@
     ;; don't override pop-to-mark-command
     (define-key counsel-mode-map [remap pop-to-mark-command] nil))
   (setq-default counsel-mode-override-describe-bindings t)
-  (when (maybe-require-package 'diminish)
-    (after-load 'counsel
-      (diminish 'counsel-mode)))
   (add-hook 'after-init-hook 'counsel-mode)
 
   (when (maybe-require-package 'ag)
