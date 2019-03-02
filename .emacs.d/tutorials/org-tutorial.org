@@ -8,15 +8,10 @@
 * Markup
   org-mode can do markup.
 ** Font styles
-   *bold* /italic/ =verbatim= +strikethrough+
-*** *bold*
-    * bold *           => *bold*
-*** /italic/
-    / italic /         => /italic/
-*** =verbatim=
-    = verbatim =       => =verbatim=
-*** +strikethrough+
-    + strikethrough +  => +strikethrough+
+   * bold *           -> *bold*
+   / italic /         -> /italic/
+   = verbatim =       -> =verbatim=
+   + strikethrough +  -> +strikethrough+
 ** Bulleted list items
    - bulleted
    - list
