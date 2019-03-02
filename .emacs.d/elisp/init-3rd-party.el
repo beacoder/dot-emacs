@@ -350,6 +350,16 @@
   (diminish 'abbrev-mode))
 (after-load 'flycheck
   (diminish 'flycheck-mode))
+(after-load 'company
+  (diminish 'company-mode))
+(after-load 'ivy
+  (diminish 'ivy-mode))
+(after-load 'counsel
+  (diminish 'counsel-mode))
+(after-load 'yard-mode
+  (diminish 'yard-mode))
+(after-load 'whitespace-cleanup-mode
+  (diminish 'whitespace-cleanup-mode))
 
 
 ;;; other setting
