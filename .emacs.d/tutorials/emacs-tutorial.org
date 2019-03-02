@@ -1,0 +1,61 @@
+#+title: A Brief Tutorial for emacs
+
+* Kill-ring
+  kill-ring contains the kill history, used to copy paste cut, without size limit.
+** Hotkeys
+   <C-w> <M-w> <C-k> <C-y> <M-y>
+
+* Rectangle
+  commands operate on rectangular areas of the text.
+** Hotkeys
+  <C-x r k> <C-x r M-w> <C-x r d> <C-x r c>
+  <C-x r y> <C-x r o>   <C-x r N> <C-x r t>
+  <C-x SPC>
+
+* History-ring
+  contains shell command history.
+** Hotkeys
+   <C-r> <M-r> <M-p> <M-n>
+
+* Register
+  use a char or number to represent a register, used to save positon text numer.
+** Hotkeys
+   Note: R stands for your register name.
+   <C-x r SPC R>  <C-x r s R>  <C-x r n R>  <C-x r w R>  <C-x r r R>  => save to register
+   <C-x r i R>    <C-x r j R>                                         => insert or jump to register
+
+* Mark-ring
+  used to save the cursor position across buffers.
+** Hotkeys
+   <C-SPC C-SPC>  => save cursor position
+   <C-u C-SPC>    => jump back last saved cursor position
+   <C-x C-SPC>    => jump to last position of the global mark ring
+
+* Keyboard macro
+  record a sequence of editing commands so that you can repeat it conveniently later.
+** Hotkeys
+   <C-x (>  do-some-stuff  <C-x )>  => define macro
+   <C-x eeee...>                    => execute macro n times
+** Command
+   <name-last-kbd-macro>  <insert-kbd-macro>
+
+* Undo & Redo
+  undo or redo previous changes.
+** Hotkeys
+   <C-_>      => undo
+   <C-g C-_>  => redo
+
+* Recursive edit
+  recursive-edit helps when you wanna break out of the command that you’re executing and temporarily pursue something else.
+  and then go back to where you were before.
+
+** Sample:
+   suppose you're in the middle of query-replace:
+   <C-w> or <C-r>  => break out of query-replace, then do something else
+   <C-M-c>         => go back to query-replace
+
+* FAQ
+** Deal with ispell error "no word lists can be found for the language "zh_cn"."
+   export LANG=en_US.UTF-8
+** Retrieve list of available packages from the package archive server.
+   <list-packages>
