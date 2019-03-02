@@ -86,3 +86,23 @@
      3 * 2 + &= 6 + 1 \\
              &= 7
    \end{align*}
+
+* Todo
+  org-mode can do GTD stuff.
+** Sample todo lists
+*** TODO explain todo lists
+    DEADLINE: <2019-03-09 Sat>
+*** DONE cycle through states
+    CLOSED: [2019-03-02 Sat 19:40]
+    :LOGBOOK:
+    - State "DONE"       from "TODO"       [2019-03-02 Sat 19:36]
+    :END:
+** Hotkeys
+   <S-M-RETURN>  => insert todo headings.
+   <C-c C-t>     => change todo state.
+   <S-UP>        => modify timestampe.
+   <S-DOWN>      => modify timestampe.
+   <S-LEFT>      => modify timestampe.
+   <S-RIGHT>     => modify timestampe.
+   <C-c C-d>     => insert deadline for todo item.
+   <C-c a>       => open org-agenda.
