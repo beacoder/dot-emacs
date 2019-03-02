@@ -96,8 +96,3 @@
 ** Sample LaTeX
    - Characters: \alpha \rightarrow \beta
    - $O(n \log n)$
-
-   \begin{align*}
-     3 * 2 + &= 6 + 1 \\
-             &= 7
-   \end{align*}
