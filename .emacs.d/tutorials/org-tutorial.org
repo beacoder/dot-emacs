@@ -12,9 +12,9 @@
 *** *bold*
     * bold *           => *bold*
 *** /italic/
-    // italic /         => /italic/
+    // italic /        => /italic/
 *** =verbatim=
-    = verbatim =       ==> =verbatim=
+    = verbatim =       => =verbatim=
 *** +strikethrough+
     + strikethrough +  => +strikethrough+
 ** Bulleted list items
@@ -48,7 +48,41 @@
    <|>        => starts a row
    <|->       => starts a horizontal separator line
 
-* Export to other formats
+* Export
   org-mode can export to HTML, LaTeX, PDF etc.
 ** Hotkeys
    <C-c C-e>  => org-export
+** Meta-data for export
+   #+title: A Brief Tutorial for org-mode
+   #+options: toc:nil
+
+* Source code
+  org-mode can embed scripts and run them.
+** Sample script
+   #+begin_src ruby
+   def fact(n)
+     if n == 0
+       1
+     else
+       n * fact(n-1)
+     end
+   end
+
+   fact(5)
+   #+end_src
+
+   #+RESULTS:
+   : 120
+** Hotkeys
+   <C-c C-c>  => evaluate script and place result afer #+RESULTS:
+
+* LaTeX integration
+  org-mode can do LaTeX.
+** Sample LaTeX
+   - Characters: \alpha \rightarrow \beta
+   - $O(n \log n)$
+
+   \begin{align*}
+     3 * 2 + &= 6 + 1 \\
+             &= 7
+   \end{align*}
