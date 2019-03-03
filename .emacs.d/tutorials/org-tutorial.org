@@ -6,6 +6,8 @@
    <TAB>       => switch between FOLDED, CHILDREN and SUBTREE.
    <S-TAB>     => switch between OVERVIEW, CONTENTS and SHOW-ALL.
    <C-RETURN>  => insert new headings with same level as previous.
+   <M-UP>      => move subtree up.
+   <M-DOWN>    => move subtree down.
 
 * Markup
   org-mode can do markup.
