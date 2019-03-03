@@ -14,6 +14,9 @@
    <M-RIGHT>    => demote heading.
    <S-M-LEFT>   => promote subtree.
    <S-M-RIGHT>  => demote subtree.
+   <S-UP>       => increase priority of heading.
+   <S-DOWN>     => decrease priority of heading.
+   <C-c c>      => capture something, continue your work.
 
 * Markup
   org-mode can do markup.
@@ -46,12 +49,12 @@
 ** Hotkeys
    <S-M-RETURN>  => insert todo headings.
    <C-c C-t>     => change todo state.
+   <C-c C-d>     => insert deadline for todo item.
+   <C-c a>       => open org-agenda.
    <S-UP>        => modify timestampe.
    <S-DOWN>      => modify timestampe.
    <S-LEFT>      => modify timestampe.
    <S-RIGHT>     => modify timestampe.
-   <C-c C-d>     => insert deadline for todo item.
-   <C-c a>       => open org-agenda.
 
 * Tables
   org-mode can do tables
