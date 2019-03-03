@@ -1,4 +1,6 @@
 #+title: A Brief Tutorial for emacs-lisp
+#+author: Huming.Chen
+#+email: chenhuming@gmail.com
 
 * Symbol
   each lisp symbol has four “cells” to store things.
