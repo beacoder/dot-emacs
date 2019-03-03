@@ -20,7 +20,7 @@
    - items
 ** Links
    [[https://orgmode.org][link-to-web: orgmode.org]]
-   [[file:init-org.el::;;; Code][link-to-file-position: init-org.el]]
+   [[file:~/.emacs.d/elisp/init-org.el::;;; Code][link-to-file-position: init-org.el]]
 *** Hotkeys
    <C-c C-l>  => insert all kinds of links.
    <C-c C-o>  => open thing at point.
