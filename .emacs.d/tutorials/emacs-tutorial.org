@@ -1,4 +1,6 @@
 #+title: A Brief Tutorial for emacs
+#+author: Huming.Chen
+#+email: chenhuming@gmail.com
 
 * Kill-ring
   kill-ring contains the kill history, used to copy paste cut, without size limit.
