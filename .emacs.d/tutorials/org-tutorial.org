@@ -1,13 +1,19 @@
 #+title: A Brief Tutorial for org-mode
+#+author: Huming.Chen
+#+email: chenhuming@gmail.com
 
 * Outline
   org-mode can do outline.
 ** Hotkeys
-   <TAB>       => switch between FOLDED, CHILDREN and SUBTREE.
-   <S-TAB>     => switch between OVERVIEW, CONTENTS and SHOW-ALL.
-   <C-RETURN>  => insert new headings with same level as previous.
-   <M-UP>      => move subtree up.
-   <M-DOWN>    => move subtree down.
+   <TAB>        => switch between FOLDED, CHILDREN and SUBTREE.
+   <S-TAB>      => switch between OVERVIEW, CONTENTS and SHOW-ALL.
+   <C-RETURN>   => insert new headings with same level as previous.
+   <M-UP>       => move subtree up.
+   <M-DOWN>     => move subtree down.
+   <M-LEFT>     => promote heading.
+   <M-RIGHT>    => demote heading.
+   <S-M-LEFT>   => promote subtree.
+   <S-M-RIGHT>  => demote subtree.
 
 * Markup
   org-mode can do markup.
@@ -58,14 +64,16 @@
   |   34 | shut the door  |
   |------+----------------|
 ** Hotkeys
-   <C-c |>    => create a table, or convert region into a table.
-   <TAB>      => re-align the table
-   <M-UP>     => move row up.
-   <M-DOWN>   => move row down.
-   <M-LEFT>   => move column lef.
-   <M-RIGHT>  => move column right.
-   <|>        => starts a row
-   <|->       => starts a horizontal separator line
+   <C-c |>      => create a table, or convert region into a table.
+   <|>          => starts a row
+   <|->         => starts a horizontal separator line
+   <TAB>        => re-align the table
+   <M-UP>       => move row up.
+   <M-DOWN>     => move row down.
+   <M-LEFT>     => move column lef.
+   <M-RIGHT>    => move column right.
+   <S-M-LEFT>   => delete column.
+   <S-M-RIGHT>  => insert column.
 
 * Export
   org-mode can export to HTML, LaTeX, PDF etc.
