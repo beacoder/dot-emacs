@@ -1,19 +1,22 @@
-;;----------------------------------------------------------------------------
-;; register setting
-;;----------------------------------------------------------------------------
+;;; init-register.el --- Register settings -*- lexical-binding: t -*-
+;;; Commentary:
+;;; Code:
 
-;; "C-x r j d" to open directory ".emacs.d"
-(set-register ?d '(file . "~/.emacs.d"))
-
-(set-register ?h '(file . "~/.bash_history"))
-
-(set-register ?e '(file . "~/.emacs.d/init.el"))
+;; <C-x r j b>  => open directory "~/backup"
+(set-register ?b '(file . "~/backup"))
 
 (set-register ?c '(file . "~/.bashrc"))
 
-(set-register ?b '(file . "~/backup"))
+(set-register ?e '(file . "~/.emacs.d/elisp"))
+
+(set-register ?i '(file . "~/.emacs.d/init.el"))
+
+(set-register ?h '(file . "~/.bash_history"))
+
+(set-register ?o '(file . "~/.emacs.d/tutorials/org-tutorial.org"))
 
 (set-register ?w '(file . "~/workspace"))
+
 
 (provide 'init-register)
 ;;; init-register.el ends here
