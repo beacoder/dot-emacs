@@ -406,7 +406,7 @@ typical word processor."
      (ruby . t)
      (screen . nil)
      (,(if (locate-library "ob-sh") 'sh 'shell) . t)
-     (sql . nil)
+     (sql . t)
      (sqlite . t))))
 
 
