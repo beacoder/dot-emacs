@@ -23,18 +23,35 @@
 ** Font styles
    * bold *           -> *bold*
    / italic /         -> /italic/
-   = verbatim =       -> =verbatim=
+   _ underlined _     -> _underlined_
    + strikethrough +  -> +strikethrough+
+   = monospaced =     -> =monospaced=
 ** Bulleted list items
-   - bulleted
-   - list
-   - items
+   - list item
+   - another item
+     - sub-item
+       1. also enumerated
+       2. if you like
+   - [ ] yet to be done
+   - [X] item which is done
 ** Links
    [[https://orgmode.org][link-to-web: orgmode.org]]
    [[file:~/.emacs.d/elisp/init-org.el::;;; Code][link-to-file-position: init-org.el]]
 *** Hotkeys
    <C-c C-l>  => insert all kinds of links.
    <C-c C-o>  => open thing at point.
+** Literal block
+   #+begin_example
+   Text block begins here
+
+   Text block ends here
+   #+end_example
+
+   For simplicity, you could use "a colon followed by a space"
+
+   : Text block begins here
+   :
+   : Text block ends here
 
 * Todo
   org-mode can do GTD stuff.
