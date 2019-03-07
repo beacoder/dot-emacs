@@ -1,6 +1,10 @@
-#+title: A Brief Tutorial for org-mode
-#+author: Huming.Chen
-#+email: chenhuming@gmail.com
+#+TITLE: A Brief Tutorial for org-mode
+#+AUTHOR: Huming.Chen
+#+EMAIL: chenhuming@gmail.com
+#+OPTIONS: toc:nil
+#+STARTUP: showeverything
+#+STARTUP: indent
+#+OPTIONS: html-postamble:nil
 
 * Outline
   org-mode can do outline.
@@ -38,14 +42,14 @@
    [[https://orgmode.org][link-to-web: orgmode.org]]
    [[file:~/.emacs.d/elisp/init-org.el::;;; Code][link-to-file-position: init-org.el]]
 *** Hotkeys
-   <C-c C-l>  => insert all kinds of links.
-   <C-c C-o>  => open thing at point.
+    <C-c C-l>  => insert all kinds of links.
+    <C-c C-o>  => open thing at point.
 ** Literal block
-   #+begin_example
+   #+BEGIN_EXAMPLE
    Text block begins here
 
    Text block ends here
-   #+end_example
+   #+END_EXAMPLE
 
    For simplicity, you could use "a colon followed by a space"
 
@@ -76,13 +80,13 @@
 * Tables
   org-mode can do tables
 ** Sample table
-  |------+----------------|
-  | Some | Data           |
-  |------+----------------|
-  |   12 | buckle my shoe |
-  |------+----------------|
-  |   34 | shut the door  |
-  |------+----------------|
+   |------+----------------|
+   | Some | Data           |
+   |------+----------------|
+   |   12 | buckle my shoe |
+   |------+----------------|
+   |   34 | shut the door  |
+   |------+----------------|
 ** Hotkeys
    <C-c |>      => create a table, or convert region into a table.
    <|>          => starts a row
@@ -97,16 +101,19 @@
 
 * Export
   org-mode can export to HTML, LaTeX, PDF etc.
+** Meta-data
+   #+HTML_HEAD: <style type="text/css">div.org-src-container{border:1px solid green;width:50%;float:left;}</style>
+   #+HTML_HEAD: <style>pre.src {background-color: #eff0f1;margin:0 0 0 0;}</style>
+   #+HTML_HEAD: <style type="text/css">div.figure{border:1px solid green;overflow:auto;}</style>
+   # #+ATTR_HTML: :style border:12px solid black;float:right;
+   # #+ATTR_HTML: :style border:2px solid red;float:right; :width:50%
 ** Hotkeys
    <C-c C-e>  => org-export
-** Meta-data for export
-   #+title: A Brief Tutorial for org-mode
-   #+options: toc:nil
 
 * Source code
   org-mode can embed scripts and run them.
 ** Sample script
-   #+begin_src ruby
+   #+BEGIN_SRC ruby
    def fact(n)
      if n == 0
        1
@@ -116,7 +123,7 @@
    end
 
    fact(5)
-   #+end_src
+   #+END_SRC
 
    #+RESULTS:
    : 120
