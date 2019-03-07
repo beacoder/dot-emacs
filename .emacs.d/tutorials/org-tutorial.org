@@ -28,12 +28,12 @@
    = monospaced =     -> =monospaced=
 ** Bulleted list items
    - list item
-   - another item
+   + item-id :: item-content
      - sub-item
        1. also enumerated
        2. if you like
    - [ ] yet to be done
-   - [X] item which is done
+   + [X] item which is done
 ** Links
    [[https://orgmode.org][link-to-web: orgmode.org]]
    [[file:~/.emacs.d/elisp/init-org.el::;;; Code][link-to-file-position: init-org.el]]
