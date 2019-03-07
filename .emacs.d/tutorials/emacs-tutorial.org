@@ -1,130 +1,63 @@
-#+title: A Brief Tutorial for org-mode
+#+title: A Brief Tutorial for emacs
 #+author: Huming.Chen
 #+email: chenhuming@gmail.com
 
-* Outline
-  org-mode can do outline.
+* Kill-ring
+  kill-ring contains the kill history, used to copy paste cut, without size limit.
 ** Hotkeys
-   <TAB>        => switch between FOLDED, CHILDREN and SUBTREE.
-   <S-TAB>      => switch between OVERVIEW, CONTENTS and SHOW-ALL.
-   <C-RETURN>   => insert new headings with same level as previous.
-   <M-UP>       => move subtree up.
-   <M-DOWN>     => move subtree down.
-   <M-LEFT>     => promote heading.
-   <M-RIGHT>    => demote heading.
-   <S-M-LEFT>   => promote subtree.
-   <S-M-RIGHT>  => demote subtree.
-   <S-UP>       => increase priority of heading.
-   <S-DOWN>     => decrease priority of heading.
-   <C-c c>      => capture something, continue your work.
+   <C-w> <M-w> <C-k> <C-y> <M-y>
 
-* Markup
-  org-mode can do markup.
-** Font styles
-   * bold *           -> *bold*
-   / italic /         -> /italic/
-   _ underlined _     -> _underlined_
-   + strikethrough +  -> +strikethrough+
-   = monospaced =     -> =monospaced=
-** Bulleted list items
-   - list item
-   + item-id :: item-content
-     - sub-item
-       1. also enumerated
-       2. if you like
-   - [ ] yet to be done
-   + [X] item which is done
-** Links
-   [[https://orgmode.org][link-to-web: orgmode.org]]
-   [[file:~/.emacs.d/elisp/init-org.el::;;; Code][link-to-file-position: init-org.el]]
-*** Hotkeys
-   <C-c C-l>  => insert all kinds of links.
-   <C-c C-o>  => open thing at point.
-** Literal block
-   #+begin_example
-   Text block begins here
-
-   Text block ends here
-   #+end_example
-
-   For simplicity, you could use "a colon followed by a space"
-
-   : Text block begins here
-   :
-   : Text block ends here
-
-* Todo
-  org-mode can do GTD stuff.
-** Sample todo lists
-*** TODO explain todo lists
-    DEADLINE: <2019-03-09 Sat>
-*** DONE cycle through states
-    CLOSED: [2019-03-02 Sat 19:40]
-    :LOGBOOK:
-    - State "DONE"       from "TODO"       [2019-03-02 Sat 19:36]
-    :END:
+* Rectangle
+  commands operate on rectangular areas of the text.
 ** Hotkeys
-   <S-M-RETURN>  => insert todo headings.
-   <C-c C-t>     => change todo state.
-   <C-c C-d>     => insert deadline for todo item.
-   <C-c a>       => open org-agenda.
-   <S-UP>        => modify timestampe.
-   <S-DOWN>      => modify timestampe.
-   <S-LEFT>      => modify timestampe.
-   <S-RIGHT>     => modify timestampe.
+  <C-x r k> <C-x r M-w> <C-x r d> <C-x r c>
+  <C-x r y> <C-x r o>   <C-x r N> <C-x r t>
+  <C-x SPC>
 
-* Tables
-  org-mode can do tables
-** Sample table
-  |------+----------------|
-  | Some | Data           |
-  |------+----------------|
-  |   12 | buckle my shoe |
-  |------+----------------|
-  |   34 | shut the door  |
-  |------+----------------|
+* History-ring
+  contains shell command history.
 ** Hotkeys
-   <C-c |>      => create a table, or convert region into a table.
-   <|>          => starts a row
-   <|->         => starts a horizontal separator line
-   <TAB>        => re-align the table
-   <M-UP>       => move row up.
-   <M-DOWN>     => move row down.
-   <M-LEFT>     => move column lef.
-   <M-RIGHT>    => move column right.
-   <S-M-LEFT>   => delete column.
-   <S-M-RIGHT>  => insert column.
+   <C-r> <M-r> <M-p> <M-n>
 
-* Export
-  org-mode can export to HTML, LaTeX, PDF etc.
+* Register
+  use a char or number to represent a register, used to save positon text numer.
 ** Hotkeys
-   <C-c C-e>  => org-export
-** Meta-data for export
-   #+title: A Brief Tutorial for org-mode
-   #+options: toc:nil
+   Note: R stands for your register name.
+   <C-x r SPC R>  <C-x r s R>  <C-x r n R>  <C-x r w R>  <C-x r r R>  => save to register
+   <C-x r i R>    <C-x r j R>                                         => insert or jump to register
 
-* Source code
-  org-mode can embed scripts and run them.
-** Sample script
-   #+begin_src ruby
-   def fact(n)
-     if n == 0
-       1
-     else
-       n * fact(n-1)
-     end
-   end
-
-   fact(5)
-   #+end_src
-
-   #+RESULTS:
-   : 120
+* Mark-ring
+  used to save the cursor position across buffers.
 ** Hotkeys
-   <C-c C-c>  => evaluate script and place result afer #+RESULTS:
+   <C-SPC C-SPC>  => save cursor position
+   <C-u C-SPC>    => jump back last saved cursor position
+   <C-x C-SPC>    => jump to last position of the global mark ring
 
-* LaTeX integration
-  org-mode can do LaTeX.
-** Sample LaTeX
-   - Characters: \alpha \rightarrow \beta
-   - $O(n \log n)$
+* Keyboard macro
+  record a sequence of editing commands so that you can repeat it conveniently later.
+** Hotkeys
+   <C-x (>  do-some-stuff  <C-x )>  => define macro
+   <C-x eeee...>                    => execute macro n times
+** Command
+   <name-last-kbd-macro>  <insert-kbd-macro>
+
+* Undo & Redo
+  undo or redo previous changes.
+** Hotkeys
+   <C-_>      => undo
+   <C-g C-_>  => redo
+
+* Recursive edit
+  recursive-edit helps when you wanna break out of the command that you’re executing and temporarily pursue something else.
+  and then go back to where you were before.
+
+** Sample:
+   suppose you're in the middle of query-replace:
+   <C-w> or <C-r>  => break out of query-replace, then do something else
+   <C-M-c>         => go back to query-replace
+
+* FAQ
+** Deal with ispell error "no word lists can be found for the language "zh_cn"."
+   export LANG=en_US.UTF-8
+** Retrieve list of available packages from the package archive server.
+   <list-packages>
