@@ -112,8 +112,8 @@
    # #+ATTR_HTML: :style border:12px solid black;float:right;
    # #+ATTR_HTML: :style border:2px solid red;float:right; :width:50%
 ** More settings
+   [[https://orgmode.org/manual/Export-Settings.html#Export-Settings][Export-Settings]]
    [[https://orgmode.org/manual/HTML-Export.html#HTML-Export][HTML-Export]]
-   [[https://orgmode.org/manual/HTML-Export.html#HTML-Export][Export-Settings]]
 ** Hotkeys
    <C-c C-e>  => org-export
 
