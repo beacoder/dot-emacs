@@ -102,11 +102,18 @@
 * Export
   org-mode can export to HTML, LaTeX, PDF etc.
 ** Meta-data
+   #+AUTHOR:
+   #+EMAIL:
+   #+STARTUP:
+   #+OPTIONS:
    #+HTML_HEAD: <style type="text/css">div.org-src-container{border:1px solid green;width:50%;float:left;}</style>
    #+HTML_HEAD: <style>pre.src {background-color: #eff0f1;margin:0 0 0 0;}</style>
    #+HTML_HEAD: <style type="text/css">div.figure{border:1px solid green;overflow:auto;}</style>
    # #+ATTR_HTML: :style border:12px solid black;float:right;
    # #+ATTR_HTML: :style border:2px solid red;float:right; :width:50%
+** More settings
+   [[https://orgmode.org/manual/HTML-Export.html#HTML-Export][HTML-Export]]
+   [[https://orgmode.org/manual/HTML-Export.html#HTML-Export][Export-Settings]]
 ** Hotkeys
    <C-c C-e>  => org-export
 
