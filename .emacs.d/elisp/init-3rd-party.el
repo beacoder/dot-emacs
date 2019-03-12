@@ -249,6 +249,13 @@
 
 
 ;;; symbol-overlay
+;; "p" => jump-prev
+;; "n" => jump-next
+;; "<" => jump-first
+;; ">" => jump-last
+;; "t" => toggle
+;; "r" => rename
+;; "w" => save
 (when (maybe-require-package 'symbol-overlay)
   (dolist (hook '(prog-mode-hook html-mode-hook css-mode-hook yaml-mode-hook conf-mode-hook))
     (add-hook hook 'symbol-overlay-mode))
