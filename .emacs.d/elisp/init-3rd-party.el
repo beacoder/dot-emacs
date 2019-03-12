@@ -284,7 +284,7 @@
   (sml/setup))
 
 
-;;; gist
+;;; gist - share code, notes, and snippets
 ;;
 ;; git config --global github.user <your-github-user-name>
 ;; git config --global github.oauth-token <your-personal-access-token-with-gist-scope>
