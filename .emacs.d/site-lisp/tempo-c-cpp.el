@@ -236,16 +236,16 @@
                        'c-tempo-tags)
 
 (tempo-define-template "c-function"
-                       '(> (p "return type: " type) " " (p "name: " name) "(" ~ ")" >  n>
-                           "{" > n> n> "}" > n>
+                       '(> (p "return type: " type) " " (p "name: " name) "(" ~ ")" > n>
+                           "{" > n> n> "}" >
                            )
-                       "fn"
+                       "function"
                        "Insert a function"
                        'c-tempo-tags)
 
 (tempo-define-template "c-malloc"
                        '(>(p "type: " type) " * " (p "variable name: " var) " = (" (s type) " *) malloc(sizeof(" (s type) "));" n>
-                          "if (NULL != " (s var) ")" n>
+                          "if (" (s var) ")" n>
                           "{" > n> ~ n> "}" > n>
                           )
                        "malloc"
@@ -354,12 +354,12 @@
                        'c++-tempo-tags)
 
 (tempo-define-template "c++-functor-class"
-                       '(> "struct " (p "classname: " type) n
-                           > "{" n
-                           > (p "return type: " return) " operator (" ~ ")" n
-                           > "{" > n> n> "}" > n> "};" > n>
+                       '(> "struct " (p "classname: " type) n>
+                           "{" > n>
+                           (p "return type: " return) " operator (" ~ ")" n>
+                           "{" > n> n> "}" > n> "};" >
                            )
-                       "ft"
+                       "functor"
                        "functor class"
                        'c++-tempo-tags)
 
@@ -369,14 +369,14 @@
                             "catch (std::exception& e)" n>
                             "{" > n> n> "}" > n>
                            )
-                       "exception"
+                       "try"
                        "Insert C++ exception handling statement"
                        'c++-tempo-tags)
 
 (tempo-define-template "c++-for_each"
                        '(> "std::for_each("
                            (p "container: " cont) ".begin(), "
-                           (s cont) ".end(), &" ~
+                           (s cont) ".end(), " ~
                            (p "method: " method) ");" >
                            )
                        "each"
@@ -391,12 +391,29 @@
                        "C++ STL copy"
                        'c++-tempo-tags)
 
+(tempo-define-template "c++-transfom"
+                       '(> "std::transfom(" (p "input iterator: " in-iter) ".begin(), "
+                           (s in-iter) ".end(), " (p "output iterator: " out-iter) ", " ~");" >
+                           )
+                       "transfrom"
+                       "C++ STL transfrom"
+                       'c++-tempo-tags)
+
 (tempo-define-template "c++-smart_ptr"
                        '(> "std::" (if (y-or-n-p "unique? ") "unique_ptr" "shared_ptr")
                            "<" (p "type: " type) "> " (p "name: " name) ";" > n>
                            )
                        "ptr"
                        "C++ smart_ptr"
+                       'c++-tempo-tags)
+
+(tempo-define-template "c++-make_pointer"
+                       '(> "auto " (p "name: " pointer) " = std::"
+                           (if (y-or-n-p "unique? ") "make_unique" "make_shared")
+                           "<" (p "type: " type) ">(" ~ ");" >
+                           )
+                       "make"
+                       "Make C++ smart_ptr"
                        'c++-tempo-tags)
 
 (provide 'tempo-c-cpp)
