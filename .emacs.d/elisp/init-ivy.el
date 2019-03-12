@@ -73,6 +73,7 @@ With prefix args, read directory from minibuffer."
 (when (maybe-require-package 'ivy-xref)
   (setq xref-show-xrefs-function 'ivy-xref-show-xrefs))
 
+
 ;; @see https://github.com/abo-abo/swiper/blob/master/ivy-hydra.el
 (defvar ivy-dispatching-done-columns 2
   "Number of columns to use if the hint does not fit on one line.")
