@@ -254,9 +254,9 @@
                        'c-tempo-tags)
 
 (tempo-define-template "c-malloc"
-                       '(>(p "type: " type) " * " (p "variable name: " var) " = (" (s type) " *) malloc(sizeof(" (s type) "));" n>
-                          "if (" (s var) ")" n>
-                          "{" > n> ~ n> "}" > n>
+                       '(>(p "type: " type) " * " (p "variable name: " var) " = ("
+                          (s type) " *) malloc(sizeof(" (s type) "));" n>
+                          "if (" (s var) ")" n> "{" > n> ~ n> "}" > n>
                           )
                        "malloc"
                        "Insert a C malloc statement to define and allocate a pointer"
@@ -310,7 +310,7 @@
 (tempo-define-template "c++-getset"
                        '((p "type: "     type 'noinsert)
                          (p "variable: " var  'noinsert)
-                         (tempo-save-named 'virtual (if (y-or-n-p  "virtual?") "virtual " ""))
+                         (tempo-save-named 'virtual (if (y-or-n-p  "virtual? ") "virtual " ""))
                          (tempo-save-named 'm_var (concat "_" (tempo-lookup-named 'var)))
                          (tempo-save-named 'fnBase (upcase-initials (tempo-lookup-named 'var)))
                          (s type) " " (s m_var) ";" > n>
@@ -323,7 +323,8 @@
 
 (tempo-define-template "c++-for-container"
                        '(> "for (auto "
-                           (p "iterator: " iter) " = " (p "container: " container) ".begin(); " (s iter) " != " (s container) ".end(); ++" (s iter) ")" n
+                           (p "iterator: " iter) " = " (p "container: " container) ".begin(); "
+                           (s iter) " != " (s container) ".end(); ++" (s iter) ")" n
                            > "{" > n> r n "}" > n>
                            )
                        "cfor"
