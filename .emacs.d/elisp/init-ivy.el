@@ -1,7 +1,11 @@
-;;----------------------------------------------------------------------------
-;; ivy configuration
-;;----------------------------------------------------------------------------
+;;; init-ivy.el --- Use ivy for minibuffer completion and more -*- lexical-binding: t -*-
+;;; Commentary:
+;;; Code:
 
+;;; ivy - a generic completion frontend for Emacs
+;; "C-m"   => calls the current action
+;; "M-o"   => show actions, calls action after selection, exit
+;; "C-M-o" => show actions, calls action after selection, don't exit
 (when (maybe-require-package 'ivy)
   (add-hook 'after-init-hook 'ivy-mode)
   (after-load 'ivy
