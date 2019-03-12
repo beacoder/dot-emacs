@@ -407,13 +407,13 @@
                        "C++ smart_ptr"
                        'c++-tempo-tags)
 
-(tempo-define-template "c++-make_pointer"
-                       '(> "auto " (p "name: " pointer) " = std::"
+(tempo-define-template "c++-make_ptr"
+                       '(> "auto " (p "name: " name) " = std::"
                            (if (y-or-n-p "unique? ") "make_unique" "make_shared")
                            "<" (p "type: " type) ">(" ~ ");" >
                            )
                        "make"
-                       "Make C++ smart_ptr"
+                       "Make C++ make_ptr"
                        'c++-tempo-tags)
 
 (provide 'tempo-c-cpp)
