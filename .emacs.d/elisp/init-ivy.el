@@ -73,6 +73,38 @@ With prefix args, read directory from minibuffer."
 (when (maybe-require-package 'ivy-xref)
   (setq xref-show-xrefs-function 'ivy-xref-show-xrefs))
 
+;; @see https://github.com/abo-abo/swiper/blob/master/ivy-hydra.el
+(defvar ivy-dispatching-done-columns 2
+  "Number of columns to use if the hint does not fit on one line.")
+
+(defun ivy-dispatching-done-hydra ()
+  "Select one of the available actions and call `ivy-done'."
+  (interactive)
+  (let* ((actions (ivy-state-action ivy-last))
+         (estimated-len (+ 25 (length
+                               (mapconcat
+                                (lambda (x) (format "[%s] %s" (nth 0 x) (nth 2 x)))
+                                (cdr actions) ", "))))
+         (n-columns (if (> estimated-len (window-width))
+                        ivy-dispatching-done-columns
+                      nil)))
+    (if (null (ivy--actionp actions))
+        (ivy-done)
+      (funcall
+       (eval
+        `(defhydra ivy-read-action (:color teal :columns ,n-columns)
+           "action"
+           ,@(mapcar (lambda (x)
+                       (list (nth 0 x)
+                             `(progn
+                                (ivy-set-action ',(nth 1 x))
+                                (ivy-done))
+                             (nth 2 x)))
+                     (cdr actions))
+           ("M-o" nil "back")
+           ("C-g" nil)))))))
+(define-key ivy-minibuffer-map (kbd "M-o") 'ivy-dispatching-done-hydra)
+
 
 (provide 'init-ivy)
 ;;; init-ivy.el ends here
