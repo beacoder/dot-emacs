@@ -391,12 +391,12 @@
                        "C++ STL copy"
                        'c++-tempo-tags)
 
-(tempo-define-template "c++-transfom"
-                       '(> "std::transfom(" (p "input iterator: " in-iter) ".begin(), "
+(tempo-define-template "c++-transform"
+                       '(> "std::transform(" (p "input iterator: " in-iter) ".begin(), "
                            (s in-iter) ".end(), " (p "output iterator: " out-iter) ", " ~");" >
                            )
-                       "transfrom"
-                       "C++ STL transfrom"
+                       "transform"
+                       "C++ STL transform"
                        'c++-tempo-tags)
 
 (tempo-define-template "c++-smart_ptr"
