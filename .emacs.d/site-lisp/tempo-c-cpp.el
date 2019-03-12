@@ -66,11 +66,21 @@
 ;;            main                    int main() { ... }
 ;;            malloc                  type * var = (type *) malloc(...)
 ;; --- C++ statements
-;;            class                   class xxx { ... };
+;;            nocopy                  class xxx { ... };
+;;            singleton               class xxx { ... };
 ;;            getset                  accessor/mutator
 ;;            cfor                    for (auto it = container.begin(); it != container.end(); ++it) { }
 ;;            rfor                    for (auto var : range) { }
-;;            ptr                     std::unique_ptr<...> ...
+;;            cout                    std::cout << ... << std::endl;
+;;            doc                     /** @brief ... @author ... */
+;;            using                   using namespace ...
+;;            functor                 struct { return_type operator () { } };
+;;            try                     try { ... } catch (std::exception& e) { ... }
+;;            each                    std::for_each( ... );
+;;            copy                    std::copy(input_iter.begin(), input_iter.end(), ... );
+;;            transform               std::transform(input_iter.begin(), input_iter.end(), out_iter, ... );
+;;            ptr                     std::unique_ptr<...> ptr;
+;;            make                    auto ptr = std::make_unique<...>(...);
 
 (require 'tempo)
 (setq tempo-interactive t)
