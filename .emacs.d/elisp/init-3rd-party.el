@@ -243,7 +243,7 @@
 
 ;;; nyan-mode
 (when (maybe-require-package 'nyan-mode)
-  (setq-default nyan-animate-nyancat nil
+  (setq-default nyan-animate-nyancat (display-graphic-p)
                 nyan-wavy-trail t)
   (add-hook 'after-init-hook 'nyan-mode))
 
