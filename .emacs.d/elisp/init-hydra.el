@@ -17,8 +17,8 @@
   "
                  ^Commands^
 --------------------------------------------
-[_p_]   Previous      [_n_]   Next          [_a_] All
-[_P_]   Skip-Prev     [_N_]   Skip-Next     [_e_] Edit
+[_p_]   Previous      [_n_]   Next          [_a_] Match-All
+[_P_]   Skip-Prev     [_N_]   Skip-Next     [_e_] Edit-All
 [_M-p_] Unmark-Prev   [_M-n_] Unmark-Next   [_q_] Quit
 ^ ^                   ^ ^
   "
