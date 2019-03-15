@@ -1,6 +1,6 @@
-;;----------------------------------------------------------------------------
-;; ruby && rails settings
-;;----------------------------------------------------------------------------
+;;; init-ruby.el --- Support for the Ruby language -*- lexical-binding: t -*-
+;;; Commentary:
+;;; Code:
 
 (require-package 'ruby-hash-syntax)
 
