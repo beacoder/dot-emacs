@@ -2,7 +2,7 @@
 ;;; Commentary:
 ;;; Code:
 
-;; <C-x r j b>  => open directory "~/backup"
+;; <C-x r j b> => open directory "~/backup"
 (set-register ?b '(file . "~/backup"))
 
 (set-register ?c '(file . "~/.bashrc"))
@@ -14,6 +14,8 @@
 (set-register ?i '(file . "~/.emacs.d/init.el"))
 
 (set-register ?o '(file . "~/.emacs.d/tutorials/org-tutorial.org"))
+
+(set-register ?t '(file . "~/workspace/todo.org"))
 
 (set-register ?w '(file . "~/workspace"))
 
