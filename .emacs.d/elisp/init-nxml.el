@@ -9,12 +9,13 @@
           '("xml" "xsd" "sch" "rng" "xslt" "svg" "rss"
             "gpx" "tcx" "plist"))
          "\\'"))
-
 (setq magic-mode-alist (cons '("<\\?xml " . nxml-mode) magic-mode-alist))
 (fset 'xml-mode 'nxml-mode)
 (fset 'html-mode 'nxml-mode)
 (fset 'mhtml-mode 'nxml-mode)
-(setq nxml-slash-auto-complete-flag t)
+(setq nxml-child-indent 4
+      nxml-attribute-indent 4
+      nxml-slash-auto-complete-flag t)
 
 
 ;; See: http://sinewalker.wordpress.com/2008/06/26/pretty-printing-xml-with-emacs-nxml-mode/
