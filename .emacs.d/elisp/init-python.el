@@ -1,6 +1,6 @@
-;;----------------------------------------------------------------------------
-;; python programming mode setting
-;;----------------------------------------------------------------------------
+;;; init-python.el --- Python editing -*- lexical-binding: t -*-
+;;; Commentary:
+;;; Code:
 
 ;; "C-c C-p" =>  run-python
 ;; "C-c C-s" =>  python-shell-send-string
@@ -15,7 +15,9 @@
       (append '(("SConstruct\\'" . python-mode)
 		("SConscript\\'" . python-mode))
               auto-mode-alist)
-      python-shell-interpreter "python3.5")
+      python-shell-interpreter "python3.7"
+      ;; python-shell-interpreter "python2.7"
+      )
 
 (require-package 'pip-requirements)
 
@@ -37,14 +39,14 @@
   (after-load 'anaconda-mode
     (bind-keys
      :map anaconda-mode-map
-     ("M-," . anaconda-mode-go-back)
      ("M-]" . anaconda-mode-find-references)
      ("M-=" . anaconda-mode-find-assignments)
      ("M-?" . anaconda-mode-show-doc)))
 
   (when (maybe-require-package 'company-anaconda)
     (after-load 'company
-      (after-load 'python (push 'company-anaconda company-backends)))))
+      (after-load 'python
+        (push 'company-anaconda company-backends)))))
 
 
 (provide 'init-python)
