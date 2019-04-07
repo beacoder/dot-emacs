@@ -16,6 +16,7 @@
                   projectile-completion-system 'ivy
                   ;; cause trouble when doing counsel-git-grep
                   ;; ivy-dynamic-exhibit-delay-ms 150
+                  ivy-use-selectable-prompt t
                   ivy-magic-tilde nil
                   ivy-initial-inputs-alist
                   '((man . "^")
