@@ -369,6 +369,10 @@
   (diminish 'whitespace-cleanup-mode))
 
 
+;;; scratch - Create buffers in same mode
+(maybe-require-package 'scratch)
+
+
 ;;; other setting
 (require 'init-hydra)
 (require 'init-git)
