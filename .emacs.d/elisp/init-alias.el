@@ -54,8 +54,8 @@
 (defalias 'sc 'scratch)
 
 ;; prettify the xml in the active region
-(defalias 'prt 'sanityinc/pp-xml-region)
-(defalias 'tidy 'sanityinc/tidy-buffer-xml)
+(defalias 'pt 'sanityinc/pp-xml-region)
+(defalias 'td 'sanityinc/tidy-buffer-xml)
 
 
 (provide 'init-alias)
