@@ -1,6 +1,6 @@
-;;----------------------------------------------------------------------------
-;; Find and load the correct package.el
-;;----------------------------------------------------------------------------
+;;; init-elpa.el --- Settings and helpers for package.el -*- lexical-binding: t -*-
+;;; Commentary:
+;;; Code:
 
 (require 'package)
 
