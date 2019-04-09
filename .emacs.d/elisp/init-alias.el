@@ -50,14 +50,13 @@
 (defalias 'tq 'tags-query-replace)
 
 ;; misc
-(defalias 'afa 'apply-function-to-region-lines-with-args)
-(defalias 'af 'apply-function-to-region-lines-without-args)
-
 (defalias 'cc 'clone-indirect-buffer)
+(defalias 'sc 'scratch)
 
 ;; prettify the xml in the active region
 (defalias 'prt 'sanityinc/pp-xml-region)
 (defalias 'tidy 'sanityinc/tidy-buffer-xml)
+
 
 (provide 'init-alias)
 ;;; init-alias.el ends here
