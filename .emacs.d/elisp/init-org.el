@@ -49,7 +49,7 @@
       org-html-validation-link nil
       org-export-kill-product-buffer-when-displayed t
       org-tags-column 80
-      org-agenda-files '("~/workspace/todo.org"))
+      org-agenda-files '("~/workspace/org/"))
 
 
 ;; Lots of stuff from http://doc.norang.ca/org-mode.html
