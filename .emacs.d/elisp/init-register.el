@@ -15,7 +15,7 @@
 
 (set-register ?o '(file . "~/.emacs.d/tutorials/org-tutorial.org"))
 
-(set-register ?t '(file . "~/workspace/todo.org"))
+(set-register ?t '(file . "~/workspace/org/todo.org"))
 
 (set-register ?w '(file . "~/workspace"))
 
