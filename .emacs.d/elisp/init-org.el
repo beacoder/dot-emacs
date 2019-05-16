@@ -207,6 +207,11 @@ typical word processor."
 
 ;;; Agenda views
 
+;; 'C-c a T' => search for todo keywords
+;; 'C-c a m' => search for tags and properties
+;; "C-c a s" => search for full text
+;; "x"       => exit org-agenda
+
 (setq-default org-agenda-clockreport-parameter-plist '(:link t :maxlevel 3))
 
 
