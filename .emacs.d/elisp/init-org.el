@@ -212,7 +212,8 @@ typical word processor."
 ;; "C-c a s" => search for full text
 ;; "x"       => exit org-agenda
 
-(setq-default org-agenda-clockreport-parameter-plist '(:link t :maxlevel 3))
+(setq-default org-agenda-clockreport-parameter-plist '(:link t :maxlevel 3)
+              org-agenda-start-with-follow-mode t)
 
 
 (let ((active-project-match "-INBOX/PROJECT"))
