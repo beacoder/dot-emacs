@@ -261,6 +261,7 @@
     (add-hook hook 'symbol-overlay-mode))
   (after-load 'symbol-overlay
     (define-key symbol-overlay-mode-map (kbd "M-i") #'symbol-overlay-put)
+    (define-key symbol-overlay-mode-map (kbd "M-I") #'symbol-overlay-remove-all)
     (define-key symbol-overlay-mode-map (kbd "M-n") #'symbol-overlay-switch-forward)
     (define-key symbol-overlay-mode-map (kbd "M-p") #'symbol-overlay-switch-backward)))
 
