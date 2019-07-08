@@ -375,6 +375,7 @@
 
 
 ;;; symon - tiny graphical system monitor
+;;; @see https://github.com/kaushalmodi/.emacs.d/blob/master/setup-files/setup-symon.el
 (when (maybe-require-package 'symon)
   (use-package symon
     :config
