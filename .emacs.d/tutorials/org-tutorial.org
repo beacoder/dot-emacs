@@ -18,6 +18,7 @@
    <M-RIGHT>    => demote heading.
    <S-M-LEFT>   => promote subtree.
    <S-M-RIGHT>  => demote subtree.
+   <C-c ,>      => org-priority.
    <S-UP>       => increase priority of heading.
    <S-DOWN>     => decrease priority of heading.
    <C-c c>      => capture something, continue your work.
