@@ -275,8 +275,9 @@ Use in `isearch-mode-end-hook'."
 (setq cursor-type 'box)
 
 ;; save place in files between sessions
-(require 'saveplace)
-(setq-default save-place t)
+(use-package saveplace
+  :ensure nil
+  :hook (after-init . save-place-mode))
 
 ;; ediff splits window horizontally
 (setq ediff-split-window-function 'split-window-horizontally
