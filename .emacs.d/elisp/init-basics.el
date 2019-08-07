@@ -67,10 +67,9 @@ The argument has the same meaning as in `apropos'."
                                 "/sudo:"
                                 ;; "/home/[a-z]\+/\\."
                                 ))
-  (global-set-key (kbd "C-x C-r") #'recentf-open-files))
-
-;; @see http://stackoverflow.com/questions/2068697/emacs-is-slow-opening-recent-files
-(setq recentf-keep '(file-remote-p file-readable-p))
+  (global-set-key (kbd "C-x C-r") #'recentf-open-files)
+  ;; @see http://stackoverflow.com/questions/2068697/emacs-is-slow-opening-recent-files
+  (setq recentf-keep '(file-remote-p file-readable-p)))
 
 ;; isearch-occur is better
 ;; (global-set-key (kbd "\C-cl") #'list-matching-lines)
