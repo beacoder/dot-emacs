@@ -56,17 +56,18 @@ The argument has the same meaning as in `apropos'."
 (global-set-key (kbd "M-g M-g") #'goto-line)
 
 ;; enable recentf-mode
-(require 'recentf)
-(add-hook 'after-init-hook 'recentf-mode)
-(setq recentf-max-menu-items  100
-      recentf-max-saved-items 1000
-      recentf-exclude '(
-                     ;; "/tmp/"
-                        "/ssh:"
-                        "/sudo:"
-                     ;; "/home/[a-z]\+/\\."
-                        ))
-(global-set-key (kbd "C-x C-r") #'recentf-open-files)
+(use-package recentf
+  :ensure nil
+  :hook (after-init . recentf-mode)
+  :init (setq recentf-max-menu-items  100
+              recentf-max-saved-items 1000
+              recentf-exclude '(
+                                ;; "/tmp/"
+                                "/ssh:"
+                                "/sudo:"
+                                ;; "/home/[a-z]\+/\\."
+                                ))
+  (global-set-key (kbd "C-x C-r") #'recentf-open-files))
 
 ;; @see http://stackoverflow.com/questions/2068697/emacs-is-slow-opening-recent-files
 (setq recentf-keep '(file-remote-p file-readable-p))
