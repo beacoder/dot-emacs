@@ -421,6 +421,7 @@
 (require 'init-flycheck)
 (require-package 'buffer-move)
 (require 'init-http)
+(require 'init-calendar)
 
 
 (provide 'init-3rd-party)
