@@ -405,6 +405,91 @@
       (symon-mode))))
 
 
+;; Docker
+(when (maybe-require-package 'docker)
+  (use-package docker
+    :bind ("C-c d" . docker)
+    :init (setq docker-image-run-arguments '("-i" "-t" "--rm")
+                docker-container-shell-file-name "/bin/bash")))
+
+
+;; PDF reader
+(when (display-graphic-p)
+  (when (maybe-require-package 'pdf-tools)
+    (use-package pdf-tools
+      :diminish (pdf-view-midnight-minor-mode pdf-view-printer-minor-mode)
+      :defines pdf-annot-activate-created-annotations
+      :mode ("\\.[pP][dD][fF]\\'" . pdf-view-mode)
+      :magic ("%PDF" . pdf-view-mode)
+      :bind (:map pdf-view-mode-map
+                  ("C-s" . isearch-forward))
+      :init
+      (setq pdf-view-midnight-colors '("#ededed" . "#21242b")
+            pdf-annot-activate-created-annotations t)
+      :config
+      ;; WORKAROUND: Fix compilation errors on macOS.
+      ;; @see https://github.com/politza/pdf-tools/issues/480
+      (when sys/macp
+        (setenv "PKG_CONFIG_PATH"
+                "/usr/local/lib/pkgconfig:/usr/local/opt/libffi/lib/pkgconfig"))
+      (pdf-tools-install t nil t t)
+
+      ;; Recover last viewed position
+      (when (>= emacs-major-version 26)
+        (use-package pdf-view-restore
+          :hook (pdf-view-mode . pdf-view-restore-mode)
+          :init (setq pdf-view-restore-filename
+                      (locate-user-emacs-file ".pdf-view-restore")))))))
+
+
+;; Epub reader
+(when (maybe-require-package 'nov)
+  (use-package nov
+    :mode ("\\.epub\\'" . nov-mode)
+    :preface
+    (defun my-nov-setup ()
+      (visual-line-mode 1)
+      (face-remap-add-relative 'variable-pitch :family "Times New Roman" :height 1.5)
+      (if (fboundp 'olivetti-mode) (olivetti-mode 1)))
+    :hook (nov-mode . my-nov-setup)))
+
+
+;; Nice writing
+(when (maybe-require-package 'olivetti)
+  (use-package olivetti
+    :diminish
+    :bind ("<f7>" . olivetti-mode)
+    :init (setq olivetti-body-width 0.618)))
+
+
+;; Music player
+(when (maybe-require-package 'bongo)
+  (use-package bongo
+    :functions (bongo-add-dired-files
+                dired-get-filename
+                dired-marker-regexp
+                dired-move-to-filename)
+    :commands (bongo-buffer
+               bongo-library-buffer-p
+               bongo-library-buffer)
+    :bind ("C-<f9>" . bongo)
+    :init
+    (with-eval-after-load 'dired
+      (defun bongo-add-dired-files ()
+        "Add marked files to Bongo library"
+        (interactive)
+        (bongo-buffer)
+        (let (file (files nil))
+          (dired-map-over-marks
+           (setq file (dired-get-filename)
+                 files (append files (list file)))
+           nil t)
+          (with-bongo-library-buffer
+           (mapc 'bongo-insert-file files)))
+        (bongo-switch-buffers))
+      (bind-key "b" #'bongo-add-dired-files dired-mode-map))))
+
+
 ;;; other setting
 (require 'init-hydra)
 (require 'init-git)
