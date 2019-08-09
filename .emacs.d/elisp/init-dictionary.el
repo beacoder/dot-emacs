@@ -39,8 +39,7 @@
     :commands (youdao-dictionary-mode
                youdao-dictionary--region-or-word
                youdao-dictionary--format-result)
-    :bind (("C-c y" . youdao-dictionary-search-at-point)
-           ("C-c Y" . youdao-dictionary-search))
+    :bind ("C-c y" . youdao-dictionary-search)
     :config
     ;; Cache documents
     (setq url-automatic-caching t)
