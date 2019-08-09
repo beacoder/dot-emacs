@@ -1,7 +1,6 @@
-;; This file contains the autoload definitions that are used by the
-;; debian package and can also be used in a standalone installation
-;; The XEmacs package has some other means to create the autoload
-;; information.
+;;; init-dictionary.el --- dictionary config -*- lexical-binding: t -*-
+;;; Commentary:
+;;; Code:
 
 (require-package 'dictionary)
 
@@ -29,6 +28,26 @@
 
 (global-set-key (kbd "\C-cs") #'dictionary-search)
 (global-set-key (kbd "\C-cm") #'dictionary-match-words)
+
+
+;; @see https://github.com/seagle0128/.emacs.d/blob/master/lisp/init-utils.el
+;; Youdao Dictionary
+(when (maybe-require-package 'youdao-dictionary)
+  (use-package youdao-dictionary
+    :functions (posframe-show
+                posframe-hide)
+    :commands (youdao-dictionary-mode
+               youdao-dictionary--region-or-word
+               youdao-dictionary--format-result)
+    :bind (("C-c y" . youdao-dictionary-search-at-point)
+           ("C-c Y" . youdao-dictionary-search))
+    :config
+    ;; Cache documents
+    (setq url-automatic-caching t)
+
+    ;; Enable Chinese word segmentation support (支持中文分词)
+    (setq youdao-dictionary-use-chinese-word-segmentation t)))
+
 
 (provide 'init-dictionary)
 ;;; init-dictionary.el ends here
