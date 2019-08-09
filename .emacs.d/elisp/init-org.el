@@ -393,9 +393,7 @@ typical word processor."
   (define-key org-mode-map (kbd "C-M-<up>") #'org-up-element)
   (when *is-a-mac*
     (define-key org-mode-map (kbd "M-h") nil)
-    (define-key org-mode-map (kbd "C-c g") #'org-mac-grab-link)))
-
-(after-load 'org
+    (define-key org-mode-map (kbd "C-c g") #'org-mac-grab-link))
   (org-babel-do-load-languages
    'org-babel-load-languages
    `((R . t)
@@ -415,6 +413,13 @@ typical word processor."
      (,(if (locate-library "ob-sh") 'sh 'shell) . t)
      (sql . t)
      (sqlite . t))))
+
+
+;; Prettify UI
+(when (maybe-require-package 'org-bullets)
+  (use-package org-bullets
+    :if (char-displayable-p ?◉)
+    :hook (org-mode . org-bullets-mode)))
 
 
 (provide 'init-org)
