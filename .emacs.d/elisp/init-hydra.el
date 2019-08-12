@@ -93,7 +93,7 @@
   "
                  ^Commands^
 --------------------------------------------
-[_b_] Bongo     [_c_] Calendar    [_k_]  Keyfreq
+[_b_] Bongo     [_c_] Calendar    [_k_] Keyfreq
 [_w_] Wttrin    [_q_] Quit
 ^ ^             ^ ^
 "
