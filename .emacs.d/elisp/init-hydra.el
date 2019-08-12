@@ -89,5 +89,21 @@
 (global-set-key (kbd "C-x q") #'hydra-quickness/body)
 
 
+(defhydra hydra-play (:hint nil)
+  "
+                 ^Commands^
+--------------------------------------------
+[_b_] Bongo     [_c_] Calendar    [_k_]  Keyfreq
+[_w_] Wttrin    [_q_] Quit
+^ ^             ^ ^
+"
+  ("b" bongo :exit t)
+  ("c" open-calendar :exit t)
+  ("k" keyfreq-show :exit t)
+  ("w" wttrin :exit t)
+  ("q" nil))
+(global-set-key (kbd "C-x p") #'hydra-play/body)
+
+
 (provide 'init-hydra)
 ;;; init-hydra.el ends here
