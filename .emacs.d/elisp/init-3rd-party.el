@@ -427,7 +427,6 @@
 (when (maybe-require-package 'olivetti)
   (use-package olivetti
     :diminish
-    :bind ("<f7>" . olivetti-mode)
     :init (setq olivetti-body-width 0.618)))
 
 
@@ -441,7 +440,6 @@
     :commands (bongo-buffer
                bongo-library-buffer-p
                bongo-library-buffer)
-    :bind ("C-<f9>" . bongo)
     :init
     (with-eval-after-load 'dired
       (defun bongo-add-dired-files ()
