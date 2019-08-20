@@ -93,13 +93,14 @@
   "
                  ^Commands^
 --------------------------------------------
-[_b_] Bongo     [_c_] Calendar    [_k_] Keyfreq
-[_w_] Wttrin    [_q_] Quit
+[_b_] Bongo    [_c_] Calendar    [_k_] Keyfreq
+[_s_] Stock    [_w_] Wttrin      [_q_] Quit
 ^ ^             ^ ^
 "
   ("b" bongo :exit t)
   ("c" open-calendar :exit t)
   ("k" keyfreq-show :exit t)
+  ("s" stock-tracker-start :exit t)
   ("w" wttrin :exit t)
   ("q" nil))
 (global-set-key (kbd "C-x p") #'hydra-play/body)
