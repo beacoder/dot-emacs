@@ -1,6 +1,10 @@
 #+title: A Brief Tutorial for emacs-lisp
 #+author: Huming.Chen
 #+email: chenhuming@gmail.com
+#+OPTIONS: toc:nil
+#+STARTUP: showeverything
+#+STARTUP: indent
+#+OPTIONS: html-postamble:nil
 
 * Symbol
   each lisp symbol has four “cells” to store things.
