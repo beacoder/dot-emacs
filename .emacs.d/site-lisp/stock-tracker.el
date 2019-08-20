@@ -52,8 +52,8 @@
   :type 'string
   :group 'stock-tracker)
 
-(defcustom stock-tracker-refresh-interval 5
-  "Refresh stock every N SECS."
+(defcustom stock-tracker-refresh-interval 1
+  "Refresh stock every N * 10 SECS."
   :type 'integer
   :group 'stock-tracker)
 
@@ -177,7 +177,7 @@ If there's a string at point, use it instead of prompt."
 (defun stock-tracker--run-refresh-timer ()
   "Run stock tracker refresh timer."
   (setq stock-tracker--refresh-timer
-        (run-with-timer 0 stock-tracker-refresh-interval 'stock-tracker--refresh)))
+        (run-with-timer 0 (* 10 stock-tracker-refresh-interval) 'stock-tracker--refresh)))
 
 (defun stock-tracker--cancel-refresh-timer ()
   "Cancel stock tracker refresh timer."
@@ -278,3 +278,114 @@ If there's a string at point, use it instead of prompt."
 ;; End:
 
 ;;; stock-tracker.el ends here
+ion, return that.
+Otherwise, get the symbol at point, as a string."
+  (cond ((use-region-p)
+         (buffer-substring-no-properties (region-beginning) (region-end)))
+        ((symbol-at-point)
+         (substring-no-properties
+          (symbol-name (symbol-at-point))))))
+
+;;; improved version, based on ag/read-from-minibuffer
+(defun stock-tracker--read-from-minibuffer (prompt)
+  "Read a value from the minibuffer with PROMPT.
+If there's a string at point, use it instead of prompt."
+  (let* ((suggested (stock-tracker--dwim-at-point))
+         (final-prompt
+          (if suggested (format "%s (default %s): " prompt suggested)
+            (format "%s: " prompt))))
+    (if (or current-prefix-arg (string= "" suggested) (not suggested))
+        (read-from-minibuffer final-prompt nil nil nil nil suggested)
+      suggested)))
+
+(defun stock-tracker--align-all-tables ()
+  "Align all org tables."
+  (org-table-map-tables 'org-table-align t))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Core Functions
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun stock-tracker--format-request-url (stock)
+  "Format STOCK as a HTTP request URL."
+  (format stock-tracker--api-url (url-hexify-string stock)))
+
+(defun stock-tracker--request (stock)
+  "Request STOCK, return JSON as an alist if successes."
+  (let (json)
+    (with-current-buffer (url-retrieve-synchronously
+                          (stock-tracker--format-request-url stock))
+      (set-buffer-multibyte t)
+      (goto-char (point-min))
+      (when (not (string-match "200 OK" (buffer-string)))
+        (error "Problem connecting to the server"))
+      (re-search-forward "^$" nil 'move)
+      (re-search-forward stock-tracker--result-prefix nil 'move)
+      (setq json (json-read-from-string
+                  (buffer-substring-no-properties (point) (point-max))))
+      (when json (setq json (cdr (-flatten-n 1 json))))
+      (kill-buffer (current-buffer)))
+    json))
+
+(defun stock-tracker--format-result (stock)
+  "Format resulted STOCK information."
+  (let* ((json (stock-tracker--request stock))
+         (code       (assoc-default 'code       json))
+         ;; (name       (assoc-default 'name       json)) ; chinese-word failed to align
+         (price      (assoc-default 'price      json))
+         (percent    (assoc-default 'percent    json))
+         (updown     (assoc-default 'updown     json))
+         (open       (assoc-default 'open       json))
+         (yestclose  (assoc-default 'yestclose  json))
+         (high       (assoc-default 'high       json))
+         (low        (assoc-default 'low        json))
+         (volume     (assoc-default 'volume     json))
+         ;; (arrow      (assoc-default 'arrow      json)) ; chinese-word failed to align
+         )
+
+    ;; construct data for display
+    (when code
+      (format stock-tracker--result-item-format
+              code price percent updown open yestclose high low volume))))
+
+(defun stock-tracker--refresh ()
+  "Refresh list of stocks."
+  (when stock-tracker-list-of-stocks
+    (message (concat "Refresh list of stocks at: " (current-time-string)))
+    (with-current-buffer (get-buffer-create stock-tracker-buffer-name)
+      (let ((inhibit-read-only t))
+        (erase-buffer)
+        (stock-tracker-mode)
+        (insert stock-tracker--result-header)
+        (dolist (stock stock-tracker-list-of-stocks)
+          (insert (or (stock-tracker--format-result stock) "")))
+        (stock-tracker--align-all-tables)))))
+
+(defun stock-tracker--run-refresh-timer ()
+  "Run stock tracker refresh timer."
+  (setq stock-tracker--refresh-timer
+        (run-with-timer 0 stock-tracker-refresh-interval 'stock-tracker--refresh)))
+
+(defun stock-tracker--cancel-refresh-timer ()
+  "Cancel stock tracker refresh timer."
+  (when stock-tracker--refresh-timer
+    (cancel-timer stock-tracker--refresh-timer)
+    (setq stock-tracker--refresh-timer nil)))
+
+(defun stock-tracker--cancel-timer-on-exit ()
+  "Cancel timer when stock tracker buffer is being killed."
+  (when (eq major-mode 'stock-tracker-mode)
+    (stock-tracker--cancel-refresh-timer)))
+
+(defun stock-tracker--search (stock)
+  "Search STOCK and show result in `stock-tracker-buffer-name' buffer."
+  (when (and stock (not (string= "" stock)))
+    (with-current-buffer (get-buffer-create stock-tracker-buffer-name)
+      (let ((inhibit-read-only t))
+        (erase-buffer)
+        (stock-tracker-mode)
+        (insert stock-tracker--result-header)
+        (insert (or (stock-tracker--format-result stock) ""))
+        (stock-tracker--align-all-tables)))))
+
+;;;#
