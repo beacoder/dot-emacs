@@ -157,7 +157,7 @@
 ;; "g"      => Change city
 ;; "q"      => Quit
 (require-package 'wttrin)
-(setq wttrin-default-cities '("Shanghai" "Taizhou"))
+(setq wttrin-default-cities '("Shanghai" "Taizhou.Jiangsu"))
 
 
 ;;; PlantUML
