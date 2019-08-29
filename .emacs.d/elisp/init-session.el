@@ -55,7 +55,6 @@
       session-save-file-coding-system 'utf-8)
 
 (add-hook 'after-init-hook #'session-initialize)
-(add-hook 'kill-emacs-hook #'cg/prepare-persistent-data)
 
 ;; buffers don't need to be saved.
 (add-to-list 'desktop-modes-not-to-save 'Info-mode)
@@ -64,7 +63,7 @@
 ;; save a bunch of variables to the desktop file
 ;; for lists specify the len of the maximal saved data also
 (setq desktop-globals-to-save
-      (append '((cg-persist-caller-filters . 1000)
+      (append '((cg-persist-caller-cache   . 1000)
                 (comint-input-ring         . 50)
                 (compile-history           . 30)
                 desktop-missing-file-warning
