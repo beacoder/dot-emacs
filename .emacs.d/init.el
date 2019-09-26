@@ -134,7 +134,6 @@
   (require 'syntax))
 (when (is-modern-emacs)
   (require 'init-3rd-party)
-  (require 'init-lua)
   (require 'init-windows)
   (require 'init-nxml)
   (require 'init-html)
