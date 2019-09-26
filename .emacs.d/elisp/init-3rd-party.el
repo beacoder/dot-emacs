@@ -463,6 +463,11 @@
         '("0601595" "0600977" "1000671")))
 
 
+;; lua-mode
+(when (maybe-require-package 'lua-mode)
+  (use-package lua-mode))
+
+
 ;;; other setting
 (require 'init-hydra)
 (require 'init-git)
