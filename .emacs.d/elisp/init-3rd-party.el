@@ -234,12 +234,6 @@
 (setq csv-separators '("," ";" "|" " "))
 
 
-;;; Multiple major modes
-(require-package 'mmm-mode)
-(setq mmm-global-mode 'buffers-with-submode-classes
-      mmm-submode-decoration-level 2)
-
-
 ;;; nyan-mode
 (when (maybe-require-package 'nyan-mode)
   (setq-default nyan-animate-nyancat (display-graphic-p)
