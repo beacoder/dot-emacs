@@ -2,6 +2,12 @@
 ;;; Commentary:
 ;;; Code:
 
+
+;; See the following note about how I set up python + virtualenv to
+;; work seamlessly with Emacs:
+;; https://gist.github.com/purcell/81f76c50a42eee710dcfc9a14bfc7240
+
+
 ;; "C-c C-p" =>  run-python
 ;; "C-c C-s" =>  python-shell-send-string
 ;; "C-c C-r" =>  python-shell-send-region
@@ -23,7 +29,11 @@
 
 (when (maybe-require-package 'anaconda-mode)
   (after-load 'python
-    (add-hook 'python-mode-hook 'anaconda-mode)
+    ;; Anaconda doesn't work on remote servers without some work, so
+    ;; by default we enable it only when working locally.
+    (add-hook 'python-mode-hook
+              (λ () (unless (file-remote-p default-directory)
+                      (anaconda-mode 1))))
     (add-hook 'python-mode-hook 'anaconda-eldoc-mode)
     (bind-keys
      :map python-mode-map
