@@ -272,8 +272,10 @@
 
 ;;; which-key
 (when (maybe-require-package 'which-key)
-  (require 'which-key)
-  (which-key-mode +1))
+  (add-hook 'after-init-hook 'which-key-mode)
+  (setq-default which-key-idle-delay 1.5)
+  (after-load 'which-key
+    (diminish 'which-key-mode)))
 
 
 ;;; move-text
