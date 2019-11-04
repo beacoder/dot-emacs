@@ -48,5 +48,11 @@
   (define-key dired-mode-map (kbd "M-s") nil)
   (define-key dired-mode-map (kbd "M-r") nil))
 
+;; Show git info in dired
+(when (maybe-require-package 'dired-git-info)
+  (use-package dired-git-info
+    :bind (:map dired-mode-map
+                (")" . dired-git-info-mode))))
+
 (provide 'init-dired)
 ;;; init-dired.el ends here
