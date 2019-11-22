@@ -57,28 +57,6 @@
 ;; (setq lisp-indent-function 'common-lisp-indent-function)
 
 
-;;; paredit setting
-;; (require-package 'paredit)
-;; (autoload 'enable-paredit-mode "paredit" "Turn on pseudo-structural editing of Lisp code." t)
-;; (eval-after-load 'paredit
-;;   '(progn
-;;      ;; Modify kill-sentence, which is easily confused with the kill-sexp
-;;      ;; binding, but doesn't preserve sexp structure
-;;      (define-key paredit-mode-map [remap kill-sentence] 'paredit-kill)
-;;      (define-key paredit-mode-map [remap backward-kill-sentence] nil)
-
-;;      ;; Allow my global binding of M-? to work when paredit is active
-;;      (define-key paredit-mode-map (kbd "M-?") nil)
-;;      ))
-;; (add-hook 'prog-mode-hook 'enable-paredit-mode)
-
-;; ;; "C-)" might not work as expected in putty, so we create a new prefix-key for paredit.
-;; (define-prefix-command 'paredit-map)
-;; (define-key global-map "\C-xp" paredit-map)
-;; (define-key paredit-map (kbd "s") 'paredit-forward-slurp-sexp)
-;; (define-key paredit-map (kbd "b") 'paredit-forward-barf-sexp)
-
-
 ;;; smex to handle M-x
 (when (maybe-require-package 'smex)
   ;; Change path for ~/.smex-items
