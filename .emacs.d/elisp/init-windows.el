@@ -103,7 +103,7 @@ Call a second time to restore the original window configuration."
   (interactive)
   (lv-delete-window) ; don't let hydra-window get in the way
   (unless (= 2 (count-windows))
-    (error "There are not 2 windows."))
+    (error "There are not 2 windows"))
   (let* ((windows (window-list))
          (w1 (car windows))
          (w2 (nth 1 windows))
