@@ -101,6 +101,7 @@ Call a second time to restore the original window configuration."
 (defun transpose-windows ()
   "Transpose two windows.  If more or less than two windows are visible, error."
   (interactive)
+  (lv-delete-window) ; don't let hydra-window get in the way
   (unless (= 2 (count-windows))
     (error "There are not 2 windows."))
   (let* ((windows (window-list))
