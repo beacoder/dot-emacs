@@ -101,7 +101,7 @@
   ("b" bongo :exit t)
   ("c" open-calendar :exit t)
   ("k" keyfreq-show :exit t)
-  ("n" newsticker-show-news)
+  ("n" newsticker-show-news :exit t)
   ("s" stock-tracker-start :exit t)
   ("w" wttrin :exit t)
   ("q" nil))
