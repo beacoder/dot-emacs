@@ -193,6 +193,36 @@ If there's a string at point, use it instead of prompt."
     (and buf (not (buffer-modified-p buf))
          (kill-buffer buf))))
 
+;; @see https://emacs-china.org/t/elpa/11192
+(defun the-fastest-elpa-mirror ()
+  "Used to find fastest elpa mirror."
+  (interactive)
+  (require 'chart)
+  (let* ((urls
+          (mapcar
+           (lambda (part)
+             (concat "http://" part "archive-contents"))
+           '("melpa.org/packages/"
+             "www.mirrorservice.org/sites/melpa.org/packages/"
+             "emacs-china.org/melpa/"
+             "mirrors.tuna.tsinghua.edu.cn/elpa/melpa/"
+             "mirrors.163.com/elpa/melpa/"
+             "mirrors.cloud.tencent.com/elpa/melpa/")))
+         (durations
+          (mapcar
+           (lambda (url)
+             (let ((start (current-time)))
+               (message "Fetching %s" url)
+               (call-process "curl" nil nil nil "--max-time" "10" url)
+               (float-time (time-subtract (current-time) start))))
+           urls)))
+    (chart-bar-quickie
+     'horizontal
+     "The fastest elpa mirror"
+     (mapcar (lambda (url) (url-host (url-generic-parse-url url))) urls) "Elpa"
+     (mapcar (lambda (d) (* 1e3 d)) durations) "ms")
+    (message "%s" durations)))
+
 
 (provide 'init-utils)
 ;;; init-utils.el ends here
