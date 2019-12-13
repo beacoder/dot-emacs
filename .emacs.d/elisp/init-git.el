@@ -77,8 +77,10 @@
 
 ;; Though see also vc-annotate's "n" & "p" bindings
 (when (maybe-require-package 'git-messenger)
-  (setq git-messenger:show-detail t)
+  (setq git-messenger:show-detail t
+        git-messenger:use-magit-popup t)
   (global-set-key (kbd "C-x v p") #'git-messenger:popup-message))
+
 
 (provide 'init-git)
 ;;; init-git.el ends here
