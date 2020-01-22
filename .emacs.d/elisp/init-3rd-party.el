@@ -454,6 +454,15 @@
                   ("Emacs Reddit" "https://www.reddit.com/r/emacs.rss")))))
 
 
+;; Preview files in dired
+(when (maybe-require-package 'peep-dired)
+  (use-package peep-dired
+    :ensure t
+    :defer t ; don't access `dired-mode-map' until `peep-dired' is loaded
+    :bind (:map dired-mode-map
+                ("P" . peep-dired))))
+
+
 ;;; other setting
 (require 'init-hydra)
 (require 'init-git)
