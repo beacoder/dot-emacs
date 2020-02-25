@@ -2,22 +2,27 @@
 ;;; Commentary:
 ;;; Code:
 
-;; <C-x r j b> => open directory "~/backup"
-(set-register ?b '(file . "~/backup"))
+(defun setup-my-registers ()
+  "Setup my own registers."
 
-(set-register ?c '(file . "~/.bashrc"))
+  ;; <C-x r j b> => open directory "~/backup"
+  (set-register ?b '(file . "~/backup"))
 
-(set-register ?e '(file . "~/.emacs.d/elisp"))
+  (set-register ?c '(file . "~/.bashrc"))
 
-(set-register ?h '(file . "~/.bash_history"))
+  (set-register ?e '(file . "~/.emacs.d/elisp"))
 
-(set-register ?i '(file . "~/.emacs.d/init.el"))
+  (set-register ?h '(file . "~/.bash_history"))
 
-(set-register ?o '(file . "~/.emacs.d/tutorials/org-tutorial.org"))
+  (set-register ?i '(file . "~/.emacs.d/init.el"))
 
-(set-register ?t '(file . "~/workspace/org/todo.org"))
+  (set-register ?o '(file . "~/.emacs.d/tutorials/org-tutorial.org"))
 
-(set-register ?w '(file . "~/workspace"))
+  (set-register ?t '(file . "~/workspace/org/todo.org"))
+
+  (set-register ?w '(file . "~/workspace")))
+
+(add-hook 'after-init-hook #'setup-my-registers)
 
 
 (provide 'init-register)
