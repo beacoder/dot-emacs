@@ -36,17 +36,8 @@
 ;;----------------------------------------------------------------------------
 ;; Restore histories and registers after saving
 ;;----------------------------------------------------------------------------
-(use-package savehist
-  :ensure nil
-  :hook (after-init . savehist-mode)
-  :init (setq enable-recursive-minibuffers t ; Allow commands in minibuffers
-              history-length 1000
-              savehist-additional-variables '(mark-ring
-                                              global-mark-ring
-                                              search-ring
-                                              regexp-search-ring
-                                              extended-command-history)
-              savehist-autosave-interval 300))
+(setq-default history-length 1000)
+(add-hook 'after-init-hook 'savehist-mode)
 
 (require-package 'session)
 
@@ -55,10 +46,6 @@
       session-save-file-coding-system 'utf-8)
 
 (add-hook 'after-init-hook #'session-initialize)
-
-;; buffers don't need to be saved.
-(add-to-list 'desktop-modes-not-to-save 'Info-mode)
-(add-to-list 'desktop-modes-not-to-save 'info-lookup-mode)
 
 ;; save a bunch of variables to the desktop file
 ;; for lists specify the len of the maximal saved data also
