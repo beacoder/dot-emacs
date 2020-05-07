@@ -30,15 +30,18 @@
     (define-key ivy-minibuffer-map (kbd "<up>") #'ivy-previous-line-or-history)
 
     ;; show more results in counsel-ag
-    ;; (add-to-list 'ivy-height-alist (cons 'counsel-ag 20))
-    )
+    ;; (add-to-list 'ivy-height-alist (cons 'counsel-generic 30))
 
-  (defun sanityinc/enable-ivy-flx-matching ()
-    "Make `ivy' matching work more like IDO."
-    (interactive)
-    (require-package 'flx)
-    (setq-default ivy-re-builders-alist
-                  '((t . ivy--regex-fuzzy)))))
+    (when (maybe-require-package 'diminish)
+      (diminish 'ivy-mode)))
+
+  (when (maybe-require-package 'ivy-rich)
+    (setq ivy-virtual-abbreviate 'abbreviate
+          ivy-rich-switch-buffer-align-virtual-buffer nil
+          ivy-rich-path-style 'abbrev)
+    (after-load 'ivy
+      (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line))
+    (add-hook 'ivy-mode-hook (lambda () (ivy-rich-mode ivy-mode)))))
 
 
 (when (maybe-require-package 'counsel)
