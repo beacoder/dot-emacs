@@ -83,6 +83,7 @@
 
 (add-hook 'c-mode-common-hook #'my-c-mode-common-hook)
 (add-hook 'c-mode-common-hook #'(lambda () (local-set-key [(tab)] #'fledermaus-maybe-tab)))
+(add-hook 'c-mode-common-hook #'hs-minor-mode)
 
 
 (when (is-modern-emacs)
