@@ -87,7 +87,7 @@
   ("j" dumb-jump-go :exit t)
   ("S" gist-region-or-buffer-private :exit t)
   ("L" gist-list :exit t)
-  ("t" hs-toggle-hiding :exit nil)
+  ("t" hs-toggle-hiding)
   ("q" nil))
 (global-set-key (kbd "C-x q") #'hydra-quickness/body)
 
