@@ -65,7 +65,7 @@
 [_u_] Update-GTAGS       [_c_] Mode-Compile     [_C_] Compile          [_r_] Recompile          [_N_] Move-Text-Down
 [_w_] Google-Search-Word [_k_] Google-Lucky     [_p_] Previous-mark    [_n_] Next-mark          [_j_] Dumb-Jump
 [_i_] Pyim               [_s_] Sort-Lines       [_d_] Remove-duplicate [_S_] Gist-Share-Code    [_L_] Gist-List
-[_q_] Quit
+[_t_] Hs-Toggle-Hiding   [_q_] Quit
   "
   ("a" smart/counsel-ag :exit t)
   ("g" counsel-git-grep :exit t)
@@ -87,6 +87,7 @@
   ("j" dumb-jump-go :exit t)
   ("S" gist-region-or-buffer-private :exit t)
   ("L" gist-list :exit t)
+  ("t" hs-toggle-hiding :exit nil)
   ("q" nil))
 (global-set-key (kbd "C-x q") #'hydra-quickness/body)
 
