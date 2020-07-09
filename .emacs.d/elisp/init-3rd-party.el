@@ -143,7 +143,8 @@
 ;; wget https://netcologne.dl.sourceforge.net/project/plantuml/plantuml.jar
 ;;
 ;; "C-c C-c" => plantuml-preview => Show UML Diagram
-(require-package 'plantuml-mode)
+(when (maybe-require-package 'plantuml-mode)
+  (setq plantuml-default-exec-mode 'jar))  ;; default server mode is not working
 
 
 ;;; Pyim - "Chinese Pinyin Input Method"
