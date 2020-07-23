@@ -455,6 +455,22 @@
                   ("Emacs Reddit" "https://www.reddit.com/r/emacs.rss")))))
 
 
+;; Another Atom/RSS reader
+(when (maybe-require-package 'elfeed)
+  (use-package elfeed
+    :bind (("C-x f" . elfeed))
+    :init (setq url-queue-timeout 30
+                elfeed-db-directory (locate-user-emacs-file ".elfeed")
+                elfeed-show-entry-switch #'pop-to-buffer
+                elfeed-show-entry-delete #'delete-window
+                elfeed-feeds '(("https://planet.emacslife.com/atom.xml" planet emacslife)
+                               ("http://www.masteringemacs.org/feed/" mastering)
+                               ("https://oremacs.com/atom.xml" oremacs)
+                               ("https://pinecast.com/feed/emacscast" emacscast)
+                               ("https://www.reddit.com/r/emacs.rss" reddit)))
+    :config (push elfeed-db-directory recentf-exclude)))
+
+
 ;; Preview files in dired
 (when (maybe-require-package 'peep-dired)
   (use-package peep-dired
