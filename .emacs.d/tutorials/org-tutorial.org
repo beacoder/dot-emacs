@@ -6,7 +6,7 @@
 #+STARTUP: indent
 #+OPTIONS: html-postamble:nil
 
-* Outline
+* Outline                                                                       :Basic:
   org-mode can do outline.
 ** Hotkeys
    <TAB>        => switch between FOLDED, CHILDREN and SUBTREE.
@@ -22,8 +22,9 @@
    <S-UP>       => increase priority of heading.
    <S-DOWN>     => decrease priority of heading.
    <C-c c>      => capture something, continue your work.
+   <C-c C-c>    => add a tag for current iterm.
 
-* Markup
+* Markup                                                                        :Extended:
   org-mode can do markup.
 ** Font styles
    * bold *           -> *bold*
@@ -33,12 +34,14 @@
    = monospaced =     -> =monospaced=
 ** Bulleted list items
    - list item
-   + item-id :: item-content
+   - item-id :: item-content
      - sub-item
        1. also enumerated
        2. if you like
-   - [ ] yet to be done
-   + [X] item which is done
+   - progress [/] [%]
+     - <C-c C-c> to mark and unmark
+     - [ ] yet to be done
+     - [X] item which is done
 ** Links
    [[https://orgmode.org][link-to-web: orgmode.org]]
    [[file:~/.emacs.d/elisp/init-org.el::;;; Code][link-to-file-position: init-org.el]]
@@ -58,7 +61,7 @@
    :
    : Text block ends here
 
-* Todo
+* Todo                                                                          :GTD:
   org-mode can do GTD stuff.
 ** Sample todo lists
 *** TODO explain todo lists
@@ -78,7 +81,7 @@
    <S-LEFT>      => modify timestampe.
    <S-RIGHT>     => modify timestampe.
 
-* Tables
+* Tables                                                                        :Extended:
   org-mode can do tables
 ** Sample table
    |------+----------------|
@@ -100,7 +103,7 @@
    <S-M-LEFT>   => delete column.
    <S-M-RIGHT>  => insert column.
 
-* Export
+* Export                                                                        :Extended:
   org-mode can export to HTML, LaTeX, PDF etc.
 ** Meta-data
    #+AUTHOR:
@@ -118,7 +121,7 @@
 ** Hotkeys
    <C-c C-e>  => org-export
 
-* Source code
+* Source code                                                                   :Extended:
   org-mode can embed scripts and run them.
 ** Sample script
    #+BEGIN_SRC ruby
@@ -138,7 +141,7 @@
 ** Hotkeys
    <C-c C-c>  => evaluate script and place result afer #+RESULTS:
 
-* LaTeX integration
+* LaTeX integration                                                             :Extended:
   org-mode can do LaTeX.
 ** Sample LaTeX
    - Characters: \alpha \rightarrow \beta
