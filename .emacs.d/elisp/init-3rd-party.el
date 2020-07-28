@@ -134,8 +134,17 @@
 ;; "wttrin" => Display weather
 ;; "g"      => Change city
 ;; "q"      => Quit
-(require-package 'wttrin)
-(setq wttrin-default-cities '("Shanghai" "Taizhou.Jiangsu"))
+(when (maybe-require-package 'wttrin)
+  (setq wttrin-default-cities '("Shanghai" "Taizhou.Jiangsu"))
+  ;; fix wttrin buffer render issue
+  (advice-remove 'wttrin-query 'render-wttrin-buffer)
+  (defun render-wttrin-buffer (ignore-args)
+    "Render the wtrrin buffer."
+    (read-only-mode -1)
+    (shr-render-region (point-min) (point-max))
+    (delete-trailing-whitespace)
+    (read-only-mode t))
+  (advice-add 'wttrin-query :after 'render-wttrin-buffer))
 
 
 ;;; PlantUML
