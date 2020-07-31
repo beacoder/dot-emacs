@@ -174,6 +174,12 @@ Otherwise, get the symbol at point, as a string."
          (substring-no-properties
           (symbol-name (symbol-at-point))))))
 
+(defun smart/interactive-dwim-at-point (orig-fun &rest args)
+  "Empower ORIG-FUN(ARGS) with ability to read `thing-at-point'."
+  (interactive (list (smart/dwim-at-point)))
+  (let ((res (apply orig-fun args)))
+    res))
+
 ;;; improved version, based on ag/read-from-minibuffer
 (defun smart/read-from-minibuffer (prompt)
   "Read a value from the minibuffer with PROMPT.
