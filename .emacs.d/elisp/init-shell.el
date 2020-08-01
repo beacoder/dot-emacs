@@ -1,22 +1,22 @@
-;;----------------------------------------------------------------------------
-;; shell setting
-;;----------------------------------------------------------------------------
+;;; init-shell.el --- shell settings -*- lexical-binding: t -*-
+;;; Commentary:
+;;; Code:
 
-(setq shell-file-name "/bin/bash")
+(when (maybe-require-package 'exec-path-from-shell)
 
-(require-package 'exec-path-from-shell)
-(after-load 'exec-path-from-shell
-  (dolist (var '("SSH_AUTH_SOCK" "SSH_AGENT_PID" "GPG_AGENT_INFO" "LANG" "LC_CTYPE" "GTAGSLIBPATH"))
-    (add-to-list 'exec-path-from-shell-variables var)))
+  (after-load 'exec-path-from-shell
+    (dolist (var '("SSH_AUTH_SOCK" "SSH_AGENT_PID" "GPG_AGENT_INFO" "LANG" "LC_CTYPE" "GTAGSLIBPATH"))
+      (add-to-list 'exec-path-from-shell-variables var)))
 
-(when (or (memq window-system '(mac ns x))
-          (unless (memq system-type '(ms-dos windows-nt))
-            (daemonp)))
-  (setq-default exec-path-from-shell-arguments nil)
-  (exec-path-from-shell-initialize))
+  (when (or (memq window-system '(mac ns x))
+            (unless (memq system-type '(ms-dos windows-nt))
+              (daemonp)))
+    (setq-default exec-path-from-shell-arguments nil)
+    (exec-path-from-shell-initialize)))
 
-;; kill the buffer after the ansi-term is exited
+
 (defadvice term-sentinel (around my-advice-term-sentinel (proc msg))
+  "Kill buffer after `ansi-term' is exited."
   (if (memq (process-status proc) '(signal exit))
       (let ((buffer (process-buffer proc)))
         ad-do-it
@@ -24,21 +24,25 @@
     ad-do-it))
 (ad-activate 'term-sentinel)
 
-;; use bash as the default shell for ansi-term
+
+(setq shell-file-name "/bin/bash")
 (defvar my-term-shell "/bin/bash")
 (defadvice ansi-term (before force-bash)
+  "Use bash as the default shell for `ansi-term'."
   (interactive (list my-term-shell)))
 (ad-activate 'ansi-term)
 
-;; use utf-8 as default coding-system for ansi-term
-(defun my-term-use-utf8 ()
-  (set-buffer-process-coding-system 'utf-8-unix 'utf-8-unix))
-(add-hook 'term-exec-hook 'my-term-use-utf8)
 
-;; make urls clickable in ansi-term
-(defun my-term-hook ()
+(defun use-utf8-in-term ()
+  "Use utf-8 as default coding-system for `ansi-term'."
+  (set-buffer-process-coding-system 'utf-8-unix 'utf-8-unix))
+(add-hook 'term-exec-hook #'use-utf8-in-term)
+
+
+(defun enable-address-mode ()
+  "Make urls clickable in `ansi-term'."
   (goto-address-mode))
-(add-hook 'term-mode-hook 'my-term-hook)
+(add-hook 'term-mode-hook #'enable-address-mode)
 
 
 ;; @see https://stackoverflow.com/questions/5819719/emacs-shell-command-output-not-showing-ansi-colors-but-the-code
@@ -51,6 +55,12 @@
          (string= (buffer-name buf) "*Shell Command Output*")
          (with-current-buffer buf
            (ansi-color-apply-on-region (point-min) (point-max))))))
+
+
+;; On Mac, when start emacs from GUI, emacs does not inherit environment variables from your shell
+(when  *is-a-mac*
+  (setenv "PATH" (concat "/usr/local/bin" path-separator (getenv "PATH"))))
+
 
 (provide 'init-shell)
 ;;; init-shell.el ends here
