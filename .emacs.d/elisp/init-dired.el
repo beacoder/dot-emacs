@@ -21,11 +21,6 @@
               ;; copy from one dired dir to the next dired dir shown in a split window
               dired-dwim-target t)
 
-;; restore positions and markers after dired-view-file exits
-(defadvice dired-view-file (around advice-dired-view-file activate)
-  (interactive)
-  (save-excursion ad-do-it))
-
 ;; Prefer g-prefixed coreutils version of standard utilities when available
 (let ((gls (executable-find "gls")))
   (when gls (setq insert-directory-program gls)))
