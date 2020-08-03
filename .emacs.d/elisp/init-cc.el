@@ -22,8 +22,8 @@
 
 ;;; useful commands
 ;;----------------------------------------------------------------------------
-;;; Keep #includes in alphabetical order
-;;  sort-lines            (C-x q s)
+;;  sort-lines             (C-x q s)
+;;  delete-duplicate-lines (C-x q d)
 
 ;; avoid default "gnu" style, use more popular one
 (setq c-default-style "linux")
