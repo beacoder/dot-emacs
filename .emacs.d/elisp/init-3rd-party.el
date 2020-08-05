@@ -146,7 +146,8 @@
         (with-current-buffer
             (url-retrieve-synchronously
              (concat "http://wttr.in/" query "?A")
-             (λ (status) (switch-to-buffer (current-buffer))))
+             (lambda (status) (switch-to-buffer (current-buffer))))
+          (delete-trailing-whitespace)
           (decode-coding-string (buffer-string) 'utf-8))))))
 
 
