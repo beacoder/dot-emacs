@@ -136,15 +136,18 @@
 ;; "q"      => Quit
 (when (maybe-require-package 'wttrin)
   (setq wttrin-default-cities '("Shanghai" "Taizhou.Jiangsu"))
-  ;; fix wttrin buffer render issue
-  (advice-remove 'wttrin-query 'render-wttrin-buffer)
-  (defun render-wttrin-buffer (ignore-args)
-    "Render the wtrrin buffer."
-    (read-only-mode -1)
-    (shr-render-region (point-min) (point-max))
-    (delete-trailing-whitespace)
-    (read-only-mode t))
-  (advice-add 'wttrin-query :after 'render-wttrin-buffer))
+
+  ;; @see https://github.com/bcbcarl/emacs-wttrin/issues/16
+  (after-load 'wttrin
+    (defun wttrin-fetch-raw-string (query)
+      "Get the weather information based on your QUERY."
+      (let ((url-user-agent "curl"))
+        (add-to-list 'url-request-extra-headers wttrin-default-accept-language)
+        (with-current-buffer
+            (url-retrieve-synchronously
+             (concat "http://wttr.in/" query "?A")
+             (λ (status) (switch-to-buffer (current-buffer))))
+          (decode-coding-string (buffer-string) 'utf-8))))))
 
 
 ;;; PlantUML
