@@ -155,15 +155,6 @@ White space here is any of: space, tab, emacs newline (line feed, ASCII 10)."
   (dolist (pattern patterns)
     (add-to-list 'auto-mode-alist (cons pattern mode))))
 
-(if (fboundp 'with-eval-after-load)
-    (defalias 'after-load 'with-eval-after-load)
-  (defmacro after-load (feature &rest body)
-    "After FEATURE is loaded, evaluate BODY."
-    (declare (indent defun))
-    `(eval-after-load ,feature
-       '(progn ,@body))))
-
-
 ;;; steal from ag/dwim-at-point
 (defun smart/dwim-at-point ()
   "If there's an active selection, return that.
