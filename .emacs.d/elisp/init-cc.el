@@ -94,8 +94,8 @@
 
   ;; company-c-headers
   (when (maybe-require-package 'company-c-headers)
-    (after-load 'company
-      (after-load 'cc-mode (push 'company-c-headers company-backends))))
+    (with-eval-after-load 'company
+      (with-eval-after-load 'cc-mode (push 'company-c-headers company-backends))))
 
   ;; flycheck
   (add-hook 'c++-mode-hook

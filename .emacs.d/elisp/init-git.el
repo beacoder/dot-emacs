@@ -38,11 +38,11 @@
           (magit-log-buffer-file t))
       (vc-print-log)))
 
-  (after-load 'vc
+  (with-eval-after-load 'vc
     (define-key vc-prefix-map (kbd "l") 'sanityinc/magit-or-vc-log-file)))
 
 
-(after-load 'magit
+(with-eval-after-load 'magit
   (define-key magit-status-mode-map (kbd "C-M-<up>") #'magit-section-up)
   (add-hook 'magit-popup-mode-hook 'sanityinc/no-trailing-whitespace)
 
@@ -63,7 +63,7 @@
 
 
 (require-package 'fullframe)
-(after-load 'magit
+(with-eval-after-load 'magit
   (fullframe magit-status magit-mode-quit-window))
 
 (when (maybe-require-package 'git-commit)
@@ -71,7 +71,7 @@
 
 
 (when *is-a-mac*
-  (after-load 'magit
+  (with-eval-after-load 'magit
     (add-hook 'magit-mode-hook (lambda () (local-unset-key [(meta h)])))))
 
 

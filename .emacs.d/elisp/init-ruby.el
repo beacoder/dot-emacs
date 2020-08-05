@@ -16,7 +16,7 @@
 
 (add-hook 'ruby-mode-hook 'subword-mode)
 
-(after-load 'page-break-lines
+(with-eval-after-load 'page-break-lines
   (push 'ruby-mode page-break-lines-modes))
 
 (require-package 'rspec-mode)
@@ -35,20 +35,20 @@
 ;;; Ruby compilation
 (require-package 'ruby-compilation)
 
-(after-load 'ruby-mode
+(with-eval-after-load 'ruby-mode
   (define-key ruby-mode-map [S-f7] 'ruby-compilation-this-buffer)
   (define-key ruby-mode-map [f7] 'ruby-compilation-this-test))
 
-(after-load 'ruby-compilation
+(with-eval-after-load 'ruby-compilation
   (defalias 'rake 'ruby-compilation-rake))
 
 
 ;;; Robe
 (when (maybe-require-package 'robe)
-  (after-load 'ruby-mode
+  (with-eval-after-load 'ruby-mode
     (add-hook 'ruby-mode-hook 'robe-mode))
-  (after-load 'robe
-    (after-load 'company
+  (with-eval-after-load 'robe
+    (with-eval-after-load 'company
       (push 'company-robe company-backends))))
 
 
@@ -105,7 +105,7 @@
 ;; Needs to run after rinari to avoid clobbering font-lock-keywords?
 
 ;; (require-package 'mmm-mode)
-;; (eval-after-load 'mmm-mode
+;; (eval-with-eval-after-load 'mmm-mode
 ;;   '(progn
 ;;      (mmm-add-classes
 ;;       '((ruby-heredoc-sql

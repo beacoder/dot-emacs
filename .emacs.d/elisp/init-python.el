@@ -28,7 +28,7 @@
 (require-package 'pip-requirements)
 
 (when (maybe-require-package 'anaconda-mode)
-  (after-load 'python
+  (with-eval-after-load 'python
     ;; Anaconda doesn't work on remote servers without some work, so
     ;; by default we enable it only when working locally.
     (add-hook 'python-mode-hook
@@ -46,7 +46,7 @@
      ("C-c w" . python-skeleton-while)
      ("C-c C-f" . nil))) ;; allow global binding for "C-c C-f"
 
-  (after-load 'anaconda-mode
+  (with-eval-after-load 'anaconda-mode
     (bind-keys
      :map anaconda-mode-map
      ("M-]" . anaconda-mode-find-references)
@@ -54,8 +54,8 @@
      ("M-?" . anaconda-mode-show-doc)))
 
   (when (maybe-require-package 'company-anaconda)
-    (after-load 'company
-      (after-load 'python
+    (with-eval-after-load 'company
+      (with-eval-after-load 'python
         (push 'company-anaconda company-backends)))))
 
 

@@ -28,7 +28,7 @@
             (replace-match (concat (getenv "TTCN3_GGSN_ROOT_PATH") "/") t nil))
           (message "TTCN3 tags has been updated..."))))))
 
-(after-load 'ttcn3
+(with-eval-after-load 'ttcn3
   ;; Don't shadow global key-bindings
   (define-key ttcn3-mode-map (kbd "M-?") nil)
   (define-key ttcn3-mode-map (kbd ",") nil)

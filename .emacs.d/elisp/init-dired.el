@@ -26,10 +26,10 @@
   (when gls (setq insert-directory-program gls)))
 
 ;; (when (maybe-require-package 'diredfl)
-;;   (after-load 'dired
+;;   (with-eval-after-load 'dired
 ;;     (diredfl-global-mode)))
 
-(after-load 'dired
+(with-eval-after-load 'dired
   (require 'dired-subtree)
   ;; the background color is awful, disable it.
   (setq dired-subtree-use-backgrounds nil)

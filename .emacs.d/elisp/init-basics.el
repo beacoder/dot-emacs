@@ -17,7 +17,7 @@ URL `https://sites.google.com/site/steveyegge2/effective-emacs'"
 (global-set-key (kbd "C-w") #'backward-kill-word-or-region)
 
 
-(after-load "xref"
+(with-eval-after-load "xref"
   (progn
     (define-key esc-map "?" #'xref-find-apropos)
     (define-key esc-map "]" #'xref-find-references)
@@ -171,7 +171,7 @@ The argument has the same meaning as in `apropos'."
           (lambda ()
             (require 'view)
             (and buffer-read-only (setq view-exit-action 'kill-buffer-if-not-modified))))
-(after-load 'view
+(with-eval-after-load 'view
   (define-key view-mode-map (kbd "p") #'View-scroll-line-backward)
   (define-key view-mode-map (kbd "n") #'View-scroll-line-forward))
 
@@ -241,7 +241,7 @@ The argument has the same meaning as in `apropos'."
     (set-face-foreground 'lazy-highlight "white")
     (set-face-background 'lazy-highlight "pink"))
   (custom-set-faces '(isearch-fail ((((class color)) (:background "red"))))))
-(after-load "isearch" (isearch-face-settings))
+(with-eval-after-load "isearch" (isearch-face-settings))
 
 ;; Isearch convenience, space matches anything (non-greedy)
 ;; @see https://www.reddit.com/r/emacs/comments/3yxk2x/flexible_isearch_without_a_package/
@@ -307,7 +307,7 @@ Use in `isearch-mode-end-hook'."
     (custom-set-faces '(ediff-fine-diff-C
                         ((((type tty)) :background "blue" :foreground "white")
                          (t :background "gold1" :foreground "red"))))))
-(after-load "ediff" (ediff-face-settings))
+(with-eval-after-load "ediff" (ediff-face-settings))
 
 
 ;; show elisp error backtrace
@@ -327,7 +327,7 @@ Use in `isearch-mode-end-hook'."
 (when (executable-find ispell-program-name)
   ;; Add spell-checking in comments for all programming language modes
   (add-hook 'prog-mode-hook 'flyspell-prog-mode)
-  (after-load 'flyspell
+  (with-eval-after-load 'flyspell
     (define-key flyspell-mode-map (kbd "C-;") nil)
     (add-to-list 'flyspell-prog-text-faces 'nxml-text-face)))
 
@@ -376,7 +376,7 @@ Use in `isearch-mode-end-hook'."
           new-format-on t))
   (list-buffers))
 
-(after-load 'ibuffer
+(with-eval-after-load 'ibuffer
   (define-key ibuffer-mode-map (kbd "(") #'switch-ibuffer-format)
   (define-key ibuffer-mode-map (kbd ")") #'switch-ibuffer-format))
 

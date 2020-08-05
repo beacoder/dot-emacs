@@ -12,7 +12,7 @@
 
 (when (maybe-require-package 'ag)
   (require 'ag)
-  (after-load "ag"
+  (with-eval-after-load "ag"
     (progn
       (defalias #'ag/read-from-minibuffer #'smart/read-from-minibuffer))))
 

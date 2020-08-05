@@ -2,7 +2,7 @@
 ;;   See http://www.reddit.com/r/emacs/comments/21fjpn/fontifying_buffer_list_for_emacs_243/
 
 (require-package 'fullframe)
-(after-load 'ibuffer
+(with-eval-after-load 'ibuffer
  (fullframe ibuffer ibuffer-quit))
 
 (require-package 'ibuffer-vc)
@@ -17,7 +17,7 @@
 (setq-default ibuffer-show-empty-filter-groups nil)
 
 
-(after-load 'ibuffer
+(with-eval-after-load 'ibuffer
   ;; Use human readable Size column instead of original one
   (define-ibuffer-column size-h
     (:name "Size" :inline t)
@@ -25,7 +25,7 @@
 
 
 ;; Don't block these key-bindings
-(after-load 'ibuffer
+(with-eval-after-load 'ibuffer
   (bind-keys
    :map ibuffer-mode-map
    ("M-s" . nil)

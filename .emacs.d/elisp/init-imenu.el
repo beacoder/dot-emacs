@@ -7,7 +7,7 @@
 (setq imenu-max-item-length "Unlimited")
 
 
-(after-load 'cc-menus
+(with-eval-after-load 'cc-menus
   ;; enable imenu to display both function name and its arg-list
   (setf (nth 2 cc-imenu-c++-generic-expression)
         ;; General function name regexp
@@ -32,7 +32,7 @@
   ;; imenu for gtest: TEST_F(Foo, TestToJumpTo)
   (push (list nil "TEST\\(_F\\)?.*, \\(.*\\))" 0) cc-imenu-c++-generic-expression)
 
-  (after-load 'imenu
+  (with-eval-after-load 'imenu
     ;; skip default generated ("TEST" "").
     (defun xwl-skip-gtest/imenu--make-index-alist (orig-fun &rest args)
       (let ((orig-ret (apply orig-fun args)))
@@ -42,7 +42,7 @@
     (advice-add 'imenu--make-index-alist :around 'xwl-skip-gtest/imenu--make-index-alist)))
 
 
-(after-load 'which-func
+(with-eval-after-load 'which-func
   ;; remove arg-list for call-graph to work.
   ;; TODO: add more code in call-graph to use arg-list to make better judgement.
   (setq which-func-cleanup-function

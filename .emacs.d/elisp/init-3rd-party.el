@@ -22,7 +22,7 @@
 (async-bytecomp-package-mode 1)
 
 ;; provide dired with asynchronous abilities
-(after-load "dired-aux" (require 'dired-async))
+(with-eval-after-load "dired-aux" (require 'dired-async))
 
 ;; sending emails asynchronously
 (require 'smtpmail-async)
@@ -38,7 +38,7 @@
 ;; "C-x u" => open the undo-tree-visualizer
 (when (require-package 'undo-tree)
   (add-hook 'after-init-hook 'global-undo-tree-mode)
-  (after-load 'undo-tree
+  (with-eval-after-load 'undo-tree
     ;; undo-buffer limit -> 100 MB                                                       |
     (setq undo-outer-limit (* 100 (expt 1024 2)))))
 
@@ -66,7 +66,7 @@
 
 ;;; markdown-mode
 (when (maybe-require-package 'markdown-mode)
-  (after-load 'whitespace-cleanup-mode
+  (with-eval-after-load 'whitespace-cleanup-mode
     (push 'markdown-mode whitespace-cleanup-mode-ignore-modes)))
 
 
@@ -119,7 +119,7 @@
 ;; "C-c M-f" => ggtags-find-file
 ;; "C-c M-g" => ggtags-grep
 (when (require-package 'ggtags)
-  (after-load 'ggtags
+  (with-eval-after-load 'ggtags
     (define-key ggtags-mode-prefix-map "\M-r" #'ggtags-find-tag-regexp))
   (add-hook 'c-mode-common-hook
             (lambda () (when (and (executable-find "global")
@@ -138,7 +138,7 @@
   (setq wttrin-default-cities '("Shanghai" "Taizhou.Jiangsu"))
 
   ;; @see https://github.com/bcbcarl/emacs-wttrin/issues/16
-  (after-load 'wttrin
+  (with-eval-after-load 'wttrin
     (defun wttrin-fetch-raw-string (query)
       "Get the weather information based on your QUERY."
       (let ((url-user-agent "curl"))
@@ -212,7 +212,7 @@
   (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh)
   (add-hook 'after-init-hook 'global-diff-hl-mode)
 
-  (after-load 'diff-hl
+  (with-eval-after-load 'diff-hl
     (define-key diff-hl-mode-map
       (kbd "<left-fringe> <mouse-1>")
       #'diff-hl-diff-goto-hunk)))
@@ -243,7 +243,7 @@
 (when (maybe-require-package 'symbol-overlay)
   (dolist (hook '(prog-mode-hook html-mode-hook css-mode-hook yaml-mode-hook conf-mode-hook))
     (add-hook hook 'symbol-overlay-mode))
-  (after-load 'symbol-overlay
+  (with-eval-after-load 'symbol-overlay
     (define-key symbol-overlay-mode-map (kbd "M-i") #'symbol-overlay-put)
     (define-key symbol-overlay-mode-map (kbd "M-I") #'symbol-overlay-remove-all)
     (define-key symbol-overlay-mode-map (kbd "M-n") #'symbol-overlay-switch-forward)
@@ -265,7 +265,7 @@
 (when (maybe-require-package 'which-key)
   (add-hook 'after-init-hook 'which-key-mode)
   (setq-default which-key-idle-delay 1.5)
-  (after-load 'which-key
+  (with-eval-after-load 'which-key
     (diminish 'which-key-mode)))
 
 
@@ -326,33 +326,33 @@
 
 
 ;;; diminish modes
-(after-load 'eldoc
+(with-eval-after-load 'eldoc
   (diminish 'eldoc-mode))
-(after-load 'undo-tree
+(with-eval-after-load 'undo-tree
   (diminish 'undo-tree-mode))
-(after-load 'ggtags
+(with-eval-after-load 'ggtags
   (diminish 'ggtags-mode))
-(after-load 'symbol-overlay
+(with-eval-after-load 'symbol-overlay
   (diminish 'symbol-overlay-mode))
-(after-load 'super-save
+(with-eval-after-load 'super-save
   (diminish 'super-save-mode))
-(after-load 'rainbow-delimiters
+(with-eval-after-load 'rainbow-delimiters
   (diminish 'rainbow-delimiters-mode))
-(after-load 'which-key
+(with-eval-after-load 'which-key
   (diminish 'which-key-mode))
-(after-load 'abbrev
+(with-eval-after-load 'abbrev
   (diminish 'abbrev-mode))
-(after-load 'flycheck
+(with-eval-after-load 'flycheck
   (diminish 'flycheck-mode))
-(after-load 'company
+(with-eval-after-load 'company
   (diminish 'company-mode))
-(after-load 'ivy
+(with-eval-after-load 'ivy
   (diminish 'ivy-mode))
-(after-load 'counsel
+(with-eval-after-load 'counsel
   (diminish 'counsel-mode))
-(after-load 'yard-mode
+(with-eval-after-load 'yard-mode
   (diminish 'yard-mode))
-(after-load 'whitespace-cleanup-mode
+(with-eval-after-load 'whitespace-cleanup-mode
   (diminish 'whitespace-cleanup-mode))
 
 

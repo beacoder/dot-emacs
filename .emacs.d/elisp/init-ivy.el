@@ -8,7 +8,7 @@
 ;; "C-M-o" => show actions, calls action after selection, don't exit
 (when (maybe-require-package 'ivy)
   (add-hook 'after-init-hook 'ivy-mode)
-  (after-load 'ivy
+  (with-eval-after-load 'ivy
     (setq-default ivy-height 20
                   ivy-use-virtual-buffers t
                   ivy-virtual-abbreviate 'fullpath
@@ -39,13 +39,13 @@
     (setq ivy-virtual-abbreviate 'abbreviate
           ivy-rich-switch-buffer-align-virtual-buffer nil
           ivy-rich-path-style 'abbrev)
-    (after-load 'ivy
+    (with-eval-after-load 'ivy
       (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line))
     (add-hook 'ivy-mode-hook (lambda () (ivy-rich-mode ivy-mode)))))
 
 
 (when (maybe-require-package 'counsel)
-  (after-load 'counsel
+  (with-eval-after-load 'counsel
     ;; don't override pop-to-mark-command
     (define-key counsel-mode-map [remap pop-to-mark-command] nil)
     ;; enable counsel-git-grep to read thing-at-point
@@ -71,7 +71,7 @@ With prefix args, read directory from minibuffer."
 
 
 (when (maybe-require-package 'swiper)
-  (after-load 'ivy
+  (with-eval-after-load 'ivy
     (defun smart/swiper-at-point (sym)
       "Use `swiper' to search for the symbol at point."
       (interactive (list (smart/read-from-minibuffer "Search string")))

@@ -9,7 +9,7 @@
 
 
 ;; Don't treat 0-9 as digit-argument.
-(after-load 'hydra
+(with-eval-after-load 'hydra
   (setq hydra-base-map (make-sparse-keymap)))
 
 
