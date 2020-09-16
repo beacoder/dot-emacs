@@ -403,67 +403,67 @@ typical word processor."
 ;; modified from org-search-view
 (defun org-agenda-search-function (string)
   "Show all entries in agenda files that contain STRING."
-  (or
-   (ivy-more-chars)
-   (progn
-     (require 'org-agenda)
-     (catch 'exit
-       (setq files (org-agenda-files))
-       ;; Uniquify files.  However, let `org-check-agenda-file' handle
-       ;; non-existent ones.
-       (setq files (cl-remove-duplicates
-                    (append files org-agenda-text-search-extra-files)
-                    :test (lambda (a b)
-                            (and (file-exists-p a)
-                                 (file-exists-p b)
-                                 (file-equal-p a b))))
-             rtnall nil)
-       ;; loop agenda files to find matched one
-       (while (setq file (pop files))
-         (setq ee nil)
-         (catch 'nextfile
-           (org-check-agenda-file file)
-           ;; search matched text
-           (with-temp-buffer
-             (insert-file-contents-literally file)
-             (org-mode)
-             (with-syntax-table (org-search-syntax-table)
-               (let ((case-fold-search t))
-                 (widen)
-                 (goto-char (point-min))
-                 (unless (or (org-at-heading-p)
-                             (outline-next-heading))
-                   (throw 'nextfile t))
-                 (goto-char (max (point-min) (1- (point))))
-                 ;; real match happens here
-                 (while (re-search-forward string nil t)
-                   (org-back-to-heading t)
-                   (while (and (not (zerop org-agenda-search-view-max-outline-level))
-                               (> (org-reduced-level (org-outline-level))
-                                  org-agenda-search-view-max-outline-level)
-                               (forward-line -1)
-                               (org-back-to-heading t)))
-                   (skip-chars-forward "* ")
-                   (setq beg (point-at-bol)
-                         beg1 (point)
-                         end (progn
-                               (outline-next-heading)
-                               (while (and (not (zerop org-agenda-search-view-max-outline-level))
-                                           (> (org-reduced-level (org-outline-level))
-                                              org-agenda-search-view-max-outline-level)
-                                           (forward-line 1)
-                                           (outline-next-heading)))
-                               (point)))
-                   (goto-char beg)
-                   ;; save found text and its location
-                   (setq txt
-                         (propertize (buffer-substring-no-properties beg1 (point-at-eol))
-                                     'location (format "%s:%d" file (line-number-at-pos beg))))
-                   (push txt ee)
-                   (goto-char (1- end)))))))
-         (setq rtn (nreverse ee))
-         (setq rtnall (append rtnall rtn)))
-       rtnall))))
+  (or (ivy-more-chars)
+      (progn
+        ;; use fuzzy matching
+        (setq string (replace-regexp-in-string " +" ".*" string))
+        (require 'org-agenda)
+        (catch 'exit
+          (setq files (org-agenda-files))
+          ;; Uniquify files.  However, let `org-check-agenda-file' handle
+          ;; non-existent ones.
+          (setq files (cl-remove-duplicates
+                       (append files org-agenda-text-search-extra-files)
+                       :test (lambda (a b)
+                               (and (file-exists-p a)
+                                    (file-exists-p b)
+                                    (file-equal-p a b))))
+                rtnall nil)
+          ;; loop agenda files to find matched one
+          (while (setq file (pop files))
+            (setq ee nil)
+            (catch 'nextfile
+              (org-check-agenda-file file)
+              ;; search matched text
+              (with-temp-buffer
+                (insert-file-contents-literally file)
+                (org-mode)
+                (with-syntax-table (org-search-syntax-table)
+                  (let ((case-fold-search t))
+                    (widen)
+                    (goto-char (point-min))
+                    (unless (or (org-at-heading-p)
+                                (outline-next-heading))
+                      (throw 'nextfile t))
+                    (goto-char (max (point-min) (1- (point))))
+                    ;; real match happens here
+                    (while (re-search-forward string nil t)
+                      (org-back-to-heading t)
+                      (while (and (not (zerop org-agenda-search-view-max-outline-level))
+                                  (> (org-reduced-level (org-outline-level))
+                                     org-agenda-search-view-max-outline-level)
+                                  (forward-line -1)
+                                  (org-back-to-heading t)))
+                      (skip-chars-forward "* ")
+                      (setq beg (point-at-bol)
+                            beg1 (point)
+                            end (progn
+                                  (outline-next-heading)
+                                  (while (and (not (zerop org-agenda-search-view-max-outline-level))
+                                              (> (org-reduced-level (org-outline-level))
+                                                 org-agenda-search-view-max-outline-level)
+                                              (forward-line 1)
+                                              (outline-next-heading)))
+                                  (point)))
+                      (goto-char beg)
+                      ;; save found text and its location
+                      (setq txt (propertize (buffer-substring-no-properties beg1 (point-at-eol))
+                                            'location (format "%s:%d" file (line-number-at-pos beg))))
+                      (push txt ee)
+                      (goto-char (1- end)))))))
+            (setq rtn (nreverse ee))
+            (setq rtnall (append rtnall rtn)))
+          rtnall))))
 
 (defun smart/org-search-action (agenda-location)
   "Go to AGENDA-LOCATION."
