@@ -10,20 +10,25 @@
   (setq-default locate-command "mdfind"))
 
 
+;; install the_silver_searcher(ag) first
 (when (maybe-require-package 'ag)
   (require 'ag)
   (with-eval-after-load "ag"
     (progn
-      (defalias #'ag/read-from-minibuffer #'smart/read-from-minibuffer))))
+      (defalias #'ag/read-from-minibuffer #'smart/read-from-minibuffer)))
 
+  ;; run ag
+  ;; wgrep-change-to-wgrep-mode
+  ;; make changes in buffer
+  ;; wgrep-finish-edit (C-c C-e)
+  (when  (maybe-require-package 'wgrep-ag)
+    (setq wgrep-auto-save-buffer t
+          wgrep-change-readonly-file t))
 
-;; install the_silver_searcher(ag) first
-(when (and (executable-find "ag")
-           (maybe-require-package 'ag))
-  (require-package 'wgrep-ag)
-  (setq-default ag-highlight-search t)
-  (global-set-key (kbd "M-s") #'ag-project)
-  (global-set-key (kbd "M-r") #'ag-project-regexp))
+  (when (executable-find "ag")
+    (setq-default ag-highlight-search t)
+    (global-set-key (kbd "M-s") #'ag-project)
+    (global-set-key (kbd "M-r") #'ag-project-regexp)))
 
 
 ;; install rg first
