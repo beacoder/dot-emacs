@@ -391,6 +391,7 @@ typical word processor."
 
 ;;; Incremental org-search-vew
 ;;; Begin
+
 (defun smart/org-search-view ()
   "Incremental `org-search-view'."
   (interactive)
