@@ -65,7 +65,7 @@
 [_u_] Update-GTAGS       [_c_] Mode-Compile     [_C_] Compile          [_r_] Recompile          [_N_] Move-Text-Down
 [_w_] Google-Search-Word [_k_] Google-Lucky     [_p_] Previous-mark    [_n_] Next-mark          [_j_] Dumb-Jump
 [_i_] Pyim               [_s_] Sort-Lines       [_D_] Remove-duplicate [_S_] Gist-Share-Code    [_L_] Gist-List
-[_d_] org-search-view    [_t_] Hs-Toggle-Hiding   [_q_] Quit
+[_d_] org-search-view    [_t_] Hs-Toggle-Hiding [_q_] Quit
   "
   ("a" smart/counsel-ag :exit t)
   ("g" counsel-git-grep :exit t)
