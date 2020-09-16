@@ -64,8 +64,8 @@
 [_a_] Counsel-ag         [_g_] Counsel-git-grep [_f_] Counsel-git      [_l_] Counsel-locate     [_P_] Move-Text-Up
 [_u_] Update-GTAGS       [_c_] Mode-Compile     [_C_] Compile          [_r_] Recompile          [_N_] Move-Text-Down
 [_w_] Google-Search-Word [_k_] Google-Lucky     [_p_] Previous-mark    [_n_] Next-mark          [_j_] Dumb-Jump
-[_i_] Pyim               [_s_] Sort-Lines       [_d_] Remove-duplicate [_S_] Gist-Share-Code    [_L_] Gist-List
-[_t_] Hs-Toggle-Hiding   [_q_] Quit
+[_i_] Pyim               [_s_] Sort-Lines       [_D_] Remove-duplicate [_S_] Gist-Share-Code    [_L_] Gist-List
+[_d_] org-search-view    [_t_] Hs-Toggle-Hiding   [_q_] Quit
   "
   ("a" smart/counsel-ag :exit t)
   ("g" counsel-git-grep :exit t)
@@ -81,13 +81,14 @@
   ("p" pop-to-mark-command)
   ("n" unpop-to-mark-command)
   ("s" sort-lines :exit t)
-  ("d" delete-duplicate-lines :exit t)
+  ("D" delete-duplicate-lines :exit t)
   ("P" move-text-up)
   ("N" move-text-down)
   ("j" dumb-jump-go :exit t)
   ("S" gist-region-or-buffer-private :exit t)
   ("L" gist-list :exit t)
   ("t" hs-toggle-hiding)
+  ("d" smart/org-search-view :exit t)
   ("q" nil))
 (global-set-key (kbd "C-x q") #'hydra-quickness/body)
 
