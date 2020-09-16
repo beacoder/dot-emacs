@@ -49,13 +49,14 @@
 (defalias 'ts 'tags-search)
 (defalias 'tq 'tags-query-replace)
 
-;; misc
-(defalias 'cc 'clone-indirect-buffer)
-(defalias 'sc 'scratch)
-
 ;; prettify the xml in the active region
 (defalias 'pt 'sanityinc/pp-xml-region)
 (defalias 'td 'sanityinc/tidy-buffer-xml)
+
+;; misc
+(defalias 'cc 'clone-indirect-buffer)
+(defalias 'sc 'scratch)
+(defalias 'wg 'wgrep-change-to-wgrep-mode)
 
 
 (provide 'init-alias)
