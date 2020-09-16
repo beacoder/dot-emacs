@@ -18,9 +18,9 @@
       (defalias #'ag/read-from-minibuffer #'smart/read-from-minibuffer)))
 
   ;; run ag
-  ;; wgrep-change-to-wgrep-mode
+  ;; wgrep-change-to-wgrep-mode (wg)
   ;; make changes in buffer
-  ;; wgrep-finish-edit (C-c C-e)
+  ;; wgrep-finish-edit          (C-c C-e)
   (when  (maybe-require-package 'wgrep-ag)
     (setq wgrep-auto-save-buffer t
           wgrep-change-readonly-file t))
