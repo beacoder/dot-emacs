@@ -510,7 +510,7 @@
 (require-package 'buffer-move)
 (require 'init-http)
 (require 'init-calendar)
-(require 'cl)
+(require 'cl-lib)
 
 
 (provide 'init-3rd-party)
