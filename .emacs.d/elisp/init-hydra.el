@@ -61,11 +61,11 @@
   "
                  ^Commands^
 --------------------------------------------
-[_a_] Counsel-ag         [_g_] Counsel-git-grep [_f_] Counsel-git      [_l_] Counsel-locate     [_P_] Move-Text-Up
+[_a_] Counsel-Ag         [_g_] Counsel-Git-Grep [_f_] Counsel-Git      [_l_] Counsel-Locate     [_P_] Move-Text-Up
 [_u_] Update-GTAGS       [_c_] Mode-Compile     [_C_] Compile          [_r_] Recompile          [_N_] Move-Text-Down
-[_w_] Google-Search-Word [_k_] Google-Lucky     [_p_] Previous-mark    [_n_] Next-mark          [_j_] Dumb-Jump
-[_i_] Pyim               [_s_] Sort-Lines       [_d_] Remove-duplicate [_S_] Gist-Share-Code    [_L_] Gist-List
-[_o_] Org-search-view    [_t_] Hs-Toggle-Hiding [_q_] Quit
+[_w_] Google-Search-Word [_k_] Google-Lucky     [_p_] Previous-Mark    [_n_] Next-Mark          [_j_] Dumb-Jump
+[_i_] Pyim               [_s_] Sort-Lines       [_d_] Remove-Duplicate [_S_] Gist-Share-Code    [_L_] Gist-List
+[_o_] Org-Search-View    [_t_] Hs-Toggle-Hiding [_q_] Quit
   "
   ("a" smart/counsel-ag :exit t)
   ("g" counsel-git-grep :exit t)
