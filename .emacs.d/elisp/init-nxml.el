@@ -18,6 +18,25 @@
       nxml-slash-auto-complete-flag t)
 
 
+;; @see https://emacs.stackexchange.com/questions/2884/the-old-how-to-fold-xml-question
+(require 'hideshow)
+(require 'sgml-mode)
+(require 'nxml-mode)
+
+(add-to-list 'hs-special-modes-alist
+             '(nxml-mode
+               "<!--\\|<[^/>]*[^/]>"
+               "-->\\|</[^/>]*[^/]>"
+
+               "<!--"
+               sgml-skip-tag-forward
+               nil))
+(add-hook 'nxml-mode-hook 'hs-minor-mode)
+
+;; optional key bindings, easier than hs defaults
+(define-key nxml-mode-map (kbd "C-c h") 'hs-toggle-hiding)
+
+
 ;; See: http://sinewalker.wordpress.com/2008/06/26/pretty-printing-xml-with-emacs-nxml-mode/
 (defun sanityinc/pp-xml-region (beg end)
   "Pretty format XML markup in region. The function inserts
