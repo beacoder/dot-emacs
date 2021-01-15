@@ -57,13 +57,6 @@
 ;; (setq lisp-indent-function 'common-lisp-indent-function)
 
 
-;;; smex to handle M-x
-(when (maybe-require-package 'smex)
-  ;; Change path for ~/.smex-items
-  (setq smex-save-file (expand-file-name ".smex-items" user-emacs-directory))
-  (global-set-key [remap execute-extended-command] #'smex))
-
-
 ;;; markdown-mode
 (when (maybe-require-package 'markdown-mode)
   (with-eval-after-load 'whitespace-cleanup-mode
