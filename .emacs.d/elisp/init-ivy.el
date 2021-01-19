@@ -2,46 +2,47 @@
 ;;; Commentary:
 ;;; Code:
 
+;;; Use light-weight selectrum instead of ivy
+
 ;;; ivy - a generic completion frontend for Emacs
 ;; "C-m"   => calls the current action
 ;; "M-o"   => show actions, calls action after selection, exit
 ;; "C-M-o" => show actions, calls action after selection, don't exit
-(when (maybe-require-package 'ivy)
-  (add-hook 'after-init-hook 'ivy-mode)
-  (with-eval-after-load 'ivy
-    (setq-default ivy-height 20
-                  ivy-use-virtual-buffers t
-                  ivy-virtual-abbreviate 'fullpath
-                  ivy-count-format ""
-                  projectile-completion-system 'ivy
-                  ;; cause trouble when doing counsel-git-grep
-                  ;; ivy-dynamic-exhibit-delay-ms 150
-                  ivy-use-selectable-prompt t
-                  ivy-magic-tilde nil
-                  ivy-initial-inputs-alist
-                  '((man . "^")
-                    (woman . "^")))
+;; (when (maybe-require-package 'ivy)
+;;   (add-hook 'after-init-hook 'ivy-mode)
+;;   (with-eval-after-load 'ivy
+;;     (setq-default ivy-height 20
+;;                   ivy-use-virtual-buffers t
+;;                   ivy-virtual-abbreviate 'fullpath
+;;                   ivy-count-format ""
+;;                   projectile-completion-system 'ivy
+;;                   ;; ivy-dynamic-exhibit-delay-ms 150
+;;                   ivy-use-selectable-prompt t
+;;                   ivy-magic-tilde nil
+;;                   ivy-initial-inputs-alist
+;;                   '((man . "^")
+;;                     (woman . "^")))
 
-    ;; IDO-style directory navigation
-    (define-key ivy-minibuffer-map (kbd "RET") #'ivy-alt-done)
-    (dolist (k '("C-j" "C-RET"))
-      (define-key ivy-minibuffer-map (kbd k) #'ivy-immediate-done))
+;;     ;; IDO-style directory navigation
+;;     (define-key ivy-minibuffer-map (kbd "RET") #'ivy-alt-done)
+;;     (dolist (k '("C-j" "C-RET"))
+;;       (define-key ivy-minibuffer-map (kbd k) #'ivy-immediate-done))
 
-    (define-key ivy-minibuffer-map (kbd "<up>") #'ivy-previous-line-or-history)
+;;     (define-key ivy-minibuffer-map (kbd "<up>") #'ivy-previous-line-or-history)
 
-    ;; show more results in counsel-ag
-    ;; (add-to-list 'ivy-height-alist (cons 'counsel-generic 30))
+;;     ;; show more results in counsel-ag
+;;     ;; (add-to-list 'ivy-height-alist (cons 'counsel-generic 30))
 
-    (when (maybe-require-package 'diminish)
-      (diminish 'ivy-mode)))
+;;     (when (maybe-require-package 'diminish)
+;;       (diminish 'ivy-mode)))
 
-  (when (maybe-require-package 'ivy-rich)
-    (setq ivy-virtual-abbreviate 'abbreviate
-          ivy-rich-switch-buffer-align-virtual-buffer nil
-          ivy-rich-path-style 'abbrev)
-    (with-eval-after-load 'ivy
-      (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line))
-    (add-hook 'ivy-mode-hook (lambda () (ivy-rich-mode ivy-mode)))))
+;;   (when (maybe-require-package 'ivy-rich)
+;;     (setq ivy-virtual-abbreviate 'abbreviate
+;;           ivy-rich-switch-buffer-align-virtual-buffer nil
+;;           ivy-rich-path-style 'abbrev)
+;;     (with-eval-after-load 'ivy
+;;       (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line))
+;;     (add-hook 'ivy-mode-hook (lambda () (ivy-rich-mode ivy-mode)))))
 
 
 (when (maybe-require-package 'counsel)
