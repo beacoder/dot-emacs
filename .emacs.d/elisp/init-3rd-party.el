@@ -496,6 +496,7 @@
 (require 'init-dired)
 (require 'init-isearch)
 (require 'init-ibuffer)
+(require 'init-selectrum)
 (require 'init-ivy)
 (require 'init-org)
 (require 'init-eww)
