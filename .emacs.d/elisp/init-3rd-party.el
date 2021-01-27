@@ -486,6 +486,36 @@
                 ("P" . peep-dired))))
 
 
+;; ipretty
+(when (maybe-require-package 'ipretty)
+  (add-hook 'after-init-hook 'ipretty-mode))
+
+
+;; Automatic byte compilation
+(when (maybe-require-package 'auto-compile)
+  (setq auto-compile-delete-stray-dest nil)
+  (add-hook 'after-init-hook 'auto-compile-on-save-mode)
+  (add-hook 'after-init-hook 'auto-compile-on-load-mode)
+  ;; Load .el if newer than corresponding .elc
+  (setq load-prefer-newer t))
+
+
+;; immortal-scratch
+(when (maybe-require-package 'immortal-scratch)
+  (add-hook 'after-init-hook 'immortal-scratch-mode))
+
+
+;; Extras for theme editing
+(when (maybe-require-package 'rainbow-mode)
+  (defun sanityinc/enable-rainbow-mode-if-theme ()
+    (when (and (buffer-file-name) (string-match-p "\\(color-theme-\\|-theme\\.el\\)" (buffer-file-name)))
+      (rainbow-mode)))
+  (add-hook 'emacs-lisp-mode-hook 'sanityinc/enable-rainbow-mode-if-theme)
+  (add-hook 'help-mode-hook 'rainbow-mode)
+  (with-eval-after-load 'rainbow-mode
+    (diminish 'rainbow-mode)))
+
+
 ;;; other setting
 (require 'init-hydra)
 (require 'init-git)
