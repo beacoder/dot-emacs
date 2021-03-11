@@ -57,6 +57,7 @@
 (global-set-key (kbd "C-x w") #'hydra-window/body)
 
 
+(require 'org-searcher)
 (defhydra hydra-quickness (:hint nil)
   "
                  ^Commands^
