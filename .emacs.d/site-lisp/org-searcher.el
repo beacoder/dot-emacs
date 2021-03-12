@@ -29,7 +29,7 @@
 ;; Incremental org-search-view
 ;;
 ;; Below are commands you can use:
-;; `smart/org-search-view'
+;; `org-searcher/search-view'
 
 ;;; Code:
 
@@ -40,19 +40,19 @@
 ;; Definition
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defvar smart/ivy-index-to-agenda-item-list nil
+(defvar org-searcher/index-to-item-alist nil
   "The alist to store mapping from ivy-index to agenda-item.")
 
-(defvar smart/window-configuration nil
+(defvar org-searcher/window-configuration nil
   "The window configuration to be restored upon closing the buffer.")
 
-(defvar smart/selected-window nil
+(defvar org-searcher/selected-window nil
   "The currently selected window.")
 
-(defvar smart/created-buffers ()
+(defvar org-searcher/created-buffers ()
   "List of newly created buffers.")
 
-(defvar smart/previous-buffers ()
+(defvar org-searcher/previous-buffers ()
   "List of buffers created before opening org-searcher.")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -60,21 +60,21 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;;###autoload
-(defun smart/org-search-view ()
+(defun org-searcher/search-view ()
   "Incremental `org-search-view'."
   (interactive)
-  (let ((smart/window-configuration (current-window-configuration))
-        (smart/selected-window (frame-selected-window))
-        (smart/previous-buffers (buffer-list)))
-    (advice-add 'ivy-previous-line :after 'smart/org-iterate-action)
-    (advice-add 'ivy-next-line :after 'smart/org-iterate-action)
-    (add-hook 'minibuffer-exit-hook 'smart/org-searcher-quit)
+  (let ((org-searcher/window-configuration (current-window-configuration))
+        (org-searcher/selected-window (frame-selected-window))
+        (org-searcher/previous-buffers (buffer-list)))
+    (advice-add 'ivy-previous-line :after 'org-searcher/iterate-action)
+    (advice-add 'ivy-next-line :after 'org-searcher/iterate-action)
+    (add-hook 'minibuffer-exit-hook 'org-searcher/quit)
     (ivy-read "Org agenda search: " #'org-agenda-search-function
               :dynamic-collection t
-              :caller #'smart/org-search-view
-              :action #'smart/org-search-action)))
+              :caller #'org-searcher/search-view
+              :action #'org-searcher/search-action)))
 
-(defun smart/visit-agenda-location (agenda-location)
+(defun org-searcher/visit-agenda-location (agenda-location)
   "Visit agenda location AGENDA-LOCATION."
   (when-let ((temp-split (split-string agenda-location ":"))
              (file-name (car temp-split))
@@ -86,13 +86,13 @@
     (with-no-warnings (goto-line line-nb))
     (unless (member
              (buffer-name (window-buffer))
-             (mapcar (function buffer-name) smart/previous-buffers))
-      (add-to-list 'smart/created-buffers (window-buffer)))))
+             (mapcar (function buffer-name) org-searcher/previous-buffers))
+      (add-to-list 'org-searcher/created-buffers (window-buffer)))))
 
-(defun smart/org-search-action (agenda-location)
+(defun org-searcher/search-action (agenda-location)
   "Go to AGENDA-LOCATION."
   (when-let ((location (get-text-property 0 'location agenda-location)))
-    (smart/visit-agenda-location location)))
+    (org-searcher/visit-agenda-location location)))
 
 ;; modified from org-search-view
 (defun org-agenda-search-function (string)
@@ -112,7 +112,7 @@
                                     (file-equal-p a b))))
                 rtnall nil
                 index 0
-                smart/ivy-index-to-agenda-item-list nil)
+                org-searcher/index-to-item-alist nil)
           ;; loop agenda files to find matched one
           (while (setq file (pop files))
             (setq ee nil)
@@ -156,7 +156,7 @@
                             (propertize (buffer-substring-no-properties beg1 (point-at-eol))
                                         'location (format "%s:%d" file (line-number-at-pos beg))))
                       ;; save in map
-                      (push (cons index txt) smart/ivy-index-to-agenda-item-list)
+                      (push (cons index txt) org-searcher/index-to-item-alist)
                       ;; save in return value
                       (push txt ee)
                       (goto-char (1- end))
@@ -165,28 +165,28 @@
             (setq rtnall (append rtnall rtn)))
           rtnall))))
 
-(defun smart/org-iterate-action (&optional arg)
+(defun org-searcher/iterate-action (&optional arg)
   "Preview agenda content while looping agenda, ignore ARG."
-  (when-let ((is-map-valid smart/ivy-index-to-agenda-item-list)
-             (item-found (assoc ivy--index smart/ivy-index-to-agenda-item-list))
+  (when-let ((is-map-valid org-searcher/index-to-item-alist)
+             (item-found (assoc ivy--index org-searcher/index-to-item-alist))
              (item-content (cdr item-found))
              (location (get-text-property 0 'location item-content)))
-    (smart/visit-agenda-location location)
+    (org-searcher/visit-agenda-location location)
     (when (active-minibuffer-window)
       (select-window (active-minibuffer-window)))))
 
-(defun smart/org-searcher-quit ()
+(defun org-searcher/quit ()
   "Quit `org-searcher'."
-  (let ((configuration smart/window-configuration)
-        (selected-window smart/selected-window))
+  (let ((configuration org-searcher/window-configuration)
+        (selected-window org-searcher/selected-window))
     ;; (kill-this-buffer)
-    (advice-remove 'ivy-previous-line 'smart/org-iterate-action)
-    (advice-remove 'ivy-next-line 'smart/org-iterate-action)
-    (remove-hook 'minibuffer-exit-hook 'smart/org-searcher-quit)
+    (advice-remove 'ivy-previous-line 'org-searcher/iterate-action)
+    (advice-remove 'ivy-next-line 'org-searcher/iterate-action)
+    (remove-hook 'minibuffer-exit-hook 'org-searcher/quit)
     (set-window-configuration configuration)
     (select-window selected-window)
-    (mapc 'kill-buffer-if-not-modified smart/created-buffers)
-    (setq smart/created-buffers ())))
+    (mapc 'kill-buffer-if-not-modified org-searcher/created-buffers)
+    (setq org-searcher/created-buffers ())))
 
 
 (provide 'org-searcher)
