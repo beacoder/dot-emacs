@@ -89,7 +89,7 @@
   ("S" gist-region-or-buffer-private :exit t)
   ("L" gist-list :exit t)
   ("t" hs-toggle-hiding)
-  ("o" smart/org-search-view :exit t)
+  ("o" org-searcher/search-view :exit t)
   ("q" nil))
 (global-set-key (kbd "C-x q") #'hydra-quickness/body)
 
