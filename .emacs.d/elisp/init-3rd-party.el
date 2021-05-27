@@ -527,7 +527,7 @@
 (require 'init-isearch)
 (require 'init-ibuffer)
 (require 'init-ivy)
-(require 'init-selectrum)
+(require 'init-minibuffer)
 (require 'init-org)
 (require 'init-eww)
 (require 'init-flycheck)
