@@ -10,7 +10,7 @@
   (with-eval-after-load 'vertico
     (require 'orderless))
 
-  (setq completion-styles '(substring orderless))
+  (setq completion-styles '(basic partial-completion orderless))
 
   (when (maybe-require-package 'embark)
     (with-eval-after-load 'vertico
@@ -48,8 +48,7 @@
     (maybe-require-package 'consult-flycheck)))
 
 (when (maybe-require-package 'marginalia)
-  (add-hook 'after-init-hook 'marginalia-mode)
-  (setq-default marginalia-annotators '(marginalia-annotators-heavy)))
+  (add-hook 'after-init-hook 'marginalia-mode))
 
 
 (provide 'init-minibuffer)
