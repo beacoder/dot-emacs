@@ -65,7 +65,7 @@
   (interactive)
   (let ((org-searcher-window-configuration (current-window-configuration))
         (org-searcher-selected-window (frame-selected-window))
-        (smart/created-buffers ())
+        (org-searcher-created-buffers ())
         (org-searcher-previous-buffers (buffer-list)))
     (advice-add 'ivy-previous-line :after #'org-searcher-iterate-action)
     (advice-add 'ivy-next-line :after #'org-searcher-iterate-action)
