@@ -5,7 +5,10 @@
 ;; Author: Huming Chen <chenhuming@gmail.com>
 ;; Maintainer: Huming Chen <chenhuming@gmail.com>
 ;; URL: https://github.com/beacoder/call-graph
-
+;; Version: 0.1.0
+;; Keywords: programming, convenience
+;; Created: 2018-01-07
+;; Package-Requires: ((emacs "25") (hierarchy "0.7.0") (tree-mode "1.0.0") (ivy "0.10.0") (anaconda-mode "0.1.13"))
 ;; This file is not part of GNU Emacs.
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -33,10 +36,6 @@
 
 ;;; Code:
 
-(require 'cl-lib)
-(require 'seq)
-(require 'map)
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Customizable
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -55,81 +54,38 @@
 ;; Definition
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defvar cg--server-clients '()
-    "Alist where KEY is a client process and VALUE is the string.")
-
 (defvar cg--server-process nil
   "The server process.")
 
 (defvar cg--client-process nil
   "The client process.")
 
+(defvar cg--retrieval-text nil
+  "The message from server.")
+
+(defvar cg--retrieval-done nil
+  "Indicate whether server message is received.")
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Helpers
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defun cg--server-log (string &optional client)
-  "Log message STRING from CLIENT."
+(defun cg--server-log (string)
+  "Log message content STRING."
   (message
-   (concat (current-time-string)
-           (if client (format " %s:" client) " " string) "\n")))
+   (concat (format "(%s): %s \n" (current-time-string) string))))
 
 (defun cg--server-filter (proc string)
   "Callback function for server with PROC and STRING."
-  (let ((pending (assoc proc cg--server-clients))
-        message
-        index)
-    ;;create entry if required
-    (unless pending
-      (setq cg--server-clients (cons (cons proc "") cg--server-clients))
-      (setq pending (assoc proc cg--server-clients)))
-    (setq message (concat (cdr pending) string))
-    (while (setq index (string-match "\n" message))
-      (setq index (1+ index))
-      (process-send-string proc (substring message 0 index))
-      (cg--server-log  (substring message 0 index) proc)
-      (setq message (substring message index)))
-    (setcdr pending message)))
+  (process-send-string proc string)
+  (cg--server-log (format "Received message from client: %s" proc)))
 
 (defun cg--client-filter (proc string)
   "Callback function for client with PROC and STRING."
-  (let ((pending (assoc proc cg--server-clients))
-        message
-        index)
-    ;;create entry if required
-    (unless pending
-      (setq cg--server-clients (cons (cons proc "") cg--server-clients))
-      (setq pending (assoc proc cg--server-clients)))
-    (setq message (concat (cdr pending) string))
-    (while (setq index (string-match "\n" message))
-      (setq index (1+ index))
-      (process-send-string proc (substring message 0 index))
-      (cg--server-log  (substring message 0 index) proc)
-      (setq message (substring message index)))
-    (setcdr pending message)))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Core Functions
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;;;###autoload
-(defun cg-server-start ()
-  "Start cg-server."
-  (interactive)
-  (setq cg--server-process
-        (make-network-process
-         :name "cg-server"
-         :buffer "*cg-server*"
-         :host cg-server-address
-         :service cg-server-port
-         :type 'datagram
-         :server t
-         :family 'ipv4
-         ;; :sentinel 'cg--server-sentinel
-         :filter 'cg--server-filter))
-  (cg--server-log
-   (format "call-graph server started on %s and listen on %d."
-           cg-server-address cg-server-port)))
+  (cg--server-log (format "Received message from server: %s" proc))
+  ;; response is ready
+  (setq cg--retrieval-done t
+        cg--retrieval-text string))
 
 (defun cg--server-stop nil
   "Stop cg-server."
@@ -145,6 +101,7 @@
 
 (defun cg--client-start ()
   "Start cg-client to talk to cg-server."
+  (cg--client-stop)
   (setq cg--client-process
         (make-network-process
          :name "cg-client"
@@ -156,18 +113,96 @@
          ;; :sentinel 'cg--client-sentinel
          :filter 'cg--client-filter))
   (cg--server-log
-   (format "cilent started to talk to %s on port %d."
+   (format "Cilent started to talk to %s on port %d."
            cg-server-address cg-server-port))
   (accept-process-output cg--client-process 3))
 
-(defun cg--client-find-references (command)
-  "Send COMMAND to find reference in remote."
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Core Functions
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;;###autoload
+(defun cg-server-start ()
+  "Start cg-server."
+  (interactive)
+  (cg--server-stop)
+  (setq cg--server-process
+        (make-network-process
+         :name "cg-server"
+         :buffer "*cg-server*"
+         :host cg-server-address
+         :service cg-server-port
+         :type 'datagram
+         :server t
+         :family 'ipv4
+         ;; :sentinel 'cg--server-sentinel
+         :filter 'cg--server-filter))
+  (cg--server-log
+   (format "Server started on %s and listen on %d."
+           cg-server-address cg-server-port)))
+
+(defun cg--client-find-references (command &optional timeout)
+  "Send COMMAND to find reference in remote and return it.
+timeout in TIMEOUT sec."
   (unless cg--client-process (cg--client-start))
   (when (and cg--client-process command)
-    (process-send-string cg--client-process command)
-
     ;; refer to url-retrieve-synchronously
-    ))
+    (let ((cg--retrieval-done nil)
+          (cg--retrieval-text nil)
+          (start-time (current-time))
+          (asynch-buffer (get-buffer "*cg-client*"))
+          (timeout-in-sec (or timeout 3)))
+      ;; send command and wait for response
+      (process-send-string cg--client-process command)
+      ;; busy-waiting for response to be ready
+      (let ((proc (get-buffer-process asynch-buffer)))
+        ;; If the access method was synchronous, `cg--retrieval-done' should
+        ;; hopefully already be set to t.  If it is nil, and `proc' is also
+        ;; nil, it implies that the async process is not running in
+        ;; asynch-buffer.  This happens e.g. for FTP files.  In such a case
+        ;; url-file.el should probably set something like a `url-process'
+        ;; buffer-local variable so we can find the exact process that we
+        ;; should be waiting for.  In the mean time, we'll just wait for any
+        ;; process output.
+        (while (and (not cg--retrieval-done)
+                    (or (not timeout-in-sec)
+                        (< (float-time (time-subtract
+                                        (current-time) start-time))
+                           timeout-in-sec)))
+          (cg--server-log "Spinning in waiting for response from remote.")
+          (if (and proc (memq (process-status proc)
+                              '(closed exit signal failed))
+                   ;; Make sure another process hasn't been started.
+                   (eq proc (or (get-buffer-process asynch-buffer) proc)))
+              ;; FIXME: It's not clear whether url-retrieve's callback is
+              ;; guaranteed to be called or not.  It seems that url-http
+              ;; decides sometimes consciously not to call it, so it's not
+              ;; clear that it's a bug, but even then we need to decide how
+              ;; url-http can then warn us that the download has completed.
+              ;; In the mean time, we use this here workaround.
+              ;; XXX: The callback must always be called.  Any
+              ;; exception is a bug that should be fixed, not worked
+              ;; around.
+              (progn ;; Call delete-process so we run any sentinel now.
+                (delete-process proc)
+                (setq cg--retrieval-done t)))
+          ;; We used to use `sit-for' here, but in some cases it wouldn't
+          ;; work because apparently pending keyboard input would always
+          ;; interrupt it before it got a chance to handle process input.
+          ;; `sleep-for' was tried but it lead to other forms of
+          ;; hanging.  --Stef
+          (unless (or (with-local-quit
+                        (accept-process-output proc 1))
+                      (null proc))
+            ;; accept-process-output returned nil, maybe because the process
+            ;; exited (and may have been replaced with another).  If we got
+            ;; a quit, just stop.
+            (when quit-flag
+              (delete-process proc))
+            (setq proc (and (not quit-flag)
+                            (get-buffer-process asynch-buffer))))))
+      ;; return the response content
+      cg--retrieval-text)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Tests
