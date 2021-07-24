@@ -61,18 +61,24 @@
   (message
    (concat (format "(%s): %s \n" (current-time-string) string))))
 
-(defun cg--client-filter (proc string)
-  "Callback function for client with PROC and STRING."
-  (cg--client-log (format "Received message from server: %s" proc))
-  ;; response is ready
-  (setq cg--retrieval-done t
-        cg--retrieval-text string))
-
 (defun cg--client-stop nil
   "Stop cg-client."
   (when cg--client-process
     (delete-process cg--client-process)
     (setq cg--client-process nil)))
+
+(defun cg--client-filter (proc string)
+  "Callback function for client with PROC and STRING."
+  (cg--client-log (format "Received message from server: %s" proc))
+  ;; response is ready
+  ;; todo: when response is too big, we may need to receive for multiple times
+  ;; check status code first, see if need more time to receive
+  (setq cg--retrieval-done t
+        cg--retrieval-text string))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Core Functions
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun cg--client-start ()
   "Start cg-client to talk to cg-server."
@@ -91,10 +97,6 @@
    (format "Cilent started to talk to %s on port %d."
            cg-server-address cg-server-port))
   (accept-process-output cg--client-process 3))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Core Functions
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun cg--client-find-references (command &optional timeout)
   "Send COMMAND to find reference in remote and return it.
@@ -157,7 +159,10 @@ timeout in TIMEOUT sec."
             (setq proc (and (not quit-flag)
                             (get-buffer-process asynch-buffer))))))
       ;; return the response content
-      cg--retrieval-text)))
+      (if (and (stringp cg--retrieval-text)
+               (not (string-empty-p (string-trim cg--retrieval-text))))
+          (split-string cg--retrieval-text "\n" t)
+        nil))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Tests
