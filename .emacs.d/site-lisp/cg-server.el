@@ -66,16 +66,23 @@
   (message
    (concat (format "(%s): %s \n" (current-time-string) string))))
 
-(defun cg--server-filter (proc string)
-  "Callback function for server with PROC and STRING."
-  (process-send-string proc string)
-  (cg--server-log (format "Received message from client: %s" proc)))
-
 (defun cg--server-stop nil
   "Stop cg-server."
   (when cg--server-process
     (delete-process cg--server-process)
     (setq cg--server-process nil)))
+
+(defun cg--server-filter (proc string)
+  "Callback function for server with PROC and STRING."
+  (cg--server-log (format "Received message from client: %s" proc))
+  (if (string-match "global" string)  ;; only handle global related command
+      (let ((command-output (shell-command-to-string string)))
+        ;; TODO: when output is too big, could introduce status code
+        ;; 200 OK  => OK
+        ;; 200 TBC => to be continued
+        (process-send-string proc command-output))
+    ;; be nice to client
+    (process-send-string proc " ")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Core Functions
