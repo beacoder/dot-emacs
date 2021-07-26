@@ -152,7 +152,7 @@ If there's a string at point, use it instead of prompt."
 
 ;;;###autoload
 (defun ipc-udp-client-send (command &optional timeout)
-  "Send COMMAND to server and get response from it (synchronously).
+  "Send COMMAND to server and get response from it synchronously.
 timeout in TIMEOUT seoncds."
   (interactive (list (smart/read-from-minibuffer "Send command")))
   (unless ipc-udp--client-process (ipc-udp--client-start))
