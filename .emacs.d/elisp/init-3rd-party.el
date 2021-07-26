@@ -534,6 +534,7 @@
 (require-package 'buffer-move)
 (require 'init-http)
 (require 'init-calendar)
+(require 'ipc-udp)
 (require 'cl-lib)
 
 
