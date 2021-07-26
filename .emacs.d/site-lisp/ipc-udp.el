@@ -87,8 +87,7 @@ If there's a string at point, use it instead of prompt."
 
 (defun ipc-udp--client-start ()
   "Start ipc-udp-client to talk to ipc-udp-server."
-  (interactive)
-  (ipc-udp--client-stop)
+  (ipc-udp-client-stop)
   (setq ipc-udp--client-process
         (make-network-process
          :name "ipc-udp-client"
@@ -134,7 +133,7 @@ If there's a string at point, use it instead of prompt."
 (defun ipc-udp-server-start ()
   "Start ipc-udp-server."
   (interactive)
-  (ipc-udp--server-stop)
+  (ipc-udp-server-stop)
   (setq ipc-udp--server-process
         (make-network-process
          :name "ipc-udp-server"
@@ -220,7 +219,7 @@ timeout in TIMEOUT seoncds."
           (split-string ipc-udp--retrieval-text "\n" t)
         nil))))
 
-(defun ipc-udp--server-stop nil
+(defun ipc-udp-server-stop nil
   "Stop ipc-udp-server."
   (interactive)
   (when ipc-udp--server-process
@@ -228,7 +227,7 @@ timeout in TIMEOUT seoncds."
     (setq ipc-udp--server-process nil)
     (ipc-udp--log "Server stoped.")))
 
-(defun ipc-udp--client-stop nil
+(defun ipc-udp-client-stop nil
   "Stop ipc-udp-client."
   (interactive)
   (when ipc-udp--client-process
