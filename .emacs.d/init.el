@@ -53,7 +53,7 @@
   (message "create-tags succeed !"))
 (defalias 'ct 'create-tags)
 
-;; set tags file lists
+;; set tags file list and cpp file search path
 (setq tags-file-name nil
       tags-table-list
       '(
