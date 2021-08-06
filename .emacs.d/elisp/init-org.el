@@ -22,6 +22,13 @@
 
 ;;; Code:
 
+;;; useful key-bindings
+;;----------------------------------------------------------------------------
+;;  org-todo     (C-c C-t)
+;;  org-priority (C-c ,)
+;;  org-schedule (C-c C-s) e.g: +/- 1d/1w
+;;  org-deadline (C-c C-d) e.g: +/- 1d/1w
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Org table
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -30,6 +37,13 @@
 ;; '|-'    => starts a horizontal separator line
 ;; '<TAB>' => Re-align the table, needed by above commands
 ;; 'C-c |' => create a table, or convert region into a table.
+
+;;; Agenda views
+
+;; 'C-c a T' => search for todo keywords
+;; 'C-c a m' => search for tags and properties
+;; "C-c a s" => search for full text
+;; "x"       => exit org-agenda
 
 (when *is-a-mac*
   (maybe-require-package 'grab-mac-link))
@@ -169,13 +183,6 @@ typical word processor."
               ("PROJECT" :inherit font-lock-string-face))))
 
 
-
-;;; Agenda views
-
-;; 'C-c a T' => search for todo keywords
-;; 'C-c a m' => search for tags and properties
-;; "C-c a s" => search for full text
-;; "x"       => exit org-agenda
 
 (setq-default org-agenda-clockreport-parameter-plist '(:link t :maxlevel 3)
               org-agenda-start-with-follow-mode t)
