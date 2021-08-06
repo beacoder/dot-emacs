@@ -516,6 +516,12 @@
     (diminish 'rainbow-mode)))
 
 
+;; System monitor
+(when (maybe-require-package 'symon)
+  (require 'symon)
+  (symon-mode))
+
+
 ;;; other setting
 (require 'init-hydra)
 (require 'init-git)
