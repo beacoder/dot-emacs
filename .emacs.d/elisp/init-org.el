@@ -24,6 +24,8 @@
 
 ;;; useful key-bindings
 ;;----------------------------------------------------------------------------
+;;  org-agenda   (C-c a)
+;;  org-capture  (C-c c)
 ;;  org-todo     (C-c C-t)
 ;;  org-priority (C-c ,)
 ;;  org-schedule (C-c C-s) e.g: +/- 1d/1w
