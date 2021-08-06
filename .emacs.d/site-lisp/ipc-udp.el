@@ -105,7 +105,7 @@ If there's a string at point, use it instead of prompt."
 
 (defun ipc-udp--server-filter (proc string)
   "Callback function for server with PROC and STRING."
-  (ipc-udp--log (format "Received message from client: %s" proc))
+  (ipc-udp--log (format "%s: Received message from client." proc))
   (sleep-for 1)  ;; simulate the network latency
   (if (string-match "global" string)  ;; only handle global related command
       (let ((command-output (shell-command-to-string string)))
@@ -118,7 +118,7 @@ If there's a string at point, use it instead of prompt."
 
 (defun ipc-udp--client-filter (proc string)
   "Callback function for client with PROC and STRING."
-  (ipc-udp--log (format "Received message from server: %s" proc))
+  (ipc-udp--log (format "%s: Received message from server." proc))
   ;; response is ready
   ;; todo: when response is too big, we may need to receive for multiple times
   ;; check status code first, see if need more time to receive
@@ -163,7 +163,7 @@ timeout in TIMEOUT seoncds."
           (asynch-buffer (get-buffer "*ipc-udp-client*"))
           (timeout-in-sec (or timeout 3)))
       (process-send-string ipc-udp--client-process command)
-      (ipc-udp--log "Send command and wait for response.")
+      (ipc-udp--log "Client: Send command and wait for response.")
       ;; busy-waiting for response to be ready
       (let ((proc (get-buffer-process asynch-buffer)))
         ;; If the access method was synchronous, `ipc-udp--retrieval-done' should
@@ -179,7 +179,7 @@ timeout in TIMEOUT seoncds."
                         (< (float-time (time-subtract
                                         (current-time) start-time))
                            timeout-in-sec)))
-          (ipc-udp--log "Spinning in waiting for response from remote.")
+          (ipc-udp--log "Client: Spinning in waiting for response from remote.")
           (if (and proc (memq (process-status proc)
                               '(closed exit signal failed))
                    ;; Make sure another process hasn't been started.
@@ -211,7 +211,7 @@ timeout in TIMEOUT seoncds."
               (delete-process proc))
             (setq proc (and (not quit-flag)
                             (get-buffer-process asynch-buffer))))))
-      (ipc-udp--log "Received response from remote.")
+      (ipc-udp--log "Client: Received response from remote.")
       ;; return the response content
       (if (and (stringp ipc-udp--retrieval-text)
                (not (string-empty-p (string-trim ipc-udp--retrieval-text))))
