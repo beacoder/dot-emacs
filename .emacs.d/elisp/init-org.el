@@ -24,12 +24,16 @@
 
 ;;; useful key-bindings
 ;;----------------------------------------------------------------------------
-;;  org-agenda   (C-c a)
-;;  org-capture  (C-c c)
-;;  org-todo     (C-c C-t)
-;;  org-priority (C-c ,)
-;;  org-schedule (C-c C-s) e.g: +/- 1d/1w
-;;  org-deadline (C-c C-d) e.g: +/- 1d/1w
+;; org-agenda   (C-c a)
+;; org-capture  (C-c c)
+;; org-todo     (C-c C-t)
+;; org-priority (C-c ,)
+;; org-schedule (C-c C-s) e.g: +/- 1d/1w
+;; org-deadline (C-c C-d) e.g: +/- 1d/1w
+
+;; org-timer-start     (C-c C-x 0) count-up timer
+;; org-timer-set-timer (C-c C-x ;) count-down timer
+;; org-timer-stop      (C-c C-x _) stop timer
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Org table
