@@ -16,18 +16,18 @@
 
 
 ;;; async setting
-(require-package 'async)
-;; deal with problems when updating packages
-(require 'async-bytecomp)
-(async-bytecomp-package-mode 1)
+(when (maybe-require-package 'async)
+  ;; deal with problems when updating packages
+  (require 'async-bytecomp)
+  (async-bytecomp-package-mode 1)
 
-;; provide dired with asynchronous abilities
-(with-eval-after-load "dired-aux" (require 'dired-async))
+  ;; provide dired with asynchronous abilities
+  (with-eval-after-load "dired-aux" (require 'dired-async))
 
-;; sending emails asynchronously
-(require 'smtpmail-async)
-(setq send-mail-function 'async-smtpmail-send-it
-      message-send-mail-function 'async-smtpmail-send-it)
+  ;; sending emails asynchronously
+  (require 'smtpmail-async)
+  (setq send-mail-function 'async-smtpmail-send-it
+        message-send-mail-function 'async-smtpmail-send-it))
 
 
 ;;; multiple-cursors setting
