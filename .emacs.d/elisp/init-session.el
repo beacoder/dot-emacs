@@ -36,7 +36,7 @@
 ;;----------------------------------------------------------------------------
 ;; Restore histories and registers after saving
 ;;----------------------------------------------------------------------------
-(setq-default history-length 1000)
+(setq-default history-length 10000)
 (add-hook 'after-init-hook 'savehist-mode)
 
 (require-package 'session)
