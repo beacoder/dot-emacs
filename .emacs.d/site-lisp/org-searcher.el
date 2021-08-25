@@ -56,13 +56,27 @@
   "List of buffers created before opening org-searcher.")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Helpers
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;; steal from ag/dwim-at-point
+(defun org-searcher--dwim-at-point ()
+  "If there's an active selection, return that.
+Otherwise, get the symbol at point, as a string."
+  (cond ((use-region-p)
+         (buffer-substring-no-properties (region-beginning) (region-end)))
+        ((symbol-at-point)
+         (substring-no-properties
+          (symbol-name (symbol-at-point))))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Core Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;;###autoload
-(defun org-searcher-search-view ()
-  "Incremental `org-search-view'."
-  (interactive)
+(defun org-searcher-search-view (&optional keyword)
+  "Incremental `org-search-view' with initial-input KEYWORD."
+  (interactive (list (org-searcher--dwim-at-point)))
   (let ((org-searcher-window-configuration (current-window-configuration))
         (org-searcher-selected-window (frame-selected-window))
         (org-searcher-created-buffers ())
@@ -71,6 +85,7 @@
     (advice-add 'ivy-next-line :after #'org-searcher-iterate-action)
     (add-hook 'minibuffer-exit-hook #'org-searcher-quit)
     (ivy-read "Org agenda search: " #'org-searcher-agenda-search-function
+              :initial-input keyword
               :dynamic-collection t
               :caller #'org-searcher-search-view
               :action #'org-searcher-search-action)))
