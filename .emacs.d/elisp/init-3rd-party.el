@@ -98,10 +98,6 @@
 (load-theme 'zenburn t)
 
 
-;;; diminish
-(require-package 'diminish)
-
-
 ;;; ggtags setting
 ;; install "GNU Global" with universal-ctags support
 ;; "cd /path/to/project && gtags"
@@ -319,37 +315,6 @@
         dumb-jump-max-find-time 60)) ;; for big project, wait one minute
 
 
-;;; diminish modes
-(with-eval-after-load 'eldoc
-  (diminish 'eldoc-mode))
-(with-eval-after-load 'undo-tree
-  (diminish 'undo-tree-mode))
-(with-eval-after-load 'ggtags
-  (diminish 'ggtags-mode))
-(with-eval-after-load 'symbol-overlay
-  (diminish 'symbol-overlay-mode))
-(with-eval-after-load 'super-save
-  (diminish 'super-save-mode))
-(with-eval-after-load 'rainbow-delimiters
-  (diminish 'rainbow-delimiters-mode))
-(with-eval-after-load 'which-key
-  (diminish 'which-key-mode))
-(with-eval-after-load 'abbrev
-  (diminish 'abbrev-mode))
-(with-eval-after-load 'flycheck
-  (diminish 'flycheck-mode))
-(with-eval-after-load 'company
-  (diminish 'company-mode))
-(with-eval-after-load 'ivy
-  (diminish 'ivy-mode))
-(with-eval-after-load 'counsel
-  (diminish 'counsel-mode))
-(with-eval-after-load 'yard-mode
-  (diminish 'yard-mode))
-(with-eval-after-load 'whitespace-cleanup-mode
-  (diminish 'whitespace-cleanup-mode))
-
-
 ;;; scratch - Create buffers in same mode
 (maybe-require-package 'scratch)
 
@@ -520,6 +485,25 @@
 (when (maybe-require-package 'symon)
   (require 'symon)
   (symon-mode))
+
+
+;;; diminish modes
+(when (maybe-require-package 'diminish)
+  (dolist (pair '('('eldoc 'eldoc-mode)
+                  '('undo-tree 'undo-tree-mode)
+                  '('ggtags 'ggtags-mode)
+                  '('symbol-overlay 'symbol-overlay-mode)
+                  '('super-save 'super-save-mode)
+                  '('rainbow-delimiters 'rainbow-delimiters-mode)
+                  '('which-key 'which-key-mode)
+                  '('abbrev 'abbrev-mode)
+                  '('flycheck 'flycheck-mode)
+                  '('company 'company-mode)
+                  '('ivy 'ivy-mode)
+                  '('counsel 'counsel-mode)
+                  '('yard-mode 'yard-mode)
+                  '('whitespace-cleanup-mode 'whitespace-cleanup-mode)))
+    (with-eval-after-load (car pair) (diminish (cdr pair)))))
 
 
 ;;; other setting
