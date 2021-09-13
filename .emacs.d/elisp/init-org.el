@@ -73,7 +73,11 @@
       org-html-validation-link nil
       org-export-kill-product-buffer-when-displayed t
       org-tags-column 80
-      org-agenda-files '("~/workspace/org/"))
+      org-agenda-files '("~/workspace/org/")
+      org-highest-priority ?A
+      org-default-priority ?B
+      org-lowest-priority ?D
+      org-support-shift-select t)
 
 
 ;; Lots of stuff from http://doc.norang.ca/org-mode.html
@@ -123,10 +127,6 @@ typical word processor."
     (when (fboundp 'writeroom-mode)
       (writeroom-mode 0))))
 
-;;(add-hook 'org-mode-hook 'buffer-face-mode)
-
-
-(setq org-support-shift-select t)
 
 ;;; Capturing
 
@@ -138,7 +138,6 @@ typical word processor."
         ("n" "note" entry (file "")
          "* %? :NOTE:\n%U\n%a\n" :clock-resume t)
         ))
-
 
 
 ;;; Refiling
@@ -191,7 +190,6 @@ typical word processor."
 (setq org-todo-keyword-faces
       (quote (("NEXT" :inherit warning)
               ("PROJECT" :inherit font-lock-string-face))))
-
 
 
 (setq-default org-agenda-clockreport-parameter-plist '(:link t :maxlevel 3)
@@ -305,7 +303,6 @@ typical word processor."
       '(:hours "%d" :require-hours t :minutes ":%02d" :require-minutes t))
 
 
-
 ;;; Show the clocked-in task - if any - in the header line
 (defun sanityinc/show-org-clock-in-header-line ()
   (setq-default header-line-format '((" " org-mode-line-string " "))))
@@ -322,7 +319,6 @@ typical word processor."
   (define-key org-clock-mode-line-map [header-line mouse-1] #'org-clock-menu))
 
 
-
 (when (and *is-a-mac* (file-directory-p "/Applications/org-clock-statusbar.app"))
   (add-hook 'org-clock-in-hook
             (lambda () (call-process "/usr/bin/osascript" nil 0 nil "-e"
@@ -330,7 +326,6 @@ typical word processor."
   (add-hook 'org-clock-out-hook
             (lambda () (call-process "/usr/bin/osascript" nil 0 nil "-e"
                                 "tell application \"org-clock-statusbar\" to clock out"))))
-
 
 
 ;; TODO: warn about inconsistent items, e.g. TODO inside non-PROJECT
@@ -341,7 +336,6 @@ typical word processor."
 
 (setq org-archive-mark-done nil)
 (setq org-archive-location "%s_archive::* Archive")
-
 
 
 (require-package 'org-pomodoro)
