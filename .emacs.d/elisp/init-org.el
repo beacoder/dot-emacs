@@ -60,6 +60,25 @@
 ;; "C-c a s" => search for full text
 ;; "x"       => exit org-agenda
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Org clock
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; cursor in headline
+
+;; org-clock-in     (C-c C-x C-i)
+;; org-clock-out    (C-c C-x C-o)
+
+;; cursor in `#+BEGIN' line
+
+;; org-clock-report (C-c C-c)
+;;
+
+;; org-clock-report format line
+;;
+;; #+BEGIN: clocktable :maxlevel 2 :scope file
+;; #+END:
+
 (when *is-a-mac*
   (maybe-require-package 'grab-mac-link))
 
