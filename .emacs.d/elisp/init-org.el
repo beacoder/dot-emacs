@@ -64,6 +64,11 @@
 ;; Org clock
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; org-clock-report format line
+;;
+;; #+BEGIN: clocktable :maxlevel 2 :scope file
+;; #+END:
+
 ;; cursor in headline
 ;;
 ;; org-clock-in     (C-c C-x C-i)
@@ -72,11 +77,6 @@
 ;; cursor in `#+BEGIN' line
 ;;
 ;; org-clock-report (C-c C-c)
-
-;; org-clock-report format line
-;;
-;; #+BEGIN: clocktable :maxlevel 2 :scope file
-;; #+END:
 
 (when *is-a-mac*
   (maybe-require-package 'grab-mac-link))
