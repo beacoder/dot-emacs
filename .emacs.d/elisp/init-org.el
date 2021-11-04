@@ -65,14 +65,13 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; cursor in headline
-
+;;
 ;; org-clock-in     (C-c C-x C-i)
 ;; org-clock-out    (C-c C-x C-o)
 
 ;; cursor in `#+BEGIN' line
-
-;; org-clock-report (C-c C-c)
 ;;
+;; org-clock-report (C-c C-c)
 
 ;; org-clock-report format line
 ;;
