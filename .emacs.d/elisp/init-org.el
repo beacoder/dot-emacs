@@ -43,6 +43,8 @@
 ;; outline-up-heading  (C-c C-u)
 ;; org-forward         (C-c C-f)
 ;; org-backward        (C-c C-b)
+;; org-previous        (C-c C-p)
+;; org-next            (C-c C-n)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Org table
