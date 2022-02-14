@@ -101,7 +101,6 @@ Otherwise, get the symbol at point, as a string."
              (is-valid-nb (integerp line-nb)))
     (find-file-read-only-other-window file-name)
     (with-no-warnings (goto-line line-nb)
-                      (beacon-mode 1)
                       (beacon-blink))
     (unless (member
              (buffer-name (window-buffer))
