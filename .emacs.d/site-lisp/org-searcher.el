@@ -7,7 +7,7 @@
 ;; Version: 0.1
 ;; Created: 2021-03-12
 ;; Keywords: convenience, tool, org
-;; Package-Requires: ((emacs "25.1") (ivy "0.10.0") (org "0.10.0"))
+;; Package-Requires: ((emacs "25.1") (ivy "0.10.0") (org "0.10.0") (beacon "1.3.3"))
 
 ;; This file is not part of GNU Emacs.
 
