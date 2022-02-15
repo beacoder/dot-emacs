@@ -184,14 +184,13 @@ Otherwise, get the symbol at point, as a string."
 
 (defun org-searcher-iterate-action (&optional arg)
   "Preview agenda content while looping agenda, ignore ARG."
-  (when-let ((ignore arg)
-             (is-map-valid org-searcher-index-to-item-alist)
-             (item-found (assoc ivy--index org-searcher-index-to-item-alist))
-             (item-content (cdr item-found))
-             (location (get-text-property 0 'location item-content)))
-    (org-searcher-visit-agenda-location location)
-    (when (active-minibuffer-window)
-      (select-window (active-minibuffer-window)))))
+  (save-selected-window
+    (when-let ((ignore arg)
+               (is-map-valid org-searcher-index-to-item-alist)
+               (item-found (assoc ivy--index org-searcher-index-to-item-alist))
+               (item-content (cdr item-found))
+               (location (get-text-property 0 'location item-content)))
+      (org-searcher-visit-agenda-location location))))
 
 (defun org-searcher-quit ()
   "Quit `org-searcher'."
