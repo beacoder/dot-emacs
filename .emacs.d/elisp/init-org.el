@@ -31,6 +31,7 @@
 ;; org-schedule        (C-c C-s)   +/- 1d/1w/1m/1y
 ;; org-deadline        (C-c C-d)   +/- 1d/1w/1m/1y
 ;; org-export          (C-c C-e)
+;; org-preview-html    (C-c p)
 
 ;; org-timer-start     (C-c C-x 0) timer: count-up
 ;; org-timer-set-timer (C-c C-x ;) timer: count-down
@@ -436,6 +437,13 @@ typical word processor."
       org-reveal-mathjax t)
 (use-package htmlize
   :ensure t)
+
+
+;; Preview html
+(when (maybe-require-package 'org-preview-html)
+  (use-package org-preview-html
+    :bind (("C-c p" . org-preview-html-mode))
+    :diminish))
 
 
 (provide 'init-org)
