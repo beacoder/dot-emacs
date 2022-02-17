@@ -1,6 +1,8 @@
 ;;; init-3rd-party.el --- 3rd party config -*- lexical-binding: t -*-
-;;; libraries with little to no configuration stay here
 ;;; Commentary:
+;;;
+;;; libraries with little to no configuration stay here
+;;;
 ;;; Code:
 
 ;;; use-package
