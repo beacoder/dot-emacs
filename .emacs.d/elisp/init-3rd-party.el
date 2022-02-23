@@ -160,7 +160,7 @@
   (pyim-basedict-enable)   ; 拼音词库，五笔用户 *不需要* 此行设置
   (defun hydra-pyim-start ()
     (interactive)
-    (pyim-start "pyim")))
+    (pyim-activate)))
 
 
 ;;; Beacon — Never lose your cursor again
