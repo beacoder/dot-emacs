@@ -446,5 +446,34 @@ typical word processor."
     :diminish))
 
 
+;; Prettify UI
+(if (>= emacs-major-version 27)
+    (when (maybe-require-package 'org-modern)
+      (use-package org-modern
+        :hook ((org-mode . org-modern-mode)
+               (org-modern-mode . (lambda ()
+                                    "Adapt `org-modern-mode'."
+                                    ;; Looks better for tags
+                                    (setq line-spacing 0.1)
+                                    ;; Disable Prettify Symbols mode
+                                    (setq prettify-symbols-alist nil)
+                                    (prettify-symbols-mode -1))))))
+  (progn
+    (when (> emacs-major-version 26)
+      (when (maybe-require-package 'org-superstar)
+        (use-package org-superstar
+          :if (and (display-graphic-p) (char-displayable-p ?◉))
+          :hook (org-mode . org-superstar-mode)
+          :init (setq org-superstar-headline-bullets-list '("◉""○""◈""◇""⁕")))))
+    (when (maybe-require-package 'org-fancy-priorities)
+      (use-package org-fancy-priorities
+        :diminish
+        :hook (org-mode . org-fancy-priorities-mode)
+        :init (setq org-fancy-priorities-list
+                    (if (and (display-graphic-p) (char-displayable-p ?�))
+                        '("�" "�" "�" "�")
+                      '("HIGH" "MEDIUM" "LOW" "OPTIONAL")))))))
+
+
 (provide 'init-org)
 ;;; init-org.el ends here
