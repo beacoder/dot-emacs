@@ -422,13 +422,6 @@ typical word processor."
       (sqlite . t)))))
 
 
-;; Prettify UI
-(when (maybe-require-package 'org-bullets)
-  (use-package org-bullets
-    :if (char-displayable-p ?◉)
-    :hook (org-mode . org-bullets-mode)))
-
-
 ;; Presentation tool
 ;; @see https://github.com/yjwen/org-reveal#first-try
 (use-package ox-reveal
@@ -447,32 +440,17 @@ typical word processor."
 
 
 ;; Prettify UI
-(if (>= emacs-major-version 27)
-    (when (maybe-require-package 'org-modern)
-      (use-package org-modern
-        :hook ((org-mode . org-modern-mode)
-               (org-modern-mode . (lambda ()
-                                    "Adapt `org-modern-mode'."
-                                    ;; Looks better for tags
-                                    (setq line-spacing 0.1)
-                                    ;; Disable Prettify Symbols mode
-                                    (setq prettify-symbols-alist nil)
-                                    (prettify-symbols-mode -1))))))
-  (progn
-    (when (> emacs-major-version 26)
-      (when (maybe-require-package 'org-superstar)
-        (use-package org-superstar
-          :if (and (display-graphic-p) (char-displayable-p ?◉))
-          :hook (org-mode . org-superstar-mode)
-          :init (setq org-superstar-headline-bullets-list '("◉""○""◈""◇""⁕")))))
-    (when (maybe-require-package 'org-fancy-priorities)
-      (use-package org-fancy-priorities
-        :diminish
-        :hook (org-mode . org-fancy-priorities-mode)
-        :init (setq org-fancy-priorities-list
-                    (if (and (display-graphic-p) (char-displayable-p ?�))
-                        '("�" "�" "�" "�")
-                      '("HIGH" "MEDIUM" "LOW" "OPTIONAL")))))))
+(when (and (>= emacs-major-version 27)
+           (maybe-require-package 'org-modern))
+  (use-package org-modern
+    :hook ((org-mode . org-modern-mode)
+           (org-modern-mode . (lambda ()
+                                "Adapt `org-modern-mode'."
+                                ;; Looks better for tags
+                                (setq line-spacing 0.1)
+                                ;; Disable Prettify Symbols mode
+                                (setq prettify-symbols-alist nil)
+                                (prettify-symbols-mode -1))))))
 
 
 (provide 'init-org)
