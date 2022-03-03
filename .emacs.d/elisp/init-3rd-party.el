@@ -511,6 +511,12 @@
     (with-eval-after-load (car pair) (diminish (cdr pair)))))
 
 
+;;; improve long lines performance
+(when (maybe-require-package 'so-long)
+  (use-package so-long
+    :hook (after-init . global-so-long-mode)))
+
+
 ;;; other setting
 (require 'init-hydra)
 (require 'init-git)
