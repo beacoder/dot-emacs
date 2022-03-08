@@ -486,12 +486,6 @@
     (diminish 'rainbow-mode)))
 
 
-;; System monitor
-(when (maybe-require-package 'symon)
-  (require 'symon)
-  (symon-mode))
-
-
 ;;; diminish modes
 (when (maybe-require-package 'diminish)
   (dolist (pair '('('eldoc 'eldoc-mode)
