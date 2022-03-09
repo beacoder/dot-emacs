@@ -68,9 +68,8 @@
 --------------------------------------------
 [_a_] Counsel-Ag         [_g_] Counsel-Git-Grep [_f_] Counsel-Git      [_l_] Counsel-Locate     [_P_] Move-Text-Up
 [_u_] Update-GTAGS       [_c_] Mode-Compile     [_C_] Compile          [_r_] Recompile          [_N_] Move-Text-Down
-[_w_] Google-Search-Word [_k_] Google-Lucky     [_p_] Previous-Mark    [_n_] Next-Mark          [_j_] Dumb-Jump
-[_i_] Pyim               [_s_] Sort-Lines       [_d_] Remove-Duplicate [_S_] Gist-Share-Code    [_L_] Gist-List
-[_o_] Org-Search-View    [_t_] Hs-Hide-Block    [_T_] Hs-Show-Block    [_q_] Quit
+[_p_] Previous-Mark      [_n_] Next-Mark        [_s_] Sort-Lines       [_d_] Remove-Duplicate   [_o_] Org-Search-View
+[_t_] Hs-Hide-Block      [_T_] Hs-Show-Block    [_q_] Quit
   "
   ("a" smart/counsel-ag :exit t)
   ("g" counsel-git-grep :exit t)
@@ -79,19 +78,13 @@
   ("u" ggtags-update-tags :exit t)
   ("c" mode-compile :exit t)
   ("C" compile :exit t)
-  ("w" modi/eww-search-words :exit t)
-  ("k" eww-im-feeling-lucky :exit t)
   ("r" recompile :exit t)
-  ("i" hydra-pyim-start :exit t)
   ("p" pop-to-mark-command)
   ("n" unpop-to-mark-command)
   ("s" sort-lines :exit t)
   ("d" delete-duplicate-lines :exit t)
   ("P" move-text-up)
   ("N" move-text-down)
-  ("j" dumb-jump-go :exit t)
-  ("S" gist-region-or-buffer-private :exit t)
-  ("L" gist-list :exit t)
   ("t" hs-hide-block)
   ("T" hs-show-block)
   ("o" org-searcher-search-view :exit t)
@@ -119,10 +112,18 @@
         ("Play"
          (("p b" bongo "Bongo" :toggle t)
           ("p c" open-calendar "Calendar" :toggle t)
-          ("p k" keyfreq-show "Keyfreq" :toggle t)
+          ("p f" keyfreq-show "Keyfreq" :toggle t)
           ("p n" newsticker-show-news "Newsticker" :toggle t)
           ("p s" stock-tracker-start "Stock" :toggle t)
-          ("p w" wttrin "Weather" :toggle t)))))))
+          ("p w" wttrin "Weather" :toggle t))
+         "Gist"
+         (("g s" gist-region-or-buffer-private "Gist-Share-Code" :toggle t)
+          ("g l" gist-list "Gist-List" :toggle t))
+         "Misc"
+         (("j" dumb-jump-go "Dumb-Jump" :toggle t)
+          ("i" hydra-pyim-start "Pin-Yin" :toggle t)
+          ("g w" modi/eww-search-words "Goolgle-Word" :toggle t)
+          ("g k" eww-im-feeling-lucky "Google-Lucky" :toggle t)))))))
 
 
 (provide 'init-hydra)
