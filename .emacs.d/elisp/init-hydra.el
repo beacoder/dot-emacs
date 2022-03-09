@@ -1,6 +1,10 @@
-;;----------------------------------------------------------------------------
-;; hydra setting
-;;----------------------------------------------------------------------------
+;; init-hydra.el --- Initialize hydra configurations.   -*- lexical-binding: t -*-
+;;; Commentary:
+;;
+;; Nice looking hydras.
+;;
+
+;;; Code:
 
 ;; Major-mode binds to one specific file type
 ;; Minor-mode shared among all file types
@@ -32,29 +36,6 @@
   ("e" mc/edit-lines)
   ("q" nil))
 (global-set-key (kbd "C-x m") #'hydra-multiple-cursors/body)
-
-
-(defhydra hydra-window (:hint nil)
-  "
-                 ^Commands^
---------------------------------------------
-[_s_] swap-window        [_o_] other-window       [_]_] enlarge-window-horizontally    [_)_] enlarge-window-vertically
-[_p_] winner-undo        [_n_] winner-redo        [_[_] shrink-window-horizontally     [_(_] shrink-window-vertically
-[_k_] delete-window      [_v_] preview-window     [_d_] dedicate-current-window        [_q_] quit
-"
-  ("s" transpose-windows)
-  ("d" sanityinc/toggle-current-window-dedication)
-  ("]" enlarge-window-horizontally)
-  (")" enlarge-window-vertically)
-  ("p" winner-undo)
-  ("n" winner-redo)
-  ("[" shrink-window-horizontally)
-  ("(" shrink-window-vertically)
-  ("v" sanityinc/split-window)
-  ("o" other-window)
-  ("k" delete-window)
-  ("q" nil))
-(global-set-key (kbd "C-x w") #'hydra-window/body)
 
 
 (require 'org-searcher)
@@ -95,23 +76,42 @@
 (global-set-key (kbd "C-x q") #'hydra-quickness/body)
 
 
-(defhydra hydra-play (:hint nil)
-  "
-                 ^Commands^
---------------------------------------------
-[_b_] Bongo    [_c_] Calendar    [_k_] Keyfreq
-[_s_] Stock    [_w_] Wttrin      [_n_] Newsticker
-[_q_] Quit
-^ ^             ^ ^
-"
-  ("b" bongo :exit t)
-  ("c" open-calendar :exit t)
-  ("k" keyfreq-show :exit t)
-  ("n" newsticker-show-news :exit t)
-  ("s" stock-tracker-start :exit t)
-  ("w" wttrin :exit t)
-  ("q" nil))
-(global-set-key (kbd "C-x p") #'hydra-play/body)
+;; pretty-hydra
+(when (maybe-require-package 'pretty-hydra)
+  (use-package pretty-hydra
+    :bind ("C-x C-h" . toggles-hydra/body)
+    :init
+    (cl-defun pretty-hydra-title (title &optional icon-type icon-name
+                                        &key face height v-adjust)
+      "Add an icon in the hydra title."
+      (let ((face (or face `(:foreground ,(face-background 'highlight))))
+            (height (or height 1.0))
+            (v-adjust (or v-adjust 0.0)))
+        (concat (propertize title 'face face))))
+
+    ;; Global toggles
+    (with-no-warnings
+      (pretty-hydra-define toggles-hydra (:title (pretty-hydra-title "Toggles" 'faicon "toggle-on" :v-adjust -0.1)
+                                                 :color amaranth :quit-key "q")
+        ("Window"
+         (("w s" transpose-windows "Swap" :toggle t)
+          ("w d" sanityinc/toggle-current-window-dedication "Dedicate" :toggle t)
+          ("]" enlarge-window-horizontally "Enlarge-Horizontally" :toggle t)
+          (")" enlarge-window-vertically "Enlarge-Vertically" :toggle t)
+          ("w p" winner-undo "Winner-Undo" :toggle t)
+          ("w n" winner-redo "Winner-Redo" :toggle t)
+          ("[" shrink-window-horizontally "Shrink-Horizontally" :toggle t)
+          ("(" shrink-window-vertically "Shrink-Vertically" :toggle t)
+          ("w v" sanityinc/split-window "Preview" :toggle t)
+          ("w o" other-window "Other" :toggle t)
+          ("w k" delete-window "Delete" :toggle t))
+         "Play"
+         (("p b" bongo "Bongo" :toggle t)
+          ("p c" open-calendar "Calendar" :toggle t)
+          ("p k" keyfreq-show "Keyfreq" :toggle t)
+          ("p n" newsticker-show-news "Newsticker" :toggle t)
+          ("p s" stock-tracker-start "Stock" :toggle t)
+          ("p w" wttrin "Weather" :toggle t)))))))
 
 
 (provide 'init-hydra)
