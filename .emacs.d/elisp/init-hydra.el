@@ -38,6 +38,29 @@
 (global-set-key (kbd "C-x m") #'hydra-multiple-cursors/body)
 
 
+(defhydra hydra-window (:hint nil)
+  "
+                 ^Commands^
+--------------------------------------------
+[_s_] swap-window        [_o_] other-window       [_]_] enlarge-window-horizontally    [_)_] enlarge-window-vertically
+[_p_] winner-undo        [_n_] winner-redo        [_[_] shrink-window-horizontally     [_(_] shrink-window-vertically
+[_k_] delete-window      [_v_] preview-window     [_d_] dedicate-current-window        [_q_] quit
+"
+  ("s" transpose-windows)
+  ("d" sanityinc/toggle-current-window-dedication)
+  ("]" enlarge-window-horizontally)
+  (")" enlarge-window-vertically)
+  ("p" winner-undo)
+  ("n" winner-redo)
+  ("[" shrink-window-horizontally)
+  ("(" shrink-window-vertically)
+  ("v" sanityinc/split-window)
+  ("o" other-window)
+  ("k" delete-window)
+  ("q" nil))
+(global-set-key (kbd "C-x w") #'hydra-window/body)
+
+
 (require 'org-searcher)
 (defhydra hydra-quickness (:hint nil)
   "
@@ -93,19 +116,7 @@
     (with-no-warnings
       (pretty-hydra-define toggles-hydra (:title (pretty-hydra-title "Toggles" 'faicon "toggle-on" :v-adjust -0.1)
                                                  :color amaranth :quit-key "q")
-        ("Window"
-         (("w s" transpose-windows "Swap" :toggle t)
-          ("w d" sanityinc/toggle-current-window-dedication "Dedicate" :toggle t)
-          ("]" enlarge-window-horizontally "Enlarge-Horizontally" :toggle t)
-          (")" enlarge-window-vertically "Enlarge-Vertically" :toggle t)
-          ("w p" winner-undo "Winner-Undo" :toggle t)
-          ("w n" winner-redo "Winner-Redo" :toggle t)
-          ("[" shrink-window-horizontally "Shrink-Horizontally" :toggle t)
-          ("(" shrink-window-vertically "Shrink-Vertically" :toggle t)
-          ("w v" sanityinc/split-window "Preview" :toggle t)
-          ("w o" other-window "Other" :toggle t)
-          ("w k" delete-window "Delete" :toggle t))
-         "Play"
+        ("Play"
          (("p b" bongo "Bongo" :toggle t)
           ("p c" open-calendar "Calendar" :toggle t)
           ("p k" keyfreq-show "Keyfreq" :toggle t)
