@@ -1,6 +1,10 @@
-;;----------------------------------------------------------------------------
-;; global key-bindings
-;;----------------------------------------------------------------------------
+;; init-basic.el --- Better default configurations.     -*- lexical-binding: t -*-
+;;; Commentary:
+;;
+;; Better defaults.
+;;
+;;;
+;;; Code:
 
 ;; @see http://steve.yegge.googlepages.com/effective-emacs
 ;; M-x may not be avalible everywhere, e.g: In term-char-mode, or when there is no Meta key.
@@ -408,6 +412,17 @@ Use in `isearch-mode-end-hook'."
 ;; Measure startup time
 ;;----------------------------------------------------------------------------
 (require 'init-benchmarking)
+
+
+;; Garbage Collector Magic Hack
+(when (maybe-require-package 'gcmh)
+  (use-package gcmh
+    :diminish
+    :init
+    (setq gcmh-idle-delay 5
+          gcmh-high-cons-threshold #x1000000) ; 16MB
+    (gcmh-mode 1)))
+
 
 (provide 'init-basics)
 ;;; init-basics.el ends here
