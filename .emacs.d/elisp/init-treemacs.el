@@ -19,7 +19,6 @@
     :bind (("C-x t t" . treemacs)
            ("C-x t s" . treemacs-select-window)
            ("C-x t d" . treemacs-delete-other-windows)
-           ("C-x t o" . treemacs-delete-other-windows)
            ("C-x t b" . treemacs-bookmark)
            ("C-x t f" . treemacs-find-file)
            ("C-x t g" . treemacs-find-tag)
