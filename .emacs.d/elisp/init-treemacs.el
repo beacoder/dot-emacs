@@ -16,19 +16,15 @@
                treemacs-git-mode)
     :custom-face
     (cfrs-border-color ((t (:background ,(face-foreground 'font-lock-comment-face nil t)))))
-    :bind (("C-x t"   . treemacs)
+    :bind (("C-x t t" . treemacs)
+           ("C-x t s" . treemacs-select-window)
+           ("C-x t d" . treemacs-delete-other-windows)
+           ("C-x t o" . treemacs-delete-other-windows)
+           ("C-x t b" . treemacs-bookmark)
+           ("C-x t f" . treemacs-find-file)
+           ("C-x t g" . treemacs-find-tag)
            :map treemacs-mode-map
-           ([mouse-1]   . treemacs-single-click-expand-action)
-           ("h" . treemacs-hydra/body))
-    :pretty-hydra
-    ((:title (pretty-hydra-title "Treemacs" 'faicon "chrome" :face 'all-the-icons-blue)
-             :color amaranth :quit-key "q")
-     ("Treemacs"
-      (("s" treemacs-select-window "select-window")
-       ("d" treemacs-delete-other-windows "delete-window")
-       ("b" treemacs-bookmark "bookmark")
-       ("f f" treemacs-find-file "find-file")
-       ("f t" treemacs-find-tag "find-tag"))))
+           ([mouse-1]   . treemacs-single-click-expand-action))
     :config
     (setq treemacs-collapse-dirs           (if treemacs-python-executable 3 0)
           treemacs-missing-project-action  'remove
