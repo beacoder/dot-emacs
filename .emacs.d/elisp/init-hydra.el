@@ -44,10 +44,9 @@
 --------------------------------------------
 [_s_] swap-window        [_o_] other-window       [_]_] enlarge-window-horizontally    [_)_] enlarge-window-vertically
 [_p_] winner-undo        [_n_] winner-redo        [_[_] shrink-window-horizontally     [_(_] shrink-window-vertically
-[_k_] delete-window      [_v_] preview-window     [_d_] dedicate-current-window        [_q_] quit
+[_k_] delete-window      [_v_] preview-window     [_q_] quit
 "
   ("s" transpose-windows)
-  ("d" sanityinc/toggle-current-window-dedication)
   ("]" enlarge-window-horizontally)
   (")" enlarge-window-vertically)
   ("p" winner-undo)
