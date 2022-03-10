@@ -86,16 +86,6 @@ Call a second time to restore the original window configuration."
     (window-configuration-to-register :sanityinc/split-window)
     (switch-to-buffer-other-window nil)))
 
-(defun sanityinc/toggle-current-window-dedication ()
-  "Toggle whether the current window is dedicated to its current buffer."
-  (interactive)
-  (let* ((window (selected-window))
-         (was-dedicated (window-dedicated-p window)))
-    (set-window-dedicated-p window (not was-dedicated))
-    (message "Window %sdedicated to %s"
-             (if was-dedicated "no longer " "")
-             (buffer-name))))
-
 
 ;; @see https://www.emacswiki.org/emacs/TransposeWindows
 (defun transpose-windows ()
