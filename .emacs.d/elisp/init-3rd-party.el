@@ -531,6 +531,7 @@
 (require 'init-calendar)
 (require 'ipc-udp)
 (require 'cl-lib)
+(require 'init-treemacs)
 
 
 (provide 'init-3rd-party)
