@@ -68,8 +68,8 @@
 [_a_] Counsel-Ag         [_g_] Counsel-Git-Grep [_f_] Counsel-Git      [_l_] Counsel-Locate     [_P_] Move-Text-Up
 [_u_] Update-GTAGS       [_c_] Mode-Compile     [_C_] Compile          [_r_] Recompile          [_N_] Move-Text-Down
 [_p_] Previous-Mark      [_n_] Next-Mark        [_s_] Sort-Lines       [_d_] Remove-Duplicate   [_o_] Org-Search-View
-[_j_] Dumb-Jump          [_i_] Pin-Yin          [_w_] Google-Word      [_k_] Google-Lucky       [_t_] Hs-Hide-Block
-[_T_] Hs-Show-Block      [_q_] Quit
+[_j_] Dumb-Jump          [_i_] Pin-Yin          [_w_] Google-Word      [_k_] Google-Lucky       [_h_] Hs-Hide-Block
+[_H_] Hs-Show-Block      [_q_] Quit
   "
   ("a" smart/counsel-ag :exit t)
   ("g" counsel-git-grep :exit t)
@@ -85,8 +85,8 @@
   ("d" delete-duplicate-lines :exit t)
   ("P" move-text-up)
   ("N" move-text-down)
-  ("t" hs-hide-block)
-  ("T" hs-show-block)
+  ("h" hs-hide-block)
+  ("H" hs-show-block)
   ("o" org-searcher-search-view :exit t)
   ("j" dumb-jump-go :exit t)
   ("i" hydra-pyim-start :exit t)
