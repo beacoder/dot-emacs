@@ -202,6 +202,7 @@ column narrower."
     (setq popper-echo-dispatch-actions t)
     :config
     (popper-echo-mode 1)
+
     (with-no-warnings
       (defun my-popper-fit-window-height (win)
         "Determine the height of popup window WIN by fitting it to the buffer's content."
