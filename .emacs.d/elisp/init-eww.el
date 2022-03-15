@@ -23,7 +23,6 @@
  ("f" . eww-lnum-follow)
  ("F" . eww-lnum-universal)
  ("h" . eww-list-histories)
- ("k" . eww-im-feeling-lucky)
  ("w" . modi/eww-search-words)
  ("c" . modi/eww-copy-url-dwim)
  ("/" . highlight-regexp)
@@ -98,20 +97,6 @@ Else prompt the user for a search string.
 See the `eww-search-prefix' variable for the search engine used."
   (interactive (list (smart/read-from-minibuffer "Google Search Word")))
   (eww search-word))
-
-
-;; I'm-feeling-lucky
-(defun eww-im-feeling-lucky (search-term)
-  "Google I'm feeling lucky."
-  (interactive (list (smart/read-from-minibuffer "Google Search Term (I'm Feeling Lucky!)")))
-  ;; Keep on burying the current buffer if it turns out to be an eww buffer.
-  (while (string-match "^eww$\\|^eww<[[:digit:]]+>$" (buffer-name))
-    (bury-buffer))
-  ;; Start a new eww search.
-  (eww search-term)
-  (sleep-for 0.1)
-  ;; https://stackoverflow.com/questions/16877882/how-to-access-google-search-im-feeling-lucky-functionality-using-api
-  (eww (concat (eww-current-url) "&btnI")))
 
 
 (defun modi/eww-copy-url-dwim (&optional option)
