@@ -1,6 +1,6 @@
-;;----------------------------------------------------------------------------
-;; grep tool setting
-;;----------------------------------------------------------------------------
+;;; init-grep.el --- Settings for grep and grep-like tools -*- lexical-binding: t -*-
+;;; Commentary:
+;;; Code:
 
 (setq-default grep-highlight-matches t
               grep-scroll-output t)
@@ -18,7 +18,7 @@
       (defalias #'ag/read-from-minibuffer #'smart/read-from-minibuffer)))
 
   ;; run ag
-  ;; wgrep-change-to-wgrep-mode (wg)
+  ;; wgrep-change-to-wgrep-mode (ag)
   ;; make changes in buffer
   ;; wgrep-finish-edit          (C-c C-e)
   (when  (maybe-require-package 'wgrep-ag)
@@ -34,7 +34,6 @@
 ;; install rg first
 (when (and (executable-find "rg")
            (maybe-require-package 'rg))
-  (maybe-require-package 'deadgrep)
   (global-set-key (kbd "M-?") #'rg-project))
 
 
