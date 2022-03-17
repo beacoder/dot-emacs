@@ -117,7 +117,7 @@ redirection destination if it has one."
       (setq page-url t))
      (t                             ;No prefix
       ))
-    (>=e "26.0"
+    (if (> emacs-major-version 25)
          (let* ((pt-on-url (shr-url-at-point nil))
                 (pt-on-image (shr-url-at-point :image-url)))
            (unless (or pt-on-url
@@ -184,22 +184,6 @@ specific to eww, while also updating `modi/eww--file-notify-descriptors-list'."
   (dotimes (index (safe-length modi/eww--file-notify-descriptors-list))
     (file-notify-rm-watch (pop modi/eww--file-notify-descriptors-list)))
   (quit-window :kill))
-
-
-;;; Dependency
-;;; Emacs version check
-(defmacro >=e (version &rest body)
-  "Emacs VERSION check wrapper around BODY.
-BODY can contain both `if' block (for stuff to execute if emacs
-is equal or newer than VERSION) and `else' block (for stuff to
-execute if emacs is older than VERSION).
-Example:
-  (>=e \"25.0\"
-      (defun-compatible-with-25.0)
-    (defun-not-compatible-in-older-version))"
-  (declare (indent 2))          ;`if'-style indentation where this macro is used
-  `(if (version<= ,version emacs-version)
-       ,@body))
 
 
 (provide 'init-eww)
