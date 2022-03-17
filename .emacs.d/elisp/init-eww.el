@@ -1,6 +1,9 @@
-;;----------------------------------------------------------------------------
-;; EWW setting
-;;----------------------------------------------------------------------------
+;;; init-eww.el --- EWW config -*- lexical-binding: t -*-
+;;; Commentary:
+;;;
+;;; Initialize EWW configurations
+;;;
+;;; Code:
 
 ;; @see https://github.com/kaushalmodi/.emacs.d/blob/master/setup-files/setup-eww.el
 
@@ -16,66 +19,60 @@
 ;; (require-package 'org-eww)
 
 
-(require 'eww)
-(bind-keys
- :map eww-mode-map
- (":" . eww)
- ("f" . eww-lnum-follow)
- ("F" . eww-lnum-universal)
- ("h" . eww-list-histories)
- ("w" . modi/eww-search-words)
- ("c" . modi/eww-copy-url-dwim)
- ("/" . highlight-regexp)
- ("q" . kill-this-buffer))
-
-;; Make the binding for `revert-buffer' do `eww-reload' in eww-mode
-(define-key eww-mode-map [remap revert-buffer] #'eww-reload)
-
-;; For single line text fields
-;; S-TAB Jump to previous link on the page
-;; C-RET Submit form data
-(bind-keys
- :map eww-text-map
- ("<backtab>"  . shr-previous-link)
- ("<C-return>" . eww-submit))
-
-;; For multi-line text boxes
-;; S-TAB Jump to previous link on the page
-;; C-RET Submit form data
-(bind-keys
- :map eww-textarea-map
- ("<backtab>"  . shr-previous-link)
- ("<C-return>" . eww-submit))
-
-(bind-keys
- :map eww-checkbox-map
- ("<down-mouse-1>" . eww-toggle-checkbox))
-
-(bind-keys
- :map shr-map
- ("c" . modi/eww-copy-url-dwim)
- ("w" . modi/eww-search-words))
-
-(bind-keys
- :map eww-link-keymap
- ("c" . modi/eww-copy-url-dwim)
- ("w" . modi/eww-search-words))
-
-
-;; Configuration
-(setq ;; eww-search-prefix "https://duckduckgo.com/html/?q="
-      ;; eww-search-prefix "https://www.google.com.hk/search?q="
-      eww-search-prefix "http://www.baidu.com/s?wd="
-      eww-download-directory "~/Downloads"
-      eww-form-checkbox-symbol "[ ]"
-      ;; (setq eww-form-checkbox-symbol "☐") ; Unicode hex 2610
-      eww-form-checkbox-selected-symbol "[X]"
-      ;; (setq eww-form-checkbox-selected-symbol "☑") ; Unicode hex 2611
-      ;; Improve the contract of pages like Google results
-      ;; http://emacs.stackexchange.com/q/2955/115
-      ;; default = 40
-      shr-color-visible-luminance-min 80
-      browse-url-browser-function 'eww-browse-url)
+;; EWW
+(use-package eww
+  :ensure nil
+  :bind (:map eww-mode-map
+         ("?" . eww-hydra/body)
+         :map eww-link-keymap
+         ("c" . modi/eww-copy-url-dwim)
+         ("w" . modi/eww-search-words)
+         :map shr-map
+         ("c" . modi/eww-copy-url-dwim)
+         ("w" . modi/eww-search-words)
+         :map eww-checkbox-map
+         ("<down-mouse-1>" . eww-toggle-checkbox)
+         ;; For multi-line text boxes
+         ;; S-TAB Jump to previous link on the page
+         ;; C-RET Submit form data
+         :map eww-textarea-map
+         ("<backtab>"  . shr-previous-link)
+         ("<C-return>" . eww-submit)
+         ;; For single line text fields
+         ;; S-TAB Jump to previous link on the page
+         ;; C-RET Submit form data
+         :map eww-text-map
+         ("<backtab>"  . shr-previous-link)
+         ("<C-return>" . eww-submit))
+  :pretty-hydra
+  ((:title (pretty-hydra-title "Eww" 'faicon "Eww" :face 'all-the-icons-blue)
+           :color amaranth :quit-key "q")
+   ("Navigate"
+    ((":" eww "eww")
+     ("f" eww-lnum-follow "follow")
+     ("F" eww-lnum-universal "universal-follow")
+     ("h" eww-list-histories "history")
+     ("w" modi/eww-search-words "search-word")
+     ("c" modi/eww-copy-url-dwim "copy-url")
+     ("/" highlight-regexp "highlight-regexp")
+     ("q" kill-this-buffer "kill-this-buffer"))))
+  :init
+  ;; Configuration
+  (require 'eww)
+  (setq ;; eww-search-prefix "https://duckduckgo.com/html/?q="
+   eww-search-prefix "https://www.google.com.hk/search?q="
+   eww-download-directory "~/Downloads"
+   eww-form-checkbox-symbol "[ ]"
+   ;; (setq eww-form-checkbox-symbol "☐") ; Unicode hex 2610
+   eww-form-checkbox-selected-symbol "[X]"
+   ;; (setq eww-form-checkbox-selected-symbol "☑") ; Unicode hex 2611
+   ;; Improve the contract of pages like Google results
+   ;; http://emacs.stackexchange.com/q/2955/115
+   ;; default = 40
+   shr-color-visible-luminance-min 80
+   browse-url-browser-function 'eww-browse-url)
+  ;; Make the binding for `revert-buffer' do `eww-reload' in eww-mode
+  (define-key eww-mode-map [remap revert-buffer] #'eww-reload))
 
 
 ;; Auto-rename new eww buffers
@@ -144,7 +141,6 @@ redirection destination if it has one."
   (call-interactively #'browse-url-of-file))
 
 
-
 ;; Auto-refreshing eww buffer whenever the html file it's showing changes
 ;; Doesn't work on MacOS
 ;; http://emacs.stackexchange.com/a/2566/115
@@ -188,7 +184,6 @@ specific to eww, while also updating `modi/eww--file-notify-descriptors-list'."
   (dotimes (index (safe-length modi/eww--file-notify-descriptors-list))
     (file-notify-rm-watch (pop modi/eww--file-notify-descriptors-list)))
   (quit-window :kill))
-
 
 
 ;;; Dependency
