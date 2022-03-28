@@ -209,7 +209,6 @@
     (define-key diff-hl-mode-map
       (kbd "<left-fringe> <mouse-1>")
       #'diff-hl-diff-goto-hunk)))
-(maybe-require-package 'browse-at-remote)
 
 
 ;;; csv-mode
