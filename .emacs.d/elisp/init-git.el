@@ -18,6 +18,9 @@
   (global-set-key (kbd "C-x v t") 'git-timemachine-toggle))
 
 
+(require-package 'git-link)
+
+
 ;; "magit-blame-addition" => for each line show the revision in which it was added
 ;; "C-x v p"              => last commit for current thing-at-point
 ;; "C-x v l"              => git history of current file
