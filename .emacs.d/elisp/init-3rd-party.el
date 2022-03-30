@@ -471,7 +471,20 @@
 
 ;; immortal-scratch
 (when (maybe-require-package 'immortal-scratch)
-  (add-hook 'after-init-hook 'immortal-scratch-mode))
+  (add-hook 'after-init-hook 'immortal-scratch-mode)
+  ;; make sure adding initial-scratch-message into desktop-globals-to-save
+  (defun save-scratch-content (&rest _)
+    "Save *scratch* buffer content before killing it."
+    (if (string= (buffer-name (current-buffer)) "*scratch*")
+        (with-current-buffer (get-buffer "*scratch*")
+          (setq initial-scratch-message
+                (buffer-substring-no-properties (point-min) (point-max))))))
+  ;; make sure *scratch* survive manual kill
+  (advice-add #'immortal-scratch-kill :before #'save-scratch-content)
+  ;; make sure *scratch* survive emacs kill
+  (add-hook 'kill-emacs-hook #'save-scratch-content)
+  ;; kill original *scratch* buffer
+  (kill-buffer "*scratch*"))
 
 
 ;; Extras for theme editing
