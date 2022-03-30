@@ -472,19 +472,27 @@
 ;; immortal-scratch
 (when (maybe-require-package 'immortal-scratch)
   (add-hook 'after-init-hook 'immortal-scratch-mode)
-  ;; make sure adding initial-scratch-message into desktop-globals-to-save
-  (defun save-scratch-content (&rest _)
-    "Save *scratch* buffer content before killing it."
+
+  ;; make sure *scratch* survive manual kill
+  (defun save-during-manual-kill (&rest _)
+    "Save *scratch* buffer content before manual kill."
     (if (string= (buffer-name (current-buffer)) "*scratch*")
         (with-current-buffer (get-buffer "*scratch*")
           (setq initial-scratch-message
                 (buffer-substring-no-properties (point-min) (point-max))))))
-  ;; make sure *scratch* survive manual kill
-  (advice-add #'immortal-scratch-kill :before #'save-scratch-content)
-  ;; make sure *scratch* survive emacs kill
-  (add-hook 'kill-emacs-hook #'save-scratch-content)
-  ;; kill original *scratch* buffer
-  (kill-buffer "*scratch*"))
+  (advice-add #'immortal-scratch-kill :before #'save-during-manual-kill)
+  (advice-add #'save-buffers-kill-emacs :before #'save-during-manual-kill)
+
+  (defun restore-scratch-content (dirname)
+    "Restore *scratch* buffer content."
+    (when (get-buffer "*scratch*")
+      (with-current-buffer (get-buffer "*scratch*")
+        (erase-buffer)
+        (when (zerop (buffer-size))
+          (insert initial-scratch-message)
+          (set-buffer-modified-p nil)
+          (funcall initial-major-mode)))))
+  (advice-add #'desktop-change-dir :after #'restore-scratch-content))
 
 
 ;; Extras for theme editing
