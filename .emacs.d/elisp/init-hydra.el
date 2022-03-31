@@ -121,7 +121,9 @@
           ("p w" wttrin "Weather" :toggle t))
          "Gist"
          (("g s" gist-region-or-buffer-private "Gist-Share-Code" :toggle t)
-          ("g l" gist-list "Gist-List" :toggle t)))))))
+          ("g l" gist-list "Gist-List" :toggle t))
+         "Misc"
+         (("m r" restore-scratch-content "Restore-Scratch-Content" :toggle t)))))))
 
 
 (provide 'init-hydra)
