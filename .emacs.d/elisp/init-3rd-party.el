@@ -478,8 +478,9 @@
     "Save *scratch* buffer content before kill."
     (if (string= (buffer-name (current-buffer)) "*scratch*")
         (with-current-buffer (get-buffer "*scratch*")
-          (setq initial-scratch-message
-                (buffer-substring-no-properties (point-min) (point-max))))))
+          (unless (zerop (buffer-size))
+            (setq initial-scratch-message
+                  (buffer-substring-no-properties (point-min) (point-max)))))))
   (advice-add #'immortal-scratch-kill :before #'save-scratch-content)
   (advice-add #'save-buffers-kill-emacs :before #'save-scratch-content)
 
