@@ -473,26 +473,29 @@
 (when (maybe-require-package 'immortal-scratch)
   (add-hook 'after-init-hook 'immortal-scratch-mode)
 
-  ;; make sure *scratch* survive manual kill
-  (defun save-during-manual-kill (&rest _)
-    "Save *scratch* buffer content before manual kill."
+  ;; make sure *scratch* survive kill
+  (defun save-scratch-content (&rest _)
+    "Save *scratch* buffer content before kill."
     (if (string= (buffer-name (current-buffer)) "*scratch*")
         (with-current-buffer (get-buffer "*scratch*")
           (setq initial-scratch-message
                 (buffer-substring-no-properties (point-min) (point-max))))))
-  (advice-add #'immortal-scratch-kill :before #'save-during-manual-kill)
-  (advice-add #'save-buffers-kill-emacs :before #'save-during-manual-kill)
+  (advice-add #'immortal-scratch-kill :before #'save-scratch-content)
+  (advice-add #'save-buffers-kill-emacs :before #'save-scratch-content)
 
-  (defun restore-scratch-content (dirname)
+  ;; used to manually restore scratch content
+  ;; e.g: use it after invoking desktop-change-dir
+  (defun restore-scratch-content ()
     "Restore *scratch* buffer content."
+    (interactive)
     (when (get-buffer "*scratch*")
       (with-current-buffer (get-buffer "*scratch*")
+        (read-only-mode -1)
         (erase-buffer)
-        (when (zerop (buffer-size))
-          (insert initial-scratch-message)
-          (set-buffer-modified-p nil)
-          (funcall initial-major-mode)))))
-  (advice-add #'desktop-change-dir :after #'restore-scratch-content))
+        (fundamental-mode)
+        (insert initial-scratch-message)
+        (set-buffer-modified-p nil)
+        (funcall initial-major-mode)))))
 
 
 ;; Extras for theme editing
