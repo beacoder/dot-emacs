@@ -477,7 +477,7 @@
   (defun save-scratch-content (&rest _)
     "Save *scratch* buffer content before kill."
     (if (string= (buffer-name (current-buffer)) "*scratch*")
-        (with-current-buffer (get-buffer "*scratch*")
+        (with-current-buffer "*scratch*"
           (unless (zerop (buffer-size))
             (setq initial-scratch-message
                   (buffer-substring-no-properties (point-min) (point-max)))))))
@@ -490,7 +490,7 @@
     "Restore *scratch* buffer content."
     (interactive)
     (when (get-buffer "*scratch*")
-      (with-current-buffer (get-buffer "*scratch*")
+      (with-current-buffer "*scratch*"
         (read-only-mode -1)
         (erase-buffer)
         (fundamental-mode)
