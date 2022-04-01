@@ -123,7 +123,7 @@
          (("g s" gist-region-or-buffer-private "Gist-Share-Code" :toggle t)
           ("g l" gist-list "Gist-List" :toggle t))
          "Misc"
-         (("m r" restore-scratch-content "Restore-Scratch-Content" :toggle t)))))))
+         (("m r" everlasting-scratch-restore "Restore-Scratch-Content" :toggle t)))))))
 
 
 (provide 'init-hydra)
