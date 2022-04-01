@@ -74,8 +74,7 @@
                 (search-ring               . 20)
                 (shell-command-history     . 50)
                 tags-file-name
-                tags-table-list
-                initial-scratch-message)))
+                tags-table-list)))
 
 
 (provide 'init-session)
