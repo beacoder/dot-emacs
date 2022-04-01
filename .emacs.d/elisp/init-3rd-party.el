@@ -469,34 +469,10 @@
   (setq load-prefer-newer t))
 
 
-;; immortal-scratch
-(when (maybe-require-package 'immortal-scratch)
-  (add-hook 'after-init-hook 'immortal-scratch-mode)
-
-  ;; make sure *scratch* survive kill
-  (defun save-scratch-content (&rest _)
-    "Save *scratch* buffer content before kill."
-    (if (string= (buffer-name (current-buffer)) "*scratch*")
-        (with-current-buffer "*scratch*"
-          (unless (zerop (buffer-size))
-            (setq initial-scratch-message
-                  (buffer-substring-no-properties (point-min) (point-max)))))))
-  (advice-add #'immortal-scratch-kill :before #'save-scratch-content)
-  (advice-add #'save-buffers-kill-emacs :before #'save-scratch-content)
-
-  ;; used to manually restore scratch content
-  ;; e.g: use it after invoking desktop-change-dir
-  (defun restore-scratch-content ()
-    "Restore *scratch* buffer content."
-    (interactive)
-    (when (get-buffer "*scratch*")
-      (with-current-buffer "*scratch*"
-        (read-only-mode -1)
-        (erase-buffer)
-        (fundamental-mode)
-        (insert initial-scratch-message)
-        (set-buffer-modified-p nil)
-        (funcall initial-major-mode)))))
+;; everlasting-scratch
+(require 'everlasting-scratch)
+;; (when (maybe-require-package 'everlasting-scratch)
+(add-hook 'after-init-hook 'everlasting-scratch-mode)
 
 
 ;; Extras for theme editing
