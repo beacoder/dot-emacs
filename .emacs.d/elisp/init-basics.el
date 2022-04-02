@@ -408,11 +408,6 @@ Use in `isearch-mode-end-hook'."
 
 (global-set-key [remap backward-up-list] 'sanityinc/backward-up-sexp) ; C-M-u, C-M-up
 
-;;----------------------------------------------------------------------------
-;; Measure startup time
-;;----------------------------------------------------------------------------
-(require 'init-benchmarking)
-
 
 ;; Garbage Collector Magic Hack
 (when (maybe-require-package 'gcmh)
