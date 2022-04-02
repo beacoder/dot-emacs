@@ -42,7 +42,7 @@
 (when (require-package 'undo-tree)
   (add-hook 'after-init-hook 'global-undo-tree-mode)
   (with-eval-after-load 'undo-tree
-    ;; undo-buffer limit -> 100 MB                                                       |
+    ;; undo-buffer limit -> 100 MB
     (setq undo-outer-limit (* 100 (expt 1024 2)))))
 
 
