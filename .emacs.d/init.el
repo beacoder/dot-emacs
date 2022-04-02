@@ -25,19 +25,9 @@
 ;; Machinery for installing required packages
 (when (is-modern-emacs) (require 'init-elpa))
 
-
 ;;----------------------------------------------------------------------------
-;; key-bindings for specific mode in emacs
+;; create tags
 ;;----------------------------------------------------------------------------
-;; the key definition only happen once
-;; (eval-after-load "coffee-mode"
-;;     '(define-key coffee-mode-map (kbd "C-c c" 'coffee-compile-file)))
-;;
-;; the key definition happens every time coffee-mode is enabled
-;; (add-hook 'coffee-mode-hook
-;;     (lambda ()
-;;         (define-key coffee-mode-map (kbd "C-c c" 'coffee-compile-file))))
-
 
 ;;; create tags with 'universal-ctags'
 (defun create-tags (dir-name1 tag-file-name dir-name2)
