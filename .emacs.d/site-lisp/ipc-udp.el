@@ -1,4 +1,4 @@
-;;; ipc-udp.el --- ipc based on udp. -*- lexical-binding: t -*-
+;;; ipc-udp.el --- IPC based on udp -*- lexical-binding: t -*-
 
 ;; Copyright (C) 2019-2021 Huming Chen
 
@@ -37,10 +37,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defvar ipc-udp--server-address "localhost"
-  "Address of the call-graph server.")
+  "Address of the server.")
 
 (defvar ipc-udp--server-port 10000
-  "Port of the call-graph server.")
+  "Port of the server.")
 
 (defvar ipc-udp--server-process nil
   "The server process.")
@@ -83,10 +83,41 @@ If there's a string at point, use it instead of prompt."
 (defun ipc-udp--log (string)
   "Log message content STRING."
   (message
-   (concat (format "(%s): %s \n" (current-time-string) string))))
+   (concat (format "%s, %s\n" (current-time-string) string))))
 
-(defun ipc-udp--client-start ()
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Business logic
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun ipc-udp--client-filter (proc string)
+  "Callback function for client with PROC and STRING."
+  (ipc-udp--log (format "[Client]: Received [%s]" string))
+  ;; response is ready
+  ;; todo: when response is too big, we may need to receive for multiple times
+  ;; check status code first, see if need more time to receive
+  (setq ipc-udp--retrieval-done t
+        ipc-udp--retrieval-text string))
+
+(defun ipc-udp--server-filter (proc string)
+  "Callback function for server with PROC and STRING."
+  (ipc-udp--log (format "[Server]: Received [%s]" string))
+  (sleep-for 1)  ;; simulate the network latency
+  (if (string-match "global" string)  ;; only handle global related command
+      (let ((command-output (shell-command-to-string string)))
+        ;; TODO: when output is too big, could introduce status code
+        ;; 200 OK  => OK
+        ;; 200 TBC => to be continued
+        (process-send-string proc command-output))
+    ;; be nice to client
+    (process-send-string proc " ")))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Core Functions
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun ipc-udp-client-start ()
   "Start ipc-udp-client to talk to ipc-udp-server."
+  (interactive)
   (ipc-udp-client-stop)
   (setq ipc-udp--client-process
         (make-network-process
@@ -99,63 +130,16 @@ If there's a string at point, use it instead of prompt."
          ;; :sentinel 'ipc-udp--client-sentinel
          :filter 'ipc-udp--client-filter))
   (ipc-udp--log
-   (format "Cilent started to talk to %s on port %d."
+   (format "[Cilent]: Start to talk to %s on port %d."
            ipc-udp--server-address ipc-udp--server-port))
   (accept-process-output ipc-udp--client-process 3))
 
-(defun ipc-udp--server-filter (proc string)
-  "Callback function for server with PROC and STRING."
-  (ipc-udp--log (format "%s: Received message from client." proc))
-  (sleep-for 1)  ;; simulate the network latency
-  (if (string-match "global" string)  ;; only handle global related command
-      (let ((command-output (shell-command-to-string string)))
-        ;; TODO: when output is too big, could introduce status code
-        ;; 200 OK  => OK
-        ;; 200 TBC => to be continued
-        (process-send-string proc command-output))
-    ;; be nice to client
-    (process-send-string proc " ")))
-
-(defun ipc-udp--client-filter (proc string)
-  "Callback function for client with PROC and STRING."
-  (ipc-udp--log (format "%s: Received message from server." proc))
-  ;; response is ready
-  ;; todo: when response is too big, we may need to receive for multiple times
-  ;; check status code first, see if need more time to receive
-  (setq ipc-udp--retrieval-done t
-        ipc-udp--retrieval-text string))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Core Functions
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;;;###autoload
-(defun ipc-udp-server-start ()
-  "Start ipc-udp-server."
-  (interactive)
-  (ipc-udp-server-stop)
-  (setq ipc-udp--server-process
-        (make-network-process
-         :name "ipc-udp-server"
-         :buffer "*ipc-udp-server*"
-         :host ipc-udp--server-address
-         :service ipc-udp--server-port
-         :type 'datagram
-         :server t
-         :family 'ipv4
-         ;; :sentinel 'ipc-udp--server-sentinel
-         :filter 'ipc-udp--server-filter))
-  (ipc-udp--log
-   (format "Server started on %s and listen on %d."
-           ipc-udp--server-address ipc-udp--server-port)))
-
-;;;###autoload
 (defun ipc-udp-client-send (command &optional timeout)
   "Send COMMAND to server and get response from it synchronously.
 timeout in TIMEOUT seoncds."
-  (interactive (list (smart/read-from-minibuffer "Send command")))
-  (unless ipc-udp--client-process (ipc-udp--client-start))
-  (when (and ipc-udp--client-process command)
+  (interactive (list (ipc-udp--read-from-minibuffer "Send command")))
+  (unless ipc-udp--client-process (ipc-udp-client-start))
+  (when command
     ;; refer to url-retrieve-synchronously
     (let ((ipc-udp--retrieval-done nil)
           (ipc-udp--retrieval-text nil)
@@ -163,7 +147,7 @@ timeout in TIMEOUT seoncds."
           (asynch-buffer (get-buffer "*ipc-udp-client*"))
           (timeout-in-sec (or timeout 3)))
       (process-send-string ipc-udp--client-process command)
-      (ipc-udp--log "Client: Send command and wait for response.")
+      (ipc-udp--log (format "[Client]: Sent [%s]" command))
       ;; busy-waiting for response to be ready
       (let ((proc (get-buffer-process asynch-buffer)))
         ;; If the access method was synchronous, `ipc-udp--retrieval-done' should
@@ -179,7 +163,7 @@ timeout in TIMEOUT seoncds."
                         (< (float-time (time-subtract
                                         (current-time) start-time))
                            timeout-in-sec)))
-          (ipc-udp--log "Client: Spinning in waiting for response from remote.")
+          (ipc-udp--log "[Client]: Busy-waiting response")
           (if (and proc (memq (process-status proc)
                               '(closed exit signal failed))
                    ;; Make sure another process hasn't been started.
@@ -211,7 +195,7 @@ timeout in TIMEOUT seoncds."
               (delete-process proc))
             (setq proc (and (not quit-flag)
                             (get-buffer-process asynch-buffer))))))
-      (ipc-udp--log "Client: Received response from remote.")
+      (ipc-udp--log "[Client]: Received response")
       ;; return the response content
       (if (and (stringp ipc-udp--retrieval-text)
                (not (string-empty-p (string-trim ipc-udp--retrieval-text))))
@@ -219,13 +203,32 @@ timeout in TIMEOUT seoncds."
           (split-string ipc-udp--retrieval-text "\n" t)
         nil))))
 
+(defun ipc-udp-server-start ()
+  "Start ipc-udp-server."
+  (interactive)
+  (ipc-udp-server-stop)
+  (setq ipc-udp--server-process
+        (make-network-process
+         :name "ipc-udp-server"
+         :buffer "*ipc-udp-server*"
+         :host ipc-udp--server-address
+         :service ipc-udp--server-port
+         :type 'datagram
+         :server t
+         :family 'ipv4
+         ;; :sentinel 'ipc-udp--server-sentinel
+         :filter 'ipc-udp--server-filter))
+  (ipc-udp--log
+   (format "[Server]: Start on %s and listen on %d."
+           ipc-udp--server-address ipc-udp--server-port)))
+
 (defun ipc-udp-server-stop nil
   "Stop ipc-udp-server."
   (interactive)
   (when ipc-udp--server-process
     (delete-process ipc-udp--server-process)
     (setq ipc-udp--server-process nil)
-    (ipc-udp--log "Server stoped.")))
+    (ipc-udp--log "[Server]: Stoped")))
 
 (defun ipc-udp-client-stop nil
   "Stop ipc-udp-client."
@@ -233,7 +236,7 @@ timeout in TIMEOUT seoncds."
   (when ipc-udp--client-process
     (delete-process ipc-udp--client-process)
     (setq ipc-udp--client-process nil)
-    (ipc-udp--log "Client stoped.")))
+    (ipc-udp--log "[Client]: Stoped")))
 
 
 (provide 'ipc-udp)
