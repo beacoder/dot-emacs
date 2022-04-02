@@ -93,11 +93,6 @@ The argument has the same meaning as in `apropos'."
 (setq global-auto-revert-non-file-buffers t
       auto-revert-verbose nil)
 
-;; enable ibuffer-mode
-(when (fboundp 'ibuffer-mode)
-  (add-hook 'after-init-hook 'ibuffer-mode))
-(setq ibuffer-filter-group-name-face 'font-lock-doc-face)
-
 ;; enable electric-pair-mode
 (when (fboundp 'electric-pair-mode)
   (add-hook 'after-init-hook 'electric-pair-mode)
