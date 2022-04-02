@@ -8,8 +8,6 @@
 ;; Emacs <-> SS-local (localhost:1080) <-|-> SS-server <-> Internet
 ;;                                       |
 ;;
-;; @see https://www.diycode.cc/topics/738
-;;
 ;; Buy VPS and setup SS on bandwagonhost
 ;; Install SS-GUI and config SS address, pwd..
 ;;
@@ -150,6 +148,8 @@
 (require 'init-session)
 (require 'init-cperl)
 (require 'init-productivity)
+;; measure startup time at the end
+(require 'init-benchmarking)
 
 (provide 'init)
 ;;; init.el ends here
