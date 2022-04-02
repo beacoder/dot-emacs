@@ -96,21 +96,6 @@
     ad-do-it))
 
 
-;;; config modeline format
-(display-time-mode t);; config time format
-(setq display-time-format "[%A %Y/%m/%d %H:%M Time-Zone:'%Z']"
-      display-time-interval 60
-      display-time-default-load-average nil
-      display-time-mail-face 'custom-themed)
-
-
-;;; auto-save settings
-(setq auto-save-default t
-      auto-save-mode t
-      auto-save-interval 300
-      auto-save-timeout 60)
-
-
 ;;; Load configs for specific features and modes
 (require 'init-register)
 (require 'init-hippie-expand)
