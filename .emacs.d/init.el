@@ -1,7 +1,6 @@
-;;----------------------------------------------------------------------------
-;; Entry file for emacs configuration 
-;;----------------------------------------------------------------------------
-
+;; init.el --- Entry file for emacs configuration.      -*- lexical-binding: t -*-
+;;; Commentary:
+;;
 ;;; Shadowsocks
 ;;                                      GFW
 ;;                                       |
@@ -14,9 +13,10 @@
 ;; (setq url-gateway-method 'socks
 ;;       socks-server '("Default server" "127.0.0.1" 1080 5))
 
+;;;
+;;; Code:
 
 ;;; Directory structure
-(setq emacs-load-start-time (current-time))
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/elisp"))
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/site-lisp"))
 (when (<= emacs-major-version 21)
