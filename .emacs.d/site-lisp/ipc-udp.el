@@ -195,7 +195,7 @@ timeout in TIMEOUT seoncds."
               (delete-process proc))
             (setq proc (and (not quit-flag)
                             (get-buffer-process asynch-buffer))))))
-      (ipc-udp--log "[Client]: Received response")
+      (unless ipc-udp--retrieval-done (ipc-udp--log "[Client]: Receive timeout"))
       ;; return the response content
       (if (and (stringp ipc-udp--retrieval-text)
                (not (string-empty-p (string-trim ipc-udp--retrieval-text))))
