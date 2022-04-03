@@ -160,9 +160,7 @@ timeout in TIMEOUT seoncds."
         ;; process output.
         (while (and (not ipc-udp--retrieval-done)
                     (or (not timeout-in-sec)
-                        (< (float-time (time-subtract
-                                        (current-time) start-time))
-                           timeout-in-sec)))
+                        (time-less-p (time-since start-time) timeout-in-sec)))
           (ipc-udp--log "[Client]: Busy-waiting response")
           (if (and proc (memq (process-status proc)
                               '(closed exit signal failed))
