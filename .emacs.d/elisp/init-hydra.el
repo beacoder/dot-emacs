@@ -123,7 +123,12 @@
          (("g s" gist-region-or-buffer-private "Gist-Share-Code" :toggle t)
           ("g l" gist-list "Gist-List" :toggle t))
          "Misc"
-         (("m r" everlasting-scratch-restore "Restore-Scratch-Content" :toggle t)))))))
+         (("m r" everlasting-scratch-restore "Restore-Scratch-Content" :toggle t))
+         "Ipc"
+         (("i s" ipc-udp-client-send "Ipc-Udp-Client-Send" :toggle t)
+          ("i c e" ipc-udp-server-stop "Ipc-Udp-Server-Stop" :toggle t)
+          ("i r a" ipc-udp-server-start "Ipc-Udp-Server-Start" :toggle t)
+          ("i r e" ipc-udp-server-stop "Ipc-Udp-Server-Stop" :toggle t)))))))
 
 
 (provide 'init-hydra)
