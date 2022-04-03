@@ -511,6 +511,11 @@
     :hook (after-init . global-so-long-mode)))
 
 
+;;; elisp-demos
+(when (maybe-require-package 'elisp-demos)
+  (advice-add 'describe-function-1 :after #'elisp-demos-advice-describe-function-1))
+
+
 ;;; other setting
 (require 'init-hydra)
 (require 'init-git)
