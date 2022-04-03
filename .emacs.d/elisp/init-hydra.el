@@ -125,10 +125,10 @@
          "Misc"
          (("m r" everlasting-scratch-restore "Restore-Scratch-Content" :toggle t))
          "Ipc"
-         (("i s" ipc-udp-client-send "Ipc-Udp-Client-Send" :toggle t)
-          ("i c e" ipc-udp-server-stop "Ipc-Udp-Server-Stop" :toggle t)
-          ("i r a" ipc-udp-server-start "Ipc-Udp-Server-Start" :toggle t)
-          ("i r e" ipc-udp-server-stop "Ipc-Udp-Server-Stop" :toggle t)))))))
+         (("i c s" ipc-udp-client-send "Ipc-Udp-Client-Send" :toggle t)
+          ("i c e" ipc-udp-client-stop "Ipc-Udp-Client-Stop" :toggle t)
+          ("i s a" ipc-udp-server-start "Ipc-Udp-Server-Start" :toggle t)
+          ("i s e" ipc-udp-server-stop "Ipc-Udp-Server-Stop" :toggle t)))))))
 
 
 (provide 'init-hydra)
