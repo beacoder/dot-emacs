@@ -470,9 +470,8 @@
 
 
 ;; everlasting-scratch
-(require 'everlasting-scratch)
-;; (when (maybe-require-package 'everlasting-scratch)
-(add-hook 'after-init-hook 'everlasting-scratch-mode)
+(when (maybe-require-package 'everlasting-scratch)
+  (add-hook 'after-init-hook 'everlasting-scratch-mode))
 
 
 ;; Extras for theme editing
