@@ -515,6 +515,11 @@
   (advice-add 'describe-function-1 :after #'elisp-demos-advice-describe-function-1))
 
 
+;;; x-protocol elisp implementation
+;;  learning how to write protocol
+(maybe-require-package 'xelb)
+
+
 ;;; other setting
 (require 'init-hydra)
 (require 'init-git)
