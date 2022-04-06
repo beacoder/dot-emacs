@@ -113,22 +113,23 @@
       (pretty-hydra-define toggles-hydra (:title (pretty-hydra-title "Toggles" 'faicon "toggle-on" :v-adjust -0.1)
                                                  :color amaranth :quit-key "q")
         ("Play"
-         (("p b" bongo "Bongo" :toggle t)
-          ("p c" open-calendar "Calendar" :toggle t)
-          ("p f" keyfreq-show "Keyfreq" :toggle t)
-          ("p n" newsticker-show-news "Newsticker" :toggle t)
-          ("p s" stock-tracker-start "Stock" :toggle t)
-          ("p w" wttrin "Weather" :toggle t))
+         (("p b" bongo "Bongo" :exit t)
+          ("p c" open-calendar "Calendar" :exit t)
+          ("p f" keyfreq-show "Keyfreq" :exit t)
+          ("p n" newsticker-show-news "Newsticker" :exit t)
+          ("p s" stock-tracker-start "Stock" :exit t)
+          ("p w" wttrin "Weather" :exit t))
          "Gist"
-         (("g s" gist-region-or-buffer-private "Gist-Share-Code" :toggle t)
-          ("g l" gist-list "Gist-List" :toggle t))
+         (("g s" gist-region-or-buffer-private "Gist-Share-Code" :exit t)
+          ("g l" gist-list "Gist-List" :exit t))
          "Misc"
-         (("m r" everlasting-scratch-restore "Restore-Scratch-Content" :toggle t))
+         (("m r" everlasting-scratch-restore "Restore-Scratch-Content" :exit t)
+          ("m c" wandbox "Online-Compile" :exit t))
          "Ipc"
-         (("i c s" ipc-udp-client-send "Ipc-Udp-Client-Send" :toggle t)
-          ("i c e" ipc-udp-client-stop "Ipc-Udp-Client-Stop" :toggle t)
-          ("i s a" ipc-udp-server-start "Ipc-Udp-Server-Start" :toggle t)
-          ("i s e" ipc-udp-server-stop "Ipc-Udp-Server-Stop" :toggle t)))))))
+         (("i c s" ipc-udp-client-send "Ipc-Udp-Client-Send" :exit t)
+          ("i c e" ipc-udp-client-stop "Ipc-Udp-Client-Stop" :exit t)
+          ("i s a" ipc-udp-server-start "Ipc-Udp-Server-Start" :exit t)
+          ("i s e" ipc-udp-server-stop "Ipc-Udp-Server-Stop" :exit t)))))))
 
 
 (provide 'init-hydra)
