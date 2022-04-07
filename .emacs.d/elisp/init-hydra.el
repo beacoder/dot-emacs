@@ -115,7 +115,7 @@
         ("Play"
          (("p b" bongo "Bongo" :exit t)
           ("p c" open-calendar "Calendar" :exit t)
-          ("p f" keyfreq-show "Keyfreq" :exit t)
+          ("p k" keyfreq-show "Keyfreq" :exit t)
           ("p n" newsticker-show-news "Newsticker" :exit t)
           ("p s" stock-tracker-start "Stock" :exit t)
           ("p w" wttrin "Weather" :exit t))
