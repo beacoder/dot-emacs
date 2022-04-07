@@ -521,7 +521,8 @@
 
 
 ;;; online compiler: https://wandbox.org
-;;  save snippet to file first then run wandbox
+;;  1.specify language with "// #wandbox lang: c++"
+;;  2.run wandbox
 (maybe-require-package 'wandbox)
 
 
