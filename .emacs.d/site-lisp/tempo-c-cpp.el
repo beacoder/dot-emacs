@@ -1,8 +1,4 @@
-;; This buffer is for notes you don't want to save, and for Lisp evaluation.
-;; If you want to create a file, visit that file with C-x C-f,
-;; then enter the text in that file's own buffer.
-
-;;; tempo-c-cpp.el --- abbrevs for c/c++ programming
+;;; tempo-c-cpp.el --- Abbrevs for c/c++ programming -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (C) 2008  Sebastien Varrette
 ;;
@@ -27,9 +23,9 @@
 ;; the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 ;; Boston, MA 02110-1301, USA.
 
-;;; Commentary
+;;; Commentary:
 ;;
-;; This is a way to hook tempo into cc-mode. In fact, I merge here many ressources, including:
+;; This is a way to hook tempo into cc-mode.  In fact, I merge here many ressources, including:
 ;; - http://www.lysator.liu.se/~davidk/elisp/tempo-examples.html
 ;; - http://svn.marc.abramowitz.info/homedir/dotfiles/emacs
 ;; - http://www.emacswiki.org/cgi-bin/wiki/TempoMode
@@ -38,8 +34,8 @@
 ;; To use this file, just put a (require 'tempo-c-cpp) in your .emacs file
 ;;
 ;; Note on tempo (from EmacsWiki):
-;; templates are defined through tempo-define-template. they uses (p ...) to prompt for variables
-;; and (s ...) to insert them again. > indents, n inserts a newline, and r inserts the region, if active.
+;; templates are defined through tempo-define-template.  they uses (p ...) to prompt for variables
+;; and (s ...) to insert them again.  > indents, n inserts a newline, and r inserts the region, if active.
 ;;
 ;; To use the templates defined here:
 ;; - either run M-x tempo-template-c-<xx> where <xx> is the name of the template (use TAB to have the list)
