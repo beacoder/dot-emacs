@@ -535,7 +535,14 @@
   (require 'sublimity-scroll)
   (require 'sublimity-map)
   (require 'sublimity-attractive)
-  (sublimity-mode 1))
+  (sublimity-mode 1)
+
+  (defun sublimity-skip-side-window (orig &rest args)
+    "Skip side window for sublimity"
+    (unless (window-parameter (get-buffer-window) 'window-side)
+      (apply orig args)))
+
+  (advice-add 'sublimity-map-show :around 'sublimity-skip-side-window))
 
 
 ;;; download manager within emacs
