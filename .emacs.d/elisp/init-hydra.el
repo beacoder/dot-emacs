@@ -109,19 +109,6 @@
         (concat (propertize title 'face face))))
 
     ;; Global toggles
- (when (maybe-require-package 'pretty-hydra)
-  (use-package pretty-hydra
-    :bind ("C-x C-h" . toggles-hydra/body)
-    :init
-    (cl-defun pretty-hydra-title (title &optional icon-type icon-name
-                                        &key face height v-adjust)
-      "Add an icon in the hydra title."
-      (let ((face (or face `(:foreground ,(face-background 'highlight))))
-            (height (or height 1.0))
-            (v-adjust (or v-adjust 0.0)))
-        (concat (propertize title 'face face))))
-
-    ;; Global toggles
     (with-no-warnings
       (pretty-hydra-define toggles-hydra (:title (pretty-hydra-title "Toggles" 'faicon "toggle-on" :v-adjust -0.1)
                                                  :color amaranth :quit-key "q")
