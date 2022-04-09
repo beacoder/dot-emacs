@@ -120,13 +120,13 @@
           ("p s" stock-tracker-start "Stock" :exit t)
           ("p w" wttrin "Weather" :exit t))
          "Gist"
-         (("g s" gist-region-or-buffer-private "Gist-Share-Code" :exit t)
+         (("g s" gist-region-or-buffer-private "Gist-Share" :exit t)
           ("g l" gist-list "Gist-List" :exit t))
          "Misc"
-         (("m r" everlasting-scratch-restore "Restore-Scratch-Content" :exit t)
+         (("m r" everlasting-scratch-restore "Restore-Scratch" :exit t)
           ("m c" wandbox "Online-Compile" :exit t)
           ("m d" download-region-as-url "Download-Region" :exit t)
-          ("m D" download-region-cancel "Download-Region" :exit t)
+          ("m D" download-region-cancel "Download-Cancel" :exit t)
           ("m s" sublimity-mode "Sublimity-Mode" :exit t))
          "Ipc"
          (("i c" ipc-udp-client-send "Ipc-Udp-Client-Send" :exit t)
