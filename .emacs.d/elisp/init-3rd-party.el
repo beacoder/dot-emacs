@@ -515,15 +515,33 @@
   (advice-add 'describe-function-1 :after #'elisp-demos-advice-describe-function-1))
 
 
-;;; x-protocol elisp implementation
-;;  learning how to write protocol
-(maybe-require-package 'xelb)
-
-
 ;;; online compiler: https://wandbox.org
 ;;  1.specify language with "// #wandbox lang: c++"
 ;;  2.run wandbox
 (maybe-require-package 'wandbox)
+
+
+;;; show indentation
+(when (maybe-require-package 'indent-guide)
+  (require 'indent-guide)
+  (unless (display-graphic-p)
+    (set-face-background 'indent-guide-face "dimgray"))
+  (indent-guide-global-mode))
+
+
+;;; sublime like smooth-scrolling
+(when (maybe-require-package 'sublimity)
+  (require 'sublimity)
+  (require 'sublimity-scroll)
+  (require 'sublimity-map)
+  (require 'sublimity-attractive)
+  (sublimity-mode 1))
+
+
+;;; download manager within emacs
+(when (maybe-require-package 'download-region)
+  (require 'download-region)
+  (setq download-region-max-downloads 5))
 
 
 ;;; other setting
