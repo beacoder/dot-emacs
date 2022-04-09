@@ -124,12 +124,14 @@
           ("g l" gist-list "Gist-List" :exit t))
          "Misc"
          (("m r" everlasting-scratch-restore "Restore-Scratch-Content" :exit t)
-          ("m c" wandbox "Online-Compile" :exit t))
+          ("m c" wandbox "Online-Compile" :exit t)
+          ("m d" download-region-as-url "Download-Region" :exit t)
+          ("m D" download-region-cancel "Download-Region" :exit t))
          "Ipc"
-         (("i c s" ipc-udp-client-send "Ipc-Udp-Client-Send" :exit t)
-          ("i c e" ipc-udp-client-stop "Ipc-Udp-Client-Stop" :exit t)
-          ("i s a" ipc-udp-server-start "Ipc-Udp-Server-Start" :exit t)
-          ("i s e" ipc-udp-server-stop "Ipc-Udp-Server-Stop" :exit t)))))))
+         (("i c" ipc-udp-client-send "Ipc-Udp-Client-Send" :exit t)
+          ("i C" ipc-udp-client-stop "Ipc-Udp-Client-Stop" :exit t)
+          ("i s" ipc-udp-server-start "Ipc-Udp-Server-Start" :exit t)
+          ("i S" ipc-udp-server-stop "Ipc-Udp-Server-Stop" :exit t)))))))
 
 
 (provide 'init-hydra)
