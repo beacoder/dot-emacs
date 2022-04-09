@@ -104,6 +104,8 @@ If there's a string at point, use it instead of prompt."
   (sleep-for 1)  ;; simulate the network latency
   (if (string-match "global" string)  ;; only handle global related command
       (let ((command-output (shell-command-to-string string)))
+        ;; Protocol design: refer to server-process-filter
+        ;;
         ;; TODO: when output is too big, could introduce status code
         ;; 200 OK  => OK
         ;; 200 TBC => to be continued
