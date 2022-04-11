@@ -526,7 +526,8 @@
 (when (maybe-require-package 'indent-guide)
   (require 'indent-guide)
   (unless (display-graphic-p)
-    (set-face-background 'indent-guide-face "dimgray"))
+    ;; green looks good in terminal
+    (set-face-background 'indent-guide-face "dimgreen"))
   (indent-guide-global-mode))
 
 
