@@ -18,14 +18,15 @@
 (require 'init-whitespace)
 
 
-;;; async setting
+;;; async handling with subprocess
 (when (maybe-require-package 'async)
   ;; deal with problems when updating packages
   (require 'async-bytecomp)
   (async-bytecomp-package-mode 1)
 
   ;; provide dired with asynchronous abilities
-  (with-eval-after-load "dired-aux" (require 'dired-async))
+  (require 'dired-async)
+  (dired-async-mode 1)
 
   ;; sending emails asynchronously
   (require 'smtpmail-async)
