@@ -533,7 +533,9 @@
 (when (maybe-require-package 'sublimity)
   (require 'sublimity)
   (require 'sublimity-scroll)
-  (require 'sublimity-map)
+  (when (display-graphic-p)
+    ;; seems anoying in small screen
+    (require 'sublimity-map))
   (require 'sublimity-attractive)
   (sublimity-mode 1)
 
