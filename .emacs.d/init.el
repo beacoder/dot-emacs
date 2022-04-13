@@ -114,7 +114,6 @@
   (require 'init-javascript)
   (require 'init-ruby)
   (require 'init-python)
-  (require 'init-ttcn3)
   (require 'init-shell)
   (require 'init-grep)
   (require 'init-compile))
