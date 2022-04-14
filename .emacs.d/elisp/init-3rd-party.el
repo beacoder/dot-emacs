@@ -408,9 +408,7 @@
 
 
 ;; stock-tracker
-(when (maybe-require-package 'stock-tracker)
-  (setq stock-tracker-list-of-stocks
-        '("0601595" "0600977" "1000671")))
+(maybe-require-package 'stock-tracker)
 
 
 ;; lua-mode
