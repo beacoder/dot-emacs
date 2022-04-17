@@ -21,9 +21,7 @@
       (append '(("SConstruct\\'" . python-mode)
 		("SConscript\\'" . python-mode))
               auto-mode-alist)
-      python-shell-interpreter "python3.7"
-      ;; python-shell-interpreter "python2.7"
-      )
+      python-shell-interpreter "python3")
 
 (require-package 'pip-requirements)
 
