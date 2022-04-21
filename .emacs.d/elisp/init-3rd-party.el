@@ -494,9 +494,9 @@
 
 ;;; diminish modes
 (when (maybe-require-package 'diminish)
+  (require 'diminish)
   (defun enable-diminish ()
-    "Diminish various modes"
-    (require 'diminish)
+    "Diminish various modes"  
     (diminish 'eldoc-mode)
     (diminish 'undo-tree-mode)
     (diminish 'ggtags-mode)
