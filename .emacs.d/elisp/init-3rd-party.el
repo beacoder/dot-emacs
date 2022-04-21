@@ -494,22 +494,22 @@
 
 ;;; diminish modes
 (when (maybe-require-package 'diminish)
-  (dolist (mode '('eldoc-mode
-                  'undo-tree-mode
-                  'ggtags-mode
-                  'symbol-overlay-mode
-                  'super-save-mode
-                  'rainbow-delimiters-mode
-                  'which-key-mode
-                  'abbrev-mode
-                  'flycheck-mode
-                  'company-mode
-                  'ivy-mode
-                  'counsel-mode
-                  'yard-mode
-                  'whitespace-cleanup-mode
-                  'rainbow-mode))
-    (diminish mode)))
+  (require 'diminish)
+  (diminish 'eldoc-mode)
+  (diminish 'undo-tree-mode)
+  (diminish 'ggtags-mode)
+  (diminish 'symbol-overlay-mode)
+  (diminish 'super-save-mode)
+  (diminish 'rainbow-delimiters-mode)
+  (diminish 'which-key-mode)
+  (diminish 'abbrev-mode)
+  (diminish 'flycheck-mode)
+  (diminish 'company-mode)
+  (diminish 'ivy-mode)
+  (diminish 'counsel-mode)
+  (diminish 'yard-mode)
+  (diminish 'whitespace-cleanup-mode)
+  (diminish 'rainbow-mode))
 
 
 ;;; improve long lines performance
