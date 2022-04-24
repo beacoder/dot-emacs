@@ -496,7 +496,7 @@
 (when (maybe-require-package 'diminish)
   (require 'diminish)
   (defun enable-diminish ()
-    "Diminish various modes"  
+    "Diminish various modes"
     (diminish 'eldoc-mode)
     (diminish 'undo-tree-mode)
     (diminish 'ggtags-mode)
@@ -511,7 +511,9 @@
     (diminish 'counsel-mode)
     (diminish 'yard-mode)
     (diminish 'whitespace-cleanup-mode)
-    (diminish 'rainbow-mode))
+    (diminish 'rainbow-mode)
+    (diminish 'view-mode)
+    (diminish 'hs-minor-mode))
   (add-hook 'prog-mode-hook 'enable-diminish))
 
 
