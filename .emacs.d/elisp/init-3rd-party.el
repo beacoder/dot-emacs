@@ -534,11 +534,9 @@
 
 ;;; show indentation
 (when (maybe-require-package 'indent-guide)
-  (require 'indent-guide)
-  (unless (display-graphic-p)
-    ;; green looks good in terminal
-    (set-face-background 'indent-guide-face "dimgreen"))
-  (indent-guide-global-mode))
+  (when (display-graphic-p)
+    (require 'indent-guide)
+    (indent-guide-global-mode)))
 
 
 ;;; sublime like smooth-scrolling
