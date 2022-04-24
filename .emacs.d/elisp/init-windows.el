@@ -152,6 +152,7 @@ column narrower."
             "\\*Calendar\\*"
             "\\*Finder\\*"
             "\\*Embark Actions\\*"
+            "\\*ggtags-global\\*"
 
             bookmark-bmenu-mode
             comint-mode
