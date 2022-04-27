@@ -1,6 +1,9 @@
-;;----------------------------------------------------------------------------
-;; use alias to shorten commands
-;;----------------------------------------------------------------------------
+;;; init-alias.el --- alias config -*- lexical-binding: t -*-
+;;; Commentary:
+;;;
+;;; Setup all kinds of alias here
+;;;
+;;; Code:
 
 ;; y or n is enough
 (defalias 'yes-or-no-p 'y-or-n-p)
@@ -57,6 +60,7 @@
 (defalias 'cc 'clone-indirect-buffer)
 (defalias 'sc 'scratch)
 (defalias 'wg 'wgrep-change-to-wgrep-mode)
+(defalias 'dc 'desktop-change-dir)
 
 
 (provide 'init-alias)
