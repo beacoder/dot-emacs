@@ -565,6 +565,27 @@
   (setq download-region-max-downloads 5))
 
 
+;;; highlight TODO and similar keywords in comments and strings
+(when (maybe-require-package 'hl-todo)
+  (use-package hl-todo
+    :custom-face
+    (hl-todo ((t (:inherit default :height 0.9 :width condensed :weight bold :underline nil :inverse-video t))))
+    :bind (:map hl-todo-mode-map
+                ([C-f3] . hl-todo-occur)
+                ("C-c t p" . hl-todo-previous)
+                ("C-c t n" . hl-todo-next)
+                ("C-c t o" . hl-todo-occur)
+                ("C-c t i" . hl-todo-insert))
+    :hook (after-init . global-hl-todo-mode)
+    :init (setq hl-todo-require-punctuation t
+                hl-todo-highlight-punctuation ":")
+    :config
+    (dolist (keyword '("BUG" "DEFECT" "ISSUE"))
+      (cl-pushnew `(,keyword . ,(face-foreground 'error)) hl-todo-keyword-faces))
+    (dolist (keyword '("WORKAROUND" "HACK" "TRICK"))
+      (cl-pushnew `(,keyword . ,(face-foreground 'warning)) hl-todo-keyword-faces))))
+
+
 ;;; other setting
 (require 'init-hydra)
 (require 'init-git)
