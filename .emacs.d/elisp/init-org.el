@@ -444,13 +444,13 @@ typical word processor."
            (maybe-require-package 'org-modern))
   (use-package org-modern
     :hook ((org-mode . org-modern-mode)
-           (org-modern-mode . (lambda ()
+           (org-agenda-finalize . org-modern-agenda)
+           (org-modern-mode . (λ ()
                                 "Adapt `org-modern-mode'."
-                                ;; Looks better for tags
-                                (setq line-spacing 0.1)
                                 ;; Disable Prettify Symbols mode
                                 (setq prettify-symbols-alist nil)
-                                (prettify-symbols-mode -1))))))
+                                (prettify-symbols-mode -1))))
+    :init (setq org-modern-label-border nil)))
 
 
 (provide 'init-org)
