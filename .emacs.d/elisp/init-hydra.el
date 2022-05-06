@@ -138,7 +138,7 @@
           ("s m" memory-report "List-Memory" :exit t)
           ("s e" list-environment "List-Environment" :exit t)
           ("s d" daemons "List-Daemons" :exit t)
-          ("s t" tldr "Command-Cheatsheet" :exit t)))))))
+          ("s c" tldr "Command-Cheatsheet" :exit t)))))))
 
 
 (provide 'init-hydra)
