@@ -134,8 +134,8 @@
           ("i s" ipc-udp-server-start "Ipc-Udp-Server-Start" :exit t)
           ("i S" ipc-udp-server-stop "Ipc-Udp-Server-Stop" :exit t))
          "System"
-         (("s p" proced "List-Processes" :exit t)
-          ("s m" memory-report "Memory-Usage" :exit t)
+         (("s p" proced "List-Process" :exit t)
+          ("s m" memory-report "List-Memory" :exit t)
           ("s e" list-environment "List-Environment" :exit t)
           ("s d" daemons "List-Daemons" :exit t)
           ("s t" tldr "Command-Cheatsheet" :exit t)))))))
