@@ -132,7 +132,13 @@
          (("i c" ipc-udp-client-send "Ipc-Udp-Client-Send" :exit t)
           ("i C" ipc-udp-client-stop "Ipc-Udp-Client-Stop" :exit t)
           ("i s" ipc-udp-server-start "Ipc-Udp-Server-Start" :exit t)
-          ("i S" ipc-udp-server-stop "Ipc-Udp-Server-Stop" :exit t)))))))
+          ("i S" ipc-udp-server-stop "Ipc-Udp-Server-Stop" :exit t))
+         "System"
+         (("s p" proced "List-Processes" :exit t)
+          ("s m" memory-report "Memory-Usage" :exit t)
+          ("s e" list-environment "List-Environment" :exit t)
+          ("s d" daemons "List-Daemons" :exit t)
+          ("s t" tldr "Command-Cheatsheet" :exit t)))))))
 
 
 (provide 'init-hydra)
