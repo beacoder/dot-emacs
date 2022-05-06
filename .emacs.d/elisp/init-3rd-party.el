@@ -586,6 +586,35 @@
       (cl-pushnew `(,keyword . ,(face-foreground 'warning)) hl-todo-keyword-faces))))
 
 
+;;; dims surrounding text
+(when (maybe-require-package 'focus)
+  (use-package focus))
+
+
+;;; process
+(use-package proced
+    :ensure nil
+    :init
+    (setq-default proced-format 'verbose)
+    (setq proced-auto-update-flag t
+          proced-auto-update-interval 3))
+
+
+;;; list-environment
+(when (maybe-require-package 'list-environment)
+  (use-package list-environment))
+
+
+;;; system services/daemons
+(when (maybe-require-package 'daemons)
+  (use-package daemons))
+
+
+;;; cheatsheets for console commands
+(when (maybe-require-package 'tldr)
+  (use-package tldr))
+
+
 ;;; other setting
 (require 'init-hydra)
 (require 'init-git)
