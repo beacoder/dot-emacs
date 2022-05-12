@@ -138,7 +138,7 @@ column narrower."
                 ("C-h l" . popper-toggle-latest)
                 ("C-h c" . popper-cycle)
                 ("C-h t" . popper-toggle-type))
-    :hook (after-init . popper-mode)
+    :hook (emacs-startup . popper-mode)
     :init
     (setq popper-reference-buffers
           '("\\*Messages\\*"
