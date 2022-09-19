@@ -40,11 +40,13 @@
 
 ;;; undo-tree setting
 ;; "C-x u" => open the undo-tree-visualizer
-(when (require-package 'undo-tree)
+(when (maybe-require-package 'undo-tree)
   (add-hook 'after-init-hook 'global-undo-tree-mode)
   (with-eval-after-load 'undo-tree
     ;; undo-buffer limit -> 100 MB
-    (setq undo-outer-limit (* 100 (expt 1024 2)))))
+    (setq undo-outer-limit (* 100 (expt 1024 2))))
+  ;; prevent undo-tree files from polluting your git repo
+  (setq undo-tree-history-directory-alist '(("." . "~/.emacs.d/undo"))))
 
 
 ;;; browse-kill-ring
