@@ -544,21 +544,21 @@
 
 
 ;;; sublime like smooth-scrolling
-(when (maybe-require-package 'sublimity)
-  (require 'sublimity)
-  (require 'sublimity-scroll)
-  ;; (when (display-graphic-p)
-    ;; seems anoying in small screen
-    ;; (require 'sublimity-map))
-  (require 'sublimity-attractive)
-  (sublimity-mode 1)
+;; (when (maybe-require-package 'sublimity)
+;;   (require 'sublimity)
+;;   (require 'sublimity-scroll)
+;;   (when (display-graphic-p)
+;;     ;; seems anoying in small screen
+;;     (require 'sublimity-map))
+;;   (require 'sublimity-attractive)
+;;   (sublimity-mode 1)
 
-  (defun sublimity-skip-side-window (orig &rest args)
-    "Skip side window for sublimity"
-    (unless (window-parameter (get-buffer-window) 'window-side)
-      (apply orig args)))
+;;   (defun sublimity-skip-side-window (orig &rest args)
+;;     "Skip side window for sublimity"
+;;     (unless (window-parameter (get-buffer-window) 'window-side)
+;;       (apply orig args)))
 
-  (advice-add 'sublimity-map-show :around 'sublimity-skip-side-window))
+;;   (advice-add 'sublimity-map-show :around 'sublimity-skip-side-window))
 
 
 ;;; download manager within emacs
