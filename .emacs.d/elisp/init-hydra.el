@@ -127,7 +127,8 @@
           ("m c" wandbox "Online-Compile" :exit t)
           ("m d" download-region-as-url "Download-Region" :exit t)
           ("m D" download-region-cancel "Download-Cancel" :exit t)
-          ("m s" sublimity-mode "Sublimity-Mode" :exit t))
+          ;; ("m s" sublimity-mode "Sublimity-Mode" :exit t)
+          )
          "Ipc"
          (("i c" ipc-udp-client-send "Ipc-Udp-Client-Send" :exit t)
           ("i C" ipc-udp-client-stop "Ipc-Udp-Client-Stop" :exit t)
