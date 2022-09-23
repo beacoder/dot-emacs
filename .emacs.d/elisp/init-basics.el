@@ -436,5 +436,9 @@ Use in `isearch-mode-end-hook'."
     (server-start)))
 
 
+;;; group backup files into one directory
+(setq backup-directory-alist '(("." . "~/.emacs.d/backups")))
+
+
 (provide 'init-basics)
 ;;; init-basics.el ends here
