@@ -34,9 +34,9 @@ This command is similar to `find-file-at-point' but without prompting for confir
 ;;----------------------------------------------------------------------------
 
 ;; @see https://github.com/xahlee/xah_emacs_init/blob/master/xah_emacs_editing_commands.el
-(defun xah-copy-to-register-1 ()
+(defun xah-copy-to-register1 ()
   "Copy current line or text selection to register 1.
-See also: `xah-paste-from-register-1', `copy-to-register'."
+See also: `xah-paste-from-register1', `copy-to-register'."
   (interactive)
   (let* (
          (bds (get-selection-or-unit 'line ))
@@ -46,46 +46,52 @@ See also: `xah-paste-from-register-1', `copy-to-register'."
     (copy-to-register ?1 p1 p2)
     (message "copied to register 1: 「%s」." inputStr)))
 
-(defun xah-paste-from-register-1 ()
+(defun xah-paste-from-register1 ()
   "Paste text from register 1.
-See also: `xah-copy-to-register-1', `insert-register'."
+See also: `xah-copy-to-register1', `insert-register'."
   (interactive)
   (when (use-region-p)
     (delete-region (region-beginning) (region-end)))
   (insert-register ?1 t))
 
-(global-set-key (kbd "M-1") #'xah-copy-to-register-1)
-(global-set-key (kbd "M-2") #'xah-paste-from-register-1)
+(global-set-key (kbd "M-1") #'xah-copy-to-register1)
+(global-set-key (kbd "M-2") #'xah-paste-from-register1)
 
-(defun smart-point-to-register-3()
-  "Save current point to register 3."
+(defun smart-location-to-register3()
+  "Save location to register3."
   (interactive)
-  (when (yes-or-no-p "Override register 3")
+  (if (markerp (get-register ?3))
+      (when (yes-or-no-p "Override location in register3 ?")
+        (point-to-register ?3)
+        (message "location saved to register3"))
     (point-to-register ?3)
-    (message "Point saved to register 3")))
+    (message "location saved to register3")))
 
-(defun smart-jump-to-register-3 ()
-  "Jumped to register 3."
+(defun smart-jump-to-register3 ()
+  "Jump to register3."
   (interactive)
   (jump-to-register ?3))
 
-(defun smart-point-to-register-5 ()
-  "Save current point to register 5."
+(defun smart-location-to-register5 ()
+  "Save location to register5."
   (interactive)
-  (when (yes-or-no-p "Override register 5")
+  (if (markerp (get-register ?5))
+      (when (yes-or-no-p "Override location in register5 ?")
+        (point-to-register ?5)
+        (message "location saved to register5"))
     (point-to-register ?5)
-    (message "Point saved to register 5")))
+    (message "location saved to register5")))
 
-(defun smart-jump-to-register-5 ()
-  "Jumped to register 5."
+(defun smart-jump-to-register5 ()
+  "Jump to register 5."
   (interactive)
   (jump-to-register ?5))
 
-(global-set-key (kbd "M-3") #'smart-point-to-register-3)
-(global-set-key (kbd "M-4") #'smart-jump-to-register-3)
+(global-set-key (kbd "M-3") #'smart-location-to-register3)
+(global-set-key (kbd "M-4") #'smart-jump-to-register3)
 
-(global-set-key (kbd "M-5") #'smart-point-to-register-5)
-(global-set-key (kbd "M-6") #'smart-jump-to-register-5)
+(global-set-key (kbd "M-5") #'smart-location-to-register5)
+(global-set-key (kbd "M-6") #'smart-jump-to-register5)
 
 ;;----------------------------------------------------------------------------
 ;; Copy/Kill Current Line If No Selection
