@@ -190,8 +190,9 @@
 (when (require-package 'call-graph)
   (require 'call-graph)
   (global-set-key (kbd "C-c g") #'call-graph)
-  ;; (setq cg-path-to-global "~/private/gtags-6.5.7/bin/")
-  (setq imenu-max-item-length "Unlimited")
+  (customize-set-variable 'cg-path-to-global "/home/ehumche/private/gtags-6.6.3/bin/")
+  (customize-set-variable 'imenu-max-item-length "Unlimited")
+  (customize-set-variable 'cg-display-func-args t)
   (dolist (filter '("grep -v \"Test/\""
                     "grep -v \"_SUITE/\""
                     "grep -v \"/test-src/\""
