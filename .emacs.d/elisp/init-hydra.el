@@ -137,7 +137,7 @@
          "System"
          (("s p" proced "List-Process" :exit t)
           ("s m" memory-report "List-Memory" :exit t)
-          ("s n" netstat "List-Connections" :exit t)
+          ("s n" netstat "List-Network" :exit t)
           ("s e" list-environment "List-Environment" :exit t)
           ("s d" daemons "List-Daemons" :exit t)
           ("s c" tldr "Command-Cheatsheet" :exit t)))))))
