@@ -187,17 +187,19 @@
 
 
 ;;; Call-graph
-(when (require-package 'call-graph)
+(when (maybe-require-package 'call-graph)
   (require 'call-graph)
   (global-set-key (kbd "C-c g") #'call-graph)
-  (customize-set-variable 'cg-path-to-global "/home/ehumche/private/gtags-6.6.3/bin/")
+  (customize-set-variable 'cg-path-to-global "/home/ehumche/private/gtags-6.6.6/bin/")
   (customize-set-variable 'imenu-max-item-length "Unlimited")
   (customize-set-variable 'cg-display-func-args t)
   (dolist (filter '("grep -v \"Test/\""
-                    "grep -v \"_SUITE/\""
                     "grep -v \"/test-src/\""
-                    "grep -v \"/TestPkg/\""))
-    (add-to-list 'cg-search-filters filter)))
+                    "grep -v \"/unittest/\""
+                    "grep -v \"/test_src/\""))
+    (add-to-list 'cg-search-filters filter))
+  (setq cg-search-backend "Global"
+        cg-path-to-git-repo "/workspace/git/ehumche/epg__3/"))
 
 
 ;;; package-lint
