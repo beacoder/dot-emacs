@@ -60,7 +60,7 @@
 (global-set-key (kbd "C-x w") #'hydra-window/body)
 
 
-(require 'org-searcher)
+(require 'org-ivy-search)
 (defhydra hydra-quickness (:hint nil)
   "
                  ^Commands^
@@ -87,7 +87,7 @@
   ("N" move-text-down)
   ("h" hs-hide-block)
   ("H" hs-show-block)
-  ("o" org-searcher-search-view :exit t)
+  ("o" org-ivy-search-view :exit t)
   ("j" dumb-jump-go :exit t)
   ("i" hydra-pyim-start :exit t)
   ("w" modi/eww-search-words :exit t)
