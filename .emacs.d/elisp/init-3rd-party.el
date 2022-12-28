@@ -202,6 +202,10 @@
         cg-path-to-git-repo "/workspace/git/ehumche/epg__3/"))
 
 
+;;; org-ivy-search
+(maybe-require-package 'org-ivy-search)
+
+
 ;;; package-lint
 (maybe-require-package 'package-lint)
 
