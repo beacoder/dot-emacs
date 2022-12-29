@@ -234,26 +234,6 @@
   (add-hook 'after-init-hook 'nyan-mode))
 
 
-;;; symbol-overlay
-;; "p" => jump-prev
-;; "n" => jump-next
-;; "<" => jump-first
-;; ">" => jump-last
-;; "t" => toggle
-;; "r" => rename
-;; "w" => save
-(when (maybe-require-package 'symbol-overlay)
-  (dolist (hook '(prog-mode-hook html-mode-hook css-mode-hook yaml-mode-hook conf-mode-hook))
-    (add-hook hook 'symbol-overlay-mode))
-  (with-eval-after-load 'symbol-overlay
-    ;; (define-key symbol-overlay-mode-map (kbd "p") #'symbol-overlay-jump-prev)
-    ;; (define-key symbol-overlay-mode-map (kbd "n") #'symbol-overlay-jump-next)
-    (define-key symbol-overlay-mode-map (kbd "M-i") #'symbol-overlay-put)
-    (define-key symbol-overlay-mode-map (kbd "M-I") #'symbol-overlay-remove-all)
-    (define-key symbol-overlay-mode-map (kbd "M-n") #'symbol-overlay-switch-forward)
-    (define-key symbol-overlay-mode-map (kbd "M-p") #'symbol-overlay-switch-backward)))
-
-
 ;;; emojify
 (when (maybe-require-package 'emojify)
   (use-package emojify
