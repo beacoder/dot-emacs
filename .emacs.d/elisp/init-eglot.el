@@ -9,11 +9,10 @@
 ;;; useful key-bindings
 ;;----------------------------------------------------------------------------
 ;;; eglot
-;;  xref-find-definitions  (M-.)
-;;  xref-find-references   (M-])
-;;  complete-symbol        (C-M-i)
+;;  xref-find-definitions (M-.)
+;;  xref-find-references  (M-])
+;;  complete-symbol       (C-M-i)
 ;;  eglot-rename
-
 
 ;; For Emacs >= 27
 (setq read-process-output-max (* 1024 1024))
