@@ -10,6 +10,7 @@
 ;;----------------------------------------------------------------------------
 ;;; eglot
 ;;  xref-find-definitions (M-.)
+;;  xref-find-apropos     (M-?)
 ;;  xref-find-references  (M-])
 ;;  complete-symbol       (C-M-i)
 ;;  eglot-rename
