@@ -644,6 +644,7 @@
 (require 'init-calendar)
 (require 'ipc-udp)
 (require 'init-treemacs)
+(require 'init-eglot)
 
 
 (provide 'init-3rd-party)
