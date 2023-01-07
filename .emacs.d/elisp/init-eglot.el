@@ -19,7 +19,12 @@
 
 
 (when (maybe-require-package 'eglot)
-  (maybe-require-package 'consult-eglot))
+  (maybe-require-package 'consult-eglot)
+  ;; default enable eglot
+  (use-package eglot
+    :hook ((prog-mode . (lambda () (unless (derived-mode-p 'emacs-lisp-mode 'lisp-mode 'makefile-mode)
+                                (eglot-ensure))))
+           ((markdown-mode yaml-mode) . eglot-ensure))))
 
 
 (provide 'init-eglot)
