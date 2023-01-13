@@ -645,6 +645,7 @@
 (require 'ipc-udp)
 (require 'init-treemacs)
 (require 'init-eglot)
+(require 'init-advice)
 
 
 (provide 'init-3rd-party)
