@@ -2,49 +2,6 @@
 ;;; Commentary:
 ;;; Code:
 
-;;; Use light-weight selectrum instead of ivy
-
-;;; ivy - a generic completion frontend for Emacs
-;; "C-m"   => calls the current action
-;; "M-o"   => show actions, calls action after selection, exit
-;; "C-M-o" => show actions, calls action after selection, don't exit
-;; (when (maybe-require-package 'ivy)
-;;   (add-hook 'after-init-hook 'ivy-mode)
-;;   (with-eval-after-load 'ivy
-;;     (setq-default ivy-height 20
-;;                   ivy-use-virtual-buffers t
-;;                   ivy-virtual-abbreviate 'fullpath
-;;                   ivy-count-format ""
-;;                   projectile-completion-system 'ivy
-;;                   ;; ivy-dynamic-exhibit-delay-ms 150
-;;                   ivy-use-selectable-prompt t
-;;                   ivy-magic-tilde nil
-;;                   ivy-initial-inputs-alist
-;;                   '((man . "^")
-;;                     (woman . "^")))
-
-;;     ;; IDO-style directory navigation
-;;     (define-key ivy-minibuffer-map (kbd "RET") #'ivy-alt-done)
-;;     (dolist (k '("C-j" "C-RET"))
-;;       (define-key ivy-minibuffer-map (kbd k) #'ivy-immediate-done))
-
-;;     (define-key ivy-minibuffer-map (kbd "<up>") #'ivy-previous-line-or-history)
-
-;;     ;; show more results in counsel-ag
-;;     ;; (add-to-list 'ivy-height-alist (cons 'counsel-generic 30))
-
-;;     (when (maybe-require-package 'diminish)
-;;       (diminish 'ivy-mode)))
-
-;;   (when (maybe-require-package 'ivy-rich)
-;;     (setq ivy-virtual-abbreviate 'abbreviate
-;;           ivy-rich-switch-buffer-align-virtual-buffer nil
-;;           ivy-rich-path-style 'abbrev)
-;;     (with-eval-after-load 'ivy
-;;       (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line))
-;;     (add-hook 'ivy-mode-hook (lambda () (ivy-rich-mode ivy-mode)))))
-
-
 (when (maybe-require-package 'counsel)
   (with-eval-after-load 'counsel
     ;; don't override pop-to-mark-command
@@ -114,6 +71,72 @@ With prefix args, read directory from minibuffer."
            ("M-o" nil "back")
            ("C-g" nil)))))))
 (define-key ivy-minibuffer-map (kbd "M-o") 'ivy-dispatching-done-hydra)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ivy-preview functions similar to ivy-file-preview mode
+;; but with less code and cleanup files better than ivy-file-preview
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defvar ivy-preview-window-configuration nil
+  "The window configuration to be restored upon closing the buffer.")
+
+(defvar ivy-preview-selected-window nil
+  "The currently selected window.")
+
+(defvar ivy-preview-selected-window-line-nb nil
+  "The currently selected window line number.")
+
+(defvar ivy-preview-created-buffers ()
+  "List of newly created buffers.")
+
+(defvar ivy-preview-previous-buffers ()
+  "List of buffers created before opening counsel-git-grep-advice.")
+
+(defun ivy-preview-setup (&rest _)
+  "Setup `ivy-preview'."
+  (setq ivy-preview-window-configuration (current-window-configuration)
+        ivy-preview-selected-window (frame-selected-window)
+        ivy-preview-selected-window-line-nb (line-number-at-pos)
+        ivy-preview-created-buffers ()
+        ivy-preview-previous-buffers (buffer-list))
+  (advice-add 'ivy-set-index :after #'ivy-preview-iterate-action)
+  (advice-add 'ivy--exhibit :after #'ivy-preview-iterate-action)
+  (add-hook 'minibuffer-exit-hook #'ivy-preview-quit))
+
+(defun ivy-preview-quit ()
+  "Quit `ivy-preview'."
+  (when-let ((configuration ivy-preview-window-configuration)
+             (selected-window ivy-preview-selected-window))
+    (advice-remove 'ivy-set-index #'ivy-preview-iterate-action)
+    (advice-remove 'ivy--exhibit #'ivy-preview-iterate-action)
+    (remove-hook 'minibuffer-exit-hook #'ivy-preview-quit)
+    (set-window-configuration configuration)
+    (select-window selected-window)
+    (goto-char (point-min))
+    (forward-line (1- ivy-preview-selected-window-line-nb))
+    (mapc 'kill-buffer-if-not-modified ivy-preview-created-buffers)
+    (setq ivy-preview-created-buffers ())))
+
+(defun ivy-preview-iterate-action (&optional arg)
+  "Preview matched occurrence, ignore ARG."
+  (save-selected-window
+    (ignore arg)
+    (when-let* ((cur-string (nth ivy--index ivy--all-candidates))
+                (found (string-match "\\`\\(.*?\\):\\([0-9]+\\):\\(.*\\)\\'" cur-string))
+                (file-name (match-string-no-properties 1 cur-string))
+                (line-nb (match-string-no-properties 2 cur-string)))
+      (find-file-read-only-other-window file-name)
+      (with-no-warnings (goto-char (point-min))
+                        (forward-line (1- (string-to-number line-nb)))
+                        (pulse-momentary-highlight-region (line-beginning-position) (line-end-position)))
+      (unless (member
+               (buffer-name (window-buffer))
+               (mapcar (function buffer-name) ivy-preview-previous-buffers))
+        (add-to-list 'ivy-preview-created-buffers (window-buffer))))))
+
+;; hook up with counsel-git-grep
+;; note: ivy-preview-setup could work with any ivy-command which returns filename:linenumber as entry
+(advice-add 'counsel-git-grep :before #'ivy-preview-setup)
 
 
 (provide 'init-ivy)
