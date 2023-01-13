@@ -134,9 +134,9 @@ With prefix args, read directory from minibuffer."
                (mapcar (function buffer-name) ivy-preview-previous-buffers))
         (add-to-list 'ivy-preview-created-buffers (window-buffer))))))
 
-;; hook up with counsel-git-grep
-;; note: ivy-preview-setup could work with any ivy-command which returns filename:linenumber as entry
-(advice-add 'counsel-git-grep :before #'ivy-preview-setup)
+;; hook up with any ivy-command which returns filename:linenumber as entry
+(dolist (ivy-command '(counsel-git-grep counsel-ag))
+  (advice-add ivy-command :before #'ivy-preview-setup))
 
 
 (provide 'init-ivy)
