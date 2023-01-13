@@ -7,49 +7,50 @@
 ;;; Code:
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; counsel-git-grep enhancement
+;; ivy-preview functions similar to ivy-file-preview mode
+;; but with less code and cleanup files better than ivy-file-preview
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defvar counsel-git-grep-advice-window-configuration nil
+(defvar ivy-preview-window-configuration nil
   "The window configuration to be restored upon closing the buffer.")
 
-(defvar counsel-git-grep-advice-selected-window nil
+(defvar ivy-preview-selected-window nil
   "The currently selected window.")
 
-(defvar counsel-git-grep-advice-selected-window-line-nb nil
+(defvar ivy-preview-selected-window-line-nb nil
   "The currently selected window line number.")
 
-(defvar counsel-git-grep-advice-created-buffers ()
+(defvar ivy-preview-created-buffers ()
   "List of newly created buffers.")
 
-(defvar counsel-git-grep-advice-previous-buffers ()
+(defvar ivy-preview-previous-buffers ()
   "List of buffers created before opening counsel-git-grep-advice.")
 
-(defun counsel-git-grep-advice-save-window-configuration (&rest _)
-  "Save current window configuration."
-  (setq counsel-git-grep-advice-window-configuration (current-window-configuration)
-        counsel-git-grep-advice-selected-window (frame-selected-window)
-        counsel-git-grep-advice-selected-window-line-nb (line-number-at-pos)
-        counsel-git-grep-advice-created-buffers ()
-        counsel-git-grep-advice-previous-buffers (buffer-list))
-  (advice-add 'ivy-set-index :after #'counsel-git-grep-advice-iterate-action)
-  (advice-add 'ivy--exhibit :after #'counsel-git-grep-advice-iterate-action)
-  (add-hook 'minibuffer-exit-hook #'counsel-git-grep-advice-quit))
+(defun ivy-preview-setup (&rest _)
+  "Setup `ivy-preview'."
+  (setq ivy-preview-window-configuration (current-window-configuration)
+        ivy-preview-selected-window (frame-selected-window)
+        ivy-preview-selected-window-line-nb (line-number-at-pos)
+        ivy-preview-created-buffers ()
+        ivy-preview-previous-buffers (buffer-list))
+  (advice-add 'ivy-set-index :after #'ivy-preview-iterate-action)
+  (advice-add 'ivy--exhibit :after #'ivy-preview-iterate-action)
+  (add-hook 'minibuffer-exit-hook #'ivy-preview-quit))
 
-(defun counsel-git-grep-advice-quit ()
-  "Quit `counsel-git-grep'."
-  (when-let ((configuration counsel-git-grep-advice-window-configuration)
-             (selected-window counsel-git-grep-advice-selected-window))
-    (advice-remove 'ivy-set-index #'counsel-git-grep-advice-iterate-action)
-    (advice-remove 'ivy--exhibit #'counsel-git-grep-advice-iterate-action)
-    (remove-hook 'minibuffer-exit-hook #'counsel-git-grep-advice-quit)
+(defun ivy-preview-quit ()
+  "Quit `ivy-preview'."
+  (when-let ((configuration ivy-preview-window-configuration)
+             (selected-window ivy-preview-selected-window))
+    (advice-remove 'ivy-set-index #'ivy-preview-iterate-action)
+    (advice-remove 'ivy--exhibit #'ivy-preview-iterate-action)
+    (remove-hook 'minibuffer-exit-hook #'ivy-preview-quit)
     (set-window-configuration configuration)
     (select-window selected-window)
     (goto-char (point-min))
-    (forward-line (1- counsel-git-grep-advice-selected-window-line-nb))
-    (mapc 'kill-buffer-if-not-modified counsel-git-grep-advice-created-buffers)
-    (setq counsel-git-grep-advice-created-buffers ())))
+    (forward-line (1- ivy-preview-selected-window-line-nb))
+    (mapc 'kill-buffer-if-not-modified ivy-preview-created-buffers)
+    (setq ivy-preview-created-buffers ())))
 
-(defun counsel-git-grep-advice-iterate-action (&optional arg)
+(defun ivy-preview-iterate-action (&optional arg)
   "Preview matched occurrence, ignore ARG."
   (save-selected-window
     (ignore arg)
@@ -63,11 +64,12 @@
                         (pulse-momentary-highlight-region (line-beginning-position) (line-end-position)))
       (unless (member
                (buffer-name (window-buffer))
-               (mapcar (function buffer-name) counsel-git-grep-advice-previous-buffers))
-        (add-to-list 'counsel-git-grep-advice-created-buffers (window-buffer))))))
+               (mapcar (function buffer-name) ivy-preview-previous-buffers))
+        (add-to-list 'ivy-preview-created-buffers (window-buffer))))))
 
 ;; hook up with counsel-git-grep
-(advice-add 'counsel-git-grep :before #'counsel-git-grep-advice-save-window-configuration)
+;; note: ivy-preview-setup could work with any ivy-command which returns filename:linenumber as entry
+(advice-add 'counsel-git-grep :before #'ivy-preview-setup)
 
 
 (provide 'init-advice)
