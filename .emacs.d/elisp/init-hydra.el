@@ -92,7 +92,7 @@
   ("i" hydra-pyim-start :exit t)
   ("w" modi/eww-search-words :exit t)
   ("q" nil))
-(global-set-key (kbd "C-x q") #'hydra-quickness/body)
+(global-set-key (kbd "C-q") #'hydra-quickness/body)
 
 
 ;; pretty-hydra
