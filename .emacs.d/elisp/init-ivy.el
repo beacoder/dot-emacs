@@ -6,9 +6,9 @@
   (with-eval-after-load 'counsel
     ;; don't override pop-to-mark-command
     (define-key counsel-mode-map [remap pop-to-mark-command] nil)
-    ;; enable counsel-git-grep to read thing-at-point
-    (advice-remove 'counsel-git-grep #'smart/interactive-dwim-at-point)
-    (advice-add 'counsel-git-grep :around #'smart/interactive-dwim-at-point))
+    ;; enable reading with thing-at-point
+    (dolist (counsel-command '(counsel-git-grep counsel-git counsel-locate))
+      (advice-add counsel-command :around #'smart/interactive-dwim-at-point)))
 
   (setq-default counsel-mode-override-describe-bindings t)
   (add-hook 'after-init-hook 'counsel-mode)
