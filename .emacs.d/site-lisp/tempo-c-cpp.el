@@ -41,6 +41,8 @@
 ;; - either run M-x tempo-template-c-<xx> where <xx> is the name of the template (use TAB to have the list)
 ;; - or start to type the corresponding abbreviation (list follows) and hit C-RET or F5
 ;;
+;;; Code:
+;;
 ;; Feel free to adapt the templates to your own programming style.
 ;;
 ;; List of abbreviations:
@@ -74,24 +76,23 @@
 ;;            try                     try { ... } catch (std::exception& e) { ... }
 ;;            each                    std::for_each( ... );
 ;;            copy                    std::copy(input_iter.begin(), input_iter.end(), ... );
+;;            remove                  std::erase(std::remove(input_iter.begin(), input_iter.end(), ... );
 ;;            transform               std::transform(input_iter.begin(), input_iter.end(), out_iter, ... );
 ;;            ptr                     std::unique_ptr<...> ptr;
 ;;            make                    auto ptr = std::make_unique<...>(...);
 
 (require 'tempo)
+
 (setq tempo-interactive t)
 
 (defvar c-tempo-tags nil
-  "Tempo tags for C mode")
+  "Tempo tags for C mode.")
 
 (defvar c++-tempo-tags nil
-  "Tempo tags for C++ mode")
-
-(defvar c-tempo-keys-alist nil
-  "")
+  "Tempo tags for C++ mode.")
 
 (defun my-tempo-c-cpp-bindings ()
-  ;;(local-set-key (read-kbd-macro "<f8>") 'tempo-forward-mark)
+  "My tempo c-cpp-bindings."
   (local-set-key (read-kbd-macro "M-<return>") 'tempo-complete-tag)
   (local-set-key (read-kbd-macro "M-RET") 'tempo-complete-tag)
   (tempo-use-tag-list 'c-tempo-tags)
@@ -101,16 +102,17 @@
 (add-hook 'c++-mode-hook '(lambda () (my-tempo-c-cpp-bindings)))
 
 ;; the following macros allow to set point using the ~ character in tempo templates
-
 (defvar tempo-initial-pos nil
-  "Initial position in template after expansion")
+  "Initial position in template after expansion.")
+
 (defadvice tempo-insert( around tempo-insert-pos act )
   "Define initial position."
   (if (eq element '~)
       (setq tempo-initial-pos (point-marker))
     ad-do-it))
-(defadvice tempo-insert-template( around tempo-insert-template-pos act )
-  "Set initial position when defined. ChristophConrad"
+
+(defadvice tempo-insert-template (around tempo-insert-template-pos act )
+  "Set initial position when defined.  ChristophConrad."
   (setq tempo-initial-pos nil)
   ad-do-it
   (if tempo-initial-pos
@@ -260,7 +262,6 @@
 
 ;;;C++-Mode Templates
 ;;(setq max-lisp-eval-depth 500)
-
 (tempo-define-template "c++-class-noncopyable"
                        '(> "class " (p "class " var) n
                            > "{" > n
@@ -306,7 +307,7 @@
 (tempo-define-template "c++-getset"
                        '((p "type: "     type 'noinsert)
                          (p "variable: " var  'noinsert)
-                         (tempo-save-named 'virtual (if (y-or-n-p  "virtual? ") "virtual " ""))
+                         (tempo-save-named 'virtual (if (y-or-n-p "Use virtual? ") "virtual " ""))
                          (tempo-save-named 'm_var (concat "_" (tempo-lookup-named 'var)))
                          (tempo-save-named 'fnBase (upcase-initials (tempo-lookup-named 'var)))
                          (s type) " " (s m_var) ";" > n>
@@ -328,8 +329,8 @@
                        'c++-tempo-tags)
 
 (tempo-define-template "c++-for-range"
-                       '(> "for (" (if (y-or-n-p "const? ") "const " "")
-                           (if (y-or-n-p "use reference? ") "auto&" "auto")
+                       '(> "for (" (if (y-or-n-p "Use const? ") "const " "")
+                           (if (y-or-n-p "Use reference? ") "auto&" "auto")
                            " " (p "item: " it) " : " (p "range: " range) ")" n>
                            "{" > n> r n "}" > n>
                            )
@@ -398,6 +399,14 @@
                        "C++ STL copy"
                        'c++-tempo-tags)
 
+(tempo-define-template "c++-remove-iter"
+                       '(> "std::erase(std::remove(" (p "iterator: " iter) ".begin(), "
+                           (s iter) ".end(), " ~ ");" >
+                           )
+                       "remove"
+                       "C++ STL remove"
+                       'c++-tempo-tags)
+
 (tempo-define-template "c++-transform"
                        '(> "std::transform(" (p "input iterator: " in-iter) ".begin(), "
                            (s in-iter) ".end(), " (p "output iterator: " out-iter) ", " ~");" >
@@ -407,7 +416,7 @@
                        'c++-tempo-tags)
 
 (tempo-define-template "c++-smart_ptr"
-                       '(> "std::" (if (y-or-n-p "unique? ") "unique_ptr" "shared_ptr")
+                       '(> "std::" (if (y-or-n-p "Use unique? ") "unique_ptr" "shared_ptr")
                            "<" (p "type: " type) "> " (p "name: " name) ";" > n>
                            )
                        "ptr"
@@ -416,12 +425,13 @@
 
 (tempo-define-template "c++-make_ptr"
                        '(> "auto " (p "name: " name) " = std::"
-                           (if (y-or-n-p "unique? ") "make_unique" "make_shared")
+                           (if (y-or-n-p "Use unique? ") "make_unique" "make_shared")
                            "<" (p "type: " type) ">(" ~ ");" >
                            )
                        "make"
                        "Make C++ make_ptr"
                        'c++-tempo-tags)
+
 
 (provide 'tempo-c-cpp)
 ;;; tempo-c-cpp.el ends here
