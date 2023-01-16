@@ -10,9 +10,7 @@
   "Open the file path under cursor.
 If there is text selection, uses the text selection for path.
 If the path is starts with “http://”, open the URL in browser.
-Input path can be {relative, full path, URL}.
-This command is similar to `find-file-at-point' but without prompting for confirmation.
-"
+Input path can be {relative, full path, URL}."
   (interactive)
   (let ( (path (if (region-active-p)
                    (buffer-substring-no-properties (region-beginning) (region-end))
@@ -24,7 +22,7 @@ This command is similar to `find-file-at-point' but without prompting for confir
             (find-file path)
           (if (file-exists-p (concat path ".el"))
               (find-file (concat path ".el"))
-            (when (y-or-n-p (format "file doesn't exist: 「%s」. Create?" path) )
+            (when (y-or-n-p (format "File doesn't exist: 「%s」, Create?" path) )
               (find-file path ))))))))
 (global-set-key (kbd "C-c j") #'open-file-at-cursor)
 
@@ -99,9 +97,9 @@ See also: `xah-copy-to-register1', `insert-register'."
 
 (defun xah-copy-line-or-region ()
   "Copy current line, or text selection.
-When `universal-argument' is called first, copy whole buffer (respects `narrow-to-region').
-URL `http://ergoemacs.org/emacs/emacs_copy_cut_current_line.html'
-Version 2015-05-06"
+When `universal-argument' is called first,
+copy whole buffer (respects `narrow-to-region').
+URL `http://ergoemacs.org/emacs/emacs_copy_cut_current_line.html' Version 2015-05-06"
   (interactive)
   (let (p1 p2 msg)
     (if current-prefix-arg
@@ -117,9 +115,9 @@ Version 2015-05-06"
                (setq msg "line copied"))))
     (kill-ring-save p1 p2)
     (message msg)))
-      
+
 (defun kill-line-or-region ()
-  "kill whole current line, or text selection.
+  "Kill whole current line, or text selection.
 When `universal-argument' is called first, kill whole buffer (respects `narrow-to-region')."
   (interactive)
   (let (p1 p2 msg)
@@ -156,7 +154,7 @@ And save to `kill-ring', if it's a valid path."
   (interactive)
   (let ((file-name (buffer-file-name)))
     (message file-name)
-    (when (and file-name (file-exists-p file-name))
+    (when (file-exists-p file-name)
       (kill-new file-name))))
 (global-set-key (kbd "C-c C-f") #'show-buffer-name)
 
