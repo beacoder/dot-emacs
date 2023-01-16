@@ -83,8 +83,8 @@ With prefix args, read directory from minibuffer."
 (defvar ivy-preview-selected-window nil
   "The currently selected window.")
 
-(defvar ivy-preview-selected-window-line-nb nil
-  "The currently selected window line number.")
+(defvar ivy-preview-selected-window-position nil
+  "The currently selected window position.")
 
 (defvar ivy-preview-created-buffers ()
   "List of newly created buffers.")
@@ -96,7 +96,7 @@ With prefix args, read directory from minibuffer."
   "Setup `ivy-preview'."
   (setq ivy-preview-window-configuration (current-window-configuration)
         ivy-preview-selected-window (frame-selected-window)
-        ivy-preview-selected-window-line-nb (line-number-at-pos)
+        ivy-preview-selected-window-position (point)
         ivy-preview-created-buffers ()
         ivy-preview-previous-buffers (buffer-list))
   (advice-add 'ivy-set-index :after #'ivy-preview-iterate-action)
@@ -112,8 +112,7 @@ With prefix args, read directory from minibuffer."
     (remove-hook 'minibuffer-exit-hook #'ivy-preview-quit)
     (set-window-configuration configuration)
     (select-window selected-window)
-    (goto-char (point-min))
-    (forward-line (1- ivy-preview-selected-window-line-nb))
+    (goto-char ivy-preview-selected-window-position)
     (mapc 'kill-buffer-if-not-modified ivy-preview-created-buffers)
     (setq ivy-preview-created-buffers ())))
 
