@@ -655,6 +655,7 @@
                   (sh-mode         . bash-ts-mode)
                   (typescript-mode . typescript-ts-mode)))))
 
+
 ;;; other setting
 (require 'init-hydra)
 (require 'init-git)
