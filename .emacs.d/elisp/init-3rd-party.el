@@ -113,16 +113,19 @@
 ;; "C-c M-r" => ggtags-find-tag-regexp
 ;; "C-c M-f" => ggtags-find-file
 ;; "C-c M-g" => ggtags-grep
-(when (require-package 'ggtags)
+(when (maybe-require-package 'ggtags)
   (with-eval-after-load 'ggtags
-    (define-key ggtags-mode-prefix-map "\M-r" #'ggtags-find-tag-regexp))
-  (add-hook 'c-mode-common-hook
-            (lambda () (when (and (executable-find "global")
-                             ;; check existence of GTAGS
-                             (not (string-match-p "GTAGS not found" (shell-command-to-string "global -p")))
-                             (not (member major-mode ggtags-exclude-modes)))
-                    (setq gtags-suggested-key-mapping t)
-                    (ggtags-mode 1)))))
+    (define-key ggtags-mode-prefix-map "\M-r" #'ggtags-find-tag-regexp)
+    (defun enable-ggtags-mode ()
+      "Enable ggtags mode."
+      (when (and (executable-find "global")
+                 ;; check existence of GTAGS
+                 (not (string-match-p "GTAGS not found" (shell-command-to-string "global -p")))
+                 (not (member major-mode ggtags-exclude-modes)))
+        (setq gtags-suggested-key-mapping t)
+        (ggtags-mode 1)))
+    (dolist (c-mode-hook '(c-mode-common-hook c++-ts-mode-hook))
+      (add-hook c-mode-hook #'enable-ggtags-mode))))
 
 
 ;;; weather report
@@ -622,6 +625,41 @@
     (define-key symbol-overlay-mode-map (kbd "M-I") #'symbol-overlay-remove-all)
     (define-key symbol-overlay-mode-map (kbd "M-n") #'symbol-overlay-switch-forward)
     (define-key symbol-overlay-mode-map (kbd "M-p") #'symbol-overlay-switch-backward)))
+
+
+;; emacs-29 new features
+(when (>= emacs-major-version 29)
+
+  ;; tree-sitter: language parser
+  ;; @see https://github.com/casouri/tree-sitter-module
+  ;;      https://git.savannah.gnu.org/cgit/emacs.git/tree/admin/notes/tree-sitter/starter-guide?h=feature/tree-sitter
+  ;; (when (maybe-require-package 'treesit)
+  ;;   (use-package treesit))
+
+  (when (and (maybe-require-package 'tree-sitter)
+             (maybe-require-package 'tree-sitter-langs))
+    ;; (require 'tree-sitter)
+    ;; (require 'tree-sitter-langs)
+
+    (setq treesit-extra-load-path
+          (list (expand-file-name "tree-sitter" user-emacs-directory))
+          major-mode-remap-alist
+          '((c-mode          . c-ts-mode)
+            (c++-mode        . c++-ts-mode)
+            (cmake-mode      . cmake-ts-mode)
+            (conf-toml-mode  . toml-ts-mode)
+            (csharp-mode     . csharp-ts-mode)
+            (css-mode        . css-ts-mode)
+            (dockerfile-mode . dockerfile-ts-mode)
+            (go-mode         . go-ts-mode)
+            (java-mode       . java-ts-mode)
+            (json-mode       . json-ts-mode)
+            (js-json-mode    . json-ts-mode)
+            (js-mode         . js-ts-mode)
+            ;; (python-mode     . python-ts-mode)
+            (rust-mode       . rust-ts-mode)
+            (sh-mode         . bash-ts-mode)
+            (typescript-mode . typescript-ts-mode)))))
 
 
 ;;; other setting
