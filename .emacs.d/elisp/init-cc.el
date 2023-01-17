@@ -33,6 +33,7 @@
 (setq c-default-style "linux")
 
 (defun fix-c-indent-offset-according-to-syntax-context (key val)
+  "Fix indent offset according to KEY and VAL."
   ;; remove the old element
   (setq c-offsets-alist (delq (assoc key c-offsets-alist) c-offsets-alist))
   ;; new value
@@ -45,6 +46,7 @@
 
 ;; personal settings
 (defun my-c-mode-common-hook ()
+  "My c mode common hook."
   ;; give me NO newline automatically after electric expressions are entered
   (setq c-auto-newline nil)
   ;; other customizations
@@ -80,14 +82,16 @@
 ;; use <tab> to indent region if anything is selected
 ;; fledermaus came up with this
 (defun fledermaus-maybe-tab ()
+  "<tab> to indent region."
   (interactive)
   (if (and transient-mark-mode mark-active)
       (indent-region (region-beginning) (region-end) nil)
     (c-indent-command)))
 
-(add-hook 'c-mode-common-hook #'my-c-mode-common-hook)
-(add-hook 'c-mode-common-hook #'(lambda () (local-set-key [(tab)] #'fledermaus-maybe-tab)))
-(add-hook 'c-mode-common-hook #'hs-minor-mode)
+(dolist (c-mode-hook '(c-mode-common-hook c-ts-mode-hook c++-ts-mode-hook))
+  (add-hook c-mode-hook #'my-c-mode-common-hook)
+  (add-hook c-mode-hook #'(lambda () (local-set-key [(tab)] #'fledermaus-maybe-tab)))
+  (add-hook c-mode-hook #'hs-minor-mode))
 
 
 (when (is-modern-emacs)
@@ -104,23 +108,22 @@
   ;; flycheck
   (add-hook 'c++-mode-hook
             #'(lambda () (setq flycheck-gcc-include-path
-                          '("."
-                            "../include/*"
-                            "../src/*"
-                            "/usr/include"
-                            "/usr/local/include/*"
-                            "/usr/include/c++/4.8.5/*"
-                            "/usr/include/boost/*")))))
+                               '("."
+                                 "../include/*"
+                                 "../src/*"
+                                 "/usr/include"
+                                 "/usr/local/include/*"
+                                 "/proj/epg-tools/gcc/8.1.0.rhel6/include/c++/8.1.0/*"
+                                 "/usr/include/boost/*")))))
 
 
 ;; @see https://stackoverflow.com/questions/7299893/getting-rid-of-buffer-has-running-process-confirmation-when-the-process-is-a-f
-;; Stop asking me all the time when killing the buffer
+;; stop asking me all the time.
 (defadvice flymake-start-syntax-check-process (after
                                                cheeso-advice-flymake-start-syntax-check-1
                                                (cmd args dir)
                                                activate compile)
-  ;; set flag to allow exit without query on any
-  ;;active flymake processes
+  "Set flag to allow exit without query on any active flymake processes."
   (set-process-query-on-exit-flag ad-return-value nil))
 
 
