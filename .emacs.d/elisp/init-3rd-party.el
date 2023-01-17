@@ -124,7 +124,7 @@
                  (not (member major-mode ggtags-exclude-modes)))
         (setq gtags-suggested-key-mapping t)
         (ggtags-mode 1)))
-    (dolist (c-mode-hook '(c-mode-common-hook c++-ts-mode-hook))
+    (dolist (c-mode-hook '(c-mode-common-hook c-ts-mode-hook c++-ts-mode-hook))
       (add-hook c-mode-hook #'enable-ggtags-mode))))
 
 
