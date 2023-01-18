@@ -76,7 +76,7 @@
 ;;            try                     try { ... } catch (std::exception& e) { ... }
 ;;            each                    std::for_each( ... );
 ;;            copy                    std::copy(input_iter.begin(), input_iter.end(), ... );
-;;            remove                  std::erase(std::remove(input_iter.begin(), input_iter.end(), ... );
+;;            remove                  container.erase(std::remove_if(container.begin(), container.end(), ...), container.end());
 ;;            transform               std::transform(input_iter.begin(), input_iter.end(), out_iter, ... );
 ;;            ptr                     std::unique_ptr<...> ptr;
 ;;            make                    auto ptr = std::make_unique<...>(...);
@@ -98,8 +98,8 @@
   (tempo-use-tag-list 'c-tempo-tags)
   (tempo-use-tag-list 'c++-tempo-tags))
 
-(add-hook 'c-mode-hook   '(lambda () (my-tempo-c-cpp-bindings)))
-(add-hook 'c++-mode-hook '(lambda () (my-tempo-c-cpp-bindings)))
+(dolist (c-mode-hook '(c-mode-common-hook c-ts-mode-hook c++-ts-mode-hook))
+  (add-hook c-mode-hook #'my-tempo-c-cpp-bindings))
 
 ;; the following macros allow to set point using the ~ character in tempo templates
 (defvar tempo-initial-pos nil
@@ -400,8 +400,8 @@
                        'c++-tempo-tags)
 
 (tempo-define-template "c++-remove-iter"
-                       '(> "std::erase(std::remove(" (p "iterator: " iter) ".begin(), "
-                           (s iter) ".end(), " ~ ");" >
+                       '(> (p "container: " container) ".erase(std::remove_if(" (s container) ".begin(), "
+                           (s container) ".end(), " ~ "), " (s container)".end());" >
                            )
                        "remove"
                        "C++ STL remove"
