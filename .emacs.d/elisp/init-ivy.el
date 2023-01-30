@@ -120,6 +120,7 @@ With prefix args, read directory from minibuffer."
   "Preview matched occurrence, ignore ARG."
   (save-selected-window
     (ignore arg)
+    (deactivate-mark)
     (when-let* ((cur-string (nth ivy--index ivy--all-candidates))
                 (found (string-match "\\`\\(.*?\\):\\([0-9]+\\):\\(.*\\)\\'" cur-string))
                 (file-name (match-string-no-properties 1 cur-string))
