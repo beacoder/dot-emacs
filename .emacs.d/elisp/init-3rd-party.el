@@ -628,7 +628,6 @@
 
 ;; emacs-29 new features
 (when (>= emacs-major-version 29)
-
   ;; tree-sitter: language parser
   ;; @see https://github.com/casouri/tree-sitter-module
   ;;      https://git.savannah.gnu.org/cgit/emacs.git/tree/admin/notes/tree-sitter/starter-guide?h=feature/tree-sitter
@@ -637,8 +636,10 @@
     (use-package treesit
       :ensure nil
       :init (setq treesit-extra-load-path
-                  (list (expand-file-name "tree-sitter" user-emacs-directory))
+                  ;; grammars
+                  (list (expand-file-name "treesit-grammars" user-emacs-directory))
                   major-mode-remap-alist
+                  ;; modes powered by treesit
                   '((c-mode          . c-ts-mode)
                     (c++-mode        . c++-ts-mode)
                     (cmake-mode      . cmake-ts-mode)
