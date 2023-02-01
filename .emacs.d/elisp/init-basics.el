@@ -64,7 +64,7 @@ The argument has the same meaning as in `apropos'."
   :ensure nil
   :hook (after-init . recentf-mode)
   :init (setq recentf-max-menu-items  100
-              recentf-max-saved-items 1000
+              recentf-max-saved-items 10000
               recentf-exclude '(
                                 ;; "/tmp/"
                                 "/ssh:"
