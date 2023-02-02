@@ -74,8 +74,7 @@
 ;;            using                   using namespace ...
 ;;            functor                 struct { return_type operator () { } };
 ;;            try                     try { ... } catch (std::exception& e) { ... }
-;;            ptr                     std::unique_ptr<...> ptr;
-;;            make                    auto ptr = std::make_unique<...>(...);
+;;            raii                    auto ptr = std::make_unique<...>(...);
 ;; --- C++ STL algorithms
 ;;            each                    std::for_each( ... );
 ;;            copy                    std::copy(input_iter.begin(), input_iter.end(), ... );
@@ -417,20 +416,12 @@
                        "C++ STL transform"
                        'c++-tempo-tags)
 
-(tempo-define-template "c++-smart_ptr"
-                       '(> "std::" (if (y-or-n-p "Use unique? ") "unique_ptr" "shared_ptr")
-                           "<" (p "type: " type) "> " (p "name: " name) ";" > n>
-                           )
-                       "ptr"
-                       "C++ smart_ptr"
-                       'c++-tempo-tags)
-
 (tempo-define-template "c++-make_ptr"
-                       '(> "auto " (p "name: " name) " = std::"
+                       '(> "auto " (p "pointer name: " name) " = std::"
                            (if (y-or-n-p "Use unique? ") "make_unique" "make_shared")
                            "<" (p "type: " type) ">(" ~ ");" >
                            )
-                       "make"
+                       "raii"
                        "Make C++ make_ptr"
                        'c++-tempo-tags)
 
