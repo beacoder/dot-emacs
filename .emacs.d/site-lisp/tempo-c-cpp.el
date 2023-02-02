@@ -74,12 +74,14 @@
 ;;            using                   using namespace ...
 ;;            functor                 struct { return_type operator () { } };
 ;;            try                     try { ... } catch (std::exception& e) { ... }
+;;            ptr                     std::unique_ptr<...> ptr;
+;;            make                    auto ptr = std::make_unique<...>(...);
+;; --- C++ STL algorithms
 ;;            each                    std::for_each( ... );
 ;;            copy                    std::copy(input_iter.begin(), input_iter.end(), ... );
 ;;            remove                  container.erase(std::remove_if(container.begin(), container.end(), ...), container.end());
 ;;            transform               std::transform(input_iter.begin(), input_iter.end(), out_iter, ... );
-;;            ptr                     std::unique_ptr<...> ptr;
-;;            make                    auto ptr = std::make_unique<...>(...);
+;;            diff                    std::set_difference(first.begin(), first.end(), second.begin(), second.end(), std::inserter(third, ...));
 
 (require 'tempo)
 
@@ -430,6 +432,14 @@
                            )
                        "make"
                        "Make C++ make_ptr"
+                       'c++-tempo-tags)
+
+(tempo-define-template "c++-set_difference"
+                       '(> "std::set_difference(" (p "first set: " first) ".begin(), " (s first) ".end(), "
+                           (p "second set: " second) ".begin(), " (s second) ".end(), "
+                           "std::inserter(" (p "third set: " third) ", " ~ "))")
+                       "diff"
+                       "C++ STL set_difference"
                        'c++-tempo-tags)
 
 
