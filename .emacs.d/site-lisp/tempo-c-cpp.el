@@ -1,9 +1,10 @@
 ;;; tempo-c-cpp.el --- Abbrevs for c/c++ programming -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (C) 2008  Sebastien Varrette
+;; Copyright (C) 2018-2023 Huming Chen
 ;;
 ;; Author: Sebastien Varrette <Sebastien.Varrette@uni.lu>
-;; Maintainer: Sebastien Varrette <Sebastien.Varrette@uni.lu>
+;; Maintainer: Huming Chen <chenhuming@gmail.com>
 ;; Created: 18 Jan 2008
 ;; Version: 0.1
 ;; Keywords: template, C, C++
