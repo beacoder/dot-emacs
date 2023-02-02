@@ -1,6 +1,6 @@
 ;;; tempo-c-cpp.el --- Abbrevs for c/c++ programming -*- lexical-binding: t; -*-
 ;;
-;; Copyright (C) 2008  Sebastien Varrette
+;; Copyright (C) 2008      Sebastien Varrette
 ;; Copyright (C) 2018-2023 Huming Chen
 ;;
 ;; Author: Sebastien Varrette <Sebastien.Varrette@uni.lu>
