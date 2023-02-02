@@ -82,6 +82,7 @@
 ;;            remove                  container.erase(std::remove_if(container.begin(), container.end(), ...), container.end());
 ;;            transform               std::transform(input_iter.begin(), input_iter.end(), out_iter, ... );
 ;;            diff                    std::set_difference(first.begin(), first.end(), second.begin(), second.end(), std::inserter(third, ...));
+;;            sort                    std::sort(input_iter.begin(), input_iter.end());
 
 (require 'tempo)
 
@@ -432,6 +433,13 @@
                            "std::inserter(" (p "third set: " third) ", " ~ "))")
                        "diff"
                        "C++ STL set_difference"
+                       'c++-tempo-tags)
+
+(tempo-define-template "c++-sort"
+                       '(> "std::sort(" (p "input iterator: " in-iter) ".begin(), "
+                           (s in-iter) ".end());")
+                       "sort"
+                       "C++ STL sort"
                        'c++-tempo-tags)
 
 
