@@ -113,7 +113,8 @@ With prefix args, read directory from minibuffer."
     (set-window-configuration configuration)
     (select-window selected-window)
     (goto-char ivy-preview-selected-window-position)
-    (mapc 'kill-buffer-if-not-modified ivy-preview-created-buffers)
+    (cl-loop for buffer in ivy-preview-created-buffers
+             do (kill-buffer-if-not-modified buffer))
     (setq ivy-preview-created-buffers ())))
 
 (defun ivy-preview-iterate-action (&optional arg)
@@ -131,7 +132,8 @@ With prefix args, read directory from minibuffer."
                         (pulse-momentary-highlight-region (line-beginning-position) (line-end-position)))
       (unless (member
                (buffer-name (window-buffer))
-               (mapcar (function buffer-name) ivy-preview-previous-buffers))
+               (cl-loop for buffer in ivy-preview-previous-buffers
+                        collect (buffer-name buffer)))
         (add-to-list 'ivy-preview-created-buffers (window-buffer))))))
 
 ;; hook up with any ivy-command which returns filename:linenumber as entry
