@@ -83,6 +83,7 @@
 ;;            transform               std::transform(input_iter.begin(), input_iter.end(), out_iter, ... );
 ;;            diff                    std::set_difference(first.begin(), first.end(), second.begin(), second.end(), std::inserter(third, ...));
 ;;            sort                    std::sort(input_iter.begin(), input_iter.end());
+;;            find                    std::find(input_iter.begin(), input_iter.end(), ...);
 
 (require 'tempo)
 
@@ -440,6 +441,14 @@
                            (s in-iter) ".end());")
                        "sort"
                        "C++ STL sort"
+                       'c++-tempo-tags)
+
+(tempo-define-template "c++-find"
+                       '(> "const auto iter = std::" (if (y-or-n-p "Use find_if? ") "find_if(" "find(")
+                           (p "input iterator: " in-iter) ".begin(), "
+                           (s in-iter) ".end(), " ~ ");")
+                       "find"
+                       "C++ STL find"
                        'c++-tempo-tags)
 
 
