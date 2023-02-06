@@ -79,7 +79,7 @@
 ;; --- C++ STL algorithms
 ;;            each                    std::for_each( ... );
 ;;            copy                    std::copy(input_iter.begin(), input_iter.end(), ... );
-;;            remove                  container.erase(std::remove_if(container.begin(), container.end(), ...), container.end());
+;;            remove                  container.erase(std::remove(container.begin(), container.end(), ...), container.end());
 ;;            transform               std::transform(input_iter.begin(), input_iter.end(), out_iter, ... );
 ;;            diff                    std::set_difference(first.begin(), first.end(), second.begin(), second.end(), std::inserter(third, ...));
 ;;            sort                    std::sort(input_iter.begin(), input_iter.end());
@@ -403,7 +403,7 @@
                        'c++-tempo-tags)
 
 (tempo-define-template "c++-remove-iter"
-                       '(> (p "container: " container) ".erase(std::remove_if(" (s container) ".begin(), "
+                       '(> (p "container: " container) ".erase(std::remove(" (s container) ".begin(), "
                            (s container) ".end(), " ~ "), " (s container)".end());" >
                            )
                        "remove"
