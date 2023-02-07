@@ -620,8 +620,7 @@
              (treesit-available-p))
     (use-package treesit-auto
       :hook (after-init . global-treesit-auto-mode)
-      :init (setq treesit-auto-install 'prompt
-                  treesit-extra-load-path
+      :init (setq treesit-extra-load-path
                   (list (expand-file-name "treesit-grammars" user-emacs-directory))))))
 
 
