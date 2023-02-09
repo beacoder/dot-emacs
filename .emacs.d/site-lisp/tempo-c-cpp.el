@@ -431,7 +431,7 @@
 (tempo-define-template "c++-set_difference"
                        '(> "std::set_difference(" (p "first set: " first) ".begin(), " (s first) ".end(), "
                            (p "second set: " second) ".begin(), " (s second) ".end(), "
-                           "std::inserter(" (p "third set: " third) ", " ~ "))")
+                           "std::inserter(" (p "third set: " third) ", " ~ "));")
                        "diff"
                        "C++ STL set_difference"
                        'c++-tempo-tags)
