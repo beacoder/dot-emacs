@@ -616,12 +616,29 @@
   ;; @see https://github.com/casouri/tree-sitter-module
   ;;      https://git.savannah.gnu.org/cgit/emacs.git/tree/admin/notes/tree-sitter/starter-guide?h=feature/tree-sitter
   ;;      https://blog.markhepburn.com/posts/experimenting-with-the-built-in-treesitter-support-in-emacs
-  (when (and (maybe-require-package 'treesit-auto)
-             (treesit-available-p))
-    (use-package treesit-auto
-      :hook (after-init . global-treesit-auto-mode)
+  (when (treesit-available-p)
+    (use-package treesit
+      :ensure nil
       :init (setq treesit-extra-load-path
-                  (list (expand-file-name "treesit-grammars" user-emacs-directory))))))
+                  (list (expand-file-name "treesit-grammars" user-emacs-directory))
+                  major-mode-remap-alist
+                  ;; modes powered by treesit
+                  '((c-mode          . c-ts-mode)
+                    (c++-mode        . c++-ts-mode)
+                    (cmake-mode      . cmake-ts-mode)
+                    (conf-toml-mode  . toml-ts-mode)
+                    (csharp-mode     . csharp-ts-mode)
+                    (css-mode        . css-ts-mode)
+                    (dockerfile-mode . dockerfile-ts-mode)
+                    (go-mode         . go-ts-mode)
+                    (java-mode       . java-ts-mode)
+                    (json-mode       . json-ts-mode)
+                    (js-json-mode    . json-ts-mode)
+                    (js-mode         . js-ts-mode)
+                    ;; (python-mode     . python-ts-mode)
+                    (rust-mode       . rust-ts-mode)
+                    (sh-mode         . bash-ts-mode)
+                    (typescript-mode . typescript-ts-mode))))))
 
 
 ;;; other setting
