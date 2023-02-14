@@ -78,14 +78,14 @@
 ;;            raii                    auto ptr = std::make_unique<...>(...);
 ;; --- C++ STL algorithms
 ;;            each                    std::for_each( ... );
-;;            copy                    std::copy(input_iter.begin(), input_iter.end(), ... );
+;;            copy                    std::copy(container.begin(), container.end(), ... );
 ;;            remove                  container.erase(std::remove(container.begin(), container.end(), ...), container.end());
-;;            transform               std::transform(input_iter.begin(), input_iter.end(), out_iter, ... );
+;;            transform               std::transform(in_container.begin(), incontainer.end(), out_container, ... );
 ;;            diff                    std::set_difference(first.begin(), first.end(), second.begin(), second.end(), std::inserter(third, ...));
-;;            sort                    std::sort(input_iter.begin(), input_iter.end());
-;;            find                    std::find(input_iter.begin(), input_iter.end(), ...);
+;;            sort                    std::sort(container.begin(), container.end());
+;;            find                    std::find(container.begin(), container.end(), ...);
 ;; --- C++ BOOST algorithms
-;;            bremove                 boost::remove_erase(container, ...);
+;;            erase                   boost::remove_erase(container, ...);
 
 (require 'tempo)
 
@@ -454,6 +454,13 @@
                            (s container) ".end(), " ~ ");")
                        "find"
                        "C++ STL find"
+                       'c++-tempo-tags)
+
+(tempo-define-template "c++-boost-erase"
+                       '(> "boost::" (if (y-or-n-p "Use remove_erase_if? ") "remove_erase_if(" "remove_erase(")
+                           (p "container: " container) ", " ~ ");")
+                       "erase"
+                       "C++ BOOST erase"
                        'c++-tempo-tags)
 
 
