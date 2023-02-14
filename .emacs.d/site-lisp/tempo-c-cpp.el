@@ -84,6 +84,8 @@
 ;;            diff                    std::set_difference(first.begin(), first.end(), second.begin(), second.end(), std::inserter(third, ...));
 ;;            sort                    std::sort(input_iter.begin(), input_iter.end());
 ;;            find                    std::find(input_iter.begin(), input_iter.end(), ...);
+;; --- C++ BOOST algorithms
+;;            bremove                 boost::remove_erase(container, ...);
 
 (require 'tempo)
 
@@ -387,33 +389,36 @@
 
 (tempo-define-template "c++-for_each"
                        '(> "std::for_each("
-                           (p "container: " cont) ".begin(), "
-                           (s cont) ".end(), " ~
+                           (p "container: " container) ".begin(), "
+                           (s container) ".end(), " ~
                            (p "method: " method) ");" >
                            )
                        "each"
                        "C++ STL for_each with method call no args)"
                        'c++-tempo-tags)
 
-(tempo-define-template "c++-copy-iter"
-                       '(> "std::copy(" (p "iterator: " iter) ".begin(), "
-                           (s iter) ".end(), " ~ ");" >
+(tempo-define-template "c++-copy"
+                       '(> "std::" (if (y-or-n-p "Use copy_if? ") "copy_if(" "copy(")
+                           (p "container: " container) ".begin(), "
+                           (s container) ".end(), " ~ ");" >
                            )
                        "copy"
                        "C++ STL copy"
                        'c++-tempo-tags)
 
-(tempo-define-template "c++-remove-iter"
-                       '(> (p "container: " container) ".erase(std::remove(" (s container) ".begin(), "
-                           (s container) ".end(), " ~ "), " (s container)".end());" >
+(tempo-define-template "c++-remove"
+                       '(> (p "container: " container) ".erase(std::"
+                           (if (y-or-n-p "Use remove_if? ") "remove_if(" "remove(")
+                           (s container) ".begin(), " (s container) ".end(), " ~ "),"
+                           (s container)".end());" >
                            )
                        "remove"
                        "C++ STL remove"
                        'c++-tempo-tags)
 
 (tempo-define-template "c++-transform"
-                       '(> "std::transform(" (p "input iterator: " in-iter) ".begin(), "
-                           (s in-iter) ".end(), " (p "output iterator: " out-iter) ", " ~");" >
+                       '(> "std::transform(" (p "input container: " in-container) ".begin(), "
+                           (s in-container) ".end(), " (p "output container: " out-container) ", " ~");" >
                            )
                        "transform"
                        "C++ STL transform"
@@ -437,16 +442,16 @@
                        'c++-tempo-tags)
 
 (tempo-define-template "c++-sort"
-                       '(> "std::sort(" (p "input iterator: " in-iter) ".begin(), "
-                           (s in-iter) ".end());")
+                       '(> "std::sort(" (p "container: " container) ".begin(), "
+                           (s container) ".end());")
                        "sort"
                        "C++ STL sort"
                        'c++-tempo-tags)
 
 (tempo-define-template "c++-find"
-                       '(> "const auto iter = std::" (if (y-or-n-p "Use find_if? ") "find_if(" "find(")
-                           (p "input iterator: " in-iter) ".begin(), "
-                           (s in-iter) ".end(), " ~ ");")
+                       '(> "auto iter = std::" (if (y-or-n-p "Use find_if? ") "find_if(" "find(")
+                           (p "container: " container) ".begin(), "
+                           (s container) ".end(), " ~ ");")
                        "find"
                        "C++ STL find"
                        'c++-tempo-tags)
