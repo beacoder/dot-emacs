@@ -128,8 +128,7 @@ With prefix args, read directory from minibuffer."
                 (line-nb (match-string-no-properties 2 cur-string)))
       (find-file-read-only-other-window file-name)
       (with-no-warnings (goto-char (point-min))
-                        (forward-line (1- (string-to-number line-nb)))
-                        (pulse-momentary-highlight-region (line-beginning-position) (line-end-position)))
+                        (forward-line (1- (string-to-number line-nb))))
       (unless (member
                (buffer-name (window-buffer))
                (cl-loop for buffer in ivy-preview-previous-buffers
