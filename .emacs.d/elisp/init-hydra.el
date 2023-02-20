@@ -66,7 +66,7 @@
                  ^Commands^
 --------------------------------------------
 [_a_] Counsel-Ag         [_g_] Counsel-Git-Grep [_f_] Counsel-Git      [_l_] Counsel-Locate     [_P_] Move-Text-Up
-[_u_] Update-GTAGS       [_c_] Mode-Compile     [_C_] Compile          [_r_] Recent-File        [_N_] Move-Text-Down
+[_u_] Update-GTAGS       [_c_] Compile          [_C_] Mode-Compile     [_r_] Recent-File        [_N_] Move-Text-Down
 [_p_] Previous-Mark      [_n_] Next-Mark        [_s_] Sort-Lines       [_d_] Remove-Duplicate   [_o_] Org-Search-View
 [_j_] Dumb-Jump          [_i_] Pin-Yin          [_w_] Google-Word      [_h_] Hs-Hide-Block      [_H_] Hs-Show-Block
 [_q_] Quit
@@ -76,8 +76,8 @@
   ("f" counsel-git :exit t)
   ("l" counsel-locate :exit t)
   ("u" ggtags-update-tags :exit t)
-  ("c" mode-compile :exit t)
-  ("C" compile :exit t)
+  ("c" compile :exit t)
+  ("C" mode-compile :exit t)
   ("r" counsel-recentf :exit t)
   ("p" pop-to-mark-command)
   ("n" unpop-to-mark-command)
