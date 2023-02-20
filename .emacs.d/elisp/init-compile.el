@@ -1,6 +1,6 @@
-;;----------------------------------------------------------------------------
-;; compile command setting
-;;----------------------------------------------------------------------------
+;;; init-compile.el --- compile command setting -*- lexical-binding: t -*-
+;;; Commentary:
+;;; Code:
 
 (setq-default compilation-scroll-output t)
 
