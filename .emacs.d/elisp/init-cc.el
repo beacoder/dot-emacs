@@ -50,8 +50,9 @@
   ;; give me NO newline automatically after electric expressions are entered
   (setq c-auto-newline nil)
   ;; other customizations
-  (setq c-basic-offset 4)
-  (setq tab-width 8)
+  (setq c-basic-offset 4
+        c-ts-mode-indent-offset 4
+        tab-width 8)
   ;; show function name in mode-line
   (which-function-mode t)
   ;; enable flyspell for comments in source code
