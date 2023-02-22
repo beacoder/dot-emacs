@@ -57,7 +57,8 @@
 (defalias 'td 'sanityinc/tidy-buffer-xml)
 
 ;; misc
-(defalias 'cc 'clone-indirect-buffer)
+(defalias 'cl 'clone-indirect-buffer)
+(defalias 'cc 'c++-mode)
 (defalias 'sc 'scratch)
 (defalias 'wg 'wgrep-change-to-wgrep-mode)
 (defalias 'dc 'desktop-change-dir)
