@@ -58,7 +58,6 @@
 
 ;; misc
 (defalias 'cl 'clone-indirect-buffer)
-(defalias 'cc 'c++-mode)
 (defalias 'sc 'scratch)
 (defalias 'wg 'wgrep-change-to-wgrep-mode)
 (defalias 'dc 'desktop-change-dir)
