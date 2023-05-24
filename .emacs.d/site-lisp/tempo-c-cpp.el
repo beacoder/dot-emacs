@@ -82,6 +82,7 @@
 ;;            remove                  container.erase(std::remove(container.begin(), container.end(), ...), container.end());
 ;;            transform               std::transform(in_container.begin(), incontainer.end(), out_container, ... );
 ;;            diff                    std::set_difference(first.begin(), first.end(), second.begin(), second.end(), std::inserter(third, ...));
+;;            includes                std::includes(first.begin(), first.end(), second.begin(), second.end());
 ;;            sort                    std::sort(container.begin(), container.end());
 ;;            find                    std::find(container.begin(), container.end(), ...);
 ;; --- C++ BOOST algorithms
@@ -439,6 +440,13 @@
                            "std::inserter(" (p "destination container: " third) ", " ~ "));")
                        "diff"
                        "C++ STL set_difference"
+                       'c++-tempo-tags)
+
+(tempo-define-template "c++-includes"
+                       '(> "std::includes(" (p "first sorted container: " first) ".begin(), " (s first) ".end(), "
+                           (p "second sorted container: " second) ".begin(), " (s second) ".end());")
+                       "includes"
+                       "C++ STL includes"
                        'c++-tempo-tags)
 
 (tempo-define-template "c++-sort"
