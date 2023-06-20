@@ -655,7 +655,7 @@
   :config
   ;; https://www.xnbeast.com/create-openai-chatgpt-account/
   ;; https://platform.openai.com/account/api-keys
-  (setq gptel-api-key "your-secret-openai-key"))
+  (setq gptel-api-key (gptel-api-key-from-auth-source)))
 
 
 ;;; other setting
