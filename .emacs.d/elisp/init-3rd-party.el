@@ -646,6 +646,17 @@
                     (typescript-mode . typescript-ts-mode))))))
 
 
+;;; chatgpt client
+;;  "gptel"   => start a chatgpt session
+;;  "C-c RET" => send question
+(use-package gptel
+  :ensure t
+  :config
+  ;; https://www.xnbeast.com/create-openai-chatgpt-account/
+  ;; https://platform.openai.com/account/api-keys
+  (setq gptel-api-key "your-secret-openai-key"))
+
+
 ;;; other setting
 (require 'init-hydra)
 (require 'init-git)
