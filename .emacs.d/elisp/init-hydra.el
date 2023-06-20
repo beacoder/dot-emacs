@@ -69,7 +69,7 @@
 [_u_] Update-GTAGS       [_c_] Compile          [_C_] Mode-Compile     [_r_] Recent-File        [_N_] Move-Text-Down
 [_p_] Previous-Mark      [_n_] Next-Mark        [_s_] Sort-Lines       [_d_] Remove-Duplicate   [_o_] Org-Search-View
 [_j_] Dumb-Jump          [_i_] Pin-Yin          [_w_] Google-Word      [_h_] Hs-Hide-Block      [_H_] Hs-Show-Block
-[_q_] Quit
+[_t_] ChatGPT            [_q_] Quit
   "
   ("a" smart/counsel-ag :exit t)
   ("g" counsel-git-grep :exit t)
@@ -91,6 +91,7 @@
   ("j" dumb-jump-go :exit t)
   ("i" hydra-pyim-start :exit t)
   ("w" modi/eww-search-words :exit t)
+  ("t" gptel :exit t)
   ("q" nil))
 (global-set-key (kbd "C-x q") #'hydra-quickness/body)
 
