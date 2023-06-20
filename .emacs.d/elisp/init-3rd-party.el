@@ -647,8 +647,9 @@
 
 
 ;;; chatgpt client
-;;  "gptel"   => start a chatgpt session
-;;  "C-c RET" => send question
+;;  "gptel"      => start a chatgpt session
+;;  "C-c RET"    => send to chatgpt
+;;  "gptel-send" => send to chatgpt
 (use-package gptel
   :ensure t
   :config
