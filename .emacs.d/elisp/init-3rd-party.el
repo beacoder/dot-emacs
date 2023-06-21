@@ -650,13 +650,14 @@
 ;;  "gptel"      => start a chatgpt session
 ;;  "C-c RET"    => send to chatgpt
 ;;  "gptel-send" => send to chatgpt
-(use-package gptel
-  :ensure t
-  :config
-  ;; https://www.xnbeast.com/create-openai-chatgpt-account/
-  ;; https://platform.openai.com/account/api-keys
-  (setq gptel-api-key (gptel-api-key-from-auth-source)
-        gptel-default-mode #'org-mode))
+(when (maybe-require-package 'markdown-mode)
+  (use-package gptel
+    :ensure t
+    :config
+    ;; https://www.xnbeast.com/create-openai-chatgpt-account/
+    ;; https://platform.openai.com/account/api-keys
+    (setq gptel-api-key (gptel-api-key-from-auth-source)
+          gptel-default-mode #'markdown-mode)))
 
 
 ;;; other setting
