@@ -68,7 +68,7 @@
 [_a_] Counsel-Ag         [_g_] Counsel-Git-Grep [_f_] Counsel-Git      [_l_] Counsel-Locate     [_P_] Move-Text-Up
 [_u_] Update-GTAGS       [_c_] Compile          [_C_] Mode-Compile     [_r_] Recent-File        [_N_] Move-Text-Down
 [_p_] Previous-Mark      [_n_] Next-Mark        [_s_] Sort-Lines       [_d_] Remove-Duplicate   [_o_] Org-Search-View
-[_i_] Pin-Yin          [_w_] Google-Word      [_h_] Hs-Hide-Block      [_H_] Hs-Show-Block      [_t_] ChatGPT
+[_i_] Pin-Yin            [_w_] Google-Word      [_h_] Hs-Hide-Block    [_H_] Hs-Show-Block      [_t_] ChatGPT
 [_q_] Quit
   "
   ("a" smart/counsel-ag :exit t)
