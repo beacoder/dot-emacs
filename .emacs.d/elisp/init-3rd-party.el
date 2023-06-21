@@ -304,16 +304,6 @@
   (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
 
 
-;;; dumb-jump - Find tag with Ag/Git-grep/Grep
-(when (require-package 'dumb-jump)
-  (dumb-jump-mode)
-  (define-key dumb-jump-mode-map (kbd "C-M-p") nil)
-  (setq dumb-jump-selector 'ivy
-        ;; dumb-jump-prefer-searcher 'ag
-        dumb-jump-force-searcher 'ag
-        dumb-jump-max-find-time 60)) ;; for big project, wait one minute
-
-
 ;;; scratch - Create buffers in same mode
 (maybe-require-package 'scratch)
 
