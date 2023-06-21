@@ -655,7 +655,8 @@
   :config
   ;; https://www.xnbeast.com/create-openai-chatgpt-account/
   ;; https://platform.openai.com/account/api-keys
-  (setq gptel-api-key (gptel-api-key-from-auth-source)))
+  (setq gptel-api-key (gptel-api-key-from-auth-source)
+        gptel-default-mode #'org-mode))
 
 
 ;;; other setting
