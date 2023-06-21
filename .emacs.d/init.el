@@ -10,11 +10,21 @@
 ;; Buy VPS and setup SS on bandwagonhost
 ;; Install SS-GUI and config SS address, pwd..
 ;;
-;; (setq url-gateway-method 'socks
-;;       socks-server '("Default server" "127.0.0.1" 1080 5))
-
 ;;;
 ;;; Code:
+
+;;----------------------------------------------------------------------------
+;; proxy setting
+;;----------------------------------------------------------------------------
+
+;; proxy for url-retrieve, used by eww, w3m...
+(setq-default url-proxy-services
+                '(("no_proxy" . "work\\.com")
+                  ("https" . "localhost:1087")
+                  ("http" . "localhost:1087")
+                  ;; socks not working, @see url-default-find-proxy-for-url
+                  ;; ("socks5" . "localhost:1080")
+                  ))
 
 ;;; Directory structure
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/elisp"))
