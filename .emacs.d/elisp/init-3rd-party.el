@@ -501,7 +501,7 @@
 ;;; online compiler: https://wandbox.org
 ;;  1.specify language with "// #wandbox lang: c++"
 ;;  2.run wandbox
-(maybe-require-package 'wandbox)
+(use-package wandbox :ensure t)
 
 
 ;;; show indentation
@@ -557,13 +557,12 @@
 
 
 ;;; dims surrounding text
-(when (maybe-require-package 'focus)
-  (use-package focus))
+(use-package focus :ensure t)
 
 
 ;;; process
 (use-package proced
-    :ensure nil
+    :ensure t
     :init
     (setq-default proced-format 'verbose)
     (setq proced-auto-update-flag t
@@ -571,18 +570,15 @@
 
 
 ;;; list-environment
-(when (maybe-require-package 'list-environment)
-  (use-package list-environment))
+(use-package list-environment :ensure t)
 
 
 ;;; system services/daemons
-(when (maybe-require-package 'daemons)
-  (use-package daemons))
+(use-package daemons :ensure t)
 
 
 ;;; cheatsheets for console commands
-(when (maybe-require-package 'tldr)
-  (use-package tldr))
+(use-package tldr :ensure t)
 
 
 ;;; symbol-overlay
@@ -664,7 +660,6 @@
 (require 'init-org)
 (require 'init-eww)
 (require 'init-flycheck)
-(require-package 'buffer-move)
 (require 'init-http)
 (require 'init-calendar)
 (require 'ipc-udp)
