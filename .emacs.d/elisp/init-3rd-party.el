@@ -653,7 +653,9 @@
     ;; @see https://github.com/ch11ng/exwm/wiki#bootstrap
     (require 'exwm)
     (require 'exwm-config)
-    (exwm-enable)))
+    (exwm-enable)
+    ;; fix ediff conflict with EXWM issue
+    (setq ediff-window-setup-function 'ediff-setup-windows-plain)))
 
 
 ;;; other setting
