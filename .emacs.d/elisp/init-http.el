@@ -22,7 +22,7 @@
   :if (featurep 'xwidget-internal)
   :bind (("C-c w" . xwidget-webkit-browse-url)
          :map xwidget-webkit-mode-map
-         ("h" . xwidget-hydra/body))
+         ("?" . xwidget-hydra/body))
   :pretty-hydra
   ((:title (pretty-hydra-title "Webkit" 'faicon "chrome" :face 'all-the-icons-blue)
            :color amaranth :quit-key "q")
@@ -42,7 +42,7 @@
      ("u" xwidget-webkit-current-url "show url" :exit t)
      ("v" xwwp-follow-link "follow link" :exit t)
      ("w" xwidget-webkit-current-url-message-kill "copy url" :exit t)
-     ("?" describe-mode "help" :exit t)
+     ("h" describe-mode "help" :exit t)
      ("Q" quit-window "quit" :exit t))))
   :init
   ;; Link navigation
