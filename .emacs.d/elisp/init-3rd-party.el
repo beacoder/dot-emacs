@@ -646,7 +646,7 @@
 
 
 ;;; Emacs X Window Manager
-(when (display-graphic-p)
+(when (and (display-graphic-p) *is-linux*)
   (use-package exwm
     :ensure t
     :config
