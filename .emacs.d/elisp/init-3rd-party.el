@@ -655,7 +655,12 @@
     (require 'exwm-config)
     (exwm-enable)
     ;; fix ediff conflict with EXWM issue
-    (setq ediff-window-setup-function 'ediff-setup-windows-plain)))
+    (setq ediff-window-setup-function 'ediff-setup-windows-plain)
+    ;; @see https://www.reddit.com/r/emacs/comments/z75ric/how_to_spawn_external_terminal_in_exwm/
+    (defun my-exwm-exterm ()
+      (interactive)
+      (async-shell-command "mate-terminal")
+      (delete-window))))
 
 
 ;;; other setting
