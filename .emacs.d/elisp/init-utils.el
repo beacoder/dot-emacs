@@ -140,6 +140,7 @@ White space here is any of: space, tab, EMACS newline (line feed, ASCII 10)."
 
 (defconst *is-windows* (eq system-type 'windows-nt))
 (defconst *is-a-mac* (eq system-type 'darwin))
+(defconst *is-linux* (eq system-type 'gnu/linux))
 
 (defun is-modern-emacs ()
   "If EMACS version is greater than 24.3, return true else false."
