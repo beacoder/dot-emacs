@@ -639,10 +639,21 @@
 (use-package gptel
     :ensure t
     :config
-    ;; https://www.xnbeast.com/create-openai-chatgpt-account/
-    ;; https://platform.openai.com/account/api-keys
+    ;; @see https://www.xnbeast.com/create-openai-chatgpt-account/
+    ;; @see https://platform.openai.com/account/api-keys
     (setq gptel-api-key (gptel-api-key-from-auth-source)
           gptel-default-mode #'markdown-mode))
+
+
+;;; Emacs X Window Manager
+(when (display-graphic-p)
+  (use-package exwm
+    :ensure t
+    :config
+    ;; @see https://github.com/ch11ng/exwm/wiki#bootstrap
+    (require 'exwm)
+    (require 'exwm-config)
+    (exwm-enable)))
 
 
 ;;; other setting
