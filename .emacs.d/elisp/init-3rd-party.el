@@ -681,7 +681,6 @@
 (require 'init-http)
 (require 'init-calendar)
 (require 'ipc-udp)
-(require 'init-treemacs)
 (require 'init-eglot)
 
 
