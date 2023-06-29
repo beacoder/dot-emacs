@@ -16,13 +16,14 @@
 ;;----------------------------------------------------------------------------
 ;; proxy setting for url-retrieve, used by eww, w3m...
 ;;----------------------------------------------------------------------------
-(setq url-proxy-services
-      '(("no_proxy" . "^.*example.com")
-        ("https" . "localhost:1087")
-        ("http" . "localhost:1087")
-        ;; socks not working, @see url-default-find-proxy-for-url
-        ;; ("socks5" . "localhost:1080")
-        ))
+(customize-set-variable 'url-proxy-services
+                        '(("no_proxy" . "^.*example.com")
+                          ("https" . "localhost:1087")
+                          ("http" . "localhost:1087")
+                          ;; socks not working, @see url-default-find-proxy-for-url
+                          ;; ("socks5" . "localhost:1080")
+                          ))
+
 
 ;;; Directory structure
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/elisp"))
