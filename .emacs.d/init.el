@@ -105,7 +105,6 @@
 
 
 ;;; Load configs for specific features and modes
-(require 'init-register)
 (require 'init-hippie-expand)
 (require 'init-cc)
 (require 'tempo-c-cpp)
@@ -117,7 +116,6 @@
   (require 'init-3rd-party)
   (require 'init-windows)
   (require 'init-nxml)
-  (require 'init-html)
   (require 'init-css)
   (require 'init-javascript)
   (require 'init-ruby)
