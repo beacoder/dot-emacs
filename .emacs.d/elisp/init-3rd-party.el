@@ -666,7 +666,6 @@
 ;;; other setting
 (require 'init-hydra)
 (require 'init-git)
-;; (require 'init-helm)
 (require 'init-company)
 ;; (require 'init-rtags)
 (require 'init-dictionary)
