@@ -26,7 +26,7 @@
 ;; "C-x v l"              => git history of current file
 ;; "C-x v t"              => git timemachine
 (when (maybe-require-package 'magit)
-  (setq-default magit-diff-refine-hunk t)
+  (setq-default magit-diff-refine-hunk 'all)
 
   (global-set-key (kbd "C-x g") #'magit-status)
   (global-set-key (kbd "C-x M-g") #'magit-dispatch)
