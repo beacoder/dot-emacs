@@ -429,19 +429,6 @@
   (use-package lua-mode))
 
 
-;; Another Atom/RSS reader
-(when (maybe-require-package 'newsticker)
-  (use-package newsticker
-    :ensure nil
-    :hook (newsticker-treeview-item-mode . (lambda () (text-scale-set +2)))
-    :init (setq newsticker-url-list
-                '(("Planet Emacslife" "https://planet.emacslife.com/atom.xml")
-                  ("Mastering Emacs" "http://www.masteringemacs.org/feed/")
-                  ("Oremacs" "https://oremacs.com/atom.xml")
-                  ("EmacsCast" "https://pinecast.com/feed/emacscast")
-                  ("Emacs Reddit" "https://www.reddit.com/r/emacs.rss")))))
-
-
 ;; Preview files in dired
 (when (maybe-require-package 'peep-dired)
   (use-package peep-dired
