@@ -665,6 +665,9 @@
       (interactive)
       (async-shell-command "mate-terminal")
       (delete-window))
+    ;; leave only one workspace
+    (while (> (exwm-workspace--count) 1)
+      (exwm-workspace-delete))
     ;;; enable editing for app inside EXWM
     ;;  "C-c C-'" => start editing
     ;;  "C-c C-c" => finish editing
