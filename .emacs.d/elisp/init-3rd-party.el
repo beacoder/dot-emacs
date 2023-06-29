@@ -660,7 +660,12 @@
     (defun my-exwm-exterm ()
       (interactive)
       (async-shell-command "mate-terminal")
-      (delete-window))))
+      (delete-window))
+    ;;; enable editing for app inside EXWM
+    ;;  "C-c C-'" => start editing
+    ;;  "C-c C-c" => finish editing
+    ;;  "C-c C-k" => cancel editing
+    (use-package exwm-edit :ensure t)))
 
 
 ;;; other setting
