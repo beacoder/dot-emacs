@@ -128,7 +128,6 @@
 (require 'init-basics)
 (require 'init-imenu)
 (require 'init-session)
-(require 'init-cperl)
 (require 'init-productivity)
 ;; measure startup time at the end
 (require 'init-benchmarking)
