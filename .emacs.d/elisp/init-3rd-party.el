@@ -658,21 +658,15 @@
     (require 'exwm)
     (require 'exwm-config)
     (exwm-enable)
-    ;; fix ediff conflict with EXWM issue
-    (setq ediff-window-setup-function 'ediff-setup-windows-plain)
-    ;; @see https://stackoverflow.com/questions/3679930/how-to-automatically-remove-or-prevent-popping-up-async-shell-command-in-ema
-    (defun async-shell-hide-poping-window (orig &rest args) (save-window-excursion (apply orig args)))
-    (advice-add 'async-shell-command :around 'async-shell-hide-poping-window)
-    ;; @see https://www.reddit.com/r/emacs/comments/z75ric/how_to_spawn_external_terminal_in_exwm/
-    (defun my-exwm-exterm () (interactive) (async-shell-command "mate-terminal"))
-    ;; leave only one workspace
-    (while (> (exwm-workspace--count) 1)
-      (exwm-workspace-delete))
     ;;; enable editing for app inside EXWM
     ;;  "C-c C-'" => start editing
     ;;  "C-c C-c" => finish editing
     ;;  "C-c C-k" => cancel editing
     (use-package exwm-edit :ensure t)
+    ;; fix ediff conflict with EXWM issue
+    (setq ediff-window-setup-function 'ediff-setup-windows-plain)
+    ;; leave only one workspace
+    (while (> (exwm-workspace--count) 1) (exwm-workspace-delete))
     ;; @see https://github.com/ch11ng/exwm/issues/198
     ;; show window title in EXWM buffer name
     (defun exwm-rename-buffer ()
@@ -682,7 +676,17 @@
                (if (<= (length exwm-title) 50) exwm-title
                  (concat (substring exwm-title 0 49) "...")))))
     (add-hook 'exwm-update-class-hook 'exwm-rename-buffer)
-    (add-hook 'exwm-update-title-hook 'exwm-rename-buffer)))
+    (add-hook 'exwm-update-title-hook 'exwm-rename-buffer)
+    ;; @see https://stackoverflow.com/questions/3679930/how-to-automatically-remove-or-prevent-popping-up-async-shell-command-in-ema
+    (defun async-shell-hide-poping-window (orig &rest args) (save-window-excursion (apply orig args)))
+    (advice-add 'async-shell-command :around 'async-shell-hide-poping-window)
+    ;; @see https://stackoverflow.com/questions/16119853/elisp-close-async-shell-command-window-after-the-command-finishes
+    (defun kill-async-buffer-when-done (process signal)
+      (and (process-buffer process) (string-match-p "finished" signal)
+           (kill-buffer (process-buffer process))))
+    (advice-add 'shell-command-sentinel :after 'kill-async-buffer-when-done)
+    ;; @see https://www.reddit.com/r/emacs/comments/z75ric/how_to_spawn_external_terminal_in_exwm/
+    (defun my-exwm-exterm () (interactive) (async-shell-command "mate-terminal"))))
 
 
 ;;; other setting
