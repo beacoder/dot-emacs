@@ -660,11 +660,11 @@
     (exwm-enable)
     ;; fix ediff conflict with EXWM issue
     (setq ediff-window-setup-function 'ediff-setup-windows-plain)
+    ;; @see https://stackoverflow.com/questions/3679930/how-to-automatically-remove-or-prevent-popping-up-async-shell-command-in-ema
+    (defun async-shell-hide-poping-window (orig &rest args) (save-window-excursion (apply orig args)))
+    (advice-add 'async-shell-command :around 'async-shell-hide-poping-window)
     ;; @see https://www.reddit.com/r/emacs/comments/z75ric/how_to_spawn_external_terminal_in_exwm/
-    (defun my-exwm-exterm ()
-      (interactive)
-      (async-shell-command "mate-terminal")
-      (delete-window))
+    (defun my-exwm-exterm () (interactive) (async-shell-command "mate-terminal"))
     ;; leave only one workspace
     (while (> (exwm-workspace--count) 1)
       (exwm-workspace-delete))
