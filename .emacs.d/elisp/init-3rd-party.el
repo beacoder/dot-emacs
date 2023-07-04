@@ -673,8 +673,7 @@
     ;;  "C-c C-c" => finish editing
     ;;  "C-c C-k" => cancel editing
     (use-package exwm-edit :ensure t)
-
-    ;; @seehttps://github.com/ch11ng/exwm/issues/198
+    ;; @see https://github.com/ch11ng/exwm/issues/198
     ;; show window title in EXWM buffer name
     (defun exwm-rename-buffer ()
       (interactive)
