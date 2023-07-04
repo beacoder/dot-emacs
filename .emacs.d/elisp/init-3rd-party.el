@@ -672,7 +672,18 @@
     ;;  "C-c C-'" => start editing
     ;;  "C-c C-c" => finish editing
     ;;  "C-c C-k" => cancel editing
-    (use-package exwm-edit :ensure t)))
+    (use-package exwm-edit :ensure t)
+
+    ;; @seehttps://github.com/ch11ng/exwm/issues/198
+    ;; show window title in EXWM buffer name
+    (defun exwm-rename-buffer ()
+      (interactive)
+      (exwm-workspace-rename-buffer
+       (concat exwm-class-name ":"
+               (if (<= (length exwm-title) 50) exwm-title
+                 (concat (substring exwm-title 0 49) "...")))))
+    (add-hook 'exwm-update-class-hook 'exwm-rename-buffer)
+    (add-hook 'exwm-update-title-hook 'exwm-rename-buffer)))
 
 
 ;;; other setting
