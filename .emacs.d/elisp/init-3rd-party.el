@@ -678,8 +678,8 @@
     (add-hook 'exwm-update-class-hook 'exwm-rename-buffer)
     (add-hook 'exwm-update-title-hook 'exwm-rename-buffer)
     ;; @see https://stackoverflow.com/questions/3679930/how-to-automatically-remove-or-prevent-popping-up-async-shell-command-in-ema
-    (defun async-shell-hide-poping-window (orig &rest args) (save-window-excursion (apply orig args)))
-    (advice-add 'async-shell-command :around 'async-shell-hide-poping-window)
+    (defun async-shell-hide-popping-window (orig &rest args) (save-window-excursion (apply orig args)))
+    (advice-add 'async-shell-command :around 'async-shell-hide-popping-window)
     ;; @see https://stackoverflow.com/questions/16119853/elisp-close-async-shell-command-window-after-the-command-finishes
     (defun kill-async-buffer-when-done (process signal)
       (and (process-buffer process) (string-match-p "finished" signal)
