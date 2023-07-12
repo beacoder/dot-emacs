@@ -111,15 +111,6 @@
 (keyfreq-autosave-mode 1)
 
 
-;;; regex-tool setting
-;; "C-c C-c" => force an update
-;; "C-c C-k" => quit regex-tool
-(when (maybe-require-package 'regex-tool)
-  (require 'regex-tool)
-  (set-default regex-tool-backend 'perl)
-  (global-set-key (kbd "C-c C-r") #'regex-tool))
-
-
 ;;; zenburn setting
 ;; need to setup putty color which goes well with zenburn first
 (require-package 'zenburn-theme)
@@ -687,6 +678,16 @@
     (advice-add 'shell-command-sentinel :after 'kill-async-buffer-when-done)
     ;; @see https://www.reddit.com/r/emacs/comments/z75ric/how_to_spawn_external_terminal_in_exwm/
     (defun my-exwm-exterm () (interactive) (async-shell-command "mate-terminal"))))
+
+
+;;; replacement for replace-regexp
+(use-package visual-regexp
+  :ensure t
+  :config
+  (define-key global-map (kbd "C-c r") 'vr/replace)
+  (define-key global-map (kbd "C-c q") 'vr/query-replace)
+  ;; if you use multiple-cursors, this is for you:
+  (define-key global-map (kbd "C-c m") 'vr/mc-mark))
 
 
 ;;; other setting
