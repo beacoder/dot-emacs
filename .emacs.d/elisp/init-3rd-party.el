@@ -633,8 +633,8 @@
     (exwm-enable)
     ;;; enable editing for app inside EXWM
     ;;  "C-c C-RET" => start editing
-    ;;  "C-c C-c" => finish editing
-    ;;  "C-c C-k" => cancel editing
+    ;;  "C-c C-c"   => finish editing
+    ;;  "C-c C-k"   => cancel editing
     (use-package exwm-edit :ensure t
       :config
       (exwm-input-set-key (kbd "C-c C-<return>") #'exwm-edit--compose))
