@@ -632,10 +632,12 @@
     (require 'exwm-config)
     (exwm-enable)
     ;;; enable editing for app inside EXWM
-    ;;  "C-c C-'" => start editing
+    ;;  "C-c C-RET" => start editing
     ;;  "C-c C-c" => finish editing
     ;;  "C-c C-k" => cancel editing
-    (use-package exwm-edit :ensure t)
+    (use-package exwm-edit :ensure t
+      :config
+      (exwm-input-set-key (kbd "C-c C-<return>") #'exwm-edit--compose))
     ;; fix ediff conflict with EXWM issue
     (setq ediff-window-setup-function 'ediff-setup-windows-plain)
     ;; leave only one workspace
