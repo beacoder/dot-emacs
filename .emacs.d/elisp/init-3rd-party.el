@@ -607,7 +607,6 @@
                     (rust-mode       . rust-ts-mode)
                     (sh-mode         . bash-ts-mode)
                     (typescript-mode . typescript-ts-mode))
-                  treesit-load-name-override-list nil
                   treesit-font-lock-level 4))))
 
 
