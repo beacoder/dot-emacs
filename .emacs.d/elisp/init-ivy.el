@@ -92,6 +92,15 @@ With prefix args, read directory from minibuffer."
 (defvar ivy-preview-previous-buffers ()
   "List of buffers created before opening counsel-git-grep-advice.")
 
+(defconst ivy-preview-buffers-threshhold 25
+  "Number of newly created buffers allowed before cleaning.")
+
+(defun ivy-preview-clean ()
+  "Clean newly created buffers."
+  (cl-loop for buffer in ivy-preview-created-buffers
+           do (kill-buffer-if-not-modified buffer))
+  (setq ivy-preview-created-buffers ()))
+
 (defun ivy-preview-setup (&rest _)
   "Setup `ivy-preview'."
   (setq ivy-preview-window-configuration (current-window-configuration)
@@ -113,9 +122,7 @@ With prefix args, read directory from minibuffer."
     (set-window-configuration configuration)
     (select-window selected-window)
     (goto-char ivy-preview-selected-window-position)
-    (cl-loop for buffer in ivy-preview-created-buffers
-             do (kill-buffer-if-not-modified buffer))
-    (setq ivy-preview-created-buffers ())))
+    (ivy-preview-clean)))
 
 (defun ivy-preview-iterate-action (&optional arg)
   "Preview matched occurrence, ignore ARG."
@@ -126,6 +133,8 @@ With prefix args, read directory from minibuffer."
                 (found (string-match "\\`\\(.*?\\):\\([0-9]+\\):\\(.*\\)\\'" cur-string))
                 (file-name (match-string-no-properties 1 cur-string))
                 (line-nb (match-string-no-properties 2 cur-string)))
+      (when (> (length ivy-preview-created-buffers) ivy-preview-buffers-threshhold)
+        (ivy-preview-clean))
       (find-file-read-only-other-window file-name)
       (with-no-warnings (goto-char (point-min))
                         (forward-line (1- (string-to-number line-nb)))
