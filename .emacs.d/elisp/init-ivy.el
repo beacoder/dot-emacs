@@ -97,9 +97,10 @@ With prefix args, read directory from minibuffer."
 
 (defun ivy-preview-clean ()
   "Clean newly created buffers."
-  (cl-loop for buffer in ivy-preview-created-buffers
-           do (kill-buffer-if-not-modified buffer))
-  (setq ivy-preview-created-buffers ()))
+  (with-temp-message "clean ivy-preview-created-buffers ..."
+    (cl-loop for buffer in ivy-preview-created-buffers
+             do (kill-buffer-if-not-modified buffer))
+    (setq ivy-preview-created-buffers ())))
 
 (defun ivy-preview-setup (&rest _)
   "Setup `ivy-preview'."
