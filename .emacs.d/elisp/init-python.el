@@ -49,12 +49,7 @@
      :map anaconda-mode-map
      ("M-]" . anaconda-mode-find-references)
      ("M-=" . anaconda-mode-find-assignments)
-     ("M-?" . anaconda-mode-show-doc)))
-
-  (when (maybe-require-package 'company-anaconda)
-    (with-eval-after-load 'company
-      (with-eval-after-load 'python
-        (push 'company-anaconda company-backends)))))
+     ("M-?" . anaconda-mode-show-doc))))
 
 
 (provide 'init-python)
