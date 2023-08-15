@@ -8,6 +8,7 @@
 ;;; Code:
 
 (use-package corfu
+  :ensure t
   :custom
   (corfu-auto t)
   (corfu-auto-prefix 2)
@@ -21,6 +22,7 @@
 
 (unless (display-graphic-p)
   (use-package corfu-terminal
+    :ensure t
     :hook (global-corfu-mode . corfu-terminal-mode)))
 
 
