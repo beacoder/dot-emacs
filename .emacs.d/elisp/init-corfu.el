@@ -1,39 +1,45 @@
 ;;; init-corfu.el --- Interactive completion in buffers -*- lexical-binding: t -*-
+;;;
 ;;; Commentary:
+;;
+;; Auto-completion configurations.
+;;
+
 ;;; Code:
 
-;; WAITING: haskell-mode sets tags-table-list globally, breaks tags-completion-at-point-function
-;; TODO Default sort order should place [a-z] before punctuation
-
-(setq tab-always-indent 'complete)
-(when (maybe-require-package 'orderless)
-  (with-eval-after-load 'vertico
-    (require 'orderless)
-    (setq completion-styles '(orderless basic))))
-(setq completion-category-defaults nil
-      completion-category-overrides nil)
-(setq completion-cycle-threshold 4)
-
-(when (maybe-require-package 'corfu)
-  (setq-default corfu-auto t)
-  (with-eval-after-load 'eshell
-    (add-hook 'eshell-mode-hook (lambda () (setq-local corfu-auto nil))))
-  (setq-default corfu-quit-no-match 'separator)
-  (add-hook 'after-init-hook 'global-corfu-mode)
+(use-package corfu
+  :custom
+  (corfu-auto t)
+  (corfu-auto-prefix 2)
+  (corfu-preview-current nil)
+  (corfu-auto-delay 0.1)
+  (corfu-popupinfo-delay '(0.2 . 0.1))
+  :bind ("M-/" . completion-at-point)
+  :hook ((after-init . global-corfu-mode)
+         (global-corfu-mode . corfu-popupinfo-mode)))
 
 
+(unless (display-graphic-p)
+  (use-package corfu-terminal
+    :hook (global-corfu-mode . corfu-terminal-mode)))
 
-  (with-eval-after-load 'corfu
-    (corfu-popupinfo-mode))
 
-  ;; Make Corfu also work in terminals, without disturbing usual behaviour in GUI
-  (when (maybe-require-package 'corfu-terminal)
-    (with-eval-after-load 'corfu
-      (corfu-terminal-mode)))
-
-  ;; TODO: https://github.com/jdtsmith/kind-icon
-  )
+;; Add extensions
+(use-package cape
+  :ensure t
+  :init
+  (setq cape-dict-case-fold t)
+  (add-to-list 'completion-at-point-functions #'cape-dabbrev)
+  (add-to-list 'completion-at-point-functions #'cape-file)
+  (add-to-list 'completion-at-point-functions #'cape-elisp-block)
+  (add-to-list 'completion-at-point-functions #'cape-keyword)
+  (add-to-list 'completion-at-point-functions #'cape-abbrev)
+  :config
+  (require 'cape-yasnippet)
+  (add-to-list 'completion-at-point-functions #'cape-yasnippet))
 
 
 (provide 'init-corfu)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; init-corfu.el ends here
