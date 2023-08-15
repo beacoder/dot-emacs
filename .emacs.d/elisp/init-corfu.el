@@ -34,9 +34,10 @@
   (add-to-list 'completion-at-point-functions #'cape-elisp-block)
   (add-to-list 'completion-at-point-functions #'cape-keyword)
   (add-to-list 'completion-at-point-functions #'cape-abbrev)
-  :config
-  (require 'cape-yasnippet)
-  (add-to-list 'completion-at-point-functions #'cape-yasnippet))
+  ;; :config
+  ;; (require 'cape-yasnippet)
+  ;; (add-to-list 'completion-at-point-functions #'cape-yasnippet)
+  )
 
 
 (provide 'init-corfu)
