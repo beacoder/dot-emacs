@@ -709,6 +709,7 @@
 (require 'init-calendar)
 (require 'ipc-udp)
 (require 'init-eglot)
+(require 'init-corfu)
 
 
 (provide 'init-3rd-party)
