@@ -98,11 +98,6 @@
   (add-hook 'c-mode-common-hook #'google-set-c-style)
   (add-hook 'c-mode-common-hook #'google-make-newline-indent)
 
-  ;; company-c-headers
-  (when (maybe-require-package 'company-c-headers)
-    (with-eval-after-load 'company
-      (with-eval-after-load 'cc-mode (push 'company-c-headers company-backends))))
-
   ;; flycheck
   (add-hook 'c++-mode-hook
             #'(lambda () (setq flycheck-gcc-include-path
