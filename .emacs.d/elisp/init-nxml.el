@@ -70,10 +70,5 @@ indentation rules."
   (shell-command-on-region beg end "tidy -xml -q -i" (current-buffer) t "*tidy-errors*" t))
 
 
-;; company-nxml
-(with-eval-after-load 'company
-  (with-eval-after-load 'nxml (push 'company-nxml company-backends)))
-
-
 (provide 'init-nxml)
 ;;; init-nxml.el ends here
