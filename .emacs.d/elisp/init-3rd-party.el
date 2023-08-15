@@ -695,7 +695,7 @@
 ;;; other setting
 (require 'init-hydra)
 (require 'init-git)
-(require 'init-company)
+;; (require 'init-company)
 ;; (require 'init-rtags)
 (require 'init-dired)
 (require 'init-isearch)
