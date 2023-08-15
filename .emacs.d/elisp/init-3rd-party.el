@@ -488,7 +488,6 @@
     (diminish 'which-key-mode)
     (diminish 'abbrev-mode)
     (diminish 'flycheck-mode)
-    (diminish 'company-mode)
     (diminish 'ivy-mode)
     (diminish 'counsel-mode)
     (diminish 'yard-mode)
@@ -695,8 +694,6 @@
 ;;; other setting
 (require 'init-hydra)
 (require 'init-git)
-;; (require 'init-company)
-;; (require 'init-rtags)
 (require 'init-dired)
 (require 'init-isearch)
 (require 'init-ibuffer)
