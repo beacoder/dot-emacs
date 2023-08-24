@@ -672,10 +672,10 @@
     ;; @see https://stackoverflow.com/questions/3679930/how-to-automatically-remove-or-prevent-popping-up-async-shell-command-in-ema
     (defun async-shell-hide-popping-window (orig &rest args) (save-window-excursion (apply orig args)))
     (advice-add 'async-shell-command :around 'async-shell-hide-popping-window)
-    ;; @see https://stackoverflow.com/questions/16119853/elisp-close-async-shell-command-window-after-the-command-finishes
+    ;; kill process-buffer after process exited
     (defun kill-async-buffer-when-done (process signal)
-      (and (process-buffer process) (string-match-p "finished" signal)
-           (kill-buffer (process-buffer process))))
+      (when (memq (process-status process) '(exit signal))
+        (kill-buffer (process-buffer process))))
     (advice-add 'shell-command-sentinel :after 'kill-async-buffer-when-done)
     ;; @see https://www.reddit.com/r/emacs/comments/z75ric/how_to_spawn_external_terminal_in_exwm/
     (defun my-exwm-exterm () (interactive) (async-shell-command "mate-terminal"))))
