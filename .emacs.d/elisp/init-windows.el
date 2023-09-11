@@ -189,9 +189,7 @@ column narrower."
             "\\*Org Select\\*" "\\*Capture\\*" "^CAPTURE-.*\\.org*"
             "\\*Gofmt Errors\\*$" "\\*Go Test\\*$" godoc-mode
             "\\*docker-containers\\*" "\\*docker-images\\*" "\\*docker-networks\\*" "\\*docker-volumes\\*"
-            "\\*prolog\\*" inferior-python-mode inf-ruby-mode swift-repl-mode
-            "\\*rustfmt\\*$" rustic-compilation-mode rustic-cargo-clippy-mode
-            rustic-cargo-outdated-mode rustic-cargo-test-moed))
+            "\\*prolog\\*" inferior-python-mode inf-ruby-mode swift-repl-mode))
 
     (with-eval-after-load 'projectile
       (setq popper-group-function #'popper-group-by-projectile))
