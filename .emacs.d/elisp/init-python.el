@@ -32,7 +32,6 @@
     (add-hook 'python-mode-hook
               (lambda () (unless (file-remote-p default-directory)
                       (anaconda-mode 1))))
-    (add-hook 'python-mode-hook 'anaconda-eldoc-mode)
     (bind-keys
      :map python-mode-map
      ("C-c c" . python-skeleton-class)
