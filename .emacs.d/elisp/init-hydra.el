@@ -124,7 +124,6 @@
           ("g l" gist-list "Gist-List" :exit t))
          "Misc"
          (("m r" everlasting-scratch-restore "Restore-Scratch" :exit t)
-          ("m c" wandbox "Online-Compile" :exit t)
           ("m d" download-region-as-url "Download-Region" :exit t)
           ("m D" download-region-cancel "Download-Cancel" :exit t)
           ;; ("m s" sublimity-mode "Sublimity-Mode" :exit t)
