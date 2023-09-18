@@ -509,12 +509,6 @@
   (advice-add 'describe-function-1 :after #'elisp-demos-advice-describe-function-1))
 
 
-;;; online compiler: https://wandbox.org
-;;  1.specify language with "// #wandbox lang: c++"
-;;  2.run wandbox
-(use-package wandbox :ensure t)
-
-
 ;;; show indentation
 (when (maybe-require-package 'indent-guide)
   (when (display-graphic-p)
