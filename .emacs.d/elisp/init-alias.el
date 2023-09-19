@@ -62,6 +62,7 @@
 (defalias 'sc 'scratch)
 (defalias 'wg 'wgrep-change-to-wgrep-mode)
 (defalias 'dc 'desktop-change-dir)
+(defalias 'rb 'rename-buffer)
 
 
 (provide 'init-alias)
