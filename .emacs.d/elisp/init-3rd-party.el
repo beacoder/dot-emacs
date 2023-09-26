@@ -687,6 +687,13 @@
   (define-key global-map (kbd "C-c m") 'vr/mc-mark))
 
 
+;;; move to the beginning/end of code
+(use-package mwim
+  :ensure t
+  :bind (([remap move-beginning-of-line] . mwim-beginning)
+         ([remap move-end-of-line] . mwim-end)))
+
+
 ;;; other setting
 (require 'init-hydra)
 (require 'init-git)
