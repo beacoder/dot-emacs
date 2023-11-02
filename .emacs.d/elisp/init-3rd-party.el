@@ -9,23 +9,6 @@
 (require-package 'use-package)
 
 
-;;; Youdao Dictionary
-(use-package youdao-dictionary
-    :ensure t
-    :functions (posframe-show
-                posframe-hide)
-    :commands (youdao-dictionary-mode
-               youdao-dictionary--region-or-word
-               youdao-dictionary--format-result)
-    :bind ("C-c y" . youdao-dictionary-search)
-    :config
-    ;; Cache documents
-    (setq url-automatic-caching t)
-
-    ;; Enable Chinese word segmentation support (支持中文分词)
-    (setq youdao-dictionary-use-chinese-word-segmentation t))
-
-
 ;; bind-key
 ;; https://github.com/jwiegley/use-package/blob/master/bind-key.el
 (require-package 'bind-key)
