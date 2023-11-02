@@ -96,18 +96,7 @@
   ;; google-c-style
   (require-package 'google-c-style)
   (add-hook 'c-mode-common-hook #'google-set-c-style)
-  (add-hook 'c-mode-common-hook #'google-make-newline-indent)
-
-  ;; flycheck
-  (add-hook 'c++-mode-hook
-            #'(lambda () (setq flycheck-gcc-include-path
-                               '("."
-                                 "../include/*"
-                                 "../src/*"
-                                 "/usr/include"
-                                 "/usr/local/include/*"
-                                 "/proj/epg-tools/gcc/8.1.0.rhel6/include/c++/8.1.0/*"
-                                 "/usr/include/boost/*")))))
+  (add-hook 'c-mode-common-hook #'google-make-newline-indent))
 
 
 ;; @see https://stackoverflow.com/questions/7299893/getting-rid-of-buffer-has-running-process-confirmation-when-the-process-is-a-f
