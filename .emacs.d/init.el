@@ -105,6 +105,11 @@
     ad-do-it))
 
 
+;;; Process performance tuning
+(setq read-process-output-max (* 4 1024 1024)
+      process-adaptive-read-buffering nil)
+
+
 ;;; Load configs for specific features and modes
 (require 'init-hippie-expand)
 (require 'init-cc)
