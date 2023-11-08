@@ -693,6 +693,7 @@
 (require 'ipc-udp)
 (require 'init-eglot)
 (require 'init-corfu)
+(require 'init-terminals)
 
 
 (provide 'init-3rd-party)
