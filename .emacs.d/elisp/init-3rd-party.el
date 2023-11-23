@@ -128,7 +128,7 @@
 ;; "g"      => Change city
 ;; "q"      => Quit
 (when (maybe-require-package 'wttrin)
-  (setq wttrin-default-cities '("Shanghai" "Taizhou.Jiangsu"))
+  (setq wttrin-default-cities '("Shanghai" "Qingpu" "Taizhou.Jiangsu" "Seoul"))
 
   ;; @see https://github.com/bcbcarl/emacs-wttrin/issues/16
   (with-eval-after-load 'wttrin
