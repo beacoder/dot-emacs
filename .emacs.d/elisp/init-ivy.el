@@ -137,6 +137,7 @@ With prefix args, read directory from minibuffer."
       (when (> (length ivy-preview-created-buffers) ivy-preview-buffers-threshhold)
         (ivy-preview-clean))
       (find-file-read-only-other-window file-name)
+      (delete-other-windows)
       (with-no-warnings (goto-char (point-min))
                         (forward-line (1- (string-to-number line-nb)))
                         (beacon-blink))
