@@ -58,7 +58,7 @@ See also: `xah-copy-to-register1', `insert-register'."
 (defun smart-location-to-register3()
   "Save location to register3."
   (interactive)
-  (if (markerp (get-register ?3))
+  (if (get-register ?3)
       (when (yes-or-no-p "Override location in register3 ?")
         (point-to-register ?3)
         (message "location saved to register3"))
@@ -73,7 +73,7 @@ See also: `xah-copy-to-register1', `insert-register'."
 (defun smart-location-to-register5 ()
   "Save location to register5."
   (interactive)
-  (if (markerp (get-register ?5))
+  (if (get-register ?5)
       (when (yes-or-no-p "Override location in register5 ?")
         (point-to-register ?5)
         (message "location saved to register5"))
