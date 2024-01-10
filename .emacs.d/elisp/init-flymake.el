@@ -22,7 +22,11 @@
   (define-key flymake-mode-map (kbd "C-c ! l") 'flymake-show-buffer-diagnostics)
   (define-key flymake-mode-map (kbd "C-c ! n") 'flymake-goto-next-error)
   (define-key flymake-mode-map (kbd "C-c ! p") 'flymake-goto-prev-error)
-  (define-key flymake-mode-map (kbd "C-c ! c") 'flymake-start))
+  (define-key flymake-mode-map (kbd "C-c ! c") 'flymake-start)
+
+  ;; Disable error prompts
+  (defun flymake-error-no-popping (orig &rest args) (list))
+  (advice-add 'flymake-error :around 'flymake-error-no-popping))
 
 (unless (version< emacs-version "28.1")
   (setq eldoc-documentation-function 'eldoc-documentation-compose)
