@@ -33,6 +33,8 @@
 
 ;;; Code:
 
+(require 'cl-macs)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Definition
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -52,7 +54,7 @@
 (defvar ivy-preview-previous-buffers ()
   "List of buffers created before opening counsel-git-grep-advice.")
 
-(defconst ivy-preview-buffers-threshhold 25
+(defconst ivy-preview-buffers-threshhold 10
   "Number of newly created buffers allowed before cleaning.")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
