@@ -694,6 +694,7 @@
 (require 'init-eglot)
 (require 'init-corfu)
 (require 'init-terminals)
+(require 'init-ui)
 
 
 (provide 'init-3rd-party)
