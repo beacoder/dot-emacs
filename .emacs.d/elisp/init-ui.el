@@ -29,7 +29,15 @@
   ;;; ibuffer support
   (when (maybe-require-package 'nerd-icons-ibuffer)
     (use-package nerd-icons-ibuffer
-      :hook (ibuffer-mode . nerd-icons-ibuffer-mode))))
+      :hook (ibuffer-mode . nerd-icons-ibuffer-mode)))
+
+  ;;; ivy support
+  (when (maybe-require-package 'nerd-icons-ivy-rich)
+    (use-package nerd-icons-ivy-rich
+      :ensure t
+      :init
+      (nerd-icons-ivy-rich-mode 1)
+      (ivy-rich-mode 1))))
 
 
 (provide 'init-ui)
