@@ -5,10 +5,6 @@
 ;;;
 ;;; Code:
 
-;;; use-package
-(require-package 'use-package)
-
-
 ;; bind-key
 ;; https://github.com/jwiegley/use-package/blob/master/bind-key.el
 (require-package 'bind-key)
