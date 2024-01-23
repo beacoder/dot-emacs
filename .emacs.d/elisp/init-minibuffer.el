@@ -2,17 +2,16 @@
 ;;; Commentary:
 ;;; Code:
 
-
 (when (maybe-require-package 'vertico)
   (add-hook 'after-init-hook 'vertico-mode)
 
-  (require-package 'orderless)
-  (with-eval-after-load 'vertico
-    (require 'orderless))
-
-  (defun sanityinc/use-orderless-in-minibuffer ()
-    (setq-local completion-styles '(substring orderless)))
-  (add-hook 'minibuffer-setup-hook 'sanityinc/use-orderless-in-minibuffer)
+  ;; Optionally use the `orderless' completion style.
+  (use-package orderless
+    :ensure t
+    :custom
+    (completion-styles '(orderless basic))
+    (completion-category-overrides '((file (styles basic partial-completion))))
+    (orderless-component-separator #'orderless-escapable-split-on-space))
 
   (when (maybe-require-package 'embark)
     (with-eval-after-load 'vertico
@@ -51,8 +50,9 @@
 
     (maybe-require-package 'consult-flycheck)))
 
-(when (maybe-require-package 'marginalia)
-  (add-hook 'after-init-hook 'marginalia-mode))
+(use-package marginalia
+  :ensure t
+  :hook (after-init . marginalia-mode))
 
 
 (provide 'init-minibuffer)
