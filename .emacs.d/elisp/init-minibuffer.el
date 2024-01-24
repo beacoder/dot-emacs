@@ -15,6 +15,7 @@
   (completion-category-overrides '((file (styles basic partial-completion))))
   (orderless-component-separator #'orderless-escapable-split-on-space))
 
+;; add extra action to minibuffer command
 (use-package embark
   :ensure t
   :bind
@@ -53,6 +54,7 @@
 
   (use-package consult-flycheck :ensure t))
 
+;; show minibuffer command docs
 (use-package marginalia
   :ensure t
   :hook (after-init . marginalia-mode))
