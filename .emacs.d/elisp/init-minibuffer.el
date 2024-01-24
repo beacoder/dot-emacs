@@ -39,7 +39,7 @@
         (require 'embark-consult)
         (add-hook 'embark-collect-mode-hook 'embark-consult-preview-minor-mode)))
 
-    (maybe-require-package 'consult-flycheck)))
+    (use-package consult-flycheck :ensure t)))
 
 (use-package marginalia
   :ensure t
