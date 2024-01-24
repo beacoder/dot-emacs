@@ -2,44 +2,56 @@
 ;;; Commentary:
 ;;; Code:
 
-(when (maybe-require-package 'vertico)
-  (add-hook 'after-init-hook 'vertico-mode)
+;; vertical completion
+(use-package vertico
+  :ensure t
+  :hook (after-init . vertico-mode))
 
-  ;; Optionally use the `orderless' completion style.
-  (use-package orderless
-    :ensure t
-    :custom
-    (completion-styles '(orderless basic))
-    (completion-category-overrides '((file (styles basic partial-completion))))
-    (orderless-component-separator #'orderless-escapable-split-on-space))
+;; Optionally use the `orderless' completion style.
+(use-package orderless
+  :ensure t
+  :custom
+  (completion-styles '(orderless basic))
+  (completion-category-overrides '((file (styles basic partial-completion))))
+  (orderless-component-separator #'orderless-escapable-split-on-space))
 
-  (when (maybe-require-package 'embark)
-    (with-eval-after-load 'vertico
-      (define-key vertico-map (kbd "C-c C-o") 'embark-export)
-      (define-key vertico-map (kbd "C-c C-c") 'embark-act)))
+(use-package embark
+  :ensure t
+  :bind
+  (("C-." . embark-act) ;; pick some comfortable binding
+   ("M-." . embark-export))
+  :init
+  (setq prefix-help-command #'embark-prefix-help-command)
+  :config
+  ;; Hide the mode line of the Embark live/completions buffers
+  (add-to-list 'display-buffer-alist
+               '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
+                 nil
+                 (window-parameters (mode-line-format . none)))))
 
-  (when (maybe-require-package 'consult)
-    (defmacro sanityinc/no-consult-preview (&rest cmds)
-      `(with-eval-after-load 'consult
-         (consult-customize ,@cmds :preview-key "M-P")))
+(when (maybe-require-package 'consult)
+  (defmacro sanityinc/no-consult-preview (&rest cmds)
+    `(with-eval-after-load 'consult
+       (consult-customize ,@cmds :preview-key "M-P")))
 
-    (sanityinc/no-consult-preview
-     consult-ripgrep
-     consult-git-grep consult-grep
-     consult-bookmark consult-recent-file consult-xref
-     consult--source-recent-file consult--source-project-recent-file consult--source-bookmark)
+  (sanityinc/no-consult-preview
+   consult-ripgrep
+   consult-git-grep consult-grep
+   consult-bookmark consult-recent-file consult-xref
+   consult--source-recent-file consult--source-project-recent-file consult--source-bookmark)
 
-    (global-set-key [remap switch-to-buffer] 'consult-buffer)
-    (global-set-key [remap switch-to-buffer-other-window] 'consult-buffer-other-window)
-    (global-set-key [remap switch-to-buffer-other-frame] 'consult-buffer-other-frame)
-    (global-set-key [remap goto-line] 'consult-goto-line)
+  (global-set-key [remap switch-to-buffer] 'consult-buffer)
+  (global-set-key [remap switch-to-buffer-other-window] 'consult-buffer-other-window)
+  (global-set-key [remap switch-to-buffer-other-frame] 'consult-buffer-other-frame)
+  (global-set-key [remap goto-line] 'consult-goto-line)
 
-    (when (maybe-require-package 'embark-consult)
-      (with-eval-after-load 'embark
-        (require 'embark-consult)
-        (add-hook 'embark-collect-mode-hook 'embark-consult-preview-minor-mode)))
+  ;; Consult users will also want the embark-consult package.
+  (use-package embark-consult
+    :ensure t ; only need to install it, embark loads it after consult if found
+    :hook
+    (embark-collect-mode . consult-preview-at-point-mode))
 
-    (use-package consult-flycheck :ensure t)))
+  (use-package consult-flycheck :ensure t))
 
 (use-package marginalia
   :ensure t
