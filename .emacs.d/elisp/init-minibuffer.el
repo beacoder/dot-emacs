@@ -29,15 +29,6 @@
      consult-bookmark consult-recent-file consult-xref
      consult--source-recent-file consult--source-project-recent-file consult--source-bookmark)
 
-    (when (and (executable-find "rg") (maybe-require-package 'affe))
-      (defun sanityinc/affe-grep-at-point (&optional dir initial)
-        (interactive (list prefix-arg (when-let ((s (symbol-at-point)))
-                                        (symbol-name s))))
-        (affe-grep dir initial))
-      (global-set-key (kbd "M-?") 'sanityinc/affe-grep-at-point)
-      (sanityinc/no-consult-preview sanityinc/affe-grep-at-point)
-      (with-eval-after-load 'affe (sanityinc/no-consult-preview affe-grep)))
-
     (global-set-key [remap switch-to-buffer] 'consult-buffer)
     (global-set-key [remap switch-to-buffer-other-window] 'consult-buffer-other-window)
     (global-set-key [remap switch-to-buffer-other-frame] 'consult-buffer-other-frame)
