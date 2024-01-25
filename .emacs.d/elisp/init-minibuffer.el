@@ -19,8 +19,7 @@
 (use-package embark
   :ensure t
   :bind
-  (("C-." . embark-act) ;; pick some comfortable binding
-   ("M-." . embark-export))
+  (("C-." . embark-act)) ;; pick some comfortable binding
   :init
   (setq prefix-help-command #'embark-prefix-help-command)
   :config
