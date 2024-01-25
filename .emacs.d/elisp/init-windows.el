@@ -175,6 +175,7 @@ column narrower."
             "\\*DAP Templates\\*$" dap-server-log-mode
             "\\*ELP Profiling Restuls\\*" profiler-report-mode
             "\\*Flycheck errors\\*$" " \\*Flycheck checker\\*$"
+            "\\*Flymake diagnostics for.*\\*$"
             "\\*Paradox Report\\*$" "\\*package update results\\*$" "\\*Package-Lint\\*$"
             "\\*[Wo]*Man.*\\*$"
             "\\*ert\\*$" overseer-buffer-mode
