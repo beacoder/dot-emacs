@@ -2,23 +2,26 @@
 ;;; Commentary:
 ;;; Code:
 
-(use-package flymake
-  :ensure t
-  :diminish
-  :functions my-elisp-flymake-byte-compile
-  :bind ("C-c f" . flymake-show-buffer-diagnostics)
-  :hook (prog-mode . flymake-mode)
-  :init (setq flymake-no-changes-timeout nil
-              flymake-fringe-indicator-position 'right-fringe)
-  :config
-  ;; Check elisp with ``load-path''
-  (defun my-elisp-flymake-byte-compile (fn &rest args)
-    ;; checkdoc-params: (fn args)
-    "Wrapper for `elisp-flymake-byte-compile'."
-    (let ((elisp-flymake-byte-compile-load-path
-           (append elisp-flymake-byte-compile-load-path load-path)))
-      (apply fn args)))
-  (advice-add 'elisp-flymake-byte-compile :around #'my-elisp-flymake-byte-compile)
+(maybe-require-package 'flymake "1.2.1")
+
+;; Use flycheck checkers with flymake to extend its coverage
+(when (maybe-require-package 'flymake-flycheck)
+  ;; Disable flycheck checkers for which we have flymake equivalents
+  (with-eval-after-load 'flycheck
+    (setq-default
+     flycheck-disabled-checkers
+     (append (default-value 'flycheck-disabled-checkers)
+             '(emacs-lisp emacs-lisp-checkdoc emacs-lisp-package sh-shellcheck))))
+
+  (add-hook 'flymake-mode-hook 'flymake-flycheck-auto)
+  (add-hook 'prog-mode-hook 'flymake-mode)
+  (add-hook 'text-mode-hook 'flymake-mode))
+
+(with-eval-after-load 'flymake
+  ;; Provide some flycheck-like bindings in flymake mode to ease transition
+  (define-key flymake-mode-map (kbd "C-c f") 'flymake-show-buffer-diagnostics)
+  (define-key flymake-mode-map (kbd "C-c s") 'flymake-start)
+
   ;; Disable error prompts
   (defun flymake-error-no-popping (orig &rest args) (list))
   (advice-add 'flymake-error :around 'flymake-error-no-popping))
