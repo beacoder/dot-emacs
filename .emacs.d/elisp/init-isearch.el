@@ -1,6 +1,6 @@
-;;----------------------------------------------------------------------------
-;; isearch configuration
-;;----------------------------------------------------------------------------
+;;; init-isearch.el --- isearch settings -*- lexical-binding: t -*-
+;;; Commentary:
+;;; Code:
 
 ;; Show number of matches while searching
 (when (maybe-require-package 'anzu)
@@ -24,8 +24,11 @@
         (ignore-errors (isearch-done t t)))
       (consult-line query)))
 
+  ;; minibuffer isearch view
   (define-key isearch-mode-map (kbd "C-o") 'sanityinc/isearch-occur)
-  (define-key isearch-mode-map (kbd "C-c C-o") 'sanityinc/isearch-occur))
+
+  ;; separate isearch view
+  (define-key isearch-mode-map (kbd "C-c C-o") 'isearch-occur))
 
 ;; Search back/forth for the symbol at point
 ;; See http://www.emacswiki.org/emacs/SearchAtPoint
