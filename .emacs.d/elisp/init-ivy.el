@@ -80,18 +80,18 @@ With prefix args, read directory from minibuffer."
 
   (defun counsel-git-grep-filter (orig-fun &optional input-str)
     "Apply git-grep for a specific file type for ORIG-FUN with arg INPUT-STR."
-    (let ((file-mattern nil)
+    (let ((file-pattern nil)
           (counsel-git-grep-cmd nil))
       (when input-str
 	;; check file extension
 	(when (string-match "^<\\(.+\\)>\\(.+\\)" input-str)
-          (setq file-mattern (match-string 1 input-str)
+          (setq file-pattern (match-string 1 input-str)
 		input-str (match-string 2 input-str)))
 	;; filter with extension
-	(if (and file-mattern input-str)
+	(if (and file-pattern input-str)
             ;; with filter, e.g: git --no-pager grep -n --no-color -I -e "DedicatedQosFlowsPacketFilterLimitation" -- "*.txt"
             (setq counsel-git-grep-cmd
-                  (format "%s -- \"%s\"" git-grep-cmd-orig file-mattern))
+                  (format "%s -- \"%s\"" git-grep-cmd-orig file-pattern))
           ;; no filter
           (setq counsel-git-grep-cmd git-grep-cmd-orig))
 	(message "git-grep actual input-str is %s" input-str)
