@@ -73,6 +73,34 @@ With prefix args, read directory from minibuffer."
 (define-key ivy-minibuffer-map (kbd "M-o") 'ivy-dispatching-done-hydra)
 
 
+;;; enable git-grep to filter for a specific file 
+;;  e.g: filter python file: <py>def
+(with-eval-after-load 'counsel
+  (defconst git-grep-cmd-orig counsel-git-grep-cmd-default)
+  
+  (defun counsel-git-grep-filter (orig-fun &optional input-str)
+    "Apply git-grep for a specific file type for ORIG-FUN with arg INPUT-STR."
+    (let ((file-ext nil)
+          (counsel-git-grep-cmd nil))
+      (when input-str
+	;; check file extension
+	(when (string-match "^<\\(.+\\)>\\(.+\\)" input-str)
+          (setq file-ext (match-string 1 input-str)
+		input-str (match-string 2 input-str)))
+	;; filter with extension
+	(if (and file-ext input-str)
+            ;; with filter, e.g: git --no-pager grep -n --no-color -I -e "DedicatedQosFlowsPacketFilterLimitation" -- "*.txt"
+            (setq counsel-git-grep-cmd
+                  (format "%s -- \"*.%s\"" git-grep-cmd-orig file-ext))
+          ;; no filter
+          (setq counsel-git-grep-cmd git-grep-cmd-orig))
+	(message "git-grep actual input-str is %s" input-str)
+	(message "git-grep actual cmd is %s" counsel-git-grep-cmd)
+	(apply orig-fun (list input-str)))))
+
+  (advice-add #'counsel-git-grep-function :around #'counsel-git-grep-filter))
+
+
 ;;; enable ivy with preview ability
 (require 'ivy-preview)
 
