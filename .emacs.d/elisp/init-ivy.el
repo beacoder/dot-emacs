@@ -73,11 +73,11 @@ With prefix args, read directory from minibuffer."
 (define-key ivy-minibuffer-map (kbd "M-o") 'ivy-dispatching-done-hydra)
 
 
-;;; enable git-grep to filter for a specific file 
-;;  e.g: filter python file: <py>def
+;;; enable git-grep to filter by files as well
+;;  e.g: filter python file: <*.py>def
 (with-eval-after-load 'counsel
   (defconst git-grep-cmd-orig counsel-git-grep-cmd-default)
-  
+
   (defun counsel-git-grep-filter (orig-fun &optional input-str)
     "Apply git-grep for a specific file type for ORIG-FUN with arg INPUT-STR."
     (let ((file-ext nil)
@@ -91,7 +91,7 @@ With prefix args, read directory from minibuffer."
 	(if (and file-ext input-str)
             ;; with filter, e.g: git --no-pager grep -n --no-color -I -e "DedicatedQosFlowsPacketFilterLimitation" -- "*.txt"
             (setq counsel-git-grep-cmd
-                  (format "%s -- \"*.%s\"" git-grep-cmd-orig file-ext))
+                  (format "%s -- \"%s\"" git-grep-cmd-orig file-ext))
           ;; no filter
           (setq counsel-git-grep-cmd git-grep-cmd-orig))
 	(message "git-grep actual input-str is %s" input-str)
