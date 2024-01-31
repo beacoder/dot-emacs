@@ -523,7 +523,9 @@
 
 
 ;;; dims surrounding text
-(use-package focus :ensure t)
+(use-package focus
+  :ensure t
+  :hook (prog-mode . focus-mode))
 
 
 ;;; process
