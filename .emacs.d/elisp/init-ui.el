@@ -36,6 +36,13 @@
     :ensure t
     :init
     (nerd-icons-ivy-rich-mode 1)
+    (ivy-rich-mode 1))
+
+  ;;; Show icons instead of mode names
+  (use-package mode-icons
+    :ensure t
+    :init
+    (mode-icons-mode)
     (ivy-rich-mode 1)))
 
 
