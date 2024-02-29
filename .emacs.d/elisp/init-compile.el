@@ -62,7 +62,6 @@
                              (is-exist (string-match "*compilation*" buf-name)))
                     ;; @see http://emacswiki.org/emacs/ModeCompile#toc2
                     (bury-buffer "*compilation*")
-                    (delete-window (get-buffer-window (get-buffer "*compilation*")))
                     (set-window-configuration sanityinc/last-window-configuration)
                     (select-window sanityinc/last-selected-window)
                     (message "NO COMPILATION ERRORS!")))))
