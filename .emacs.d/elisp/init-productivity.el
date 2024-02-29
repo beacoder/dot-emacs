@@ -5,6 +5,8 @@
 ;;;
 ;;; Code:
 
+(require 'init-utils)
+
 ;; @see http://ergoemacs.org/emacs/emacs_open_file_path_fast.html
 (defun open-file-at-cursor ()
   "Open the file path under cursor.
@@ -36,8 +38,7 @@ Input path can be {relative, full path, URL}."
   "Copy current line or text selection to register 1.
 See also: `xah-paste-from-register1', `copy-to-register'."
   (interactive)
-  (let* (
-         (bds (get-selection-or-unit 'line ))
+  (let* ((bds (get-selection-or-unit 'line ))
          (inputStr (elt bds 0) )
          (p1 (elt bds 1) )
          (p2 (elt bds 2)))
@@ -52,23 +53,24 @@ See also: `xah-copy-to-register1', `insert-register'."
     (delete-region (region-beginning) (region-end)))
   (insert-register ?1 t))
 
-(global-set-key (kbd "M-1") #'xah-copy-to-register1)
-(global-set-key (kbd "M-2") #'xah-paste-from-register1)
-
-(defun smart-location-to-register3()
-  "Save location to register3."
+(defun xah-copy-to-register3 ()
+  "Copy current line or text selection to register 3.
+See also: `xah-paste-from-register3', `copy-to-register'."
   (interactive)
-  (if (get-register ?3)
-      (when (yes-or-no-p "Override location in register3 ?")
-        (point-to-register ?3)
-        (message "location saved to register3"))
-    (point-to-register ?3)
-    (message "location saved to register3")))
+  (let* ((bds (get-selection-or-unit 'line ))
+         (inputStr (elt bds 0) )
+         (p1 (elt bds 1) )
+         (p2 (elt bds 2)))
+    (copy-to-register ?3 p1 p2)
+    (message "copied to register 3: 「%s」." inputStr)))
 
-(defun smart-jump-to-register3 ()
-  "Jump to register3."
+(defun xah-paste-from-register3 ()
+  "Paste text from register 3.
+See also: `xah-copy-to-register3', `insert-register'."
   (interactive)
-  (jump-to-register ?3))
+  (when (use-region-p)
+    (delete-region (region-beginning) (region-end)))
+  (insert-register ?3 t))
 
 (defun smart-location-to-register5 ()
   "Save location to register5."
@@ -85,9 +87,10 @@ See also: `xah-copy-to-register1', `insert-register'."
   (interactive)
   (jump-to-register ?5))
 
-(global-set-key (kbd "M-3") #'smart-location-to-register3)
-(global-set-key (kbd "M-4") #'smart-jump-to-register3)
-
+(global-set-key (kbd "M-1") #'xah-copy-to-register1)
+(global-set-key (kbd "M-2") #'xah-paste-from-register1)
+(global-set-key (kbd "M-3") #'xah-copy-to-register3)
+(global-set-key (kbd "M-4") #'xah-paste-from-register3)
 (global-set-key (kbd "M-5") #'smart-location-to-register5)
 (global-set-key (kbd "M-6") #'smart-jump-to-register5)
 
@@ -118,9 +121,10 @@ URL `http://ergoemacs.org/emacs/emacs_copy_cut_current_line.html' Version 2015-0
 
 (defun kill-line-or-region ()
   "Kill whole current line, or text selection.
-When `universal-argument' is called first, kill whole buffer (respects `narrow-to-region')."
+When `universal-argument' is called first
+kill whole buffer (respects `narrow-to-region')."
   (interactive)
-  (let (p1 p2 msg)
+  (let (p1 p2)
     (if current-prefix-arg
         (progn (setq p1 (point-min))
                (setq p2 (point-max))
