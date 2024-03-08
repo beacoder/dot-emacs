@@ -92,8 +92,10 @@
 
 ;;; zenburn setting
 ;; need to setup putty color which goes well with zenburn first
-(require-package 'zenburn-theme)
-(load-theme 'zenburn t)
+(use-package zenburn-theme
+  :ensure t
+  :config
+  (load-theme 'zenburn t))
 
 
 ;;; ggtags setting
