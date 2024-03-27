@@ -41,8 +41,11 @@ With prefix args, read directory from minibuffer."
 
 
 ;; @see https://github.com/abo-abo/swiper/blob/master/ivy-hydra.el
-(defvar ivy-dispatching-done-columns 2
-  "Number of columns to use if the hint does not fit on one line.")
+(use-package ivy-hydra
+  :ensure t
+  :config
+  (defvar ivy-dispatching-done-columns 2
+    "Number of columns to use if the hint does not fit on one line."))
 
 (defun ivy-dispatching-done-hydra ()
   "Select one of the available actions and call `ivy-done'."
