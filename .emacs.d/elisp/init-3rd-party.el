@@ -602,7 +602,7 @@
                     (json-mode       . json-ts-mode)
                     (js-json-mode    . json-ts-mode)
                     (js-mode         . js-ts-mode)
-                    ;; (python-mode     . python-ts-mode)
+                    (python-mode     . python-ts-mode)
                     (rust-mode       . rust-ts-mode)
                     (sh-mode         . bash-ts-mode)
                     (typescript-mode . typescript-ts-mode))
