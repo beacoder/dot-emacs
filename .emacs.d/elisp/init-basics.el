@@ -211,11 +211,10 @@ The argument has the same meaning as in `apropos'."
 ;;                        :font "DejaVu Sans Mono-10:weight=normal"
 ;;                        :height 100))
 
-;;(when (display-graphic-p)
-;;   ;; "DejaVu Sans Mono" is a nice open source font family
-;;   (set-face-attribute 'default nil
-;;                       :font "-misc-dejavu lgc sans mono-medium-r-normal--0-0-0-0-m-0-iso8859-1"
-;;                       :height 100))
+;; @see https://stackoverflow.com/questions/294664/how-to-set-the-font-size-in-emacs
+;; set font size to 12 pt
+(when (display-graphic-p)
+  (set-face-attribute 'default nil :height 120))
 
 ;; set minibuffer-prompt color
 (set-face-foreground 'minibuffer-prompt "pink")
