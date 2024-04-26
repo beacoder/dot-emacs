@@ -121,27 +121,6 @@
     (add-hook c-mode-hook #'enable-ggtags-mode)))
 
 
-;;; weather report
-;; "wttrin" => Display weather
-;; "g"      => Change city
-;; "q"      => Quit
-(when (maybe-require-package 'wttrin)
-  (setq wttrin-default-cities '("Shanghai" "Qingpu" "Taizhou.Jiangsu" "Seoul"))
-
-  ;; @see https://github.com/bcbcarl/emacs-wttrin/issues/16
-  (with-eval-after-load 'wttrin
-    (defun wttrin-fetch-raw-string (query)
-      "Get the weather information based on your QUERY."
-      (let ((url-user-agent "curl"))
-        (add-to-list 'url-request-extra-headers wttrin-default-accept-language)
-        (with-current-buffer
-            (url-retrieve-synchronously
-             (concat "http://wttr.in/" query "?A")
-             (lambda (status) (switch-to-buffer (current-buffer))))
-          (delete-trailing-whitespace)
-          (decode-coding-string (buffer-string) 'utf-8))))))
-
-
 ;;; PlantUML
 ;; Download plantuml.jar first, put it in ~/plantuml.jar.
 ;; wget https://netcologne.dl.sourceforge.net/project/plantuml/plantuml.jar
