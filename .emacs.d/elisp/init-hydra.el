@@ -117,8 +117,7 @@
          (("p b" bongo "Bongo" :exit t)
           ("p c" open-calendar "Calendar" :exit t)
           ("p k" keyfreq-show "Keyfreq" :exit t)
-          ("p s" stock-tracker-start "Stock" :exit t)
-          ("p w" wttrin "Weather" :exit t))
+          ("p s" stock-tracker-start "Stock" :exit t))
          "Gist"
          (("g s" gist-region-or-buffer-private "Gist-Share" :exit t)
           ("g l" gist-list "Gist-List" :exit t))
