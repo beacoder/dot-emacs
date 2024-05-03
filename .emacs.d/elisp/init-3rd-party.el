@@ -179,9 +179,8 @@
 
 
 ;;; Call-graph
-(use-package call-graph
-  :ensure t
-  :config
+(progn
+  (require 'call-graph)
   (global-set-key (kbd "C-c g") #'call-graph)
   (customize-set-variable 'cg-path-to-global "/home/ehumche/private/gtags-6.6.6/bin/")
   (customize-set-variable 'imenu-max-item-length "Unlimited")
