@@ -220,6 +220,12 @@ If there's a string at point, use it instead of prompt."
      (mapcar (lambda (d) (* 1e3 d)) durations) "ms")
     (message "%s" durations)))
 
+(defun too-long-file-p ()
+  "Check whether the file is too long."
+  (or (> (buffer-size) 500000)
+      (and (fboundp 'buffer-line-statistics)
+           (> (car (buffer-line-statistics)) 10000))))
+
 
 (provide 'init-utils)
 ;;; init-utils.el ends here
