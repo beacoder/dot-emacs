@@ -661,18 +661,6 @@
          ([remap move-end-of-line] . mwim-end)))
 
 
-;; minor mode to aggressively keep your code always indented
-(use-package aggressive-indent
-  :ensure t
-  :diminish
-  :hook ((after-init . global-aggressive-indent-mode)
-         ;; NOTE: Disable in large files due to the performance issues
-         ;; https://github.com/Malabarba/aggressive-indent-mode/issues/73
-         (find-file . (λ ()
-                        (when (too-long-file-p)
-                          (aggressive-indent-mode -1))))))
-
-
 ;;; other setting
 (require 'init-hydra)
 (require 'init-git)
