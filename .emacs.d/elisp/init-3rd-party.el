@@ -582,8 +582,7 @@
                     (js-mode         . js-ts-mode)
                     (python-mode     . python-ts-mode)
                     (rust-mode       . rust-ts-mode)
-                    (sh-mode         . bash-ts-mode)
-                    (typescript-mode . typescript-ts-mode))
+                    (sh-mode         . bash-ts-mode))
                   treesit-font-lock-level 4))))
 
 
