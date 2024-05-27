@@ -35,10 +35,7 @@
 
 (setq-default js-indent-level 2)
 
-
 (add-to-list 'interpreter-mode-alist (cons "node" 'js2-mode))
-
-
 
 (when (and (executable-find "ag")
            (maybe-require-package 'xref-js2))
@@ -46,7 +43,6 @@
     (define-key js2-mode-map (kbd "M-.") nil)
     (add-hook 'js2-mode-hook
               (lambda () (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil t)))))
-
 
 
 ;;; Coffeescript
@@ -86,12 +82,14 @@
               (lambda () (inferior-js-keys-mode -1)))))
 
 
-
 (when (maybe-require-package 'add-node-modules-path)
   (with-eval-after-load 'typescript-mode
     (add-hook 'typescript-mode-hook 'add-node-modules-path))
   (with-eval-after-load 'js2-mode
     (add-hook 'js2-mode-hook 'add-node-modules-path)))
+
+
+(add-to-list 'auto-mode-alist '("\\.\\(ts\\|ets\\)" . typescript-mode))
 
 
 (provide 'init-javascript)
