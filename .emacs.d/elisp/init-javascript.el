@@ -89,7 +89,7 @@
     (add-hook 'js2-mode-hook 'add-node-modules-path)))
 
 
-;; treat arkTS as typescript
+;; treat ArkTS as typescript
 (add-to-list 'auto-mode-alist '("\\.\\(ts\\|ets\\)" . typescript-mode))
 
 
