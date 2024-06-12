@@ -2,6 +2,13 @@
 ;;; Commentary:
 ;;; Code:
 
+;; make sure ivy is loaded
+(use-package ivy
+  :ensure t
+  :config
+  (require 'ivy))
+
+
 (when (maybe-require-package 'counsel)
   (with-eval-after-load 'counsel
     ;; don't override pop-to-mark-command
