@@ -508,12 +508,6 @@
       (cl-pushnew `(,keyword . ,(face-foreground 'warning)) hl-todo-keyword-faces))))
 
 
-;;; dims surrounding text
-(use-package focus
-  :ensure t
-  :hook (prog-mode . focus-mode))
-
-
 ;;; process
 (use-package proced
     :ensure t
