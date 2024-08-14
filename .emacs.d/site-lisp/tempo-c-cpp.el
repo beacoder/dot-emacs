@@ -85,8 +85,7 @@
 ;;            includes                std::includes(first.begin(), first.end(), second.begin(), second.end());
 ;;            sort                    std::sort(container.begin(), container.end());
 ;;            find                    std::find(container.begin(), container.end(), ...);
-;; --- C++ BOOST algorithms
-;;            erase                   boost::remove_erase(container, ...);
+;;            erase                   std::erase(container, ...);
 
 (require 'tempo)
 
@@ -464,11 +463,11 @@
                        "C++ STL find"
                        'c++-tempo-tags)
 
-(tempo-define-template "c++-boost-erase"
-                       '(> "boost::" (if (y-or-n-p "Use remove_erase_if? ") "remove_erase_if(" "remove_erase(")
+(tempo-define-template "c++-erase"
+                       '(> "std::" (if (y-or-n-p "Use erase_if? ") "erase_if(" "erase(")
                            (p "container: " container) ", " ~ ");")
                        "erase"
-                       "C++ BOOST erase"
+                       "C++ STL erase"
                        'c++-tempo-tags)
 
 
