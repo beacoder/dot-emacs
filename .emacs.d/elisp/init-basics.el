@@ -280,8 +280,8 @@ Use in `isearch-mode-end-hook'."
 ;;       (isearch-yank-string region))))
 
 ;; set cursor color
-(add-hook 'window-setup-hook '(lambda () (set-cursor-color "white")))
-(add-hook 'after-make-frame-functions '(lambda (f) (with-selected-frame f (set-cursor-color "white"))))
+(add-hook 'window-setup-hook (lambda () (set-cursor-color "white")))
+(add-hook 'after-make-frame-functions (lambda (f) (with-selected-frame f (set-cursor-color "white"))))
 (setq cursor-type 'box)
 
 ;; save place in files between sessions
@@ -454,23 +454,12 @@ Use in `isearch-mode-end-hook'."
 ;;----------------------------------------------------------------------------
 ;; Register settings
 ;;----------------------------------------------------------------------------
-(defun setup-my-registers ()
-  "Setup my own registers."
-
-  ;; <C-x r j b> => open directory "~/backup"
-  (set-register ?b '(file . "~/backup"))
-
-  (set-register ?c '(file . "~/private/init.csh"))
-
-  (set-register ?e '(file . "~/.emacs.d/elisp"))
-
-  (set-register ?h '(file . "~/.sh_history"))
-
-  (set-register ?o '(file . "~/.emacs.d/tutorials/org-tutorial.org"))
-
-  (set-register ?w '(file . "~/workspace")))
-
-(add-hook 'after-init-hook #'setup-my-registers)
+(set-register ?b '(file . "~/backup")) ;; <C-x r j b> => open directory "~/backup"
+(set-register ?c '(file . "~/private/init.csh"))
+(set-register ?e '(file . "~/.emacs.d/elisp"))
+(set-register ?h '(file . "~/.sh_history"))
+(set-register ?o '(file . "~/.emacs.d/tutorials/org-tutorial.org"))
+(set-register ?w '(file . "~/workspace"))
 
 
 (provide 'init-basics)
