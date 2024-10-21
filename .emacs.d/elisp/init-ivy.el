@@ -100,7 +100,7 @@ With prefix args, read directory from minibuffer."
 		input-str (match-string 2 input-str)))
 	;; filter with extension
 	(if (and file-pattern input-str)
-            ;; with filter: git --no-pager grep -n --no-color -I -i -e "DedicatedQosFlowsPacketFilterLimitation" -- "*.txt"
+            ;; with filter: git --no-pager grep -n --no-color -I -i -e "text-to-grep" -- "*.txt"
             (setq counsel-git-grep-cmd
                   (format "%s -- \"%s\"" git-grep-cmd-orig file-pattern))
           ;; no filter
