@@ -86,7 +86,8 @@ With prefix args, read directory from minibuffer."
 ;;; enable git-grep to filter by files as well
 ;;  e.g: filter python file: <*.py>def
 (with-eval-after-load 'counsel
-  (defconst git-grep-cmd-orig counsel-git-grep-cmd-default)
+  ;; refer to counsel-git-grep-cmd-default
+  (defconst git-grep-cmd-orig "git --no-pager grep -n --no-color -I -i -e \"%s\"")
 
   (defun counsel-git-grep-filter (orig-fun &optional input-str)
     "Apply git-grep for a specific file type for ORIG-FUN with arg INPUT-STR."
@@ -99,7 +100,7 @@ With prefix args, read directory from minibuffer."
 		input-str (match-string 2 input-str)))
 	;; filter with extension
 	(if (and file-pattern input-str)
-            ;; with filter, e.g: git --no-pager grep -n --no-color -I -e "DedicatedQosFlowsPacketFilterLimitation" -- "*.txt"
+            ;; with filter: git --no-pager grep -n --no-color -I -i -e "DedicatedQosFlowsPacketFilterLimitation" -- "*.txt"
             (setq counsel-git-grep-cmd
                   (format "%s -- \"%s\"" git-grep-cmd-orig file-pattern))
           ;; no filter
