@@ -54,7 +54,7 @@
 (setq tags-file-name nil
       tags-table-list
       '(
-        "~/my_tag_files/TAGS"
+        ;; "~/my_tag_files/TAGS"         ;; not used for now
         ;; "~/my_tag_files/STL_TAGS"     ;; stl(gcc) headers
         ;; "~/my_tag_files/BOOST_TAGS"   ;; boost headers
         )
