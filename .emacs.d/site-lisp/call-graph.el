@@ -7,7 +7,7 @@
 ;; Version: 1.0.3
 ;; Created: 2018-01-07
 ;; Keywords: programming, convenience
-;; Package-Requires: ((emacs "26.1") (hierarchy "0.7.0") (tree-mode "1.0.0") (ivy "0.10.0") (beacon "1.3.4"))
+;; Package-Requires: ((emacs "26.1") (tree-mode "1.0.0") (ivy "0.10.0") (beacon "1.3.4"))
 
 ;; This file is not part of GNU Emacs.
 
