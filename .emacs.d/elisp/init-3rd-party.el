@@ -585,12 +585,14 @@
 ;;  "C-c RET"    => send to chatgpt
 ;;  "gptel-send" => send to chatgpt
 (use-package gptel
-    :ensure t
-    :config
-    ;; @see https://www.xnbeast.com/create-openai-chatgpt-account/
-    ;; @see https://platform.openai.com/account/api-keys
-    (setq gptel-api-key (gptel-api-key-from-auth-source)
-          gptel-default-mode #'markdown-mode))
+  :ensure t
+  :config
+  (setq
+   gptel-model 'qwen2.5:latest                                   ; select the model to use
+   gptel-backend (gptel-make-ollama "Ollama"                     ; local LLM settings
+                                    :host "localhost:11434"      ; where it's running
+                                    :stream t                    ; stream responses
+                                    :models '(qwen2.5:latest)))) ; list of models
 
 
 ;;; Emacs X Window Manager
