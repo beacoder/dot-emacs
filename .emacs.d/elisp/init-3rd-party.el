@@ -583,10 +583,11 @@
                   treesit-font-lock-level 4))))
 
 
-;;; chatgpt client
-;;  "gptel"      => start a chatgpt session
-;;  "C-c RET"    => send to chatgpt
-;;  "gptel-send" => send to chatgpt
+;;; LLM client
+;;  "gptel"         => start a LLM session
+;;  "C-c RET"       => send to LLM
+;;  "gptel-send"    => send to LLM
+;;  "gptel-rewrite" => Rewrite, refactor
 (use-package gptel
   :ensure t
   :config
