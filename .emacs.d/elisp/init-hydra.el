@@ -66,9 +66,9 @@
                  ^Commands^
 --------------------------------------------
 [_a_] Counsel-Ag         [_g_] Counsel-Git-Grep [_f_] Counsel-Git      [_l_] Counsel-Locate     [_P_] Move-Text-Up
-[_u_] Update-GTAGS       [_c_] Compile          [_C_] Mode-Compile     [_r_] Recent-File        [_N_] Move-Text-Down
+[_u_] Update-GTAGS       [_c_] Compile          [_C_] Mode-Compile     [_r_] GPT-Rewrite        [_N_] Move-Text-Down
 [_p_] Previous-Mark      [_n_] Next-Mark        [_s_] Mate-Term        [_d_] Remove-Duplicate   [_o_] Org-Search-View
-[_i_] Pin-Yin            [_w_] Google-Word      [_h_] Hs-Hide-Block    [_H_] Hs-Show-Block      [_t_] ChatGPT
+[_i_] Pin-Yin            [_w_] Google-Word      [_h_] Hs-Hide-Block    [_H_] Hs-Show-Block      [_t_] GPT
 [_S_] Sort-Lines         [_q_] Quit
   "
   ("a" smart/counsel-ag :exit t)
@@ -78,7 +78,7 @@
   ("u" ggtags-update-tags :exit t)
   ("c" compile :exit t)
   ("C" mode-compile :exit t)
-  ("r" counsel-recentf :exit t)
+  ("r" gptel-rewrite :exit t)
   ("p" pop-to-mark-command)
   ("n" unpop-to-mark-command)
   ("s" my-exwm-exterm :exit t)
