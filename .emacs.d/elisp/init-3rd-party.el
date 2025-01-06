@@ -592,11 +592,16 @@
   :ensure t
   :config
   (setq
-   gptel-model 'qwen2.5:latest                                   ; select the model to use
-   gptel-backend (gptel-make-ollama "Ollama"                     ; local LLM settings
-                                    :host "localhost:11434"      ; where it's running
-                                    :stream t                    ; stream responses
-                                    :models '(qwen2.5:latest)))) ; list of models
+   gptel-model 'qwen2.5:latest
+   gptel-backend (gptel-make-ollama "Ollama"
+                                    :header (λ () `(("Authorization" . ,(concat "Bearer " (gptel--get-api-key)))))  ;; optional
+                                    :key 'gptel-api-key                                                             ;; optional
+                                    :host "localhost:11434"
+                                    :protocol "https"                                                               ;; optional
+                                    :endpoint "/v1/chat/completions"                                                ;; optional
+                                    :stream t
+                                    :models '(qwen2.5:latest
+                                              mistral:latest))))
 
 
 ;;; Emacs X Window Manager
