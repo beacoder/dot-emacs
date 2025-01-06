@@ -594,14 +594,20 @@
   (setq
    gptel-model 'qwen2.5:latest
    gptel-backend (gptel-make-ollama "Ollama"
-                                    :header (λ () `(("Authorization" . ,(concat "Bearer " (gptel--get-api-key)))))  ;; optional
-                                    :key 'gptel-api-key                                                             ;; optional
-                                    :host "localhost:11434"
-                                    :protocol "https"                                                               ;; optional
-                                    :endpoint "/v1/chat/completions"                                                ;; optional
-                                    :stream t
-                                    :models '(qwen2.5:latest
-                                              mistral:latest))))
+                   :header (λ () `(("Authorization" . ,(concat "Bearer " (gptel--get-api-key)))))  ;; optional
+                   :key 'gptel-api-key                                                             ;; optional
+                   :host "localhost:11434"
+                   :protocol "https"                                                               ;; optional
+                   :endpoint "/v1/chat/completions"                                                ;; optional
+                   :stream t
+                   :models '(qwen2.5:latest
+                             mistral:latest)))
+  (gptel-make-openai "DeepSeek"                                                                    ;; second model for use
+    :host "api.deepseek.com"
+    :endpoint "/chat/completions"
+    :stream t
+    :key "your-api-key"
+    :models '(deepseek-chat deepseek-coder)))
 
 
 ;;; Emacs X Window Manager
