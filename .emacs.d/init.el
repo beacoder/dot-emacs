@@ -71,6 +71,12 @@
       ;; Do case-sensitive tag searches
       tags-case-fold-search nil)
 
+(defun my/disable-visit-tags-table (orig-fun &rest args)
+  "Disable `visit-tags-table` for specific modes."
+  (unless (member major-mode '(python-mode js-mode markdown-mode)) ; Add modes to disable here
+    (apply orig-fun args)))
+(advice-add 'visit-tags-table :around #'my/disable-visit-tags-table)
+
 (if *is-windows*
     ;; on win-32, set threshhold to 511MB
     (setq large-file-warning-threshold (* 511 (expt 1024 2)))
