@@ -71,13 +71,6 @@
       ;; Do case-sensitive tag searches
       tags-case-fold-search nil)
 
-;; disable visit-tag-list for certain modes
-(dolist (mode-hook '(python-mode-hook js-mode-hook markdown-hook))
-  (add-hook mode-hook
-            (lambda ()
-              (setq-local tags-add-tables nil))))
-
-
 (if *is-windows*
     ;; on win-32, set threshhold to 511MB
     (setq large-file-warning-threshold (* 511 (expt 1024 2)))
