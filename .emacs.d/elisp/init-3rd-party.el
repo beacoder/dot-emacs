@@ -617,7 +617,6 @@
     :config
     ;; @see https://github.com/ch11ng/exwm/wiki#bootstrap
     (require 'exwm)
-    (require 'exwm-config)
     ;; replace existing window manager by default
     (customize-set-variable 'exwm-replace t)
     (exwm-enable)
