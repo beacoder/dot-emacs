@@ -32,8 +32,8 @@
 (when (maybe-require-package 'reformatter)
   (reformatter-define black :program "black" :args '("-")))
 
-(provide 'init-python)
-;;; init-python.el ends here
+(add-hook 'python-mode-hook
+          (lambda () (define-key python-mode-map (kbd "M-i") nil)))
 
 
 (provide 'init-python)
