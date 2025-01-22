@@ -601,7 +601,7 @@
                    :endpoint "/v1/chat/completions"                                                ;; optional
                    :stream t
                    :models '(qwen2.5:latest
-                             mistral:latest)))
+                             deepseek-r1:7b)))
   (gptel-make-openai "DeepSeek"                                                                    ;; second model for use
     :host "api.deepseek.com"
     :endpoint "/chat/completions"
