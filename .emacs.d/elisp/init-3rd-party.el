@@ -594,7 +594,7 @@
   (setq
    gptel-model 'qwen2.5:latest
    gptel-backend (gptel-make-ollama "Ollama"
-                   :header (λ () `(("Authorization" . ,(concat "Bearer " (gptel--get-api-key)))))  ;; optional
+                   :header (lambda () `(("Authorization" . ,(concat "Bearer " (gptel--get-api-key)))))  ;; optional
                    :key 'gptel-api-key                                                             ;; optional
                    :host "localhost:11434"
                    :protocol "https"                                                               ;; optional
