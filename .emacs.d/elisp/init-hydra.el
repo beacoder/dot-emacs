@@ -81,7 +81,7 @@
   ("r" gptel-rewrite :exit t)
   ("p" pop-to-mark-command)
   ("n" unpop-to-mark-command)
-  ("s" gptel-send :exit t)
+  ("s" elysium-query :exit t)
   ("d" delete-duplicate-lines :exit t)
   ("P" move-text-up)
   ("N" move-text-down)
