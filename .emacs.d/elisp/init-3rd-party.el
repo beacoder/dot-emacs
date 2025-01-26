@@ -610,10 +610,6 @@
     :models '(deepseek-chat deepseek-coder)))
 
 
-;; apply gptel generated code changes
-(use-package elysium :ensure t)
-
-
 ;;; Emacs X Window Manager
 (when (and (display-graphic-p) *is-linux*)
   (use-package exwm
