@@ -20,7 +20,7 @@
 (defhydra hydra-multiple-cursors (:hint nil)
   "
                  ^Commands^
---------------------------------------------
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 [_p_]   Previous      [_n_]   Next          [_a_] Match-All
 [_P_]   Skip-Prev     [_N_]   Skip-Next     [_e_] Edit-All
 [_M-p_] Unmark-Prev   [_M-n_] Unmark-Next   [_q_] Quit
@@ -41,7 +41,7 @@
 (defhydra hydra-window (:hint nil)
   "
                  ^Commands^
---------------------------------------------
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 [_s_] swap-window        [_o_] other-window       [_]_] enlarge-window-horizontally    [_)_] enlarge-window-vertically
 [_p_] winner-undo        [_n_] winner-redo        [_[_] shrink-window-horizontally     [_(_] shrink-window-vertically
 [_k_] delete-window      [_v_] preview-window     [_q_] quit
@@ -64,7 +64,7 @@
 (defhydra hydra-quickness (:hint nil)
   "
                  ^Commands^
---------------------------------------------
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 [_a_] Counsel-Ag         [_g_] Counsel-Git-Grep [_f_] Counsel-Git      [_l_] Counsel-Locate     [_P_] Move-Text-Up
 [_u_] Update-GTAGS       [_c_] Compile          [_C_] Mode-Compile     [_r_] GPT-Rewrite        [_N_] Move-Text-Down
 [_p_] Previous-Mark      [_n_] Next-Mark        [_s_] GPT-Send         [_d_] Remove-Duplicate   [_o_] Org-Search-View
