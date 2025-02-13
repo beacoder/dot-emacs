@@ -7,165 +7,186 @@
 #+OPTIONS: html-postamble:nil
 
 * Symbol
-  each lisp symbol has four “cells” to store things.
+each lisp symbol has four “cells” to store things.
 ** Name
-   a string, typically the same as the symbol.
+a string, typically the same as the symbol.
 ** Value
-   stores the symbol's value, typically when the symbol is used as variable.
+stores the symbol's value, typically when the symbol is used as variable.
 ** Function
-   stores function definition object or lisp macros.
+stores function definition object or lisp macros.
 ** Property list
-   typically hold a list of name/value pairs, used for syntax coloring strings, for function's state, etc.
+typically hold a list of name/value pairs, used for syntax coloring strings, for function's state, etc.
 
 * Basic functions
-  car cdr setcar setcdr cons nthcdr
+car cdr setcar setcdr cons nthcdr
 ** Car
-   return the first item in the list
+return the first item in the list
 *** Sample
-    (car '(rose violet daisy buttercup))  => rose
+(car '(rose violet daisy buttercup))  => rose
 ** Cdr
-   return the second to last elements
+return the second to last elements
 *** Sample
-    (cdr '(rose violet daisy buttercup))  => (violet daisy buttercup)
+(cdr '(rose violet daisy buttercup))  => (violet daisy buttercup)
 ** Setcar
-   replace the first element in the list and return the replacing element
+replace the first element in the list and return the replacing element
 ** Setcdr
-   replace the rest of elements in the list and return the replacing element
+replace the rest of elements in the list and return the replacing element
 ** Cons
-   create a new cons, give it CAR and CDR as components, and return it
+create a new cons, give it CAR and CDR as components, and return it
 *** Sample
-    (cons 'rose '(violet daisy buttercup))  => (rose violet daisy buttercup)
+(cons 'rose '(violet daisy buttercup))  => (rose violet daisy buttercup)
 ** Nthcdr
-   return the nth to last elements
+return the nth to last elements
 *** Sample
-    (nthcdr 1 '(rose violet daisy buttercup))  => (violet daisy buttercup)
+(nthcdr 1 '(rose violet daisy buttercup))  => (violet daisy buttercup)
 
 * Interactive
-  purpose of (interactive …) is to makes your function callable as interactive command,
-  which can be called by execute-extended-command "M-x".
-  it also provides a method for taking user input and feed to your function's arguments.
+purpose of (interactive …) is to makes your function callable as interactive command,
+which can be called by execute-extended-command "M-x".
+it also provides a method for taking user input and feed to your function's arguments.
 
 * Quote
-  return the argument, without evaluating it.
+return the argument, without evaluating it.
 ** Sample
-   `(quote x)'  => `x'
+`(quote x)'  => `x'
+
+* Back Quote
+constructing lists in a more convenient and readable way, especially when you want to
+evaluate some parts of the list while keeping other parts as literals.
+** Sample
+#+begin_src emacs-lisp
+  `(1 2 3)  ; => (1 2 3)
+
+  (let ((x 2))
+    `(1 ,x 3))  ; => (1 2 3)
+
+  (let ((lst '(a b)))
+    `(1 ,@lst 3))  ; => (1 a b 3)
+
+  (let ((x 2)
+        (lst '(a b)))
+    `(1 ,x ,@lst 3))  ; => (1 2 a b 3)
+#+end_src
+
+#+RESULTS:
+| 1 | 2 | a | b | 3 |
 
 * Evaluate expression
-  means executing the expression and returning the evaluated result.
-  includes: eval-buffer eval-region eval-minibuffer etc.
+means executing the expression and returning the evaluated result.
+includes: eval-buffer eval-region eval-minibuffer etc.
 ** Rules
 *** Self-evaluating
-    any form that is not a list or symbol will evaluate to themselves.
+any form that is not a list or symbol will evaluate to themselves.
 *** Symbol
-    symbol is treated as a variable and will evaluate to the variable's value.
+symbol is treated as a variable and will evaluate to the variable's value.
 *** List
-    if the first element of the list is:
-    - symbol             => uses the symbol's function cell contents, then call the function.
-    - a function object  => evaluate the remaining elements of the list as actual argument, then call the function with this list of arguments.
-    - a macro object     => expand the macro to some kind of other form.
+if the first element of the list is:
+- symbol             => uses the symbol's function cell contents, then call the function.
+- a function object  => evaluate the remaining elements of the list as actual argument, then call the function with this list of arguments.
+- a macro object     => expand the macro to some kind of other form.
 
 * Atom
-  return t if OBJECT is not a cons cell.
+return t if OBJECT is not a cons cell.
 ** Sample
-   (atom 'a)  => t
+(atom 'a)  => t
 
 * Mapcar & Mapc
-  mapcar: apply FUNCTION to each element of SEQUENCE, and make a list of the results.
-  mapc: apply FUNCTION to each element of SEQUENCE, and return the unchanged SEQUENCE.
+mapcar: apply FUNCTION to each element of SEQUENCE, and make a list of the results.
+mapc: apply FUNCTION to each element of SEQUENCE, and return the unchanged SEQUENCE.
 
 ** Sample
-   (mapcar '1+ [3 4 5] )  => (4 5 6)
-   (mapc '1+ [3 4 5] )    => [3 4 5]
+(mapcar '1+ [3 4 5] )  => (4 5 6)
+(mapc '1+ [3 4 5] )    => [3 4 5]
 
 * List modification functions
-  push pop nbutlast nth butlast
+push pop nbutlast nth butlast
 ** Push
-   add new element to the list and return the resultant list.
+add new element to the list and return the resultant list.
 ** Pop
-   remove first element from the list and return the removed element.
+remove first element from the list and return the removed element.
 ** Nbutlast
-   remove last n elements from the list and return the resultant list.
+remove last n elements from the list and return the resultant list.
 ** Nth
-   return the nth item in the list.
+return the nth item in the list.
 ** Butlast
-   return list without the last n elements.
+return list without the last n elements.
 ** [[https://www.emacswiki.org/emacs/ListModification][List modification]]
 
 * Alist & Hash-table
-  alist: when list has the form ((key1 . value1)(key2 . value2)), it's called an association list, aka alist. it's used for mapping from keys to values.
-  hash table: a very fast kind of lookup table.
+alist: when list has the form ((key1 . value1)(key2 . value2)), it's called an association list, aka alist. it's used for mapping from keys to values.
+hash table: a very fast kind of lookup table.
 ** Sample
-   ((red . "ff000") (green . "00ff00") (blue . "000ff"))
-   ((red "ff0000") (green "00ff00O") (blue "000ff"))
-   (assoc 'green '((red . "ff000") (green . "00ff00") (blue . "000ff")))  => (green . "00ff00")
+((red . "ff000") (green . "00ff00") (blue . "000ff"))
+((red "ff0000") (green "00ff00O") (blue "000ff"))
+(assoc 'green '((red . "ff000") (green . "00ff00") (blue . "000ff")))  => (green . "00ff00")
 
 * Thing-at-point & Bounds-of-thing-at-point
-  thing should be a symbol specifying a type of syntactic entity,
-  including `symbol', `list', `sexp', `defun',`filename', `url', `email', `word',
-  `sentence', `whitespace', `line', `number', and `page'.
+thing should be a symbol specifying a type of syntactic entity,
+including `symbol', `list', `sexp', `defun',`filename', `url', `email', `word',
+`sentence', `whitespace', `line', `number', and `page'.
 ** Thing-at-point
-   return the thing at point.
+return the thing at point.
 *** Sample
-    (thing-at-point 'word)
+(thing-at-point 'word)
 ** Bounds-of-thing-at-point
-   return the start and end buffer locations for the thing at point.
+return the start and end buffer locations for the thing at point.
 *** Sample
-   (bounds-of-thing-at-point 'word)
+(bounds-of-thing-at-point 'word)
 
 * Eq & Equal
 ** Eq
-   tests whether its arguments are the same object.
+tests whether its arguments are the same object.
 ** Equal
-   tests whether two objects have the same structure and contents.
+tests whether two objects have the same structure and contents.
 
 * Control structures
 ** (if COND THEN ELSE...)
-   if COND yields non-nil, do THEN, else do ELSE...
+if COND yields non-nil, do THEN, else do ELSE...
 ** (cond CLAUSES...)
-   try each clause until one succeeds.
+try each clause until one succeeds.
 *** Sample
-    (cond ((eq 'a 'b) 'first) ((atom 'a) 'second))  => second
+(cond ((eq 'a 'b) 'first) ((atom 'a) 'second))  => second
 ** (when COND BODY...)
-   if COND yields non-nil, do BODY, else return nil.
+if COND yields non-nil, do BODY, else return nil.
 ** (unless COND BODY...)
-   if COND yields nil, do BODY, else return nil.
+if COND yields nil, do BODY, else return nil.
 ** (while TEST BODY...)
-   if TEST yields non-nil, eval BODY... and repeat.
+if TEST yields non-nil, eval BODY... and repeat.
 ** (dolist (VAR LIST [RESULT]) BODY...)
-   Loop over a list.
-   Evaluate BODY with VAR bound to each car from LIST, in turn.
+Loop over a list.
+Evaluate BODY with VAR bound to each car from LIST, in turn.
 *** Sample
-    (dolist (x '(1 2 3)) (insert (number-to-string x)))  => "123"
+(dolist (x '(1 2 3)) (insert (number-to-string x)))  => "123"
 ** (dotimes (VAR COUNT [RESULT]) BODY...)
-   Loop a certain number of times.
-   Evaluate BODY with VAR bound to successive integers running from 0, inclusive, to COUNT, exclusive.
+Loop a certain number of times.
+Evaluate BODY with VAR bound to successive integers running from 0, inclusive, to COUNT, exclusive.
 *** Sample
-    (dotimes (x 3 "return value") (insert (number-to-string x)))  => 012"return value"
+(dotimes (x 3 "return value") (insert (number-to-string x)))  => 012"return value"
 ** (catch TAG BODY...)
-   catch establishes a return point for the throw function.
+catch establishes a return point for the throw function.
 ** (throw TAG VALUE)
-   The purpose of throw is to return from a return point previously established with catch.
+The purpose of throw is to return from a return point previously established with catch.
 *** Sample
-    (catch 'hack (throw 'hack 'yes))  => yes
+(catch 'hack (throw 'hack 'yes))  => yes
 
 * Lambda expression
-  lambda: return a lambda expression (anonymous function), pretty like "anonymous functor" returned by std::bind() in C++ I think.
+lambda: return a lambda expression (anonymous function), pretty like "anonymous functor" returned by std::bind() in C++ I think.
 ** Sample
-   #+begin_src emacs-lisp
-   (progn
-     (fset 'sayHello (lambda () (message "Hello World !")))
-     (symbol-function 'sayHello)
-     (sayHello))
-     #+end_src
+#+begin_src emacs-lisp
+  (progn
+    (fset 'sayHello (lambda () (message "Hello World !")))
+    (symbol-function 'sayHello)
+    (sayHello))
+#+end_src
 
-     #+RESULTS:
-     : Hello World !
+#+RESULTS:
+: Hello World !
 
 * Member & Memq & Memql
-  check if an element is a member of LIST.
-  Comparison done with `equal', `eq', `eql' respectively.
+check if an element is a member of LIST.
+Comparison done with `equal', `eq', `eql' respectively.
 ** Sample
-   (member major-mode ggtags-exclude-modes)
+(member major-mode ggtags-exclude-modes)
 
 * Pass-by-value
 - Like most Lisps, allows only pass-by-value to function.
