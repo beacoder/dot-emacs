@@ -99,7 +99,7 @@
       org-html-validation-link nil
       org-export-kill-product-buffer-when-displayed t
       org-tags-column 80
-      org-agenda-files '("~/workspace/org/")
+      org-agenda-files '("~/workspace/org/" "~/workspace/org/languages/" "~/.emacs.d/tutorials")
       org-highest-priority ?A
       org-default-priority ?B
       org-lowest-priority ?D
