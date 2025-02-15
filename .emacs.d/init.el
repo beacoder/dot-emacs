@@ -18,8 +18,8 @@
 ;;----------------------------------------------------------------------------
 ;; (customize-set-variable 'url-proxy-services
 ;;                         '(("no_proxy" . "^.*example.com")
-;;                           ("https" . "localhost:1087")
-;;                           ("http" . "localhost:1087")
+;;                           ("https" . "localhost:1080")
+;;                           ("http" . "localhost:1080")
 ;;                           ;; socks not working, @see url-default-find-proxy-for-url
 ;;                           ;; ("socks5" . "localhost:1080")
 ;;                           ))
