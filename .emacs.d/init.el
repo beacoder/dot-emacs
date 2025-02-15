@@ -14,7 +14,7 @@
 ;;; Code:
 
 ;;----------------------------------------------------------------------------
-;; proxy setting for url-retrieve, used by eww, w3m...
+;; proxy setting for url-retrieve which is emacs's default http client.
 ;;----------------------------------------------------------------------------
 ;; (customize-set-variable 'url-proxy-services
 ;;                         '(("no_proxy" . "^.*example.com")
