@@ -24,7 +24,7 @@
     :models '(deepseek-chat deepseek-coder)))
 
 (defun gptel-dwim (prompt)
-  "Request a response from the ‘gptel-backend’ for PROMPT.
+  "Request a response from the `gptel-backend' for PROMPT.
 
 The request is asynchronous, this function returns immediately.
 
