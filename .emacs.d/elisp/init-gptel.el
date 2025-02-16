@@ -24,7 +24,7 @@
     :models '(deepseek-chat deepseek-coder)))
 
 (defun gptel-dwim (prompt)
-  "Request a response from the `gptel-backend' for PROMPT.
+  "Request a response from the ‘gptel-backend’ for PROMPT.
 
 The request is asynchronous, this function returns immediately.
 
@@ -36,9 +36,17 @@ If PROMPT is
   (declare (indent 1))
   (interactive (list (smart/read-from-minibuffer "Ask ChatGPT")))
   (when (string= prompt "") (user-error "A prompt is required."))
-  (when current-prefix-arg
-    (when-let ((context (smart/dwim-at-point)))
-      (setq prompt (concat prompt "\n\n" context))))
+  (when-let* ((param (if (listp current-prefix-arg) (car current-prefix-arg) current-prefix-arg))
+              (context
+               (cond
+                ;; handle param as text file
+                ((= param 7) (ignore-errors (read-file-as-string (smart/dwim-at-point))))
+                ;; handle param as binary file (image)
+                ((= param 8) (ignore-errors (base64-encode-file (smart/dwim-at-point))))
+                ((null current-prefix-arg) nil)
+                ;; handle param as text
+                (t (smart/dwim-at-point)))))
+    (setq prompt (concat prompt "\n\n" context)))
   (message "Querying %s..." (gptel-backend-name gptel-backend))
   (gptel--sanitize-model)
   (gptel-request
