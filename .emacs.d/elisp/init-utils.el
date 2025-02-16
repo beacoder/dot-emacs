@@ -226,12 +226,12 @@ If there's a string at point, use it instead of prompt."
       (and (fboundp 'buffer-line-statistics)
            (> (car (buffer-line-statistics)) 10000))))
 
-(defun read-file-as-string-utf-8 (filename)
-  "Read the content of FILENAME as a UTF-8 encoded string."
+(defun read-file-as-string (filename)
+  "Read the content of FILENAME as string."
   (with-temp-buffer
     (set-buffer-file-coding-system 'utf-8)
     (insert-file-contents-literally filename)
-        (buffer-string)))
+    (buffer-string)))
 
 (defun base64-encode-file (filename)
   "Base64 encode the contents of FILENAME."
