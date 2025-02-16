@@ -20,7 +20,7 @@
     :host "api.deepseek.com"
     :endpoint "/chat/completions"
     :stream t
-    :key "sk-c459736eef794f82b46e7116c592e57f"
+    :key "kkkkkkkk"
     :models '(deepseek-chat deepseek-coder)))
 
 (defun gptel-dwim (prompt)
