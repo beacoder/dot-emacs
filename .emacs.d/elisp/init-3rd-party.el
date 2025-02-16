@@ -583,33 +583,6 @@
                   treesit-font-lock-level 4))))
 
 
-;;; LLM client
-;;  "gptel"         => start a LLM session
-;;  "C-c RET"       => send to LLM
-;;  "gptel-send"    => send to LLM
-;;  "gptel-rewrite" => Rewrite, refactor
-(use-package gptel
-  :ensure t
-  :config
-  (setq
-   gptel-model 'qwen2.5:latest
-   gptel-backend (gptel-make-ollama "Ollama"
-                   :header (lambda () `(("Authorization" . ,(concat "Bearer " (gptel--get-api-key)))))  ;; optional
-                   :key 'gptel-api-key                                                             ;; optional
-                   :host "localhost:11434"
-                   :protocol "https"                                                               ;; optional
-                   :endpoint "/v1/chat/completions"                                                ;; optional
-                   :stream t
-                   :models '(qwen2.5:latest
-                             deepseek-r1:7b)))
-  (gptel-make-openai "DeepSeek"                                                                    ;; second model for use
-    :host "api.deepseek.com"
-    :endpoint "/chat/completions"
-    :stream t
-    :key "your-api-key"
-    :models '(deepseek-chat deepseek-coder)))
-
-
 ;;; Emacs X Window Manager
 (when (and (display-graphic-p) *is-linux*)
   (use-package exwm
@@ -688,6 +661,7 @@
 (require 'init-corfu)
 (require 'init-terminals)
 (require 'init-ui)
+(require 'init-gptel)
 
 
 (provide 'init-3rd-party)
