@@ -20,7 +20,7 @@
     :host "api.deepseek.com"
     :endpoint "/chat/completions"
     :stream t
-    :key "deepseek_api_key"
+    :key "sk-c459736eef794f82b46e7116c592e57f"
     :models '(deepseek-chat deepseek-coder)))
 
 (defun gptel-dwim (prompt)
@@ -49,16 +49,16 @@ If PROMPT is
     (lambda (response info)
       (if (not response)
           (message "gptel-dwim failed with message: %s" (plist-get info :status))
-        (with-current-buffer (get-buffer-create "*gptel-dwim*")
-          (let ((inhibit-read-only nil))
-            (goto-char (point-max))
-            (deactivate-mark)
-            (ignore-errors (insert response))
-            (display-buffer
-             (current-buffer)
-             '((display-buffer-reuse-window
-                display-buffer-pop-up-window)
-               (reusable-frames . visible)))))))))
+        (display-buffer
+         (with-current-buffer (get-buffer-create "*LLM response*")
+           (let ((inhibit-read-only nil))
+             (deactivate-mark)
+             (goto-char (point-max))
+             (ignore-errors (insert response))
+             (current-buffer)))
+         '((display-buffer-reuse-window
+            display-buffer-pop-up-window)
+           (reusable-frames . visible)))))))
 
 
 (provide 'init-gptel)
