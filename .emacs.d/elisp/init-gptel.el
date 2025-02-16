@@ -20,12 +20,8 @@
     :host "api.deepseek.com"
     :endpoint "/chat/completions"
     :stream t
-    :key "sk-c459736eef794f82b46e7116c592e57f"
+    :key "deepseek_api_key"
     :models '(deepseek-chat deepseek-coder)))
-
-(defconst gpt-system-message
-  "You are a large language model and a helpful assistant. Respond concisely."
-  "The system message used by gptel.")
 
 (defun gptel-dwim (prompt)
   "Request a response from the `gptel-backend' for PROMPT.
@@ -47,7 +43,8 @@ If PROMPT is
   (gptel--sanitize-model)
   (gptel-request
       prompt
-    :system gpt-system-message
+    :system "You are a large language model and a helpful assistant. Respond concisely."
+    :stream t
     :callback
     (lambda (response info)
       (if (not response)
@@ -56,8 +53,7 @@ If PROMPT is
           (let ((inhibit-read-only nil))
             (goto-char (point-max))
             (deactivate-mark)
-            (insert "\n")
-            (insert response)
+            (ignore-errors (insert response))
             (display-buffer
              (current-buffer)
              '((display-buffer-reuse-window
