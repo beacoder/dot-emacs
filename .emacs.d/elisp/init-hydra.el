@@ -67,8 +67,8 @@
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 [_a_] Counsel-Ag         [_g_] Counsel-Git-Grep [_f_] Counsel-Git      [_l_] Counsel-Locate     [_P_] Move-Text-Up
 [_u_] Update-GTAGS       [_c_] Compile          [_C_] Mode-Compile     [_r_] GPT-Rewrite        [_N_] Move-Text-Down
-[_p_] Previous-Mark      [_n_] Next-Mark        [_s_] GPT-Send         [_d_] Remove-Duplicate   [_o_] Org-Search-View
-[_i_] Pin-Yin            [_w_] Google-Word      [_h_] Hs-Hide-Block    [_H_] Hs-Show-Block      [_t_] GPT-Buffer
+[_p_] Previous-Mark      [_n_] Next-Mark        [_s_] GPT-Dwim         [_d_] Remove-Duplicate   [_o_] Org-Search-View
+[_i_] Pin-Yin            [_w_] Google-Word      [_h_] Hs-Hide-Block    [_H_] Hs-Show-Block      [_t_] GPT-Send
 [_S_] Sort-Lines         [_q_] Quit
   "
   ("a" smart/counsel-ag :exit t)
@@ -81,7 +81,7 @@
   ("r" gptel-rewrite :exit t)
   ("p" pop-to-mark-command)
   ("n" unpop-to-mark-command)
-  ("s" gptel-send :exit t)
+  ("s" gptel-dwim :exit t)
   ("d" delete-duplicate-lines :exit t)
   ("P" move-text-up)
   ("N" move-text-down)
@@ -90,7 +90,7 @@
   ("o" org-ivy-search-view :exit t)
   ("i" hydra-pyim-start :exit t)
   ("w" modi/eww-search-words :exit t)
-  ("t" gptel :exit t)
+  ("t" gptel-send :exit t)
   ("S" sort-lines :exit t)
   ("q" nil))
 (global-set-key (kbd "C-x q") #'hydra-quickness/body)
