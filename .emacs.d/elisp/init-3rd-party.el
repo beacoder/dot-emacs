@@ -643,11 +643,6 @@
          ([remap move-end-of-line] . mwim-end)))
 
 
-;; remove the ELPA directory to eliminate any outdated packages it may contain.
-;; e.g: check gptel's load-path => (cl-find-if (lambda (dir) (string-match-p "gptel" dir)) load-path)
-(shell-command "rm -rf ~/.emacs.d/elpa")
-
-
 ;;; other setting
 (require 'init-hydra)
 (require 'init-git)
