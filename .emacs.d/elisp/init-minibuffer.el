@@ -45,12 +45,6 @@
   (global-set-key [remap switch-to-buffer-other-frame] 'consult-buffer-other-frame)
   (global-set-key [remap goto-line] 'consult-goto-line)
 
-  ;; Consult users will also want the embark-consult package.
-  (use-package embark-consult
-    :ensure t ; only need to install it, embark loads it after consult if found
-    :hook
-    (embark-collect-mode . consult-preview-at-point-mode))
-
   (use-package consult-flycheck :ensure t))
 
 ;; show minibuffer command docs
