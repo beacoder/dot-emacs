@@ -59,8 +59,9 @@ If PROMPT is
           (message "gptel-dwim failed with message: %s" (plist-get info :status))
         (display-buffer
          (with-current-buffer (get-buffer-create "*LLM response*")
-           (let ((inhibit-read-only nil))
+           (let ((inhibit-read-only t))
              (deactivate-mark)
+             (visual-line-mode 1)
              (goto-char (point-max))
              (ignore-errors (insert response))
              (current-buffer)))
