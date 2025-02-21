@@ -23,6 +23,59 @@
     :key "kkkkkkkk"
     :models '(deepseek-chat deepseek-coder)))
 
+
+(defconst coding-prompt (read "
+\"You are a large language model and a careful programmer.
+
+You know how to do file management with following api:
+    1. when you want to create file, you say: touch file_name
+    2. when you want to delete file, you say: rm file
+    3. when you want to open/update file, you say: find-file
+    3. when you want to change file, you say: mv old_file new_file
+
+You also know how to update code with following api:
+    1. when you want to create new function, you say: add function
+    2. when you want to delete function, you say: delete function
+
+Generate response according to user's requirement, provide code and api only, without any additional text, prompt or note.
+
+**Example**:
+
+requirement:
+Please create a Python script named echo.py.
+The functionality of this script is as follows:
+1. read file content.
+2. print file content.
+3. If the file path is invalid or the file cannot be read, output an error message.
+
+**Answer**:
+touch echo.py
+
+```python
+def echo_file_content(file_path):
+    try:
+        with open(file_path, 'r') as file:
+            content = file.read()
+            print(content)
+    except FileNotFoundError:
+        print(f\\\"Error: The specified file path is invalid or the file does not exist.\\\")
+    except IOError:
+        print(\\\"Error: An I/O error occurred while trying to read the file.\\\")
+
+if __name__ == \\\"__main__\\\":
+    import sys
+    if len(sys.argv) != 2:
+        print(\\\"Usage: python echo.py <file_path>\\\")
+    else:
+        file_path = sys.argv[1]
+        echo_file_content(file_path)
+```
+
+requirement:\"
+")
+  "Coding prompt.")
+
+
 (defun gptel-dwim (prompt)
   "Request a response from the `gptel-backend' for PROMPT.
 
@@ -35,18 +88,19 @@ If PROMPT is
   sending to the LLM."
   (declare (indent 1))
   (interactive (list (smart/read-from-minibuffer "Ask ChatGPT")))
-  (when (string= prompt "") (user-error "A prompt is required."))
   (when-let* ((param (if (listp current-prefix-arg) (car current-prefix-arg) current-prefix-arg))
               (context
                (cond
-                ;; handle param as text file
+                ;; handle context as text file
                 ((= param 7) (ignore-errors (read-file-as-string (smart/dwim-at-point))))
-                ;; handle param as binary file (image)
-                ((= param 8) (ignore-errors (base64-encode-file (smart/dwim-at-point))))
+                ;; handle context as binary file (image)
+                ;; ((= param 9) (ignore-errors (base64-encode-file (smart/dwim-at-point))))
                 ((null current-prefix-arg) nil)
-                ;; handle param as text
+                ;; handle context as text
                 (t (smart/dwim-at-point)))))
-    (setq prompt (concat prompt "\n\n" context)))
+    (if (= param 8) ;; handle context as coding requirement
+        (setq prompt (concat coding-prompt "\n\n" context))
+      (setq prompt (concat prompt "\n\n" context))))
   (message "Querying %s..." (gptel-backend-name gptel-backend))
   (gptel--sanitize-model)
   (gptel-request
