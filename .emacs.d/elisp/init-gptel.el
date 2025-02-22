@@ -23,32 +23,28 @@
     :key "kkkkkkkk"
     :models '(deepseek-chat deepseek-coder)))
 
-
-(defconst coding-prompt (read "
+(defconst my--coding-prompt (read "
 \"You are a large language model and a careful programmer.
 
-You know how to do file management with following api:
-    1. when you want to create file, you say: touch file_name
-    2. when you want to delete file, you say: rm file
-    3. when you want to open/update file, you say: find-file
-    3. when you want to change file, you say: mv old_file new_file
+Available APIs:
+- create file with: touch file_name
+- delete file with: rm file_name
+- change file with: mv old_file new_file
+- open   file with: find-file file_name
 
-You also know how to update code with following api:
-    1. when you want to create new function, you say: add function
-    2. when you want to delete function, you say: delete function
+Follow my instructions to generate response:
+- generate code and api only, without any additional text, prompt or note.
+- generate code in full, do not abbreviate or omit code.
 
-Generate response according to user's requirement, provide code and api only, without any additional text, prompt or note.
-
-**Example**:
+Example:
 
 requirement:
-Please create a Python script named echo.py.
-The functionality of this script is as follows:
-1. read file content.
-2. print file content.
-3. If the file path is invalid or the file cannot be read, output an error message.
+Please create a Python script named echo.py. The functionality of this script is as follows:
+- read file content.
+- print file content.
+- If the file path is invalid or the file cannot be read, output an error message.
 
-**Answer**:
+assistant:
 touch echo.py
 
 ```python
@@ -75,6 +71,53 @@ requirement:\"
 ")
   "Coding prompt.")
 
+(defconst my-gptel--system-prompt "You are a large language model and a helpful assistant. Respond concisely."
+  "System prompt.")
+
+(defvar my-gptel--user-prompt ""
+  "User prompt.")
+
+(defvar my-gptel--use-stream-p t
+  "Whether use steaming.")
+
+(defvar my-gptel--param nil
+  "prefix-arg for gptel-dwim.")
+
+(defun my-gptel--request ()
+  "Initiate gptel request."
+  (gptel--sanitize-model)
+  (gptel-request my-gptel--user-prompt
+    :system my-gptel--system-prompt
+    :stream my-gptel--use-stream-p
+    :callback #'my-gptel--response-callback))
+
+(defun my-gptel-retry ()
+  "Retry previous gptel request."
+  (interactive)
+  (my-gptel--request))
+
+;; TODO: parse llm response and execute commands accordingly.
+(defun my-gptel-eval-response (response)
+  "Evaluate gptel RESPONSE."
+  (interactive (list (smart/read-from-minibuffer "Please input LLM response")))
+  (dolist (line (split-string response "\n" t))
+    (message "%s" line)))
+
+(defun my-gptel--response-callback (response info)
+  "Callback function for gptel request."
+  (if (not response)
+      (message "gptel-dwim failed with message: %s" (plist-get info :status))
+    (display-buffer
+     (with-current-buffer (get-buffer-create "*LLM response*")
+       (let ((inhibit-read-only t))
+         (deactivate-mark)
+         (visual-line-mode 1)
+         (goto-char (point-max))
+         (ignore-errors (insert response))
+         (current-buffer)))
+     '((display-buffer-reuse-window
+        display-buffer-pop-up-window)
+       (reusable-frames . visible)))))
 
 (defun gptel-dwim (prompt)
   "Request a response from the `gptel-backend' for PROMPT.
@@ -88,40 +131,22 @@ If PROMPT is
   sending to the LLM."
   (declare (indent 1))
   (interactive (list (smart/read-from-minibuffer "Ask ChatGPT")))
-  (when-let* ((param (if (listp current-prefix-arg) (car current-prefix-arg) current-prefix-arg))
+  (setq my-gptel--param (if (listp current-prefix-arg) (car current-prefix-arg) current-prefix-arg))
+  (when-let* (my-gptel--param
               (context
                (cond
                 ;; handle context as text file
-                ((= param 7) (ignore-errors (read-file-as-string (smart/dwim-at-point))))
+                ((= my-gptel--param 7) (ignore-errors (read-file-as-string (smart/dwim-at-point))))
                 ;; handle context as binary file (image)
-                ;; ((= param 9) (ignore-errors (base64-encode-file (smart/dwim-at-point))))
-                ((null current-prefix-arg) nil)
+                ;; ((= my-gptel--param 9) (ignore-errors (base64-encode-file (smart/dwim-at-point))))
                 ;; handle context as text
                 (t (smart/dwim-at-point)))))
-    (if (= param 8) ;; handle context as coding requirement
-        (setq prompt (concat coding-prompt "\n\n" context))
+    (if (= my-gptel--param 8) ;; handle context as coding requirement, ai-agent
+        (setq prompt (concat my--coding-prompt "\n\n" context))
       (setq prompt (concat prompt "\n\n" context))))
+  (setq my-gptel--user-prompt prompt)
   (message "Querying %s..." (gptel-backend-name gptel-backend))
-  (gptel--sanitize-model)
-  (gptel-request
-      prompt
-    :system "You are a large language model and a helpful assistant. Respond concisely."
-    :stream t
-    :callback
-    (lambda (response info)
-      (if (not response)
-          (message "gptel-dwim failed with message: %s" (plist-get info :status))
-        (display-buffer
-         (with-current-buffer (get-buffer-create "*LLM response*")
-           (let ((inhibit-read-only t))
-             (deactivate-mark)
-             (visual-line-mode 1)
-             (goto-char (point-max))
-             (ignore-errors (insert response))
-             (current-buffer)))
-         '((display-buffer-reuse-window
-            display-buffer-pop-up-window)
-           (reusable-frames . visible)))))))
+  (my-gptel--request))
 
 
 (provide 'init-gptel)
