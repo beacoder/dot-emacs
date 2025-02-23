@@ -96,13 +96,6 @@ requirement:\"
   (interactive)
   (my-gptel--request))
 
-;; TODO: parse llm response and execute commands accordingly.
-(defun my-gptel-eval-response (response)
-  "Evaluate gptel RESPONSE."
-  (interactive (list (smart/read-from-minibuffer "Please input LLM response")))
-  (dolist (line (split-string response "\n" t))
-    (message "%s" line)))
-
 (defun my-gptel--response-callback (response info)
   "Callback function for gptel request."
   (if (not response)
