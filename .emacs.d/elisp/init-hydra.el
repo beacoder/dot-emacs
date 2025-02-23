@@ -69,7 +69,7 @@
 [_u_] Update-GTAGS       [_c_] Compile          [_C_] Mode-Compile     [_r_] GPT-Retry          [_N_] Move-Text-Down
 [_p_] Previous-Mark      [_n_] Next-Mark        [_s_] GPT-Dwim         [_d_] Remove-Duplicate   [_o_] Org-Search-View
 [_i_] Pin-Yin            [_w_] Google-Word      [_h_] Hs-Hide-Block    [_H_] Hs-Show-Block      [_t_] GPT-Send
-[_S_] Sort-Lines         [_e_] GPT-Eval         [_q_] Quit
+[_S_] Sort-Lines         [_q_] Quit
   "
   ("a" smart/counsel-ag :exit t)
   ("g" counsel-git-grep :exit t)
@@ -92,7 +92,6 @@
   ("w" modi/eww-search-words :exit t)
   ("t" gptel-send :exit t)
   ("S" sort-lines :exit t)
-  ("e" my-gptel-eval-response :exit t)
   ("q" nil))
 (global-set-key (kbd "C-x q") #'hydra-quickness/body)
 
