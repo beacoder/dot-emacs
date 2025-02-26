@@ -12,12 +12,21 @@
 ;;  xref-find-definitions (M-.)
 ;;  xref-find-apropos     (M-?)
 ;;  xref-find-references  (M-])
-;;  complete-symbol       (C-M-i)
 ;;  eglot-rename
 
 
-(when (maybe-require-package 'eglot)
-  (maybe-require-package 'consult-eglot))
+;; by default, clangd will be used as c/c++ lsp server
+(use-package eglot
+  :hook (((c-mode c++-mode c-ts-mode c++-ts-mode) . eglot-ensure))
+  :init
+  (setq read-process-output-max (* 1024 1024)) ; 1MB
+  (setq eglot-autoshutdown t
+        eglot-events-buffer-size 0
+        eglot-send-changes-idle-time 0.5)
+  :config
+  (use-package consult-eglot
+    :bind (:map eglot-mode-map
+                ("C-M-." . consult-eglot-symbols))))
 
 
 (provide 'init-eglot)
