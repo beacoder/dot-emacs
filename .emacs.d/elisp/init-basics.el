@@ -321,7 +321,7 @@ Use in `isearch-mode-end-hook'."
 
 
 ;; show elisp error backtrace
-(setq debug-on-error t)
+(setq debug-on-error nil)
 
 ;; enable flyspell in text-mode
 ;;(dolist (hook '(text-mode-hook))
