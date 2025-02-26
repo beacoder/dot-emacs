@@ -10,7 +10,7 @@
 ;;----------------------------------------------------------------------------
 ;;; eglot
 ;;  xref-find-definitions (M-.)
-;;  xref-find-apropos     (M-?)
+;;  consult-eglot-symbols (M-?)
 ;;  xref-find-references  (M-])
 ;;  eglot-rename
 
@@ -26,7 +26,7 @@
   :config
   (use-package consult-eglot
     :bind (:map eglot-mode-map
-                ("C-M-." . consult-eglot-symbols))))
+                ("M-?" . consult-eglot-symbols))))
 
 
 (provide 'init-eglot)
