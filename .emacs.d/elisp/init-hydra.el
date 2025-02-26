@@ -65,33 +65,33 @@
   "
                  ^Commands^
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-[_a_] Counsel-Ag         [_g_] Counsel-Git-Grep [_f_] Counsel-Git      [_l_] Counsel-Locate     [_P_] Move-Text-Up
-[_u_] Update-GTAGS       [_c_] Compile          [_C_] Mode-Compile     [_r_] GPT-Retry          [_N_] Move-Text-Down
-[_p_] Previous-Mark      [_n_] Next-Mark        [_s_] GPT-Dwim         [_d_] Remove-Duplicate   [_o_] Org-Search-View
-[_i_] Pin-Yin            [_w_] Google-Word      [_h_] Hs-Hide-Block    [_H_] Hs-Show-Block      [_t_] GPT-Send
-[_S_] Sort-Lines         [_q_] Quit
+[_a_] Counsel-Ag         [_s_] GPT-Dwim          [_u_] Update-GTAGS       [_p_] Previous-Mark      [_h_] Hs-Hide-Block
+[_g_] Counsel-Git-Grep   [_r_] GPT-Retry         [_c_] Compile            [_n_] Next-Mark          [_H_] Hs-Show-Block
+[_f_] Counsel-Git        [_t_] GPT-Send          [_C_] Mode-Compile       [_P_] Move-Text-Up       [_d_] Remove-Duplicate
+[_l_] Counsel-Locate     [_o_] Org-Search-View   [_w_] Google-Word        [_N_] Move-Text-Down     [_S_] Sort-Lines
+[_i_] Pin-Yin            [_q_] Quit
   "
-  ("a" smart/counsel-ag :exit t)
-  ("g" counsel-git-grep :exit t)
-  ("f" counsel-git :exit t)
-  ("l" counsel-locate :exit t)
-  ("u" ggtags-update-tags :exit t)
-  ("c" compile :exit t)
   ("C" mode-compile :exit t)
-  ("r" my-gptel-retry :exit t)
-  ("p" pop-to-mark-command)
-  ("n" unpop-to-mark-command)
-  ("s" gptel-dwim :exit t)
-  ("d" delete-duplicate-lines :exit t)
-  ("P" move-text-up)
-  ("N" move-text-down)
-  ("h" hs-hide-block)
   ("H" hs-show-block)
-  ("o" org-ivy-search-view :exit t)
-  ("i" hydra-pyim-start :exit t)
-  ("w" modi/eww-search-words :exit t)
-  ("t" gptel-send :exit t)
+  ("N" move-text-down)
+  ("P" move-text-up)
   ("S" sort-lines :exit t)
+  ("a" smart/counsel-ag :exit t)
+  ("c" compile :exit t)
+  ("d" delete-duplicate-lines :exit t)
+  ("f" counsel-git :exit t)
+  ("g" counsel-git-grep :exit t)
+  ("h" hs-hide-block)
+  ("i" hydra-pyim-start :exit t)
+  ("l" counsel-locate :exit t)
+  ("n" unpop-to-mark-command)
+  ("o" org-ivy-search-view :exit t)
+  ("p" pop-to-mark-command)
+  ("r" my-gptel-retry :exit t)
+  ("s" gptel-dwim :exit t)
+  ("t" gptel-send :exit t)
+  ("u" ggtags-update-tags :exit t)
+  ("w" modi/eww-search-words :exit t)
   ("q" nil))
 (global-set-key (kbd "C-x q") #'hydra-quickness/body)
 
