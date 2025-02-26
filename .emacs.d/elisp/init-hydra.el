@@ -99,7 +99,7 @@
 ;; pretty-hydra
 (when (maybe-require-package 'pretty-hydra)
   (use-package pretty-hydra
-    :bind ("C-x C-h" . toggles-hydra/body)
+    :bind ("C-x h" . toggles-hydra/body)
     :init
     (cl-defun pretty-hydra-title (title &optional icon-type icon-name
                                         &key face height v-adjust)
