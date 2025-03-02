@@ -82,7 +82,7 @@ If PROMPT is
   (setq my-gptel--param (if (listp current-prefix-arg) (car current-prefix-arg) current-prefix-arg))
   (when-let* (my-gptel--param
               (context (smart/dwim-at-point)))
-     ;; handle tool use, note: qwen supports tool-use.
+    ;; handle tool-use, e.g: qwen support tool-use.
     (if (= my-gptel--param 8)
         (setq prompt (concat my-gptel--tool-prompt "\n\n" context))
       (setq prompt (concat prompt "\n\n" context))))
