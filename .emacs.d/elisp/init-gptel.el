@@ -214,6 +214,9 @@ If PROMPT is
                             :description "Path to the file to read.  Supports relative paths and ~."))
         :category "filesystem")))
 
+;; enable gptel logging
+(setq gptel-log-level 'info)
+
 
 (provide 'init-gptel)
 ;;; init-gptel.el ends here
