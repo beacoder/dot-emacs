@@ -81,10 +81,12 @@ If PROMPT is
         (context (smart/dwim-at-point)))
     (when local-prefix-arg
       (if (= local-prefix-arg 8)
-          ;; handle tool-use, e.g: qwen support tool-use.
+          ;; e.g: qwen support tool-use.
+          ;; handle tool-use: add context for prompt
           (if (and prompt (not (string= prompt "")))
               (setq prompt (concat my-gptel--tool-prompt "\n\n" prompt))
             (setq prompt (concat my-gptel--tool-prompt "\n\n" context)))
+        ;; otherwise: add prompt for context
         (and context (setq prompt (concat prompt "\n\n" context))))))
   (setq my-gptel--user-prompt prompt)
   (message "Querying %s..." (gptel-backend-name gptel-backend))
