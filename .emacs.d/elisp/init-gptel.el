@@ -35,9 +35,6 @@
 (defvar my-gptel--use-stream-p t
   "Whether use steaming.")
 
-(defvar my-gptel--param nil
-  "prefix-arg for gptel-dwim.")
-
 (defun my-gptel--request ()
   "Initiate gptel request."
   (gptel--sanitize-model)
@@ -79,13 +76,16 @@ If PROMPT is
   sending to the LLM."
   (declare (indent 1))
   (interactive (list (smart/read-from-minibuffer "Ask ChatGPT")))
-  (setq my-gptel--param (if (listp current-prefix-arg) (car current-prefix-arg) current-prefix-arg))
-  (when-let* (my-gptel--param
-              (context (smart/dwim-at-point)))
-    ;; handle tool-use, e.g: qwen support tool-use.
-    (if (= my-gptel--param 8)
-        (setq prompt (concat my-gptel--tool-prompt "\n\n" context))
-      (setq prompt (concat prompt "\n\n" context))))
+  (let ((local-prefix-arg
+         (if (listp current-prefix-arg) (car current-prefix-arg) current-prefix-arg))
+        (context (smart/dwim-at-point)))
+    (when local-prefix-arg
+      (if (= local-prefix-arg 8)
+          ;; handle tool-use, e.g: qwen support tool-use.
+          (if (and prompt (not (string= prompt "")))
+              (setq prompt (concat my-gptel--tool-prompt "\n\n" prompt))
+            (setq prompt (concat my-gptel--tool-prompt "\n\n" context)))
+        (and context (setq prompt (concat prompt "\n\n" context))))))
   (setq my-gptel--user-prompt prompt)
   (message "Querying %s..." (gptel-backend-name gptel-backend))
   (my-gptel--request))
