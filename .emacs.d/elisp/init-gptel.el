@@ -213,6 +213,27 @@ If PROMPT is
    :args (list '(:name "filepath"
                        :type "string"
                        :description "Path to the file to read.  Supports relative paths and ~."))
+   :category "filesystem")
+
+  (gptel-make-tool
+   :function (lambda (script_program script_file script_args)
+               (with-temp-message "Executing command ..."
+                 (shell-command-to-string
+                  (concat script_program " "
+                          (expand-file-name script_file) " "
+                          script_args))))
+   :name "run_script"
+   :description "Run script"
+   :args (list
+          '(:name "script_program"
+                  :type "string"
+                  :description "Program to run the the script.")
+          '(:name "script_file"
+                  :type "string"
+                  :description "Path to the script to run.  Supports relative paths and ~.")
+          '(:name "script_args"
+                  :type "string"
+                  :description "Args for script to run."))
    :category "filesystem"))
 
 ;; enable gptel logging
