@@ -142,7 +142,7 @@
           '(:name "script_args"
                   :type "string"
                   :description "Args for script to run."))
-   :category "filesystem")
+   :category "command")
 
   (gptel-make-tool
    :function (lambda (command)
@@ -154,7 +154,7 @@
           '(:name "command"
                   :type "string"
                   :description "Command to run."))
-   :category "filesystem"))
+   :category "command"))
 
 
 (provide 'init-gptel-tools)
