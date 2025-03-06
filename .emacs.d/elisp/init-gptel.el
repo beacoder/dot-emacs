@@ -11,17 +11,17 @@
   :ensure t
   :config
   (setq
-   gptel-model 'qwen2.5:latest
-   gptel-backend (gptel-make-ollama "Ollama"
+   gptel-model 'deepseek-reasoner
+   gptel-backend (gptel-make-openai "DeepSeek"
+                   :host "api.deepseek.com"
+                   :endpoint "/chat/completions"
                    :stream t
-                   :models '(qwen2.5:latest
-                             deepseek-r1:7b)))
-  (gptel-make-openai "DeepSeek"
-    :host "api.deepseek.com"
-    :endpoint "/chat/completions"
+                   :key "deep-seek-api-key"
+                   :models '(deepseek-chat deepseek-coder deepseek-reasoner)))
+  (gptel-make-ollama "Ollama"
     :stream t
-    :key "kkkkkkkk"
-    :models '(deepseek-chat deepseek-coder)))
+    :models '(qwen2.5:latest
+              deepseek-r1:7b)))
 
 (defconst my-gptel--tool-prompt "Use the provided tools to accomplish this task:"
   "Tool prompt.")
@@ -217,11 +217,9 @@ If PROMPT is
 
   (gptel-make-tool
    :function (lambda (script_program script_file script_args)
-               (with-temp-message "Executing command ..."
-                 (shell-command-to-string
-                  (concat script_program " "
-                          (expand-file-name script_file) " "
-                          script_args))))
+               (let ((command (concat script_program " " (expand-file-name script_file) " " script_args)))
+                 (with-temp-message (format "Running script: %s" command)
+                   (shell-command-to-string command))))
    :name "run_script"
    :description "Run script"
    :args (list
@@ -234,6 +232,18 @@ If PROMPT is
           '(:name "script_args"
                   :type "string"
                   :description "Args for script to run."))
+   :category "filesystem")
+
+  (gptel-make-tool
+   :function (lambda (command)
+               (with-temp-message (format "Running command: %s" command)
+                 (shell-command-to-string command)))
+   :name "run_command"
+   :description "Run command"
+   :args (list
+          '(:name "command"
+                  :type "string"
+                  :description "Command to run."))
    :category "filesystem"))
 
 ;; enable gptel logging
