@@ -17,6 +17,7 @@
 
 ;; by default, clangd will be used as c/c++ lsp server
 (use-package eglot
+  :ensure t
   :hook (((c-mode c++-mode c-ts-mode c++-ts-mode) . eglot-ensure))
   :init
   (setq eglot-stay-out-of '(imenu)
@@ -26,6 +27,7 @@
         eglot-send-changes-idle-time 0.5)
   :config
   (use-package consult-eglot
+    :ensure t
     :bind (:map eglot-mode-map
                 ("M-?" . consult-eglot-symbols))))
 
