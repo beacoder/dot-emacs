@@ -2,6 +2,31 @@
 ;;; Commentary:
 ;;; Code:
 
+;; define tool-callbacks
+(defun my-gptel--read_file(filepath)
+  (with-temp-buffer
+    (insert-file-contents (expand-file-name filepath))
+    (buffer-string)))
+
+(defun my-gptel--read_files (filepaths)
+  (mapconcat
+   (lambda (filepath)
+     (concat (my-gptel--read_file filepath) "\n\n"))
+   filepaths))
+
+(defun my-gptel--create_file(path filename content)
+  (let ((full-path (expand-file-name filename path)))
+    (with-temp-buffer
+      (insert content)
+      (write-file full-path))
+    (format "Created file %s in %s" filename path)))
+
+(defun my-gptel--run_script (script_program script_file script_args)
+  (let ((command
+         (concat script_program " " (expand-file-name script_file) " " script_args)))
+    (with-temp-message (format "Running script: %s" command)
+      (shell-command-to-string command))))
+
 ;; Holds a list of tools available for LLM to use
 ;; @see https://github.com/karthink/gptel/issues/514
 (progn
@@ -94,12 +119,7 @@
    :category "filesystem")
 
   (gptel-make-tool
-   :function (lambda (path filename content)
-               (let ((full-path (expand-file-name filename path)))
-                 (with-temp-buffer
-                   (insert content)
-                   (write-file full-path))
-                 (format "Created file %s in %s" filename path)))
+   :function #'my-gptel--create_file
    :name "create_file"
    :description "Create a new file with the specified content"
    :args (list '(:name "path"
@@ -114,10 +134,7 @@
    :category "filesystem")
 
   (gptel-make-tool
-   :function (lambda (filepath)
-               (with-temp-buffer
-                 (insert-file-contents (expand-file-name filepath))
-                 (buffer-string)))
+   :function #'my-gptel--read_file
    :name "read_file"
    :description "Read and display the contents of a file"
    :args (list '(:name "filepath"
@@ -126,10 +143,16 @@
    :category "filesystem")
 
   (gptel-make-tool
-   :function (lambda (script_program script_file script_args)
-               (let ((command (concat script_program " " (expand-file-name script_file) " " script_args)))
-                 (with-temp-message (format "Running script: %s" command)
-                   (shell-command-to-string command))))
+   :function #'my-gptel--read_files
+   :name "read_multiple_files"
+   :description "Read multiple files simultaneously."
+   :args (list '(:name "filepaths"
+                       :type "array"
+                       :description "Path to the files to read.  Supports relative paths and ~."))
+   :category "filesystem")
+
+  (gptel-make-tool
+   :function #'my-gptel--run_script
    :name "run_script"
    :description "Run script"
    :args (list
