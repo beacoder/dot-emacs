@@ -10,14 +10,10 @@
 (use-package gptel
   :ensure t
   :config
-  (setq
-   gptel-model 'deepseek-reasoner
-   gptel-backend (gptel-make-openai "DeepSeek"
-                   :host "api.deepseek.com"
-                   :endpoint "/chat/completions"
-                   :stream t
-                   :key "deep-seek-api-key"
-                   :models '(deepseek-chat deepseek-coder deepseek-reasoner)))
+  (setq gptel-model   'deepseek-reasoner
+        gptel-backend (gptel-make-deepseek "DeepSeek"
+                        :stream t
+                        :key "deepseek-api-key"))
   (gptel-make-ollama "Ollama"
     :stream t
     :models '(qwen2.5:latest
