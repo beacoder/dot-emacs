@@ -24,6 +24,10 @@
         (write-file full-path))
       (format "Created file %s in %s" filename path)))
 
+  (defun my-gptel--open_file(filepath)
+    (find-file (expand-file-name filepath))
+    (format "Opened file %s" filepath))
+
   (defun my-gptel--run_script (script_program script_file script_args)
     (let ((command
            (concat script_program " " (expand-file-name script_file) " " script_args)))
@@ -143,6 +147,15 @@
    :args (list '(:name "filepaths"
                        :type "array"
                        :description "Path to the files to read.  Supports relative paths and ~."))
+   :category "filesystem")
+
+  (gptel-make-tool
+   :function #'my-gptel--open_file
+   :name "open_file"
+   :description "Open and display the contents of a file."
+   :args (list '(:name "filepath"
+                       :type "string"
+                       :description "Path to the file to open.  Supports relative paths and ~."))
    :category "filesystem")
 
   (gptel-make-tool
