@@ -21,7 +21,15 @@
 
 (require 'init-gptel-tools)
 
-(defconst my-gptel--tool-prompt "Use the provided tools to accomplish this task:"
+(defconst my-gptel--tool-prompt
+  "You are an AI assistant equipped with a set of tools to help complete tasks.
+For each task provided, follow these steps:
+1.Understand the task: Carefully analyze the task requirements.
+2.Select the appropriate tool: Choose the most suitable tool from the provided list to accomplish the task.
+3.Execute the task: Use the selected tool to perform the task step-by-step.
+4.Verify the output: Ensure the result meets the task's requirements.
+5.Proceed to the next task: Move on to the next task only after completing the current one.
+Tasks:"
   "Tool prompt.")
 
 (defconst my-gptel--system-prompt "You are a large language model and a helpful assistant. Respond concisely."
