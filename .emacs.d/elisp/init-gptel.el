@@ -21,15 +21,29 @@
 
 (require 'init-gptel-tools)
 
+(setq gptel-log-level 'info)
+
+(defconst my-gptel--completion-prompt
+  "You are an expert %s programmer.\n
+Follow my instructions to complete the following %s code snippet in a clean, efficient, and idiomatic way.\n
+1.Ensure the code is functional, well-formatted, and follows best practices for the given programming language.\n
+2.Generate ONLY %s code as output, without any explanation or markdown code fences.\n
+3.Generate code in full, do not abbreviate or omit code.\n
+4.Generate completion code only, do not repeat the original code.\n
+5.Do not ask for further clarification, and make any assumptions you need to follow instructions.\n\n
+%s
+"
+  "Completion prompt.")
+
 (defconst my-gptel--tool-prompt
-  "You are an AI assistant equipped with a set of tools to help complete tasks.
-For each task provided, follow these steps:
-1.Understand the task: Carefully analyze the task requirements.
-2.Select the appropriate tool: Choose the most suitable tool from the provided list to accomplish the task.
-3.Execute the task: Use the selected tool to perform the task step-by-step.
-4.Verify the output: Ensure the result meets the task's requirements.
-5.Proceed to the next task: Move on to the next task only after completing the current one.
-Tasks:"
+  "You are an AI assistant equipped with a set of tools to help complete tasks.\n
+For each task provided, follow these steps:\n
+1.Understand the task: Carefully analyze the task requirements.\n
+2.Select the appropriate tool: Choose the most suitable tool from the provided list to accomplish the task.\n
+3.Execute the task: Use the selected tool to perform the task step-by-step.\n
+4.Verify the output: Ensure the result meets the task's requirements.\n
+5.Proceed to the next task: Move on to the next task only after completing the current one.\n
+Tasks:\n"
   "Tool prompt.")
 
 (defconst my-gptel--system-prompt "You are a large language model and a helpful assistant. Respond concisely."
@@ -40,6 +54,12 @@ Tasks:"
 
 (defvar my-gptel--use-stream-p t
   "Whether use steaming.")
+
+(defvar my-gptel--completion-position nil
+  "Current completion position.")
+
+(defvar my-gptel--completion-buffer nil
+  "Buffer for code completion.")
 
 (defun my-gptel--request ()
   "Initiate gptel request."
@@ -53,6 +73,23 @@ Tasks:"
   "Retry previous gptel request."
   (interactive)
   (my-gptel--request))
+
+(defun my-gptel--completion-callback (response info)
+  "Callback function for gptel complete."
+  (if (not response)
+      (message "gptel-complete failed with message: %s" (plist-get info :status))
+    (display-buffer
+     (with-current-buffer my-gptel--completion-buffer
+       (let ((inhibit-read-only t))
+         (deactivate-mark)
+         (visual-line-mode 1)
+         (goto-char my-gptel--completion-position)
+         (ignore-errors(insert response))
+         (setq my-gptel--completion-position (point))
+         (current-buffer)))
+     '((display-buffer-reuse-window
+        display-buffer-pop-up-window)
+       (reusable-frames . visible)))))
 
 (defun my-gptel--response-callback (response info)
   "Callback function for gptel request."
@@ -98,8 +135,25 @@ If PROMPT is
   (message "Querying %s..." (gptel-backend-name gptel-backend))
   (my-gptel--request))
 
-;; enable gptel logging
-(setq gptel-log-level 'info)
+(defun my-gptel-complete ()
+  "Code completion."
+  (interactive)
+  (gptel--sanitize-model)
+  (unless (use-region-p)
+    (user-error "`gptel-complete' requires an active region."))
+  (when (derived-mode-p 'prog-mode)
+    (let* ((lang (downcase (gptel--strip-mode-suffix major-mode)))
+           (code (buffer-substring (region-beginning) (region-end)))
+           (prompt (format my-gptel--completion-prompt lang lang lang code)))
+      (setq my-gptel--completion-position (region-end)
+            my-gptel--completion-buffer (current-buffer))
+      (message "Completing with %s..." (gptel-backend-name gptel-backend))
+      (gptel-request prompt
+        :system my-gptel--system-prompt
+        :stream my-gptel--use-stream-p
+        :callback #'my-gptel--completion-callback))))
+
+(global-set-key (kbd "C-c <TAB>") #'my-gptel-complete)
 
 
 (provide 'init-gptel)
