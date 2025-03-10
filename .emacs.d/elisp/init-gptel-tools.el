@@ -174,13 +174,13 @@
                   :description "Args for script to run."))
    :category "command")
 
+  ;; super-powerful, capable of replacing numerous existing tools.
   (gptel-make-tool
    :function (lambda (command)
                (with-temp-message (format "Running command: %s" command)
                  (shell-command-to-string command)))
    :name "run_command"
-
-   :description "Run command."
+   :description "Run a command."
    :args (list
           '(:name "command"
                   :type "string"
