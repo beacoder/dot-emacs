@@ -136,30 +136,30 @@ If PROMPT is
   (my-gptel--request))
 
 (defun my-gptel-complete ()
-    "Code completion."
-    (interactive)
-    (gptel--sanitize-model)
-    (unless (use-region-p)
-!     (user-error "`gptel-complete' requires an active region."))
-    (when (derived-mode-p 'prog-mode)
-      (let ((original-gptel-model gptel-model)
-            (original-gptel-backend gptel-backend))
-        (unwind-protect
-            (let* ((gptel-model 'qwen2.5:latest)
-                   (gptel-backend (gptel-get-backend "Ollama"))
-                   (lang (downcase (gptel--strip-mode-suffix major-mode)))
-                   (code (buffer-substring (region-beginning) (region-end)))
-                   (prompt (format my-gptel--completion-prompt lang lang lang code)))
-              (setq my-gptel--completion-position (region-end)
-                    my-gptel--completion-buffer (current-buffer))
-              (message "Completing with %s..." (gptel-backend-name gptel-backend))
-              (gptel-request prompt
-                :system my-gptel--system-prompt
-                :stream my-gptel--use-stream-p
-                :callback #'my-gptel--completion-callback))
-          (progn
-            (setq gptel-model original-gptel-model
-                  gptel-backend original-gptel-backend))))))
+  "Code completion."
+  (interactive)
+  (gptel--sanitize-model)
+  (unless (use-region-p)
+    (user-error "`gptel-complete' requires an active region"))
+  (when (derived-mode-p 'prog-mode)
+    (let ((original-gptel-model gptel-model)
+          (original-gptel-backend gptel-backend))
+      (unwind-protect
+          (let* ((gptel-model 'qwen2.5:latest)
+                 (gptel-backend (gptel-get-backend "Ollama"))
+                 (lang (downcase (gptel--strip-mode-suffix major-mode)))
+                 (code (buffer-substring (region-beginning) (region-end)))
+                 (prompt (format my-gptel--completion-prompt lang lang lang code)))
+            (setq my-gptel--completion-position (region-end)
+                  my-gptel--completion-buffer (current-buffer))
+            (message "Completing with %s..." (gptel-backend-name gptel-backend))
+            (gptel-request prompt
+              :system my-gptel--system-prompt
+              :stream my-gptel--use-stream-p
+              :callback #'my-gptel--completion-callback))
+        (progn
+          (setq gptel-model original-gptel-model
+                gptel-backend original-gptel-backend))))))
 
 (global-set-key (kbd "C-c <TAB>") #'my-gptel-complete)
 
