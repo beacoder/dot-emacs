@@ -16,8 +16,7 @@
                         :key "deepseek-api-key"))
   (gptel-make-ollama "Ollama"
     :stream t
-    :models '(qwen2.5:latest
-              deepseek-r1:7b)))
+    :models '(qwen2.5:latest)))
 
 (require 'init-gptel-tools)
 
