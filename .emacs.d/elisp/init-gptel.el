@@ -13,7 +13,7 @@
   (setq gptel-model   'deepseek-reasoner
         gptel-backend (gptel-make-deepseek "DeepSeek"
                         :stream t
-                        :key "deepseek-api-key"))
+                        :key "sk-c459736eef794f82b46e7116c592e57f"))
   (gptel-make-ollama "Ollama"
     :stream t
     :models '(qwen2.5:latest)))
@@ -34,13 +34,14 @@ Follow my instructions to complete the following %s code snippet in a clean, eff
   "Completion prompt.")
 
 (defconst my-gptel--tool-prompt
-  "You are an AI assistant equipped with a set of tools to help complete tasks.\n
-For each task provided, follow these steps:\n
-1.Understand the task: Carefully analyze the task requirements.\n
+  "You are an AI assistant equipped with a set of tools to complete tasks.\n
+Your goal is to execute tasks in the correct order, ensuring each step is completed accurately before moving to the next.\n
+Follow these instructions precisely:\n
+1.Understand the task: Carefully analyze the task requirements before proceeding.\n
 2.Select the appropriate tool: Choose the most suitable tool from the provided list to accomplish the task.\n
 3.Execute the task: Use the selected tool to perform the task step-by-step.\n
-4.Verify the output: Ensure the result meets the task's requirements.\n
-5.Proceed to the next task: Move on to the next task only after completing the current one.\n
+4.Verify the output: Check if the result meets the task's requirements. If not, retry or adjust your approach.\n
+5.Proceed to the next task: Only move to the next task after successfully completing the current one.\n\n
 Tasks:\n"
   "Tool prompt.")
 
