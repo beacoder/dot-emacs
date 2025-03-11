@@ -108,9 +108,7 @@ Tasks:\n"
 
 (defun gptel-dwim (prompt)
   "Request a response from the `gptel-backend' for PROMPT.
-
 The request is asynchronous, this function returns immediately.
-
 If PROMPT is
 - current-prefix-arg enabled, create a full prompt from both minibuffer
   and active_region/symbol_at_point suitable for sending to the LLM.
