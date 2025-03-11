@@ -13,7 +13,7 @@
   (setq gptel-model   'deepseek-reasoner
         gptel-backend (gptel-make-deepseek "DeepSeek"
                         :stream t
-                        :key "sk-c459736eef794f82b46e7116c592e57f"))
+                        :key "deepseek-api-key"))
   (gptel-make-ollama "Ollama"
     :stream t
     :models '(qwen2.5:latest)))
