@@ -30,8 +30,7 @@ Follow my instructions to complete the following %s code snippet in a clean, eff
 3.Generate code in full, do not abbreviate or omit code.\n
 4.Generate completion code only, do not repeat the original code.\n
 5.Do not ask for further clarification, and make any assumptions you need to follow instructions.\n\n
-%s
-"
+%s"
   "Completion prompt.")
 
 (defconst my-gptel--tool-prompt
