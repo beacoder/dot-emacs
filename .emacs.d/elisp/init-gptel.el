@@ -10,10 +10,15 @@
 (use-package gptel
   :ensure t
   :config
-  (setq gptel-model   'deepseek-reasoner
-        gptel-backend (gptel-make-deepseek "DeepSeek"
+  (setq gptel-model   'Qwen/Qwen2.5-Coder-32B-Instruct
+        gptel-backend (gptel-make-openai "QwenAPI"
+                        :host "api-inference.modelscope.cn"
                         :stream t
-                        :key "deepseek-api-key"))
+                        :key "api-key"
+                        :models '(Qwen/Qwen2.5-Coder-32B-Instruct)))
+  (gptel-make-deepseek "DeepSeek"
+    :stream t
+    :key "api-key")
   (gptel-make-ollama "Ollama"
     :stream t
     :models '(qwen2.5:latest)))
