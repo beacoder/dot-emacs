@@ -10,13 +10,7 @@
       (with-temp-buffer
         (insert-file-contents (expand-file-name filepath))
         (buffer-string))))
-
-  (defun my-gptel--read_files (filepaths)
-    (mapconcat
-     (lambda (filepath)
-       (concat (my-gptel--read_file filepath) "\n\n"))
-     filepaths))
-
+  
   (defun my-gptel--create_file(path filename content)
     (let ((full-path (expand-file-name filename path)))
       (with-temp-buffer
@@ -139,16 +133,7 @@
                        :type "string"
                        :description "Path to the file to read.  Supports relative paths and ~."))
    :category "filesystem")
-
-  (gptel-make-tool
-   :function #'my-gptel--read_files
-   :name "read_multiple_files"
-   :description "Read multiple files simultaneously."
-   :args (list '(:name "filepaths"
-                       :type "array"
-                       :description "Path to the files to read.  Supports relative paths and ~."))
-   :category "filesystem")
-
+  
   (gptel-make-tool
    :function #'my-gptel--open_file
    :name "open_file"
