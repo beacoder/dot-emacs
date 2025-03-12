@@ -11,14 +11,22 @@
   :ensure t
   :config
   (setq gptel-model   'Qwen/Qwen2.5-32B-Instruct
-        gptel-backend (gptel-make-openai "QwenAPI"
+        ;; free 2000 request per-day
+        gptel-backend (gptel-make-openai "Free"
                         :host "api-inference.modelscope.cn"
                         :stream t
-                        :key "api-key"
+                        :key ""
                         :models '(Qwen/Qwen2.5-32B-Instruct)))
+  ;; cheaper than deepseek in daytime
+  (gptel-make-openai "QwenAPI"
+    :host "dashscope.aliyuncs.com/compatible-mode"
+    :stream t
+    :key ""
+    :models '(qwen2.5-32b-instruct))
+  ;; cheaper than qwen in nighttime
   (gptel-make-deepseek "DeepSeek"
     :stream t
-    :key "api-key")
+    :key "")
   (gptel-make-ollama "Ollama"
     :stream t
     :models '(qwen2.5:latest)))
