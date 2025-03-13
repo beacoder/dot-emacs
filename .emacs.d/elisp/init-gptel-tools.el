@@ -202,4 +202,4 @@
 
 
 (provide 'init-gptel-tools)
-;;; init-gptel-tools ends here
+;;; init-gptel-tools.el ends here
