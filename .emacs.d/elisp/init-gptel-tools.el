@@ -5,6 +5,21 @@
 ;; Define tool-callbacks
 ;; @note return either a result or a message to inform the LLM
 (progn
+  (defun my-gptel--run_async_command (callback command)
+    "Run COMMAND asynchronously and pass output to CALLBACK."
+    (let ((buffer (generate-new-buffer " *async output*")))
+      (async-shell-command command buffer nil) ; Disable auto-display
+      (let ((proc (get-buffer-process buffer)))
+        (when proc
+          (set-process-sentinel
+           proc
+           (λ (process _event)
+             (unless (process-live-p process)
+               (with-current-buffer (process-buffer process)
+                 (let ((output (buffer-substring-no-properties (point-min) (point-max))))
+                   (kill-buffer (current-buffer))
+                   (funcall callback output))))))))))
+  
   (defun my-gptel--read_file(filepath)
     (with-temp-message (format "Reading file: %s" filepath)
       (with-temp-buffer
@@ -170,7 +185,20 @@
           '(:name "command"
                   :type "string"
                   :description "Command to run."))
-   :category "command"))
+   :category "command")
+
+  ;; async-tools make multiple agents possible.
+  (gptel-make-tool
+   :function #'my-gptel--run_async_command
+   :name "run_async_command"
+   :description "Run an async command."
+   :args (list
+          '(:name "command"
+                  :type "string"
+                  :description "Command to run."))
+   :category "command"
+   :async t
+   :include t))
 
 
 (provide 'init-gptel-tools)
