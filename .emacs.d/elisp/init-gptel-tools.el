@@ -6,20 +6,25 @@
 ;; @note return either a result or a message to inform the LLM
 (progn
   (defun my-gptel--run_async_command (callback command)
-    "Run COMMAND asynchronously and pass output to CALLBACK."
-    (let ((buffer (generate-new-buffer " *async output*")))
-      (async-shell-command command buffer nil) ; Disable auto-display
-      (let ((proc (get-buffer-process buffer)))
-        (when proc
-          (set-process-sentinel
-           proc
-           (lambda (process _event)
-             (unless (process-live-p process)
-               (with-current-buffer (process-buffer process)
-                 (let ((output (buffer-substring-no-properties (point-min) (point-max))))
-                   (kill-buffer (current-buffer))
-                   (funcall callback output))))))))))
-  
+      "Run COMMAND asynchronously and pass output to CALLBACK."
+      (condition-case error
+          (let ((buffer (generate-new-buffer " *async output*")))
+            (with-temp-message (format "Running async command: %s" command)
+              (async-shell-command command buffer nil))
+            (let ((proc (get-buffer-process buffer)))
+              (when proc
+                (set-process-sentinel
+                 proc
+                 (λ (process _event)
+                   (unless (process-live-p process)
+                     (with-current-buffer (process-buffer process)
+                       (let ((output (buffer-substring-no-properties (point-min) (point-max))))
+                         (kill-buffer (current-buffer))
+                         (funcall callback output)))))))))
+        (t
+         ;; Handle any kind of error
+         (funcall callback (format "An error occurred: %s" error)))))
+
   (defun my-gptel--read_file(filepath)
     (with-temp-message (format "Reading file: %s" filepath)
       (with-temp-buffer
