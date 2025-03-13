@@ -13,7 +13,7 @@
         (when proc
           (set-process-sentinel
            proc
-           (λ (process _event)
+           (lambda (process _event)
              (unless (process-live-p process)
                (with-current-buffer (process-buffer process)
                  (let ((output (buffer-substring-no-properties (point-min) (point-max))))
