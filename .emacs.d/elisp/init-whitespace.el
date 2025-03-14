@@ -22,5 +22,11 @@
 (add-hook 'after-init-hook #'global-whitespace-cleanup-mode)
 
 
+;;; markdown-mode
+(when (maybe-require-package 'markdown-mode)
+  (with-eval-after-load 'whitespace-cleanup-mode
+    (push 'markdown-mode whitespace-cleanup-mode-ignore-modes)))
+
+
 (provide 'init-whitespace)
 ;;; init-whitespace.el ends here
