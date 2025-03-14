@@ -64,12 +64,6 @@
 ;; (setq lisp-indent-function 'common-lisp-indent-function)
 
 
-;;; markdown-mode
-(when (maybe-require-package 'markdown-mode)
-  (with-eval-after-load 'whitespace-cleanup-mode
-    (push 'markdown-mode whitespace-cleanup-mode-ignore-modes)))
-
-
 ;;; ttcn3 setting
 (autoload 'ttcn-3-mode "ttcn3" "Major mode for ttcn3 files" t)
 (add-to-list 'auto-mode-alist '("\\.ttcn$" . ttcn-3-mode))
