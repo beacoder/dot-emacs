@@ -111,7 +111,6 @@
 
 
 ;;; Load configs for specific features and modes
-(require 'init-hippie-expand)
 (require 'init-cc)
 (require 'tempo-c-cpp)
 (require 'init-alias)
