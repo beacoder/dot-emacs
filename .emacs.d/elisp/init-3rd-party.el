@@ -654,7 +654,6 @@
 (require 'init-org)
 (require 'init-eww)
 (require 'init-flymake)
-(require 'init-http)
 (require 'init-calendar)
 (require 'ipc-udp)
 (require 'init-eglot)
