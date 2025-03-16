@@ -5,31 +5,6 @@
 ;; Define tool-callbacks
 ;; @note return either a result or a message to inform the LLM
 (progn
-  (defun my-gptel--edit-buffer (buffer-name old-string new-string)
-    "In BUFFER-NAME, replace OLD-STRING with NEW-STRING."
-    (with-current-buffer buffer-name
-      (let ((case-fold-search nil))  ;; Case-sensitive search
-        (save-excursion
-          (goto-char (point-min))
-          (let ((count 0))
-            (while (search-forward old-string nil t)
-              (setq count (1+ count)))
-            (if (= count 0)
-                (format "Error: Could not find text to replace in buffer %s" buffer-name)
-              (if (> count 1)
-                  (format "Error: Found %d matches for the text to replace in buffer %s" count buffer-name)
-                (goto-char (point-min))
-                (search-forward old-string)
-                (replace-match new-string t t)
-                (format "Successfully edited buffer %s" buffer-name))))))))
-
-  (defun my-gptel--replace-buffer (buffer-name content)
-    "Completely replace contents of BUFFER-NAME with CONTENT."
-    (with-current-buffer buffer-name
-      (erase-buffer)
-      (insert content)
-      (format "Buffer replaced: %s" buffer-name)))
-
   (defun my-gptel--run_async_command (callback command)
     "Run COMMAND asynchronously and pass output to CALLBACK."
     (condition-case error
@@ -132,38 +107,6 @@
    :args (list '(:name "buffer"
                        :type "string"
                        :description "The name of the buffer whose contents are to be retrieved"))
-   :category "emacs")
-
-  (gptel-make-tool
-   :function #'my-gptel--edit-buffer
-   :name "edit_buffer"
-   :description "Edits emacs buffers."
-   :args (list '(:name "buffer_name"
-                       :type string
-                       :description "Name of the buffer to modify"
-                       :required t)
-               '(:name "old_string"
-                       :type string
-                       :description "Text to replace (must match exactly)"
-                       :required t)
-               '(:name "new_string"
-                       :type string
-                       :description "Text to replace old_string with"
-                       :required t))
-   :category "emacs")
-
-  (gptel-make-tool
-   :function #'my-gptel--replace-buffer
-   :name "replace_buffer"
-   :description "Completely overwrites buffer contents"
-   :args (list '(:name "buffer_name"
-                       :type string
-                       :description "Name of the buffer to overwrite"
-                       :required t)
-               '(:name "content"
-                       :type string
-                       :description "Content to write to the buffer"
-                       :required t))
    :category "emacs")
 
   (gptel-make-tool
