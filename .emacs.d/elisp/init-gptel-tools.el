@@ -5,32 +5,57 @@
 ;; Define tool-callbacks
 ;; @note return either a result or a message to inform the LLM
 (progn
+  (defun my-gptel--edit-buffer (buffer-name old-string new-string)
+    "In BUFFER-NAME, replace OLD-STRING with NEW-STRING."
+    (with-current-buffer buffer-name
+      (let ((case-fold-search nil))  ;; Case-sensitive search
+        (save-excursion
+          (goto-char (point-min))
+          (let ((count 0))
+            (while (search-forward old-string nil t)
+              (setq count (1+ count)))
+            (if (= count 0)
+                (format "Error: Could not find text to replace in buffer %s" buffer-name)
+              (if (> count 1)
+                  (format "Error: Found %d matches for the text to replace in buffer %s" count buffer-name)
+                (goto-char (point-min))
+                (search-forward old-string)
+                (replace-match new-string t t)
+                (format "Successfully edited buffer %s" buffer-name))))))))
+
+  (defun my-gptel--replace-buffer (buffer-name content)
+    "Completely replace contents of BUFFER-NAME with CONTENT."
+    (with-current-buffer buffer-name
+      (erase-buffer)
+      (insert content)
+      (format "Buffer replaced: %s" buffer-name)))
+
   (defun my-gptel--run_async_command (callback command)
-      "Run COMMAND asynchronously and pass output to CALLBACK."
-      (condition-case error
-          (let ((buffer (generate-new-buffer " *async output*")))
-            (with-temp-message (format "Running async command: %s" command)
-              (async-shell-command command buffer nil))
-            (let ((proc (get-buffer-process buffer)))
-              (when proc
-                (set-process-sentinel
-                 proc
-                 (lambda (process _event)
-                   (unless (process-live-p process)
-                     (with-current-buffer (process-buffer process)
-                       (let ((output (buffer-substring-no-properties (point-min) (point-max))))
-                         (kill-buffer (current-buffer))
-                         (funcall callback output)))))))))
-        (t
-         ;; Handle any kind of error
-         (funcall callback (format "An error occurred: %s" error)))))
+    "Run COMMAND asynchronously and pass output to CALLBACK."
+    (condition-case error
+        (let ((buffer (generate-new-buffer " *async output*")))
+          (with-temp-message (format "Running async command: %s" command)
+            (async-shell-command command buffer nil))
+          (let ((proc (get-buffer-process buffer)))
+            (when proc
+              (set-process-sentinel
+               proc
+               (lambda (process _event)
+                 (unless (process-live-p process)
+                   (with-current-buffer (process-buffer process)
+                     (let ((output (buffer-substring-no-properties (point-min) (point-max))))
+                       (kill-buffer (current-buffer))
+                       (funcall callback output)))))))))
+      (t
+       ;; Handle any kind of error
+       (funcall callback (format "An error occurred: %s" error)))))
 
   (defun my-gptel--read_file(filepath)
     (with-temp-message (format "Reading file: %s" filepath)
       (with-temp-buffer
         (insert-file-contents (expand-file-name filepath))
         (buffer-string))))
-  
+
   (defun my-gptel--create_file(path filename content)
     (let ((full-path (expand-file-name filename path)))
       (with-temp-buffer
@@ -110,6 +135,38 @@
    :category "emacs")
 
   (gptel-make-tool
+   :function #'my-gptel--edit-buffer
+   :name "edit_buffer"
+   :description "Edits emacs buffers."
+   :args (list '(:name "buffer_name"
+                       :type string
+                       :description "Name of the buffer to modify"
+                       :required t)
+               '(:name "old_string"
+                       :type string
+                       :description "Text to replace (must match exactly)"
+                       :required t)
+               '(:name "new_string"
+                       :type string
+                       :description "Text to replace old_string with"
+                       :required t))
+   :category "emacs")
+
+  (gptel-make-tool
+   :function #'my-gptel--replace-buffer
+   :name "replace_buffer"
+   :description "Completely overwrites buffer contents"
+   :args (list '(:name "buffer_name"
+                       :type string
+                       :description "Name of the buffer to overwrite"
+                       :required t)
+               '(:name "content"
+                       :type string
+                       :description "Content to write to the buffer"
+                       :required t))
+   :category "emacs")
+
+  (gptel-make-tool
    :function (lambda (directory) (mapconcat #'identity (directory-files directory) "\n"))
    :name "list_directory"
    :description "List the contents of a given directory."
@@ -153,7 +210,7 @@
                        :type "string"
                        :description "Path to the file to read.  Supports relative paths and ~."))
    :category "filesystem")
-  
+
   (gptel-make-tool
    :function #'my-gptel--open_file
    :name "open_file"
