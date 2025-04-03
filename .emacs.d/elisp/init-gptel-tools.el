@@ -21,7 +21,7 @@
         (if (not edit-success)
             (format "Failed to edited %s" file-name)
           (write-file file-name)
-          (format "Successfully edited %s" file-name)))))
+          (format "Successfully edited %s at line %d" file-name line-number)))))
 
   (defun my-gptel--run_async_command (callback command)
     "Run COMMAND asynchronously and pass output to CALLBACK."
