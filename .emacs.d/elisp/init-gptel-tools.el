@@ -5,6 +5,24 @@
 ;; Define tool-callbacks
 ;; @note return either a result or a message to inform the LLM
 (progn
+  (defun my-gptel--edit-file (file-name line-number old-string new-string)
+    "In FILE-PATH, replace OLD-STRING with NEW-STRING at LINE-NUMBER."
+    (with-temp-buffer
+      (let ((case-fold-search nil)
+            (edit-success nil)
+            (file-name (expand-file-name file-name)))
+        (insert-file-contents file-name)
+        (when (not (string= old-string ""))
+          (goto-char (point-min))
+          (forward-line (1- line-number))
+          (when (search-forward old-string nil t)
+            (replace-match new-string t t)
+            (setq edit-success t)))
+        (if (not edit-success)
+            (format "Failed to edited %s" file-name)
+          (write-file file-name)
+          (format "Successfully edited %s" file-name)))))
+
   (defun my-gptel--run_async_command (callback command)
     "Run COMMAND asynchronously and pass output to CALLBACK."
     (condition-case error
@@ -161,6 +179,24 @@
    :args (list '(:name "filepath"
                        :type "string"
                        :description "Path to the file to open.  Supports relative paths and ~."))
+   :category "filesystem")
+
+  (gptel-make-tool
+   :function #'my-gptel--edit-file
+   :name "edit_file"
+   :description "Update file content by replacing old-string with new-string at a specific line."
+   :args (list '(:name "file-name"
+                       :type "string"
+                       :description "The name of the file to edit")
+               '(:name "line-number"
+                       :type "integer"
+                       :description "The line number of the file where edit start")
+               '(:name "old-string"
+                       :type "string"
+                       :description "The old-string to be replaced.")
+               '(:name "new-string"
+                       :type "string"
+                       :description "The new-string to replace old-string."))
    :category "filesystem")
 
   (gptel-make-tool
