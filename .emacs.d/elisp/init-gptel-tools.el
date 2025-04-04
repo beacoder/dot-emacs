@@ -5,15 +5,15 @@
 ;; Define tool-callbacks
 ;; @note return either a result or a message to inform the LLM
 (progn
-  (defun my-gptel--edit-file (file-path file-edits)
+  (defun my-gptel--edit_file (file-path file-edits)
     "In FILE-PATH, apply FILE-EDITS with pattern matching and replacing."
-    (let ((inhibit-read-only t)
-          (case-fold-search nil)
-          (edit-success nil)
-          (file-name (expand-file-name file-path))
-          (yes-to-all nil)
-          (ask-once-done nil))
-      (with-current-buffer (find-file file-name)
+    (with-current-buffer (find-file (expand-file-name file-path))
+      (let ((inhibit-read-only t)
+            (case-fold-search nil)
+            (edit-success nil)
+            (file-name (expand-file-name file-path))
+            (yes-to-all nil)
+            (ask-once-done nil))
         (dolist (file-edit (seq-into file-edits 'list))
           (when-let ((line-number (plist-get file-edit :line_number))
                      (old-string (plist-get file-edit :old_string))
@@ -193,9 +193,9 @@
    :category "filesystem")
 
   (gptel-make-tool
-   :function #'my-gptel--edit-file
+   :function #'my-gptel--edit_file
    :name "edit_file"
-   :description "Update file content with a list of edits, each edit contains a line-number,
+   :description "Edit file with a list of edits, each edit contains a line-number,
 a old-string and a new-string, new-string will replace the old-string at the specified line."
    :args (list '(:name "file-path"
                        :type "string"
