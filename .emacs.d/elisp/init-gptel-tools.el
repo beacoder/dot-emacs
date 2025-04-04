@@ -5,23 +5,27 @@
 ;; Define tool-callbacks
 ;; @note return either a result or a message to inform the LLM
 (progn
-  (defun my-gptel--edit-file (file-name line-number old-string new-string)
-    "In FILE-PATH, replace OLD-STRING with NEW-STRING at LINE-NUMBER."
+  (defun my-gptel--edit-file (file-path file-edits)
+    "In FILE-PATH, apply FILE-EDITS with pattern matching and replacing."
     (with-temp-buffer
       (let ((case-fold-search nil)
             (edit-success nil)
-            (file-name (expand-file-name file-name)))
+            (file-name (expand-file-name file-path)))
         (insert-file-contents file-name)
-        (when (not (string= old-string ""))
-          (goto-char (point-min))
-          (forward-line (1- line-number))
-          (when (search-forward old-string nil t)
-            (replace-match new-string t t)
-            (setq edit-success t)))
+        (dolist (file-edit (seq-into file-edits 'list))
+          (when-let ((line-number (plist-get file-edit :line_number))
+                     (old-string (plist-get file-edit :old_string))
+                     (new-string (plist-get file-edit :new_string))
+                     (is-valid-old-string (not (string= old-string ""))))
+            (goto-char (point-min))
+            (forward-line (1- line-number))
+            (when (search-forward old-string nil t)
+              (replace-match new-string t t)
+              (setq edit-success t))))
         (if (not edit-success)
             (format "Failed to edited %s" file-name)
           (write-file file-name)
-          (format "Successfully edited %s at line %d" file-name line-number)))))
+          (format "Successfully edited %s" file-name)))))
 
   (defun my-gptel--run_async_command (callback command)
     "Run COMMAND asynchronously and pass output to CALLBACK."
@@ -184,19 +188,22 @@
   (gptel-make-tool
    :function #'my-gptel--edit-file
    :name "edit_file"
-   :description "Update file content by replacing old-string with new-string at a specific line."
-   :args (list '(:name "file-name"
+   :description "Update file content with a list of edits, each edit contains a line-number,
+a old-string and a new-string, new-string will replace the old-string at the specified line."
+   :args (list '(:name "file-path"
                        :type "string"
-                       :description "The name of the file to edit")
-               '(:name "line-number"
-                       :type "integer"
-                       :description "The line number of the file where edit start")
-               '(:name "old-string"
-                       :type "string"
-                       :description "The old-string to be replaced.")
-               '(:name "new-string"
-                       :type "string"
-                       :description "The new-string to replace old-string."))
+                       :description "The full path of the file to edit")
+               '(:name "file-edits"
+                       :type array
+                       :items (:type object
+                                     :properties
+                                     (:line_number
+                                      (:type integer :description "The line number of the file where edit starts.")
+                                      :old_string
+                                      (:type string :description "The old-string to be replaced.")
+                                      :new_string
+                                      (:type string :description "The new-string to replace old-string.")))
+                       :description "The list of edits to apply on the file"))
    :category "filesystem")
 
   (gptel-make-tool
