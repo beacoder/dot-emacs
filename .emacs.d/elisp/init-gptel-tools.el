@@ -7,11 +7,13 @@
 (progn
   (defun my-gptel--edit-file (file-path file-edits)
     "In FILE-PATH, apply FILE-EDITS with pattern matching and replacing."
-    (with-temp-buffer
-      (let ((case-fold-search nil)
-            (edit-success nil)
-            (file-name (expand-file-name file-path)))
-        (insert-file-contents file-name)
+    (let ((inhibit-read-only t)
+          (case-fold-search nil)
+          (edit-success nil)
+          (file-name (expand-file-name file-path))
+          (yes-to-all nil)
+          (ask-once-done nil))
+      (with-current-buffer (find-file file-name)
         (dolist (file-edit (seq-into file-edits 'list))
           (when-let ((line-number (plist-get file-edit :line_number))
                      (old-string (plist-get file-edit :old_string))
@@ -19,13 +21,18 @@
                      (is-valid-old-string (not (string= old-string ""))))
             (goto-char (point-min))
             (forward-line (1- line-number))
-            (when (search-forward old-string nil t)
+            (when (and (search-forward old-string nil t)
+                       (or yes-to-all (y-or-n-p (format "Replacing \"%s\" with \"%s\" ?" old-string new-string))))
               (replace-match new-string t t)
-              (setq edit-success t))))
-        (if (not edit-success)
-            (format "Failed to edited %s" file-name)
-          (write-file file-name)
-          (format "Successfully edited %s" file-name)))))
+              (setq edit-success t)
+              (unless (or yes-to-all ask-once-done)
+                (setq yes-to-all (y-or-n-p (format "Say yes to all the following replacement?"))
+                      ask-once-done t)))))
+        (if (and edit-success (y-or-n-p (format "Finished replacing, save changes to file?")))
+            (progn
+              (write-file file-name)
+              (format "Successfully edited %s" file-name))
+          (format "Failed to edited %s" file-name)))))
 
   (defun my-gptel--run_async_command (callback command)
     "Run COMMAND asynchronously and pass output to CALLBACK."
