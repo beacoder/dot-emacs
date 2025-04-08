@@ -535,7 +535,7 @@
 ;; "r" => rename
 ;; "w" => save
 (when (maybe-require-package 'symbol-overlay)
-  (dolist (hook '(prog-mode-hook html-mode-hook css-mode-hook yaml-mode-hook conf-mode-hook))
+  (dolist (hook '(prog-mode-hook html-mode-hook css-mode-hook yaml-mode-hook conf-mode-hook text-mode-hook fundamental-mode-hook))
     (add-hook hook 'symbol-overlay-mode))
   (with-eval-after-load 'symbol-overlay
     ;; (define-key symbol-overlay-mode-map (kbd "p") #'symbol-overlay-jump-prev)
