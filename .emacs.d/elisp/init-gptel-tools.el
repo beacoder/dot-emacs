@@ -112,7 +112,7 @@
  :name "read_url"
  :description "Fetch and read the contents of a URL."
  :args (list '(:name "url"
-                     :type "string"
+                     :type string
                      :description "The URL to read"))
  :category "web")
 
@@ -121,10 +121,10 @@
  :name "append_to_buffer"
  :description "Append text to the an Emacs buffer.  If the buffer does not exist, it will be created."
  :args (list '(:name "buffer"
-                     :type "string"
+                     :type string
                      :description "The name of the buffer to append text to.")
              '(:name "text"
-                     :type "string"
+                     :type string
                      :description "The text to append to the buffer."))
  :category "emacs")
 
@@ -133,7 +133,7 @@
  :name "read_buffer"
  :description "Return the contents of an Emacs buffer."
  :args (list '(:name "buffer"
-                     :type "string"
+                     :type string
                      :description "The name of the buffer whose contents are to be retrieved"))
  :category "emacs")
 
@@ -142,7 +142,7 @@
  :name "list_directory"
  :description "List the contents of a given directory."
  :args (list '(:name "directory"
-                     :type "string"
+                     :type string
                      :description "The path to the directory to list"))
  :category "filesystem")
 
@@ -151,10 +151,10 @@
  :name "make_directory"
  :description "Create a new directory with the given name in the specified parent directory."
  :args (list '(:name "parent"
-                     :type "string"
+                     :type string
                      :description "The parent directory where the new directory should be created, e.g. /tmp")
              '(:name "name"
-                     :type "string"
+                     :type string
                      :description "The name of the new directory to create, e.g. testdir"))
  :category "filesystem")
 
@@ -163,13 +163,13 @@
  :name "create_file"
  :description "Create a new file with the specified content."
  :args (list '(:name "path"
-                     :type "string"
+                     :type string
                      :description "The directory where to create the file")
              '(:name "filename"
-                     :type "string"
+                     :type string
                      :description "The name of the file to create")
              '(:name "content"
-                     :type "string"
+                     :type string
                      :description "The content to write to the file"))
  :category "filesystem")
 
@@ -178,7 +178,7 @@
  :name "read_file"
  :description "Read and display the contents of a file."
  :args (list '(:name "filepath"
-                     :type "string"
+                     :type string
                      :description "Path to the file to read.  Supports relative paths and ~."))
  :category "filesystem")
 
@@ -187,7 +187,7 @@
  :name "open_file"
  :description "Open and display the contents of a file."
  :args (list '(:name "filepath"
-                     :type "string"
+                     :type string
                      :description "Path to the file to open.  Supports relative paths and ~."))
  :category "filesystem")
 
@@ -218,13 +218,13 @@ a old-string and a new-string, new-string will replace the old-string at the spe
  :description "Run the script along with its specified arguments using the program."
  :args (list
         '(:name "script_program"
-                :type "string"
+                :type string
                 :description "Program to run the the script.")
         '(:name "script_file"
-                :type "string"
+                :type string
                 :description "Path to the script to run.  Supports relative paths and ~.")
         '(:name "script_args"
-                :type "string"
+                :type string
                 :description "Args for script to run."))
  :category "command")
 
@@ -237,7 +237,7 @@ a old-string and a new-string, new-string will replace the old-string at the spe
  :description "Run a command."
  :args (list
         '(:name "command"
-                :type "string"
+                :type string
                 :description "Command to run."))
  :category "command")
 
@@ -248,7 +248,7 @@ a old-string and a new-string, new-string will replace the old-string at the spe
  :description "Run an async command."
  :args (list
         '(:name "command"
-                :type "string"
+                :type string
                 :description "Command to run."))
  :category "command"
  :async t
