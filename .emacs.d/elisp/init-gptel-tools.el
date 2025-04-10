@@ -6,7 +6,7 @@
 ;; @note return either a result or a message to inform the LLM
 (defun my-gptel--edit_file (file-path file-edits)
   "In FILE-PATH, apply FILE-EDITS with pattern matching and replacing."
-  (if (and (not (string= file-path "")) file-edits)
+  (if (and file-path (not (string= file-path "")) file-edits)
       (with-current-buffer (get-buffer-create "*edit-file*")
         (insert-file-contents (expand-file-name file-path))
         (let ((inhibit-read-only t)
