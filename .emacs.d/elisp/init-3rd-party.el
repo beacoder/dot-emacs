@@ -637,6 +637,12 @@
          ([remap move-end-of-line] . mwim-end)))
 
 
+;;; emacs-ipython-notebook
+;;  for .ipynb, enable ein:ipynb-mode
+(use-package ein
+  :ensure t)
+
+
 ;;; other setting
 (require 'init-hydra)
 (require 'init-git)
