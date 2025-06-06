@@ -68,10 +68,10 @@
 [_a_] Counsel-Ag         [_s_] GPT-Dwim          [_u_] Update-GTAGS       [_p_] Previous-Mark      [_h_] Hs-Hide-Block
 [_g_] Counsel-Git-Grep   [_r_] GPT-Retry         [_c_] Compile            [_n_] Next-Mark          [_H_] Hs-Show-Block
 [_f_] Counsel-Git        [_t_] GPT-Send          [_o_] Org-Search-View    [_P_] Move-Text-Up       [_d_] Remove-Duplicate
-[_l_] Counsel-Locate     [_C_] GPT-Complete      [_w_] Google-Word        [_N_] Move-Text-Down     [_S_] Sort-Lines
+[_l_] Counsel-Locate     [_C_] GPT-Session       [_w_] Google-Word        [_N_] Move-Text-Down     [_S_] Sort-Lines
 [_i_] Pin-Yin            [_q_] Quit
   "
-  ("C" my-gptel-complete :exit t)
+  ("C" gptel :exit t)
   ("H" hs-show-block)
   ("N" move-text-down)
   ("P" move-text-up)
