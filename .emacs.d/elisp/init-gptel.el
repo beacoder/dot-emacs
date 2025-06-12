@@ -73,11 +73,15 @@ Tasks:\n"
 (defvar my-gptel--completion-buffer nil
   "Buffer for code completion.")
 
+(defun my-gptel--is-qwen3 ()
+  "Check if current model is qwen3."
+  (string-prefix-p (downcase "qwen3") (downcase (symbol-name gptel-model))))
+
 (defun my-gptel--request ()
   "Initiate gptel request."
   (gptel--sanitize-model)
   (gptel-request my-gptel--user-prompt
-    :system my-gptel--system-prompt
+    :system (if (my-gptel--is-qwen3) (concat my-gptel--system-prompt "/no_think") my-gptel--system-prompt)
     :stream my-gptel--use-stream-p
     :callback #'my-gptel--response-callback))
 
