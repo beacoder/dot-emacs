@@ -65,20 +65,19 @@
   "
                  ^Commands^
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-[_a_] Counsel-Ag         [_s_] GPT-Dwim          [_u_] Update-GTAGS       [_p_] Previous-Mark      [_h_] Hs-Hide-Block
+[_a_] Counsel-Ag         [_d_] GPT-Dwim          [_u_] Update-GTAGS       [_p_] Previous-Mark      [_h_] Hs-Hide-Block
 [_g_] Counsel-Git-Grep   [_r_] GPT-Retry         [_c_] Compile            [_n_] Next-Mark          [_H_] Hs-Show-Block
-[_f_] Counsel-Git        [_t_] GPT-Send          [_o_] Org-Search-View    [_P_] Move-Text-Up       [_d_] Remove-Duplicate
-[_l_] Counsel-Locate     [_C_] GPT-Session       [_w_] Google-Word        [_N_] Move-Text-Down     [_S_] Sort-Lines
+[_f_] Counsel-Git        [_t_] GPT-Send          [_o_] Org-Search-View    [_P_] Move-Text-Up       [_D_] Remove-Duplicate
+[_l_] Counsel-Locate     [_s_] GPT-Session       [_w_] Google-Word        [_N_] Move-Text-Down     [_S_] Sort-Lines
 [_i_] Pin-Yin            [_q_] Quit
   "
-  ("C" gptel :exit t)
   ("H" hs-show-block)
   ("N" move-text-down)
   ("P" move-text-up)
   ("S" sort-lines :exit t)
   ("a" smart/counsel-ag :exit t)
   ("c" compile :exit t)
-  ("d" delete-duplicate-lines :exit t)
+  ("D" delete-duplicate-lines :exit t)
   ("f" counsel-git :exit t)
   ("g" counsel-git-grep :exit t)
   ("h" hs-hide-block)
@@ -88,7 +87,8 @@
   ("o" org-ivy-search-view :exit t)
   ("p" pop-to-mark-command)
   ("r" my-gptel-retry :exit t)
-  ("s" gptel-dwim :exit t)
+  ("d" gptel-dwim :exit t)
+  ("s" gptel :exit t)
   ("t" gptel-send :exit t)
   ("u" ggtags-update-tags :exit t)
   ("w" modi/eww-search-words :exit t)
