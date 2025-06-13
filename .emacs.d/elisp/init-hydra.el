@@ -86,7 +86,7 @@
   ("n" unpop-to-mark-command)
   ("o" org-ivy-search-view :exit t)
   ("p" pop-to-mark-command)
-  ("r" my-gptel-retry :exit t)
+  ("r" gptel-retry :exit t)
   ("d" gptel-dwim :exit t)
   ("s" gptel :exit t)
   ("t" gptel-send :exit t)
