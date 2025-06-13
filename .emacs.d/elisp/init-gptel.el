@@ -86,11 +86,6 @@ Tasks:\n"
     :stream my-gptel--use-stream-p
     :callback #'my-gptel--response-callback))
 
-(defun my-gptel-retry ()
-  "Retry previous gptel request."
-  (interactive)
-  (my-gptel--request))
-
 (defun my-gptel--completion-callback (response info)
   "Callback function for gptel complete."
   (if (not response)
@@ -150,7 +145,12 @@ If PROMPT is
   (message "Querying %s..." (gptel-backend-name gptel-backend))
   (my-gptel--request))
 
-(defun my-gptel-complete ()
+(defun my-gptel-retry ()
+  "Retry previous gptel request."
+  (interactive)
+  (my-gptel--request))
+
+(defun gptel-complete ()
   "Code completion."
   (interactive)
   (gptel--sanitize-model)
@@ -170,7 +170,7 @@ If PROMPT is
         :stream my-gptel--use-stream-p
         :callback #'my-gptel--completion-callback))))
 
-(global-set-key (kbd "C-c <TAB>") #'my-gptel-complete)
+(global-set-key (kbd "C-c <TAB>") #'gptel-complete)
 
 
 (provide 'init-gptel)
