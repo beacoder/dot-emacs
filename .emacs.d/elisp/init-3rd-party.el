@@ -637,6 +637,18 @@
          ([remap move-end-of-line] . mwim-end)))
 
 
+;;; connect to mcp server
+(use-package mcp
+  :ensure t
+  :after gptel
+  :custom (mcp-hub-servers
+           '(("weather" :command "python" :args ("/github.com/beacoder/llm/blob/main/misc/mcp_weather_server.py"))))
+  :config (progn
+            (require 'gptel-integrations)
+            (require 'mcp-hub))
+  :hook (after-init . mcp-hub-start-all-server))
+
+
 ;;; other setting
 (require 'init-hydra)
 (require 'init-git)
