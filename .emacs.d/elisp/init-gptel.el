@@ -145,7 +145,7 @@ If PROMPT is
   (message "Querying %s..." (gptel-backend-name gptel-backend))
   (my-gptel--request))
 
-(defun my-gptel-retry ()
+(defun gptel-retry ()
   "Retry previous gptel request."
   (interactive)
   (my-gptel--request))
