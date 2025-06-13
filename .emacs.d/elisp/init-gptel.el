@@ -74,8 +74,9 @@ Tasks:\n"
   "Buffer for code completion.")
 
 (defun my-gptel--is-qwen3 ()
-  "Check if current model is qwen3."
-  (string-prefix-p (downcase "qwen3") (downcase (symbol-name gptel-model))))
+  "Check if current model is Qwen3."
+  (when-let ((model-name (symbol-name gptel-model)))
+    (string-match "qwen3" (downcase model-name))))
 
 (defun my-gptel--request ()
   "Initiate gptel request."
