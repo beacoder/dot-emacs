@@ -162,12 +162,12 @@ If PROMPT is
            (gptel-backend (gptel-get-backend "Ollama"))
            (lang (downcase (gptel--strip-mode-suffix major-mode)))
            (code (buffer-substring (region-beginning) (region-end)))
-           (prompt (format my-gptel--completion-prompt lang lang lang code)))
+           (prompt (format my-gptel--completion-prompt lang lang lang)))
       (setq my-gptel--completion-position (region-end)
             my-gptel--completion-buffer (current-buffer))
       (message "Completing with %s..." (gptel-backend-name gptel-backend))
-      (gptel-request prompt
-        :system my-gptel--system-prompt
+      (gptel-request code
+        :system prompt
         :stream my-gptel--use-stream-p
         :callback #'my-gptel--completion-callback))))
 
