@@ -35,6 +35,9 @@
 
 (setq gptel-log-level 'info)
 
+(defconst my-gptel--default-prompt "You are a large language model and a helpful assistant. Respond concisely."
+  "Default prompt.")
+
 (defconst my-gptel--completion-prompt
   "You are an expert %s programmer.
 Follow my instructions to complete the following %s code snippet in a clean, efficient, and idiomatic way.
@@ -42,8 +45,7 @@ Follow my instructions to complete the following %s code snippet in a clean, eff
 2.Generate ONLY %s code as output, without any explanation or markdown code fences.
 3.Generate code in full, do not abbreviate or omit code.
 4.Generate completion code only, do not repeat the original code.
-5.Do not ask for further clarification, and make any assumptions you need to follow instructions.\n\n
-%s"
+5.Do not ask for further clarification, and make any assumptions you need to follow instructions."
   "Completion prompt.")
 
 (defconst my-gptel--tool-prompt
@@ -54,11 +56,10 @@ Follow these instructions precisely:
 2.Select the appropriate tool: Choose the most suitable tool from the provided list to accomplish the task.
 3.Execute the task: Use the selected tool to perform the task step-by-step.
 4.Verify the output: Check if the result meets the task's requirements. If not, retry or adjust your approach.
-5.Proceed to the next task: Only move to the next task after successfully completing the current one.\n\n
-Tasks:\n"
+5.Proceed to the next task: Only move to the next task after successfully completing the current one."
   "Tool prompt.")
 
-(defconst my-gptel--system-prompt "You are a large language model and a helpful assistant. Respond concisely."
+(defvar my-gptel--system-prompt ""
   "System prompt.")
 
 (defvar my-gptel--user-prompt ""
@@ -131,19 +132,19 @@ If PROMPT is
   (interactive (list (smart/read-from-minibuffer "Ask ChatGPT")))
   (let ((local-prefix-arg
          (if (listp current-prefix-arg) (car current-prefix-arg) current-prefix-arg))
-        (context (smart/dwim-at-point)))
+        (context (smart/dwim-at-point))
+        (my-gptel--system-prompt my-gptel--default-prompt))
     (when local-prefix-arg
-      (if (= local-prefix-arg 8)
-          ;; e.g: qwen support tool-use.
-          ;; handle tool-use: add context for prompt
-          (if (and prompt (not (string= prompt "")))
-              (setq prompt (concat my-gptel--tool-prompt "\n\n" prompt))
-            (setq prompt (concat my-gptel--tool-prompt "\n\n" context)))
-        ;; otherwise: add prompt for context
-        (and context (setq prompt (concat prompt "\n\n" context))))))
-  (setq my-gptel--user-prompt prompt)
-  (message "Querying %s..." (gptel-backend-name gptel-backend))
-  (my-gptel--request))
+      (when (= local-prefix-arg 8)
+        ;; e.g: qwen support tool-use.
+        ;; handle tool-use: add context for prompt
+        (setq my-gptel--system-prompt my-gptel--tool-prompt))
+      ;; add prompt for context
+      (and context
+           (setq prompt (concat prompt "\n\n" context))))
+    (setq my-gptel--user-prompt prompt)
+    (message "Querying %s..." (gptel-backend-name gptel-backend))
+    (my-gptel--request)))
 
 (defun gptel-retry ()
   "Retry previous gptel request."
