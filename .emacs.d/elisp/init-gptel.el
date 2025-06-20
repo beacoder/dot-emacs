@@ -59,7 +59,7 @@ Follow these instructions precisely:
 5.Proceed to the next task: Only move to the next task after successfully completing the current one."
   "Tool prompt.")
 
-(defvar my-gptel--system-prompt ""
+(defvar my-gptel--system-prompt my-gptel--default-prompt
   "System prompt.")
 
 (defvar my-gptel--user-prompt ""
