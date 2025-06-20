@@ -59,6 +59,10 @@ Follow these instructions precisely:
 5.Proceed to the next task: Only move to the next task after successfully completing the current one."
   "Tool prompt.")
 
+;; Add the tool directive to `gptel-directives'
+(unless (alist-get 'tool gptel-directives)
+  (add-to-list 'gptel-directives `(tool . ,my-gptel--tool-prompt)))
+
 (defvar my-gptel--system-prompt ""
   "System prompt.")
 
