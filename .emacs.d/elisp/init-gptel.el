@@ -59,7 +59,7 @@ Follow these instructions precisely:
 5.Proceed to the next task: Only move to the next task after successfully completing the current one."
   "Tool prompt.")
 
-(defvar my-gptel--system-prompt my-gptel--default-prompt
+(defvar my-gptel--system-prompt ""
   "System prompt.")
 
 (defvar my-gptel--user-prompt ""
@@ -132,8 +132,8 @@ If PROMPT is
   (interactive (list (smart/read-from-minibuffer "Ask ChatGPT")))
   (let ((local-prefix-arg
          (if (listp current-prefix-arg) (car current-prefix-arg) current-prefix-arg))
-        (context (smart/dwim-at-point))
-        (my-gptel--system-prompt my-gptel--default-prompt))
+        (context (smart/dwim-at-point)))
+    (setq my-gptel--system-prompt my-gptel--default-prompt)
     (when local-prefix-arg
       (when (= local-prefix-arg 8)
         ;; e.g: qwen support tool-use.
