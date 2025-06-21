@@ -138,6 +138,15 @@
  :category "emacs")
 
 (gptel-make-tool
+ :function #'my-gptel--open_file
+ :name "open_file"
+ :description "Open and display the contents of a file."
+ :args (list '(:name "filepath"
+                     :type string
+                     :description "Path to the file to open.  Supports relative paths and ~."))
+ :category "emacs")
+
+(gptel-make-tool
  :function (lambda (directory) (mapconcat #'identity (directory-files directory) "\n"))
  :name "list_directory"
  :description "List the contents of a given directory."
@@ -180,15 +189,6 @@
  :args (list '(:name "filepath"
                      :type string
                      :description "Path to the file to read.  Supports relative paths and ~."))
- :category "filesystem")
-
-(gptel-make-tool
- :function #'my-gptel--open_file
- :name "open_file"
- :description "Open and display the contents of a file."
- :args (list '(:name "filepath"
-                     :type string
-                     :description "Path to the file to open.  Supports relative paths and ~."))
  :category "filesystem")
 
 (gptel-make-tool
