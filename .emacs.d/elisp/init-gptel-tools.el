@@ -60,11 +60,15 @@
       (buffer-string))))
 
 (defun my-gptel--create_file(path filename content)
-  (let ((full-path (expand-file-name filename path)))
-    (with-temp-buffer
-      (insert content)
-      (write-file full-path))
-    (format "Created file %s in %s" filename path)))
+  (condition-case error
+      (let ((full-path (expand-file-name filename path)))
+        (with-temp-buffer
+          (insert content)
+          (write-file full-path))
+        (format "Created file %s in %s" filename path))
+    (t
+     ;; Handle any kind of error
+     (format "An error occurred: %s" error))))
 
 (defun my-gptel--open_file(filepath)
   (find-file (expand-file-name filepath))
