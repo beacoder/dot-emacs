@@ -4,24 +4,24 @@
 
 ;; Define tool-callbacks
 ;; @note return either a result or a message to inform the LLM
-(defun my-gptel--edit_file (file-path file-edits)
-  "In FILE-PATH, apply FILE-EDITS with pattern matching and replacing."
-  (if (and file-path (not (string= file-path "")) file-edits)
+(defun my-gptel--edit_file (file_path file_changes)
+  "In FILE_PATH, apply FILE_CHANGES with pattern matching and replacing."
+  (if (and file_path (not (string= file_path "")) file_changes)
       (with-current-buffer (get-buffer-create "*edit-file*")
-        (insert-file-contents (expand-file-name file-path))
+        (insert-file-contents (expand-file-name file_path))
         (let ((inhibit-read-only t)
               (case-fold-search nil)
-              (file-name (expand-file-name file-path))
+              (file-name (expand-file-name file_path))
               (edit-success nil))
           ;; apply changes
-          (dolist (file-edit (seq-into file-edits 'list))
-            (when-let ((line-number (plist-get file-edit :line_number))
-                       (old-string (plist-get file-edit :old_string))
-                       (new-string (plist-get file-edit :new_string)))
+          (dolist (file_change (seq-into file_changes 'list))
+            (when-let ((line_number (plist-get file_change :line_number))
+                       (old_string (plist-get file_change :old_string))
+                       (new_string (plist-get file_change :new_string)))
               (goto-char (point-min))
-              (forward-line (1- line-number))
-              (when (search-forward old-string nil t)
-                (replace-match new-string t t)
+              (forward-line (1- line_number))
+              (when (search-forward old_string nil t)
+                (replace-match new_string t t)
                 (setq edit-success t))))
           ;; return result to gptel
           (if edit-success
@@ -30,7 +30,7 @@
                 (ediff-buffers (find-file-noselect file-name) (current-buffer))
                 (format "Successfully edited %s" file-name))
             (format "Failed to edited %s" file-name))))
-    (format "Failed to edited %s" file-path)))
+    (format "Failed to edited %s" file_path)))
 
 (defun my-gptel--run_async_command (callback command)
   "Run COMMAND asynchronously and pass output to CALLBACK."
@@ -197,22 +197,22 @@
 (gptel-make-tool
  :function #'my-gptel--edit_file
  :name "edit_file"
- :description "Edit file with a list of edits, each edit contains a line-number,
-a old-string and a new-string, new-string will replace the old-string at the specified line."
- :args (list '(:name "file-path"
+ :description "Edit file with a list of changes, each change contains a line number,
+an old string and a new string, new string will replace the old string at the specified line."
+ :args (list '(:name "file_path"
                      :type string
                      :description "The full path of the file to edit")
-             '(:name "file-edits"
+             '(:name "file_changes"
                      :type array
                      :items (:type object
                                    :properties
                                    (:line_number
                                     (:type integer :description "The line number of the file where edit starts.")
                                     :old_string
-                                    (:type string :description "The old-string to be replaced.")
+                                    (:type string :description "The old string to be replaced.")
                                     :new_string
-                                    (:type string :description "The new-string to replace old-string.")))
-                     :description "The list of edits to apply on the file"))
+                                    (:type string :description "The new string to replace old.")))
+                     :description "The list of changes to apply on the file"))
  :category "filesystem")
 
 (gptel-make-tool
