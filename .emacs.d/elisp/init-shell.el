@@ -26,10 +26,9 @@
 
 
 (setq shell-file-name "/bin/bash")
-(defvar my-term-shell "/bin/bash")
 (defadvice ansi-term (before force-bash)
   "Use bash as the default shell for `ansi-term'."
-  (interactive (list my-term-shell)))
+  (interactive (list shell-file-name)))
 (ad-activate 'ansi-term)
 
 
