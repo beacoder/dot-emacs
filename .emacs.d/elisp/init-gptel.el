@@ -63,7 +63,7 @@ Follow my instructions to complete the following %s code snippet in a clean, eff
         (concat tool-prompt "/no_think")
       tool-prompt)))
 
-;; Add the tool directive to `gptel-directives'
+;; add tool directive to `gptel-directives'
 (unless (alist-get 'tool gptel-directives)
   (add-to-list 'gptel-directives `(tool . ,#'my-gptel--tool-prompt)))
 
@@ -73,7 +73,8 @@ Follow my instructions to complete the following %s code snippet in a clean, eff
 (defvar my-gptel--user-prompt ""
   "User prompt.")
 
-(defvar my-gptel--use-stream-p t
+;; use non-stream, since streaming not working well with tool_call
+(defvar my-gptel--use-stream-p nil
   "Whether use steaming.")
 
 (defvar my-gptel--completion-position nil
