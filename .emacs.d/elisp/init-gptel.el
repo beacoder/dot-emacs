@@ -73,7 +73,7 @@ Follow my instructions to complete the following %s code snippet in a clean, eff
 (defvar my-gptel--user-prompt ""
   "User prompt.")
 
-;; use non-stream, since streaming not working well with tool_call
+;; use non-stream, since streaming not working well with `tool_call'
 (defvar my-gptel--use-stream-p nil
   "Whether use steaming.")
 
