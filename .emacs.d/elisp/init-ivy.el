@@ -84,30 +84,44 @@ With prefix args, read directory from minibuffer."
 
 
 ;;; enable git-grep to filter by files as well
-;;  e.g: filter python file: <*.py>def
+;;  e.g: filter python file: <*.py><*.cpp>def
+;;  meaning: grep def in py files, not in cpp files
 (with-eval-after-load 'counsel
   ;; refer to counsel-git-grep-cmd-default
   (defconst git-grep-cmd-orig "git --no-pager grep -n --no-color -I -i -e \"%s\"")
 
   (defun counsel-git-grep-filter (orig-fun &optional input-str)
-    "Apply git-grep for a specific file type for ORIG-FUN with arg INPUT-STR."
-    (let ((file-pattern nil)
+    "Apply git-grep for a specific file type for ORIG-FUN with INPUT-STR."
+    (let ((file-patterns nil)
+          (exclude-patterns nil)
           (counsel-git-grep-cmd nil))
       (when input-str
-	;; check file extension
-	(when (string-match "^<\\(.+\\)>\\(.+\\)" input-str)
-          (setq file-pattern (match-string 1 input-str)
-		input-str (match-string 2 input-str)))
-	;; filter with extension
-	(if (and file-pattern input-str)
-            ;; with filter: git --no-pager grep -n --no-color -I -i -e "text-to-grep" -- "*.txt"
-            (setq counsel-git-grep-cmd
-                  (format "%s -- \"%s\"" git-grep-cmd-orig file-pattern))
-          ;; no filter
+        ;; Check for complex pattern format <FILE-PATTERNS><EXCLUDE-PATTERNS>SEARCH-TEXT
+        (if (string-match "^<\\(.*\\)><\\(.+\\)>\\(.+\\)" input-str)
+            (setq file-patterns (match-string 1 input-str)
+                  exclude-patterns (match-string 2 input-str)
+                  input-str (match-string 3 input-str))
+          ;; Fallback to simpler pattern format <FILE-PATTERNS>SEARCH-TEXT
+          (when (string-match "^<\\(.+\\)>\\(.+\\)" input-str)
+            (setq file-patterns (match-string 1 input-str)
+                  input-str (match-string 2 input-str))))
+        ;; Build the git-grep command based on file and exclude patterns
+        (when (and input-str (or file-patterns exclude-patterns))
+          (setq counsel-git-grep-cmd (format "%s -- " git-grep-cmd-orig))
+          (when file-patterns
+            (dolist (pattern (split-string file-patterns " +"))
+              (unless (string-empty-p pattern)
+                (setq counsel-git-grep-cmd
+                      (format "%s \"%s\"" counsel-git-grep-cmd pattern)))))
+          (when exclude-patterns
+            (dolist (pattern (split-string exclude-patterns " +"))
+              (unless (string-empty-p pattern)
+                (setq counsel-git-grep-cmd
+                      (format "%s \":(exclude)%s\"" counsel-git-grep-cmd pattern))))))
+        ;; Fallback to original command if no filters are applied
+        (unless counsel-git-grep-cmd
           (setq counsel-git-grep-cmd git-grep-cmd-orig))
-	(message "git-grep actual input-str is %s" input-str)
-	(message "git-grep actual cmd is %s" counsel-git-grep-cmd)
-	(apply orig-fun (list input-str)))))
+        (apply orig-fun (list input-str)))))
 
   (advice-add #'counsel-git-grep-function :around #'counsel-git-grep-filter))
 
