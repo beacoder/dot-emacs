@@ -87,10 +87,11 @@ With prefix args, read directory from minibuffer."
 ;;  e.g: filter python file: <*.py><*.cpp>def
 ;;  meaning: grep def in py files, not in cpp files
 (with-eval-after-load 'counsel
+
   ;; refer to counsel-git-grep-cmd-default
   (defconst git-grep-cmd-orig "git --no-pager grep -n --no-color -I -i -e \"%s\"")
 
-  (defun counsel-git-grep-filter (orig-fun &optional input-str)
+  (defun apply-git-grep-filter (orig-fun &optional input-str)
     "Apply git-grep for a specific file type for ORIG-FUN with INPUT-STR."
     (let ((file-patterns nil)
           (exclude-patterns nil)
@@ -123,7 +124,8 @@ With prefix args, read directory from minibuffer."
           (setq counsel-git-grep-cmd git-grep-cmd-orig))
         (apply orig-fun (list input-str)))))
 
-  (advice-add #'counsel-git-grep-function :around #'counsel-git-grep-filter))
+  (advice-add #'counsel-git-grep-function :around #'apply-git-grep-filter)
+  (advice-add #'counsel--git-grep-occur-cmd :around #'apply-git-grep-filter))
 
 
 ;;; enable ivy with preview ability
