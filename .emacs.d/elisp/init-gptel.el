@@ -123,7 +123,11 @@ Follow my instructions to complete the following %s code snippet in a clean, eff
          (deactivate-mark)
          (visual-line-mode 1)
          (goto-char (point-max))
-         (ignore-errors (insert response))
+         (ignore-errors
+           (insert response)
+           (insert "\n"))
+         (markdown-mode)
+         (gptel-mode)
          (current-buffer)))
      '((display-buffer-reuse-window
         display-buffer-pop-up-window)
