@@ -11,6 +11,8 @@
   :ensure t
   :config
   (setq gptel-model   'Qwen/Qwen2.5-32B-Instruct
+        ;; Randomness in response text, 0 to 2
+        gptel-temperature 0
         ;; free 2000 request per-day
         gptel-backend (gptel-make-openai "Free"
                         :host "api-inference.modelscope.cn"
