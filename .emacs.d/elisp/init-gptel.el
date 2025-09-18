@@ -19,13 +19,6 @@
                         :stream t
                         :key ""
                         :models '(Qwen/Qwen2.5-32B-Instruct)))
-  ;; cheaper than deepseek in daytime
-  (gptel-make-openai "QwenAPI"
-    :host "dashscope.aliyuncs.com/compatible-mode"
-    :stream t
-    :key ""
-    :models '(qwen2.5-32b-instruct))
-  ;; cheaper than qwen in nighttime
   (gptel-make-deepseek "DeepSeek"
     :stream t
     :key "")
