@@ -33,6 +33,7 @@
   :ensure t
   :init
   (setq cape-dict-case-fold t)
+  (add-to-list 'completion-at-point-functions #'cape-line)
   (add-to-list 'completion-at-point-functions #'cape-dabbrev)
   (add-to-list 'completion-at-point-functions #'cape-file)
   (add-to-list 'completion-at-point-functions #'cape-elisp-block)
