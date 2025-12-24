@@ -7,19 +7,21 @@
 ;;; Code:
 
 ;;; useful key-bindings and commands
+;;; useful key-bindings and commands
 ;;----------------------------------------------------------------------------
 ;;  eglot
 ;;-----------------------------
-;;  xref-find-definitions     (M-.)
-;;  xref-find-references      (M-])
-;;  consult-eglot-symbols     (M-?)
-;;  eglot-find-declaration    (C-c d)
-;;  eglot-find-implementation (C-c i)
-;;  eglot-find-typeDefinition (C-c t)
+;;  xref-find-definitions      (M-.)
+;;  xref-find-references       (M-])
+;;  consult-eglot-symbols      (M-?)
+;;  eglot-find-declaration     (C-c d)
+;;  eglot-find-implementation  (C-c i)
+;;  eglot-find-typeDefinition  (C-c t)
 ;;-----------------------------
-;;  eglot-rename              (C-c r)
-;;  eglot-show-type-hierarchy (C-c h)
-;;  eglot-show-call-hierarchy (C-c c)
+;;  eglot-rename               (C-c r)
+;;  eglot-show-type-hierarchy  (C-c h)
+;;  eglot-show-call-hierarchy  (C-c c)
+;;  eglot-code-action-quickfix (C-<return>)
 
 
 ;; ensure 1.19 installed since it added call and type hierarchies.
@@ -36,7 +38,8 @@
               ("C-c t" . eglot-find-typeDefinition)
               ("C-c r" . eglot-rename)
               ("C-c h" . eglot-show-type-hierarchy)
-              ("C-c c" . eglot-show-call-hierarchy))
+              ("C-c c" . eglot-show-call-hierarchy)
+              ("C-<return>" . eglot-code-action-quickfix))
   :init
   (setq eglot-stay-out-of '(imenu)
         read-process-output-max (* 1024 1024) ; 1MB
