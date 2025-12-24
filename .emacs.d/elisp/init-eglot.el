@@ -7,7 +7,6 @@
 ;;; Code:
 
 ;;; useful key-bindings and commands
-;;; useful key-bindings and commands
 ;;----------------------------------------------------------------------------
 ;;  eglot
 ;;-----------------------------
