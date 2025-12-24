@@ -179,7 +179,6 @@
   (progn
     (require 'call-graph)
     (global-set-key (kbd "C-c g") #'call-graph)
-    (customize-set-variable 'call-graph-path-to-global "/home/ehumche/private/gtags-6.6.6/bin/")
     (customize-set-variable 'imenu-max-item-length "Unlimited")
     (customize-set-variable 'call-graph-display-func-args t)
     (dolist (filter '("grep -v \"Test/\""
@@ -191,9 +190,7 @@
                       "grep -v \"/test_src/\""
                       "grep -v \"/signalflowtest/\""
                       "grep -v \"/ct/\""))
-      (add-to-list 'call-graph-search-filters filter))
-    (setq call-graph-search-backend "Global"
-          call-graph-path-to-git-repo "/workspace/git/ehumche/epg__3/")))
+      (add-to-list 'call-graph-search-filters filter))))
 
 
 ;;; org-ivy-search
