@@ -10,16 +10,16 @@
 ;;----------------------------------------------------------------------------
 ;;  eglot
 ;;-----------------------------
-;;  xref-find-definitions (M-.)
-;;  xref-find-references  (M-])
-;;  consult-eglot-symbols (M-?)
-;;  eglot-find-declaration
-;;  eglot-find-implementation
-;;  eglot-find-typeDefinition
+;;  xref-find-definitions     (M-.)
+;;  xref-find-references      (M-])
+;;  consult-eglot-symbols     (M-?)
+;;  eglot-find-declaration    (C-c d)
+;;  eglot-find-implementation (C-c i)
+;;  eglot-find-typeDefinition (C-c t)
 ;;-----------------------------
-;;  eglot-rename
-;;  eglot-show-type-hierarchy
-;;  eglot-show-call-hierarchy
+;;  eglot-rename              (C-c r)
+;;  eglot-show-type-hierarchy (C-c h)
+;;  eglot-show-call-hierarchy (C-c c)
 
 
 ;; ensure 1.19 installed since it added call and type hierarchies.
@@ -30,6 +30,13 @@
 (use-package eglot
   :ensure t
   :hook (((c-mode c++-mode c-ts-mode c++-ts-mode) . eglot-ensure))
+  :bind (:map eglot-mode-map
+              ("C-c d" . eglot-find-declaration)
+              ("C-c i" . eglot-find-implementation)
+              ("C-c t" . eglot-find-typeDefinition)
+              ("C-c r" . eglot-rename)
+              ("C-c h" . eglot-show-type-hierarchy)
+              ("C-c c" . eglot-show-call-hierarchy))
   :init
   (setq eglot-stay-out-of '(imenu)
         read-process-output-max (* 1024 1024) ; 1MB
@@ -42,7 +49,7 @@
     (add-to-list 'eglot-server-programs
                  '((c-mode c-ts-mode c++-mode c++-ts-mode objc-mode)
                    . ("clangd"
-                      "--compile-commands-dir=./build/Linux_x86_64"
+                      "--compile-commands-dir=/workspace/git/ehumche/epg__3/build/Linux_x86_64"
                       "--background-index"
                       "--clang-tidy"
                       "--completion-style=detailed"
