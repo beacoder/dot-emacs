@@ -49,7 +49,7 @@
     (add-to-list 'eglot-server-programs
                  '((c-mode c-ts-mode c++-mode c++-ts-mode objc-mode)
                    . ("clangd"
-                      "--compile-commands-dir=/workspace/git/ehumche/epg__3/build/Linux_x86_64"
+                      "--compile-commands-dir=./build/Linux_x86_64"
                       "--background-index"
                       "--clang-tidy"
                       "--completion-style=detailed"
