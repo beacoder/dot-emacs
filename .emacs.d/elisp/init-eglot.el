@@ -6,13 +6,20 @@
 
 ;;; Code:
 
-;;; useful key-bindings
+;;; useful key-bindings and commands
 ;;----------------------------------------------------------------------------
-;;; eglot
+;;  eglot
+;;-----------------------------
 ;;  xref-find-definitions (M-.)
-;;  consult-eglot-symbols (M-?)
 ;;  xref-find-references  (M-])
+;;  consult-eglot-symbols (M-?)
+;;  eglot-find-declaration
+;;  eglot-find-implementation
+;;  eglot-find-typeDefinition
+;;-----------------------------
 ;;  eglot-rename
+;;  eglot-show-type-hierarchy
+;;  eglot-show-call-hierarchy
 
 
 ;; ensure 1.19 installed since it added call and type hierarchies.
