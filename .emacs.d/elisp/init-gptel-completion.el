@@ -1,7 +1,7 @@
-;;; init-gptel-completion.el --- GPTel-powered C++ code completion -*- lexical-binding: t -*-
+;;; init-gptel-completion.el --- GPTel-powered C++ completion -*- lexical-binding: t -*-
 
 ;;; Commentary:
-;; C++ code completion powered by eglot + gptel + ag
+;; C++ code completion using eglot + gptel + ag
 
 ;;; Code:
 
@@ -67,7 +67,7 @@ Similar patterns in this repository:
 %s
 Rules:
 - Continue the code naturally
-- Do NOT add code fence
+- Do NOT add code fences
 - Do NOT invent APIs
 - Reuse existing patterns
 - Match formatting and style
@@ -111,33 +111,65 @@ Rules:
   (and my/gptel-overlay (overlay-buffer my/gptel-overlay)))
 
 ;; ------------------------------------------------------------
-;; Completion Interface
+;; GPTel Interaction
 ;; ------------------------------------------------------------
+(defvar my/gptel-regenerate-timer nil
+  "Timer for delayed regeneration.")
+
 (defun my/gptel-handle-response (response _info)
   "Handle GPTel RESPONSE by displaying it in an overlay."
   (when response
+    (message "")
     (my/show-overlay response)))
 
+;;;###autoload
 (defun my/gptel-complete ()
-  "Request code completion from GPTel."
+  "Request GPTel code completion."
   (interactive)
+  (message "Generating completion...")
   (gptel-request (my/build-gptel-prompt)
     :system my/completion-system-prompt
     :callback #'my/gptel-handle-response))
 
+(defun my/self-insert-p ()
+  "Check if current command is self-insert."
+  (eq this-command 'self-insert-command))
+
+(defun my/last-command-was-ret-p ()
+  "Return non-nil if the last command was triggered by RET or RETURN."
+  (memq last-command-event '(?\r return)))
+
 (defun my/accept-gptel-completion ()
-  "Insert the current completion and clear overlay."
-  (interactive)
-  (when my/gptel-overlay
-    (insert (overlay-get my/gptel-overlay 'after-string))
-    (my/clear-overlay)))
+  "Accept completion."
+  (when (my/gptel-overlay-active-p)
+    (let ((text (overlay-get my/gptel-overlay 'after-string)))
+      (my/clear-overlay)
+      (insert text))))
 
 (defun my/reject-gptel-completion ()
-  "Dismiss the current completion."
-  (interactive)
-  (my/clear-overlay))
+  "Reject completion."
+  (when (my/gptel-overlay-active-p)
+    (my/clear-overlay)))
 
-(global-set-key (kbd "C-c <TAB>") #'my/gptel-complete)
+(defun my/delayed-regenerate ()
+  "Delayed regeneration."
+  (when my/gptel-regenerate-timer
+    (cancel-timer my/gptel-regenerate-timer))
+  (setq my/gptel-regenerate-timer
+        (run-with-idle-timer
+         0.25 nil   ;; adjust: 0.2–0.4 works well
+         #'my/gptel-complete)))
+
+(defun my/gptel-regenerate-on-input ()
+  "Trigger regeneration when conditions met."
+  (when (derived-mode-p 'c++-mode)
+    (if (my/last-command-was-ret-p)
+        (my/accept-gptel-completion)
+      (my/reject-gptel-completion)
+      (when (my/self-insert-p)
+        (my/delayed-regenerate)))))
+
+(add-hook 'post-command-hook #'my/gptel-regenerate-on-input)
 
 
 (provide 'init-gptel-completion)
