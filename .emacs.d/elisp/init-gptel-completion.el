@@ -17,47 +17,63 @@
 ;; ------------------------------------------------------------
 (setq eglot-extend-to-xref t)
 
-;; ------------------------------------------------------------
-;; Context Extraction Functions
-;; ------------------------------------------------------------
-(defun my/cpp-current-function ()
-  "Return the current C++ function definition as a string."
-  (save-excursion
-    (ignore-errors
-      (treesit-beginning-of-defun)
-      (let ((func-beginning (point)))
-        (treesit-end-of-defun)
-        (buffer-substring-no-properties func-beginning (point))))))
+(defgroup my/gptel-completion nil
+  "GPTel-based C++ code completion."
+  :group 'tools)
 
-(defun my/symbol-at-point ()
+(defcustom my/gptel-idle-delay 0.25
+  "Idle time before regenerating GPTel completion."
+  :type 'number
+  :group 'my/gptel-completion)
+
+;; ------------------------------------------------------------
+;; Context Extraction
+;; ------------------------------------------------------------
+(defun my/gptel--cpp-current-function ()
+  "Return current C++ function definition as string."
+  (when (treesit-ready-p 'cpp)
+    (save-excursion
+      (ignore-errors
+        (treesit-beginning-of-defun)
+        (let ((beg (point)))
+          (treesit-end-of-defun)
+          (buffer-substring-no-properties beg (point)))))))
+
+(defun my/gptel--symbol-at-point ()
   "Return the symbol at point or active region as a string."
   (cond ((use-region-p)
          (buffer-substring-no-properties (region-beginning) (region-end)))
         ((symbol-at-point)
          (substring-no-properties (symbol-name (symbol-at-point))))))
 
-(defun my/eglot-local-symbols ()
-  "Return a list of local symbols from Eglot."
-  (when (eglot-current-server)
-    (let ((symbols (xref-backend-apropos (xref-find-backend) (my/symbol-at-point))))
-      (mapcar (lambda (s)
-                (substring-no-properties (xref-match-item-summary s)))
-              symbols))))
+(defun my/gptel--eglot-local-symbols ()
+  "Return list of local symbols from Eglot."
+  (when-let* ((server (eglot-current-server))
+              (backend (xref-find-backend))
+              (query (my/gptel--symbol-at-point)))
+    (mapcar
+     (lambda (item)
+       (substring-no-properties
+        (xref-match-item-summary item)))
+     (xref-backend-apropos backend query))))
 
-(defun my/ag-search (query)
-  "Search for QUERY using ag and return trimmed results."
-  (string-trim
-   (shell-command-to-string
-    (format "ag --cpp --nobreak --noheading \"%s\" | head -n 20" query))))
+(defun my/gptel--ag-search (query)
+  "Search QUERY using ag and return trimmed results."
+  (when (and query (executable-find "ag"))
+    (string-trim
+     (shell-command-to-string
+      (format
+       "ag --cpp --nobreak --noheading %S | head -n 20"
+       query)))))
 
 ;; ------------------------------------------------------------
 ;; Prompt Construction
 ;; ------------------------------------------------------------
-(defconst my/completion-system-prompt
+(defconst my/gptel--system-prompt
   "You are an expert C++ programmer."
   "Completion system prompt.")
 
-(defconst my/completion-prompt
+(defconst my/gptel--completion-prompt
   "You are completing C++ code inside a large code base.
 Current function:
 %s
@@ -74,102 +90,105 @@ Rules:
 - Output ONLY the code to be inserted"
   "Completion core prompt.")
 
-(defun my/build-gptel-prompt ()
-  "Build a structured prompt for GPTel completion."
-  (let* ((current-func (my/cpp-current-function))
-         (local-symbols (my/eglot-local-symbols))
-         (current-symbol (my/symbol-at-point))
-         (similar-patterns (and current-symbol
-                                (my/ag-search current-symbol))))
-    (format my/completion-prompt
-            current-func
-            (string-join local-symbols ", ")
-            (or similar-patterns "None found"))))
+(defun my/gptel--build-prompt ()
+  "Assemble GPTel completion prompt."
+  (let* ((func (or (my/gptel--cpp-current-function) "N/A"))
+         (symbols (or (my/gptel--eglot-local-symbols) '()))
+         (symbol (my/gptel--symbol-at-point))
+         (patterns (or (my/gptel--ag-search symbol) "None found")))
+    (format my/gptel--completion-prompt
+            func
+            (string-join symbols ", ")
+            patterns)))
 
 ;; ------------------------------------------------------------
 ;; Overlay Management
 ;; ------------------------------------------------------------
-(defvar my/gptel-overlay nil
-  "Overlay for displaying GPTel completions.")
+(defvar my/gptel--overlay nil
+  "Overlay used to display GPTel completions.")
 
-(defun my/clear-overlay ()
-  "Remove the completion overlay."
-  (when my/gptel-overlay
-    (delete-overlay my/gptel-overlay)
-    (setq my/gptel-overlay nil)))
+(defun my/gptel--clear-overlay ()
+  "Remove GPTel completion overlay."
+  (when (overlayp my/gptel--overlay)
+    (delete-overlay my/gptel--overlay))
+  (setq my/gptel--overlay nil))
 
-(defun my/show-overlay (text)
-  "Display TEXT in an overlay at point."
-  (my/clear-overlay)
-  (setq my/gptel-overlay (make-overlay (point) (point)))
-  (overlay-put my/gptel-overlay
+(defun my/gptel--overlay-active-p ()
+  "Return non-nil if GPTel overlay is active."
+  (overlayp my/gptel--overlay))
+
+(defun my/gptel--show-overlay (text)
+  "Show TEXT as ghost completion at point."
+  (my/gptel--clear-overlay)
+  (setq my/gptel--overlay (make-overlay (point) (point)))
+  (overlay-put my/gptel--overlay
                'after-string
                (propertize text 'face 'shadow)))
 
-(defun my/gptel-overlay-active-p ()
-  "Check if completion overlay is active."
-  (and my/gptel-overlay (overlay-buffer my/gptel-overlay)))
+(defun my/gptel--accept-overlay ()
+  "Insert overlay text into buffer."
+  (when (my/gptel--overlay-active-p)
+    (let ((text (overlay-get my/gptel--overlay 'after-string)))
+      (my/gptel--clear-overlay)
+      (insert text))))
 
 ;; ------------------------------------------------------------
 ;; GPTel Interaction
 ;; ------------------------------------------------------------
-(defvar my/gptel-regenerate-timer nil
-  "Timer for delayed regeneration.")
+(defvar my/gptel--regenerate-timer nil
+  "Idle timer for GPTel regeneration.")
 
-(defun my/gptel-handle-response (response _info)
-  "Handle GPTel RESPONSE by displaying it in an overlay."
-  (when response
+(defun my/gptel--handle-response (response _info)
+  "Display GPTel RESPONSE."
+  (when (and response (stringp response))
     (message "")
-    (my/show-overlay response)))
+    (my/gptel--show-overlay response)))
 
 ;;;###autoload
 (defun my/gptel-complete ()
   "Request GPTel code completion."
   (interactive)
   (message "Generating completion...")
-  (gptel-request (my/build-gptel-prompt)
-    :system my/completion-system-prompt
-    :callback #'my/gptel-handle-response))
+  (gptel-request
+      (my/gptel--build-prompt)
+    :system my/gptel--system-prompt
+    :callback #'my/gptel--handle-response))
 
-(defun my/self-insert-p ()
-  "Check if current command is self-insert."
-  (eq this-command 'self-insert-command))
-
-(defun my/last-command-was-ret-p ()
-  "Return non-nil if the last command was triggered by RET or RETURN."
-  (memq last-command-event '(?\r return)))
-
-(defun my/accept-gptel-completion ()
-  "Accept completion."
-  (when (my/gptel-overlay-active-p)
-    (let ((text (overlay-get my/gptel-overlay 'after-string)))
-      (my/clear-overlay)
-      (insert text))))
-
-(defun my/reject-gptel-completion ()
-  "Reject completion."
-  (when (my/gptel-overlay-active-p)
-    (my/clear-overlay)))
-
-(defun my/delayed-regenerate ()
-  "Delayed regeneration."
-  (when my/gptel-regenerate-timer
-    (cancel-timer my/gptel-regenerate-timer))
-  (setq my/gptel-regenerate-timer
+(defun my/gptel--schedule-regenerate ()
+  "Schedule GPTel completion after idle delay."
+  (when my/gptel--regenerate-timer
+    (cancel-timer my/gptel--regenerate-timer))
+  (setq my/gptel--regenerate-timer
         (run-with-idle-timer
-         0.25 nil   ;; adjust: 0.2–0.4 works well
+         my/gptel-idle-delay nil
          #'my/gptel-complete)))
 
-(defun my/gptel-regenerate-on-input ()
-  "Trigger regeneration when conditions met."
-  (when (derived-mode-p 'c++-mode)
-    (if (my/last-command-was-ret-p)
-        (my/accept-gptel-completion)
-      (my/reject-gptel-completion)
-      (when (my/self-insert-p)
-        (my/delayed-regenerate)))))
+;; ------------------------------------------------------------
+;; Input Handling
+;; ------------------------------------------------------------
+(defun my/gptel--self-insert-p ()
+  "Return non-nil if command was self insert."
+  (eq this-command 'self-insert-command))
 
-(add-hook 'post-command-hook #'my/gptel-regenerate-on-input)
+(defun my/gptel--last-command-was-ret-p ()
+  "Return non-nil if last command was RET/RETURN."
+  (memq last-command-event '(?\r return)))
+
+(defun my/gptel--post-command ()
+  "Post-command hook driving GPTel completion."
+  (when (derived-mode-p 'c++-mode)
+    (cond
+     ((my/gptel--last-command-was-ret-p)
+      (when (my/gptel--overlay-active-p)
+        (delete-char -1))
+      (my/gptel--accept-overlay))
+     ((my/gptel--self-insert-p)
+      (my/gptel--clear-overlay)
+      (my/gptel--schedule-regenerate))
+     (t
+      (my/gptel--clear-overlay)))))
+
+(add-hook 'post-command-hook #'my/gptel--post-command)
 
 
 (provide 'init-gptel-completion)
