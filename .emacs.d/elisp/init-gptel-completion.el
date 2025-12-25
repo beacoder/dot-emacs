@@ -6,13 +6,6 @@
 ;;; Code:
 
 ;; ------------------------------------------------------------
-;; Prerequisites
-;; ------------------------------------------------------------
-;; 1. clangd --background-index --clang-tidy
-;; 2. silver search install
-;; 3. gptel configured
-
-;; ------------------------------------------------------------
 ;; Configuration
 ;; ------------------------------------------------------------
 (setq eglot-extend-to-xref t)
@@ -39,63 +32,122 @@
           (treesit-end-of-defun)
           (buffer-substring-no-properties beg (point)))))))
 
-(defun my/gptel--symbol-at-point ()
-  "Return the symbol at point or active region as a string."
-  (cond ((use-region-p)
-         (buffer-substring-no-properties (region-beginning) (region-end)))
-        ((symbol-at-point)
-         (substring-no-properties (symbol-name (symbol-at-point))))))
-
-(defun my/gptel--eglot-local-symbols ()
+(defun my/eglot--in-scope-symbols+kind ()
   "Return list of local symbols from Eglot."
-  (when-let* ((server (eglot-current-server))
-              (backend (xref-find-backend))
-              (query (my/gptel--symbol-at-point)))
-    (mapcar
-     (lambda (item)
-       (substring-no-properties
-        (xref-match-item-summary item)))
-     (xref-backend-apropos backend query))))
+  (when-let* ((server (eglot--current-server-or-lose))
+              (pos (eglot--pos-to-lsp-position (point)))
+              (params `(:textDocument (:uri ,(eglot--path-to-uri (buffer-file-name)))
+                                      :position ,pos
+                                      :context (:triggerKind 1)))
+              (completion (jsonrpc-request server
+                                           :textDocument/completion
+                                           params)))
+    (let ((items (cond
+                  ((vectorp completion) completion)
+                  ((plist-get completion :items))
+                  (t nil))))
+      (mapcar (lambda (item)
+                (cons
+                 (plist-get item :label)
+                 (list :label (plist-get item :label)
+                       :kind  (plist-get item :kind))))
+              items))))
 
-(defun my/gptel--ag-search (query)
-  "Search QUERY using ag and return trimmed results."
-  (when (and query (executable-find "ag"))
-    (string-trim
-     (shell-command-to-string
-      (format
-       "ag --cpp --nobreak --noheading %S | head -n 20"
-       query)))))
+(defun my/gptel--classify-symbols (symbols)
+  "Classify SYMBOLS into different kind."
+  (cl-loop for s in symbols
+           if (memq (plist-get s :kind) '(2 3 4)) collect s into funcs
+           else if (memq (plist-get s :kind) '(6 21)) collect s into vars
+           else if (memq (plist-get s :kind) '(5 10 20)) collect s into members
+           finally return `(:funcs ,funcs :vars ,vars :members ,members)))
+
+(defun my/gptel--select-search-symbols (classified)
+  "Select symbols to search based on CLASSIFIED."
+  (append
+   (cl-subseq (plist-get classified :funcs) 0 2)
+   (cl-subseq (plist-get classified :members) 0 1)))
+
+(defun my/gptel--ag-pattern-for-symbol (symbol)
+  "Format SYMBOL for searching with ag."
+  (let ((name (plist-get symbol :label)))
+    (cond
+     ((memq (plist-get symbol :kind) '(2 3 4))
+      (when (string-match "\\b\\([A-Za-z_][A-Za-z0-9_]*\\)\\s-*(" name)
+        (setq name (match-string 1 name)))
+      (format "%s\\s*\\(" name))
+     ((memq (plist-get symbol :kind) '(5 10 20))
+      (format "(\\.|->)%s\\b" name))
+     (t name))))
+
+(defun my/gptel--ag-search-pattern (pattern)
+  "Search PATTERN using ag."
+  (shell-command-to-string
+   (format "ag --cpp --nobreak --noheading -C 3 \"%s\" | head -n 30"
+           pattern)))
+
+(defun my/gptel--ag-similar-patterns (s-k)
+  "Search similar patterns based on S-K."
+  (let* ((symbols s-k)
+         (classified (my/gptel--classify-symbols symbols))
+         (targets (my/gptel--select-search-symbols classified)))
+    (string-join
+     (cl-loop for sym in targets
+              for pat = (my/gptel--ag-pattern-for-symbol sym)
+              collect (my/gptel--ag-search-pattern pat))
+     "\n\n")))
 
 ;; ------------------------------------------------------------
 ;; Prompt Construction
 ;; ------------------------------------------------------------
 (defconst my/gptel--system-prompt
-  "You are an expert C++ programmer."
+  "You are an expert C++ language-server–style code completion engine.
+
+You are operating inside a very large, existing C++ codebase.
+
+Your task:
+- Continue or complete the code at the cursor position
+- Produce code that would compile in this codebase
+
+You are given:
+- The current function body
+- The list of in-scope symbols (authoritative)
+- Examples of similar patterns retrieved from this repository
+
+Hard rules (must follow):
+- Use ONLY the provided in-scope symbols and patterns
+- Do NOT invent new functions, types, macros, or headers
+- Do NOT change existing code outside the completion
+- Respect C++ syntax, constness, references, and ownership
+- Match formatting, indentation, and naming style
+- Prefer existing helper functions and idioms
+- If unsure, produce the smallest reasonable completion
+
+Output rules:
+- Output ONLY the code to be inserted
+- Do NOT include explanations, comments, or markdown
+- Do NOT repeat existing code unless necessary for completion"
   "Completion system prompt.")
 
 (defconst my/gptel--completion-prompt
-  "You are completing C++ code inside a large code base.
-Current function:
+  "Current function:
+```cpp
 %s
+```
+
 In-scope symbols:
 %s
+
 Similar patterns in this repository:
-%s
-Rules:
-- Continue the code naturally
-- Do NOT add code fences
-- Do NOT invent APIs
-- Reuse existing patterns
-- Match formatting and style
-- Output ONLY the code to be inserted"
-  "Completion core prompt.")
+%s"
+  "Completion user prompt.")
 
 (defun my/gptel--build-prompt ()
   "Assemble GPTel completion prompt."
   (let* ((func (or (my/gptel--cpp-current-function) "N/A"))
-         (symbols (or (my/gptel--eglot-local-symbols) '()))
-         (symbol (my/gptel--symbol-at-point))
-         (patterns (or (my/gptel--ag-search symbol) "None found")))
+         (symbols+kind (or (my/eglot--in-scope-symbols+kind) '()))
+         (symbols (or (delete-dups (mapcar #'car symbols+kind)) '()))
+         (s+k (or (mapcar #'cdr symbols+kind) '()))
+         (patterns (or (my/gptel--ag-similar-patterns s+k) "None found")))
     (format my/gptel--completion-prompt
             func
             (string-join symbols ", ")
