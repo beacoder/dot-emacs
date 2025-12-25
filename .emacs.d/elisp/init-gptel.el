@@ -27,21 +27,12 @@
     :models '(qwen2.5:latest)))
 
 (require 'init-gptel-tools)
+(require 'init-gptel-completion)
 
 (setq gptel-log-level 'info)
 
 (defconst my-gptel--default-prompt "You are a large language model and a helpful assistant. Respond concisely."
   "Default prompt.")
-
-(defconst my-gptel--completion-prompt
-  "You are an expert %s programmer.
-Follow my instructions to complete the following %s code snippet in a clean, efficient, and idiomatic way.
-1.Ensure the code is functional, well-formatted, and follows best practices for the given programming language.
-2.Generate ONLY %s code as output, without any explanation or markdown code fences.
-3.Generate code in full, do not abbreviate or omit code.
-4.Generate completion code only, do not repeat the original code.
-5.Do not ask for further clarification, and make any assumptions you need to follow instructions."
-  "Completion prompt.")
 
 (defun my-gptel--tool-prompt ()
   "Generic directive for tool calling."
@@ -68,15 +59,9 @@ Follow my instructions to complete the following %s code snippet in a clean, eff
 (defvar my-gptel--user-prompt ""
   "User prompt.")
 
-;; use non-stream, since streaming not working well with `tool_call'
+;; tool_call not working well with streaming.
 (defvar my-gptel--use-stream-p nil
   "Whether use steaming.")
-
-(defvar my-gptel--completion-position nil
-  "Current completion position.")
-
-(defvar my-gptel--completion-buffer nil
-  "Buffer for code completion.")
 
 (defun my-gptel--is-qwen3 ()
   "Check if current model is Qwen3."
@@ -90,23 +75,6 @@ Follow my instructions to complete the following %s code snippet in a clean, eff
     :system (if (my-gptel--is-qwen3) (concat my-gptel--system-prompt "/no_think") my-gptel--system-prompt)
     :stream my-gptel--use-stream-p
     :callback #'my-gptel--response-callback))
-
-(defun my-gptel--completion-callback (response info)
-  "Callback function for gptel complete."
-  (if (not response)
-      (message "gptel-complete failed with message: %s" (plist-get info :status))
-    (display-buffer
-     (with-current-buffer my-gptel--completion-buffer
-       (let ((inhibit-read-only t))
-         (deactivate-mark)
-         (visual-line-mode 1)
-         (goto-char my-gptel--completion-position)
-         (ignore-errors(insert response))
-         (setq my-gptel--completion-position (point))
-         (current-buffer)))
-     '((display-buffer-reuse-window
-        display-buffer-pop-up-window)
-       (reusable-frames . visible)))))
 
 (defun my-gptel--response-callback (response info)
   "Callback function for gptel request."
@@ -159,28 +127,6 @@ If PROMPT is
   (interactive)
   (message "Querying %s..." (gptel-backend-name gptel-backend))
   (my-gptel--request))
-
-(defun gptel-complete ()
-  "Code completion."
-  (interactive)
-  (gptel--sanitize-model)
-  (unless (use-region-p)
-    (user-error "`gptel-complete' requires an active region"))
-  (when (derived-mode-p 'prog-mode)
-    (let* ((gptel-model 'qwen2.5:latest)
-           (gptel-backend (gptel-get-backend "Ollama"))
-           (lang (downcase (gptel--strip-mode-suffix major-mode)))
-           (code (buffer-substring (region-beginning) (region-end)))
-           (prompt (format my-gptel--completion-prompt lang lang lang)))
-      (setq my-gptel--completion-position (region-end)
-            my-gptel--completion-buffer (current-buffer))
-      (message "Completing with %s..." (gptel-backend-name gptel-backend))
-      (gptel-request code
-        :system prompt
-        :stream my-gptel--use-stream-p
-        :callback #'my-gptel--completion-callback))))
-
-(global-set-key (kbd "C-c <TAB>") #'gptel-complete)
 
 
 (provide 'init-gptel)
