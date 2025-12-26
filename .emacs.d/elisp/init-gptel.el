@@ -27,7 +27,7 @@
     :models '(qwen2.5:latest)))
 
 (require 'init-gptel-tools)
-(require 'init-gptel-completion)
+(require 'gptel-cpp-complete)
 
 (setq gptel-log-level 'info)
 
