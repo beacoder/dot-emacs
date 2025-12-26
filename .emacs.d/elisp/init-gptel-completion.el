@@ -61,11 +61,16 @@
            else if (memq (plist-get s :kind) '(5 10 20)) collect s into members
            finally return `(:funcs ,funcs :vars ,vars :members ,members)))
 
+(defun my/gptel--safe-subseq (seq start end)
+  "Safely extracts a subseq from SEQ starting at START index up to END (not included)."
+  (when seq
+    (cl-subseq seq start (min end (length seq)))))
+
 (defun my/gptel--select-search-symbols (classified)
   "Select symbols to search based on CLASSIFIED."
   (append
-   (cl-subseq (plist-get classified :funcs) 0 2)
-   (cl-subseq (plist-get classified :members) 0 1)))
+   (my/gptel--safe-subseq (plist-get classified :funcs) 0 2)
+   (my/gptel--safe-subseq (plist-get classified :members) 0 1)))
 
 (defun my/gptel--ag-pattern-for-symbol (symbol)
   "Format SYMBOL for searching with ag."
@@ -133,7 +138,6 @@ Output rules:
 ```cpp
 %s
 ```
-
 In-scope symbols:
 %s
 
