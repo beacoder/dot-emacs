@@ -15,7 +15,6 @@
 ;;  consult-eglot-symbols      (M-?)
 ;;  eglot-find-declaration     (C-c d)
 ;;  eglot-find-implementation  (C-c i)
-;;  eglot-find-typeDefinition  (C-c t)
 ;;-----------------------------
 ;;  eglot-rename               (C-c r)
 ;;  eglot-show-type-hierarchy  (C-c h)
@@ -34,7 +33,6 @@
   :bind (:map eglot-mode-map
               ("C-c d" . eglot-find-declaration)
               ("C-c i" . eglot-find-implementation)
-              ("C-c t" . eglot-find-typeDefinition)
               ("C-c r" . eglot-rename)
               ("C-c h" . eglot-show-type-hierarchy)
               ("C-c c" . eglot-show-call-hierarchy)
