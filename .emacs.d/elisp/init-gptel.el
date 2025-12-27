@@ -28,6 +28,8 @@
 
 (require 'init-gptel-tools)
 (require 'gptel-cpp-complete)
+(dolist (c-mode-hook '(c-mode-common-hook c-ts-mode-hook c++-ts-mode-hook))
+  (add-hook c-mode-hook #'gptel-cpp-complete-mode))
 
 (setq gptel-log-level 'info)
 
