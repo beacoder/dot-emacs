@@ -10,21 +10,22 @@
 (use-package gptel
   :ensure t
   :config
-  (setq gptel-model   'Qwen/Qwen2.5-32B-Instruct
-        ;; Randomness in response text, 0 to 2
-        gptel-temperature 0
-        ;; free 2000 request per-day
-        gptel-backend (gptel-make-openai "Free"
-                        :host "api-inference.modelscope.cn"
-                        :stream t
-                        :key ""
-                        :models '(Qwen/Qwen2.5-32B-Instruct)))
-  (gptel-make-deepseek "DeepSeek"
-    :stream t
-    :key "")
-  (gptel-make-ollama "Ollama"
-    :stream t
-    :models '(qwen2.5:latest)))
+  (progn
+    (setq gptel-model   'deepseek-chat
+          ;; Randomness in response text, 0 to 2
+          gptel-temperature 0
+          gptel-backend (gptel-make-deepseek "DeepSeek"
+                          :stream t
+                          :key ""))
+    ;; free 2000 request per-day
+    (gptel-make-openai "Free"
+      :host "api-inference.modelscope.cn"
+      :stream t
+      :key ""
+      :models '(Qwen/Qwen2.5-32B-Instruct))
+    (gptel-make-ollama "Ollama"
+      :stream t
+      :models '(qwen3:8b))))
 
 (require 'init-gptel-tools)
 (require 'gptel-cpp-complete)
