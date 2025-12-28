@@ -11,18 +11,20 @@
   :ensure t
   :config
   (progn
-    (setq gptel-model   'deepseek-chat
+    (setq gptel-model 'deepseek-ai/DeepSeek-V3.2
           ;; Randomness in response text, 0 to 2
           gptel-temperature 0
-          gptel-backend (gptel-make-deepseek "DeepSeek"
-                          :stream t
-                          :key ""))
-    ;; free 2000 request per-day
-    (gptel-make-openai "Free"
-      :host "api-inference.modelscope.cn"
+          gptel-backend
+          ;; free 2000 request per-day, each model 500
+          (gptel-make-openai "Free"
+            :host "api-inference.modelscope.cn"
+            :stream t
+            :key ""
+            :models '(Qwen/Qwen2.5-32B-Instruct
+                      deepseek-ai/DeepSeek-V3.2)))
+    (gptel-make-deepseek "DeepSeek"
       :stream t
-      :key ""
-      :models '(Qwen/Qwen2.5-32B-Instruct))
+      :key "")
     (gptel-make-ollama "Ollama"
       :stream t
       :models '(qwen3:8b))))
