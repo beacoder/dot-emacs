@@ -20,6 +20,7 @@
 ;;  eglot-show-type-hierarchy  (C-c h)
 ;;  eglot-show-call-hierarchy  (C-c c)
 ;;  eglot-code-action-quickfix (C-<return>)
+;;  eglot-format               (<TAB>)
 
 
 ;; ensure 1.19 installed since it added call and type hierarchies.
@@ -37,7 +38,8 @@
               ("C-c h" . eglot-show-type-hierarchy)
               ("C-c c" . eglot-show-call-hierarchy)
               ("C-<return>" . eglot-code-action-quickfix)
-              ("C-<RET>" . eglot-code-action-quickfix))
+              ("C-<RET>" . eglot-code-action-quickfix)
+              ("<TAB>" . eglot-format))
   :init
   (setq eglot-stay-out-of '(imenu)
         read-process-output-max (* 1024 1024) ; 1MB
