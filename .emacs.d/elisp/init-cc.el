@@ -77,20 +77,9 @@
   (define-key c-mode-map (kbd "C-c C-e") nil)
   (define-key c-mode-map (kbd "C-c C-s") nil))
 
-;; use <tab> to indent region if anything is selected
-;; fledermaus came up with this
-(defun fledermaus-maybe-tab ()
-  "<tab> to indent region."
-  (interactive)
-  (if (and transient-mark-mode mark-active)
-      (indent-region (region-beginning) (region-end) nil)
-    (c-indent-command)))
-
 (dolist (c-mode-hook '(c-mode-common-hook c-ts-mode-hook c++-ts-mode-hook))
   (add-hook c-mode-hook #'my-c-mode-common-hook)
-  (add-hook c-mode-hook #'(lambda () (local-set-key [(tab)] #'fledermaus-maybe-tab)))
   (add-hook c-mode-hook #'hs-minor-mode))
-
 
 (when (is-modern-emacs)
   ;; google-c-style
