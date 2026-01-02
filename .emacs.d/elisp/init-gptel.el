@@ -46,14 +46,14 @@
 (defun my-gptel--tool-prompt ()
   "Generic directive for tool calling."
   (let ((tool-prompt
-         (concat "You are an AI assistant equipped with a set of tools to complete tasks.\n"
-                 "Your goal is to execute tasks in the correct order, ensuring each step is completed accurately before moving to the next.\n"
-                 "Follow these instructions precisely:\n"
-                 "1.Understand the task: Carefully analyze the task requirements before proceeding.\n"
-                 "2.Select the appropriate tool: Choose the most suitable tool from the provided list to accomplish the task.\n"
-                 "3.Execute the task: Use the selected tool to perform the task step-by-step.\n"
-                 "4.Verify the output: Check if the result meets the task's requirements. If not, retry or adjust your approach.\n"
-                 "5.Proceed to the next task: Only move to the next task after successfully completing the current one.\n")))
+         "You are an AI assistant equipped with a set of tools to complete tasks.
+Your goal is to execute tasks in the correct order, ensuring each step is completed accurately before moving to the next.
+Follow these instructions precisely:
+1.Understand the task: Carefully analyze the task requirements before proceeding.
+2.Select the appropriate tool: Choose the most suitable tool from the provided list to accomplish the task.
+3.Execute the task: Use the selected tool to perform the task step-by-step.
+4.Verify the output: Check if the result meets the task's requirements. If not, retry or adjust your approach.
+5.Proceed to the next task: Only move to the next task after successfully completing the current one."))
     (if (my-gptel--is-qwen3)
         (concat tool-prompt "/no_think")
       tool-prompt)))
