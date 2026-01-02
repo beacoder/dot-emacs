@@ -30,11 +30,13 @@
       :models '(qwen3:8b))))
 
 (require 'init-gptel-tools)
-(require 'gptel-cpp-complete)
-(when (display-graphic-p)
-  ;; gptel-cpp-complete-mode not work well in terminal mode
-  (dolist (c-mode-hook '(c-mode-common-hook c-ts-mode-hook c++-ts-mode-hook))
-    (add-hook c-mode-hook #'gptel-cpp-complete-mode)))
+
+(use-package gptel-cpp-complete
+  :ensure t
+  :config
+  (when (display-graphic-p)
+    (dolist (c-mode-hook '(c-mode-common-hook c-ts-mode-hook c++-ts-mode-hook))
+      (add-hook c-mode-hook #'gptel-cpp-complete-mode))))
 
 (setq gptel-log-level 'info)
 
