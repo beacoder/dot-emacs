@@ -62,46 +62,6 @@ Returns a success message string or an error description."
      ;; Handle any kind of error
      (format "An error occurred: %s" error))))
 
-(defun my-gptel--open_file (filepath)
-  "Open FILEPATH in Emacs and return a success message.
-
-FILEPATH is a string representing the path to the file.
-Supports relative paths and ~ expansion.
-
-Uses `find-file' to open the file in Emacs.
-Returns a success message string."
-  (find-file (expand-file-name filepath))
-  (format "Opened file %s" filepath))
-
-(defun my-gptel--append_to_buffer (buffer text)
-  "Append TEXT to BUFFER.
-
-BUFFER is a string representing the name of the buffer.
-TEXT is a string containing the text to append.
-If BUFFER doesn't exist, it will be created.
-
-Uses `get-buffer-create' to get or create the buffer.
-Returns a success message string."
-  (with-current-buffer (get-buffer-create buffer)
-    (save-excursion
-      (goto-char (point-max))
-      (insert text)))
-  (format "Appended text to buffer %s" buffer))
-
-(defun my-gptel--read_buffer (buffer)
-  "Read and return the contents of BUFFER.
-
-BUFFER is a string representing the buffer name.
-The buffer must be live (existing and not killed).
-
-Returns the buffer contents as a string.
-Raises an error if the buffer is not live."
-  (with-temp-message "Reading buffer"
-    (unless (buffer-live-p (get-buffer buffer))
-      (error "Error: buffer %s is not live." buffer))
-    (with-current-buffer  buffer
-      (buffer-substring-no-properties (point-min) (point-max)))))
-
 (defun my-gptel--make_directory (parent name)
   "Create a directory named NAME in PARENT.
 
@@ -119,52 +79,6 @@ Returns a success message string or an error description."
 
 ;; Holds a list of tools available for LLM to use
 ;; @see https://github.com/karthink/gptel/issues/514
-(gptel-make-tool
- :function (lambda (url)
-             (with-current-buffer (url-retrieve-synchronously url)
-               (goto-char (point-min)) (forward-paragraph)
-               (let ((dom (libxml-parse-html-region (point) (point-max))))
-                 (run-at-time 0 nil #'kill-buffer (current-buffer))
-                 (with-temp-buffer
-                   (shr-insert-document dom)
-                   (buffer-substring-no-properties (point-min) (point-max))))))
- :name "read_url"
- :description "Fetch and read the contents of a URL."
- :args (list '(:name "url"
-                     :type string
-                     :description "The URL to read"))
- :category "web")
-
-(gptel-make-tool
- :function #'my-gptel--append_to_buffer
- :name "append_to_buffer"
- :description "Append text to the an Emacs buffer.  If the buffer does not exist, it will be created."
- :args (list '(:name "buffer"
-                     :type string
-                     :description "The name of the buffer to append text to.")
-             '(:name "text"
-                     :type string
-                     :description "The text to append to the buffer."))
- :category "emacs")
-
-(gptel-make-tool
- :function #'my-gptel--read_buffer
- :name "read_buffer"
- :description "Return the contents of an Emacs buffer."
- :args (list '(:name "buffer"
-                     :type string
-                     :description "The name of the buffer whose contents are to be retrieved"))
- :category "emacs")
-
-(gptel-make-tool
- :function #'my-gptel--open_file
- :name "open_file"
- :description "Open and display the contents of a file."
- :args (list '(:name "filepath"
-                     :type string
-                     :description "Path to the file to open.  Supports relative paths and ~."))
- :category "emacs")
-
 (gptel-make-tool
  :function #'my-gptel--make_directory
  :name "make_directory"
