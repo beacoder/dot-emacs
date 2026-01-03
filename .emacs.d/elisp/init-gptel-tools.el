@@ -5,9 +5,17 @@
 ;; Define tool-callbacks
 ;; @note return either a result or a message to inform the LLM
 (defun my-gptel--edit_file (file_path file_changes)
-  "In FILE_PATH, apply FILE_CHANGES with pattern matching and replacing."
+  "Apply FILE_CHANGES to FILE_PATH using pattern matching and replacement.
+
+FILE_PATH is a string representing the full path to the file to edit.
+FILE_CHANGES is a list of plists where each plist contains:
+  :line_number - The line number where the edit should start (1-indexed)
+  :old_string - The string to search for and replace
+  :new_string - The string to replace OLD_STRING with
+
+Returns a success or failure message string."
   (if (and file_path (not (string= file_path "")) file_changes)
-      (with-current-buffer (get-buffer-create "*edit-file*")
+      (with-temp-buffer
         (insert-file-contents (expand-file-name file_path))
         (let ((inhibit-read-only t)
               (case-fold-search nil)
@@ -20,20 +28,29 @@
                        (new_string (plist-get file_change :new_string)))
               (goto-char (point-min))
               (forward-line (1- line_number))
-              (when (search-forward old_string nil t)
-                (replace-match new_string t t)
-                (setq edit-success t))))
+              (let ((eol (line-end-position)))
+                (when (search-forward old_string eol t)
+                  (replace-match new_string t t)
+                  (setq edit-success t)))))
           ;; return result to gptel
           (if edit-success
               (progn
-                ;; show diffs
-                (ediff-buffers (find-file-noselect file-name) (current-buffer))
+                (write-file file-name)
                 (format "Successfully edited %s" file-name))
             (format "Failed to edited %s" file-name))))
     (format "Failed to edited %s" file_path)))
 
 (defun my-gptel--run_async_command (callback command)
-  "Run COMMAND asynchronously and pass output to CALLBACK."
+  "Run COMMAND asynchronously and pass output to CALLBACK.
+
+COMMAND is a string representing the shell command to execute.
+CALLBACK is a function that will be called with the command output.
+The callback receives a single argument: the output string.
+
+This function uses async-shell-command and sets up a process sentinel
+that calls the callback when the command completes.
+
+Returns nothing (the result is passed to the callback)."
   (condition-case error
       (let ((buffer (generate-new-buffer " *async output*")))
         (with-temp-message (format "Running async command: %s" command)
@@ -52,13 +69,26 @@
      ;; Handle any kind of error
      (funcall callback (format "An error occurred: %s" error)))))
 
-(defun my-gptel--read_file(filepath)
+(defun my-gptel--read_file (filepath)
+  "Read and return the contents of FILEPATH.
+
+FILEPATH is a string representing the path to the file.
+Supports relative paths and ~ expansion.
+
+Returns the file contents as a string."
   (with-temp-message (format "Reading file: %s" filepath)
     (with-temp-buffer
       (insert-file-contents (expand-file-name filepath))
-      (buffer-string))))
+      (buffer-substring-no-properties (point-min) (point-max)))))
 
-(defun my-gptel--create_file(path filename content)
+(defun my-gptel--create_file (path filename content)
+  "Create a new file with FILENAME in PATH containing CONTENT.
+
+PATH is a string representing the directory where to create the file.
+FILENAME is a string representing the name of the file to create.
+CONTENT is a string containing the content to write to the file.
+
+Returns a success message string or an error description."
   (condition-case error
       (let ((full-path (expand-file-name filename path)))
         (with-temp-buffer
@@ -69,17 +99,26 @@
      ;; Handle any kind of error
      (format "An error occurred: %s" error))))
 
-(defun my-gptel--open_file(filepath)
+(defun my-gptel--open_file (filepath)
+  "Open FILEPATH in Emacs and return a success message.
+
+FILEPATH is a string representing the path to the file.
+Supports relative paths and ~ expansion.
+
+Uses `find-file' to open the file in Emacs.
+Returns a success message string."
   (find-file (expand-file-name filepath))
   (format "Opened file %s" filepath))
 
-(defun my-gptel--run_script (script_program script_file script_args)
-  (let ((command
-         (concat script_program " " (expand-file-name script_file) " " script_args)))
-    (with-temp-message (format "Running script: %s" command)
-      (shell-command-to-string command))))
-
 (defun my-gptel--append_to_buffer (buffer text)
+  "Append TEXT to BUFFER.
+
+BUFFER is a string representing the name of the buffer.
+TEXT is a string containing the text to append.
+If BUFFER doesn't exist, it will be created.
+
+Uses `get-buffer-create' to get or create the buffer.
+Returns a success message string."
   (with-current-buffer (get-buffer-create buffer)
     (save-excursion
       (goto-char (point-max))
@@ -87,6 +126,13 @@
   (format "Appended text to buffer %s" buffer))
 
 (defun my-gptel--read_buffer (buffer)
+  "Read and return the contents of BUFFER.
+
+BUFFER is a string representing the buffer name.
+The buffer must be live (existing and not killed).
+
+Returns the buffer contents as a string.
+Raises an error if the buffer is not live."
   (with-temp-message "Reading buffer"
     (unless (buffer-live-p (get-buffer buffer))
       (error "Error: buffer %s is not live." buffer))
@@ -94,6 +140,13 @@
       (buffer-substring-no-properties (point-min) (point-max)))))
 
 (defun my-gptel--make_directory (parent name)
+  "Create a directory named NAME in PARENT.
+
+PARENT is a string representing the parent directory path.
+NAME is a string representing the name of the directory to create.
+
+Uses `make-directory' with the `t' flag to create parent directories if needed.
+Returns a success message string or an error description."
   (condition-case nil
       (progn
         (make-directory (expand-file-name name parent) t)
@@ -148,15 +201,6 @@
                      :type string
                      :description "Path to the file to open.  Supports relative paths and ~."))
  :category "emacs")
-
-(gptel-make-tool
- :function (lambda (directory) (mapconcat #'identity (directory-files directory) "\n"))
- :name "list_directory"
- :description "List the contents of a given directory."
- :args (list '(:name "directory"
-                     :type string
-                     :description "The path to the directory to list"))
- :category "filesystem")
 
 (gptel-make-tool
  :function #'my-gptel--make_directory
@@ -214,22 +258,6 @@ an old string and a new string, new string will replace the old string at the sp
                                     (:type string :description "The new string to replace old.")))
                      :description "The list of changes to apply on the file"))
  :category "filesystem")
-
-(gptel-make-tool
- :function #'my-gptel--run_script
- :name "run_script"
- :description "Run the script along with its specified arguments using the program."
- :args (list
-        '(:name "script_program"
-                :type string
-                :description "Program to run the the script.")
-        '(:name "script_file"
-                :type string
-                :description "Path to the script to run.  Supports relative paths and ~.")
-        '(:name "script_args"
-                :type string
-                :description "Args for script to run."))
- :category "command")
 
 ;; super-powerful, capable of replacing numerous existing tools.
 (gptel-make-tool
