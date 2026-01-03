@@ -137,6 +137,26 @@ If PROMPT is
   (message "Querying %s..." (gptel-backend-name gptel-backend))
   (my-gptel--request))
 
+(gptel-make-preset 'gpt4coding
+  :description "A preset optimized for coding tasks"
+  :backend "DeepSeek"
+  :model 'deepseek-chat
+  :stream nil ;; tool_call not working well with streaming.
+  :system (my-gptel--tool-prompt)
+  :tools '("run_command" "make_directory"
+           "create_file" "edit_file"
+           "read_file")
+  :temperature 0)
+
+(gptel-make-preset 'gpt4qa
+  :description "A preset optimized for general QA tasks"
+  :backend "Free"
+  :model 'deepseek-ai/DeepSeek-V3.2
+  :stream t
+  :system my-gptel--default-prompt
+  :tools nil
+  :temperature 1)
+
 
 (provide 'init-gptel)
 ;;; init-gptel.el ends here
