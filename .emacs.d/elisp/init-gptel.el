@@ -47,24 +47,22 @@
 (defconst my-gptel--default-prompt "You are a large language model and a helpful assistant. Respond concisely."
   "Default prompt.")
 
-(defun my-gptel--tool-prompt ()
-  "Generic directive for tool calling."
-  (let ((tool-prompt
-         "You are an AI assistant equipped with a set of tools to complete tasks.
+(defconst my-gptel--tool-prompt
+  "You are an AI assistant equipped with a set of tools to complete tasks.
 Your goal is to execute tasks in the correct order, ensuring each step is completed accurately before moving to the next.
 Follow these instructions precisely:
 1.Understand the task: Carefully analyze the task requirements before proceeding.
 2.Select the appropriate tool: Choose the most suitable tool from the provided list to accomplish the task.
 3.Execute the task: Use the selected tool to perform the task step-by-step.
 4.Verify the output: Check if the result meets the task's requirements. If not, retry or adjust your approach.
-5.Proceed to the next task: Only move to the next task after successfully completing the current one."))
-    (if (my-gptel--is-qwen3)
-        (concat tool-prompt "/no_think")
-      tool-prompt)))
+5.Proceed to the next task: Only move to the next task after successfully completing the current one.
+
+/no_think"
+  "Generic directive for tool calling.")
 
 ;; add tool directive to `gptel-directives'
 (unless (alist-get 'tool gptel-directives)
-  (add-to-list 'gptel-directives `(tool . ,#'my-gptel--tool-prompt)))
+  (add-to-list 'gptel-directives `(tool . ,my-gptel--tool-prompt)))
 
 (defvar my-gptel--system-prompt ""
   "System prompt.")
@@ -72,25 +70,16 @@ Follow these instructions precisely:
 (defvar my-gptel--user-prompt ""
   "User prompt.")
 
-;; tool_call not working well with streaming.
-(defvar my-gptel--use-stream-p nil
-  "Whether use steaming.")
-
-(defun my-gptel--is-qwen3 ()
-  "Check if current model is Qwen3."
-  (when-let ((model-name (symbol-name gptel-model)))
-    (string-match "qwen3" (downcase model-name))))
-
 (defun my-gptel--request ()
   "Initiate gptel request."
   (gptel--sanitize-model)
   (gptel-request my-gptel--user-prompt
-    :system (if (my-gptel--is-qwen3) (concat my-gptel--system-prompt "/no_think") my-gptel--system-prompt)
-    :stream my-gptel--use-stream-p
+    :system my-gptel--system-prompt
+    :stream nil ;; streaming not working well with `tool_call'
     :callback #'my-gptel--response-callback))
 
 (defun my-gptel--response-callback (response info)
-  "Callback function for gptel request."
+  "Callback function with RESPONSE and INFO for gptel request."
   (if (not response)
       (message "gptel-dwim failed with message: %s" (plist-get info :status))
     (display-buffer
@@ -127,7 +116,7 @@ If PROMPT is
       (when (= local-prefix-arg 8)
         ;; e.g: qwen support tool-use.
         ;; handle tool-use: add context for prompt
-        (setq my-gptel--system-prompt (my-gptel--tool-prompt)))
+        (setq my-gptel--system-prompt my-gptel--tool-prompt))
       ;; add prompt for context
       (and context
            (setq prompt (concat prompt "\n\n" context))))
@@ -135,25 +124,19 @@ If PROMPT is
     (message "Querying %s..." (gptel-backend-name gptel-backend))
     (my-gptel--request)))
 
-(defun gptel-retry ()
-  "Retry previous gptel request."
-  (interactive)
-  (message "Querying %s..." (gptel-backend-name gptel-backend))
-  (my-gptel--request))
-
 (gptel-make-preset 'gptel-coding
   :description "A preset optimized for coding tasks"
-  :backend "DeepSeek"
-  :model 'deepseek-chat
+  :backend "EricAI"
+  :model 'deepseek-ai/DeepSeek-V3.2
   :stream nil ;; tool_call not working well with streaming.
-  :system (my-gptel--tool-prompt)
+  :system my-gptel--tool-prompt
   :tools '("run_command" "make_directory"
-           "create_file" "read_file")
+           "create_file" "read_file" "Edit")
   :temperature 0)
 
 (gptel-make-preset 'gptel-qa
   :description "A preset optimized for general QA tasks"
-  :backend "Free"
+  :backend "EricAI"
   :model 'deepseek-ai/DeepSeek-V3.2
   :stream t
   :system my-gptel--default-prompt
