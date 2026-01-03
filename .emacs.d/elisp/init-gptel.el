@@ -148,8 +148,7 @@ If PROMPT is
   :stream nil ;; tool_call not working well with streaming.
   :system (my-gptel--tool-prompt)
   :tools '("run_command" "make_directory"
-           "create_file" "Edit"
-           "read_file")
+           "create_file" "read_file")
   :temperature 0)
 
 (gptel-make-preset 'gptel-qa
