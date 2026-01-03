@@ -31,6 +31,10 @@
 
 (require 'init-gptel-tools)
 
+(use-package gptel-agent
+  :ensure t
+  :config (gptel-agent-update))
+
 (use-package gptel-cpp-complete
   :ensure t
   :config
