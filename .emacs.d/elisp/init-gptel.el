@@ -11,7 +11,9 @@
   :ensure t
   :config
   (progn
-    (setq gptel-model 'deepseek-ai/DeepSeek-V3.2
+    (setq gptel-log-level 'info
+          gptel-confirm-tool-calls nil
+          gptel-model 'deepseek-ai/DeepSeek-V3.2
           ;; Randomness in response text, 0 to 2
           gptel-temperature 0
           gptel-backend
@@ -41,8 +43,6 @@
   (when (display-graphic-p)
     (dolist (c-mode-hook '(c-mode-common-hook c-ts-mode-hook c++-ts-mode-hook))
       (add-hook c-mode-hook #'gptel-cpp-complete-mode))))
-
-(setq gptel-log-level 'info)
 
 (defconst my-gptel--default-prompt "You are a large language model and a helpful assistant. Respond concisely."
   "Default prompt.")
