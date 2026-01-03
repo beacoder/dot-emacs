@@ -42,6 +42,26 @@
     (dolist (c-mode-hook '(c-mode-common-hook c-ts-mode-hook c++-ts-mode-hook))
       (add-hook c-mode-hook #'gptel-cpp-complete-mode))))
 
+(gptel-make-preset 'gptel-coding
+  :description "A preset optimized for coding tasks"
+  :backend "DeepSeek"
+  :model 'deepseek-chat
+  :stream nil ;; tool_call not working well with streaming.
+  :system (my-gptel--tool-prompt)
+  :tools '("run_command" "make_directory"
+           "create_file" "Edit"
+           "read_file")
+  :temperature 0)
+
+(gptel-make-preset 'gptel-qa
+  :description "A preset optimized for general QA tasks"
+  :backend "Free"
+  :model 'deepseek-ai/DeepSeek-V3.2
+  :stream t
+  :system my-gptel--default-prompt
+  :tools nil
+  :temperature 1)
+
 (setq gptel-log-level 'info)
 
 (defconst my-gptel--default-prompt "You are a large language model and a helpful assistant. Respond concisely."
@@ -140,26 +160,6 @@ If PROMPT is
   (interactive)
   (message "Querying %s..." (gptel-backend-name gptel-backend))
   (my-gptel--request))
-
-(gptel-make-preset 'gpt4coding
-  :description "A preset optimized for coding tasks"
-  :backend "DeepSeek"
-  :model 'deepseek-chat
-  :stream nil ;; tool_call not working well with streaming.
-  :system (my-gptel--tool-prompt)
-  :tools '("run_command" "make_directory"
-           "create_file" "edit_file"
-           "read_file")
-  :temperature 0)
-
-(gptel-make-preset 'gpt4qa
-  :description "A preset optimized for general QA tasks"
-  :backend "Free"
-  :model 'deepseek-ai/DeepSeek-V3.2
-  :stream t
-  :system my-gptel--default-prompt
-  :tools nil
-  :temperature 1)
 
 
 (provide 'init-gptel)
