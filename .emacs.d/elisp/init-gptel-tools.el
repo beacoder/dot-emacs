@@ -3,43 +3,6 @@
 ;;; Code:
 
 ;; Define tool-callbacks
-;; @note return either a result or a message to inform the LLM
-(defun my-gptel--edit_file (file_path file_changes)
-  "Apply FILE_CHANGES to FILE_PATH using pattern matching and replacement.
-
-FILE_PATH is a string representing the full path to the file to edit.
-FILE_CHANGES is a list of plists where each plist contains:
-  :line_number - The line number where the edit should start (1-indexed)
-  :old_string - The string to search for and replace
-  :new_string - The string to replace OLD_STRING with
-
-Returns a success or failure message string."
-  (if (and file_path (not (string= file_path "")) file_changes)
-      (with-temp-buffer
-        (insert-file-contents (expand-file-name file_path))
-        (let ((inhibit-read-only t)
-              (case-fold-search nil)
-              (file-name (expand-file-name file_path))
-              (edit-success nil))
-          ;; apply changes
-          (dolist (file_change (seq-into file_changes 'list))
-            (when-let ((line_number (plist-get file_change :line_number))
-                       (old_string (plist-get file_change :old_string))
-                       (new_string (plist-get file_change :new_string)))
-              (goto-char (point-min))
-              (forward-line (1- line_number))
-              (let ((eol (line-end-position)))
-                (when (search-forward old_string eol t)
-                  (replace-match new_string t t)
-                  (setq edit-success t)))))
-          ;; return result to gptel
-          (if edit-success
-              (progn
-                (write-file file-name)
-                (format "Successfully edited %s" file-name))
-            (format "Failed to edited %s" file-name))))
-    (format "Failed to edited %s" file_path)))
-
 (defun my-gptel--run_async_command (callback command)
   "Run COMMAND asynchronously and pass output to CALLBACK.
 
@@ -236,27 +199,6 @@ Returns a success message string or an error description."
  :args (list '(:name "filepath"
                      :type string
                      :description "Path to the file to read.  Supports relative paths and ~."))
- :category "filesystem")
-
-(gptel-make-tool
- :function #'my-gptel--edit_file
- :name "edit_file"
- :description "Edit file with a list of changes, each change contains a line number,
-an old string and a new string, new string will replace the old string at the specified line."
- :args (list '(:name "file_path"
-                     :type string
-                     :description "The full path of the file to edit")
-             '(:name "file_changes"
-                     :type array
-                     :items (:type object
-                                   :properties
-                                   (:line_number
-                                    (:type integer :description "The line number of the file where edit starts.")
-                                    :old_string
-                                    (:type string :description "The old string to be replaced.")
-                                    :new_string
-                                    (:type string :description "The new string to replace old.")))
-                     :description "The list of changes to apply on the file"))
  :category "filesystem")
 
 ;; super-powerful, capable of replacing numerous existing tools.
