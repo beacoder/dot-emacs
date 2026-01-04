@@ -67,7 +67,7 @@
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 [_a_] Counsel-Ag         [_d_] GPT-Dwim          [_u_] Update-GTAGS       [_p_] Previous-Mark      [_h_] Hs-Hide-Block
 [_g_] Counsel-Git-Grep   [_r_] GPT-Agent         [_c_] Compile            [_n_] Next-Mark          [_H_] Hs-Show-Block
-[_f_] Counsel-Git        [_t_] GPT-Send          [_o_] Org-Search-View    [_P_] Move-Text-Up       [_D_] Remove-Duplicate
+[_f_] Counsel-Git        [_t_] GPT-Menu          [_o_] Org-Search-View    [_P_] Move-Text-Up       [_D_] Remove-Duplicate
 [_l_] Counsel-Locate     [_s_] GPT-Session       [_w_] Google-Word        [_N_] Move-Text-Down     [_S_] Sort-Lines
 [_i_] Pin-Yin            [_q_] Quit
   "
@@ -89,7 +89,7 @@
   ("r" gptel-agent :exit t)
   ("d" gptel-dwim :exit t)
   ("s" gptel :exit t)
-  ("t" gptel-send :exit t)
+  ("t" gptel-menu :exit t)
   ("u" ggtags-update-tags :exit t)
   ("w" modi/eww-search-words :exit t)
   ("q" nil))
