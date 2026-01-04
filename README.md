@@ -1,4 +1,4 @@
-# beacoder/dot-emacs
+# dot-emacs
 
 A comprehensive Emacs configuration focused on C++ development with modern tooling and productivity enhancements.
 
