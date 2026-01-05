@@ -2,6 +2,10 @@
 ;;; Commentary:
 ;;; Code:
 
+;; ============================================================================
+;; Package Configuration
+;; ============================================================================
+
 ;;; LLM client
 ;;  "gptel"         => start a LLM session
 ;;  "C-c RET"       => send to LLM
@@ -31,9 +35,14 @@
       :stream t
       :models '(qwen3:8b))))
 
+;; ============================================================================
+;; Additional Packages
+;; ============================================================================
+
 (use-package gptel-agent
   :ensure t
-  :config (gptel-agent-update))
+  :config 
+  (gptel-agent-update))
 
 (use-package gptel-cpp-complete
   :ensure t
@@ -42,8 +51,13 @@
     (dolist (c-mode-hook '(c-mode-common-hook c-ts-mode-hook c++-ts-mode-hook))
       (add-hook c-mode-hook #'gptel-cpp-complete-mode))))
 
-(defconst my-gptel--default-prompt "You are a large language model and a helpful assistant. Respond concisely."
-  "Default prompt.")
+;; ============================================================================
+;; Custom Prompts and Variables
+;; ============================================================================
+
+(defconst my-gptel--default-prompt 
+  "You are a large language model and a helpful assistant. Respond concisely."
+  "Default system prompt for general QA tasks.")
 
 (defconst my-gptel--tool-prompt
   "You are an AI assistant equipped with a set of tools to complete tasks.
@@ -56,28 +70,27 @@ Follow these instructions precisely:
 5.Proceed to the next task: Only move to the next task after successfully completing the current one.
 
 /no_think"
-  "Generic directive for tool calling.")
-
-;; add tool directive to `gptel-directives'
-(unless (alist-get 'tool gptel-directives)
-  (add-to-list 'gptel-directives `(tool . ,my-gptel--tool-prompt)))
-
-(defvar my-gptel--system-prompt ""
-  "System prompt.")
+  "System prompt for tool-calling tasks.")
 
 (defvar my-gptel--user-prompt ""
-  "User prompt.")
+  "Current user prompt for gptel requests.")
+
+;; ============================================================================
+;; Core Functions
+;; ============================================================================
 
 (defun my-gptel--request ()
-  "Initiate gptel request."
+  "Initiate a gptel request with the current user prompt."
   (gptel--sanitize-model)
   (gptel-request my-gptel--user-prompt
-    :system my-gptel--system-prompt
-    :stream nil ;; streaming not working well with `tool_call'
+    :system my-gptel--default-prompt
+    :stream nil  ; streaming not working well with `tool_call'
     :callback #'my-gptel--response-callback))
 
 (defun my-gptel--response-callback (response info)
-  "Callback function with RESPONSE and INFO for gptel request."
+  "Callback function for gptel requests.
+RESPONSE is the LLM response text.
+INFO contains metadata about the request."
   (if (not response)
       (message "gptel-dwim failed with message: %s" (plist-get info :status))
     (display-buffer
@@ -99,38 +112,43 @@ Follow these instructions precisely:
 (defun gptel-dwim (prompt)
   "Request a response from the `gptel-backend' for PROMPT.
 The request is asynchronous, this function returns immediately.
-If PROMPT is
+
+If PROMPT is:
 - current-prefix-arg enabled, create a full prompt from both minibuffer
   and active_region/symbol_at_point suitable for sending to the LLM.
 - a string, it is used to create a full prompt suitable for
   sending to the LLM."
   (declare (indent 1))
   (interactive (list (smart/read-from-minibuffer "Ask ChatGPT")))
+  
   (let ((local-prefix-arg
          (if (listp current-prefix-arg) (car current-prefix-arg) current-prefix-arg))
         (context (smart/dwim-at-point)))
-    (setq my-gptel--system-prompt my-gptel--default-prompt)
+    
+    ;; Add context from active region or symbol at point if prefix arg is given
     (when local-prefix-arg
-      (when (= local-prefix-arg 8)
-        ;; e.g: qwen support tool-use.
-        ;; handle tool-use: add context for prompt
-        (setq my-gptel--system-prompt my-gptel--tool-prompt))
-      ;; add prompt for context
       (and context
            (setq prompt (concat prompt "\n\n" context))))
+    
     (setq my-gptel--user-prompt prompt)
     (message "Querying %s..." (gptel-backend-name gptel-backend))
     (my-gptel--request)))
 
+;; ============================================================================
+;; Preset Configurations
+;; ============================================================================
+
+;; Preset for coding tasks with tool support
 (gptel-make-preset 'gptel-coding
   :description "A preset optimized for coding tasks"
   :backend "EricAI"
   :model 'deepseek-ai/DeepSeek-V3.2
-  :stream nil ;; tool_call not working well with streaming.
+  :stream nil  ; tool_call not working well with streaming
   :system my-gptel--tool-prompt
   :tools '("Bash" "Mkdir" "Write" "Read" "Edit")
   :temperature 0)
 
+;; Preset for general QA tasks
 (gptel-make-preset 'gptel-qa
   :description "A preset optimized for general QA tasks"
   :backend "EricAI"
@@ -140,6 +158,9 @@ If PROMPT is
   :tools nil
   :temperature 1)
 
+;; ============================================================================
+;; Provide the module
+;; ============================================================================
 
 (provide 'init-gptel)
 ;;; init-gptel.el ends here
