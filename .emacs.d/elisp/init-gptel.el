@@ -41,7 +41,7 @@
 
 (use-package gptel-agent
   :ensure t
-  :config 
+  :config
   (gptel-agent-update))
 
 (use-package gptel-cpp-complete
@@ -55,7 +55,7 @@
 ;; Custom Prompts and Variables
 ;; ============================================================================
 
-(defconst my-gptel--default-prompt 
+(defconst my-gptel--default-prompt
   "You are a large language model and a helpful assistant. Respond concisely."
   "Default system prompt for general QA tasks.")
 
@@ -120,16 +120,16 @@ If PROMPT is:
   sending to the LLM."
   (declare (indent 1))
   (interactive (list (smart/read-from-minibuffer "Ask ChatGPT")))
-  
+
   (let ((local-prefix-arg
          (if (listp current-prefix-arg) (car current-prefix-arg) current-prefix-arg))
         (context (smart/dwim-at-point)))
-    
+
     ;; Add context from active region or symbol at point if prefix arg is given
     (when local-prefix-arg
       (and context
            (setq prompt (concat prompt "\n\n" context))))
-    
+
     (setq my-gptel--user-prompt prompt)
     (message "Querying %s..." (gptel-backend-name gptel-backend))
     (my-gptel--request)))
@@ -141,8 +141,8 @@ If PROMPT is:
 ;; Preset for coding tasks with tool support
 (gptel-make-preset 'gptel-coding
   :description "A preset optimized for coding tasks"
-  :backend "EricAI"
-  :model 'deepseek-ai/DeepSeek-V3.2
+  :backend "DeepSeek"
+  :model 'deepseek-chat
   :stream t
   :system my-gptel--tool-prompt
   :tools '("Bash" "Mkdir" "Write" "Read" "Edit")
@@ -151,7 +151,7 @@ If PROMPT is:
 ;; Preset for general QA tasks
 (gptel-make-preset 'gptel-qa
   :description "A preset optimized for general QA tasks"
-  :backend "EricAI"
+  :backend "Free"
   :model 'deepseek-ai/DeepSeek-V3.2
   :stream t
   :system my-gptel--default-prompt
