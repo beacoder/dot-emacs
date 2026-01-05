@@ -84,7 +84,7 @@ Follow these instructions precisely:
   (gptel--sanitize-model)
   (gptel-request my-gptel--user-prompt
     :system my-gptel--default-prompt
-    :stream nil  ; streaming not working well with `tool_call'
+    :stream t
     :callback #'my-gptel--response-callback))
 
 (defun my-gptel--response-callback (response info)
@@ -143,7 +143,7 @@ If PROMPT is:
   :description "A preset optimized for coding tasks"
   :backend "EricAI"
   :model 'deepseek-ai/DeepSeek-V3.2
-  :stream nil  ; tool_call not working well with streaming
+  :stream t
   :system my-gptel--tool-prompt
   :tools '("Bash" "Mkdir" "Write" "Read" "Edit")
   :temperature 0)
