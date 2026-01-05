@@ -31,8 +31,6 @@
       :stream t
       :models '(qwen3:8b))))
 
-(require 'init-gptel-tools)
-
 (use-package gptel-agent
   :ensure t
   :config (gptel-agent-update))
@@ -130,8 +128,7 @@ If PROMPT is
   :model 'deepseek-ai/DeepSeek-V3.2
   :stream nil ;; tool_call not working well with streaming.
   :system my-gptel--tool-prompt
-  :tools '("run_command" "make_directory"
-           "create_file" "read_file" "Edit")
+  :tools '("Bash" "Mkdir" "Write" "Read" "Edit")
   :temperature 0)
 
 (gptel-make-preset 'gptel-qa
