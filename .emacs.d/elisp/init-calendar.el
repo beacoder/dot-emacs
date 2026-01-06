@@ -42,30 +42,32 @@
                   holiday-other-holidays))))
 
 
-(when (maybe-require-package 'calfw)
-  ;; Better views of calendar
-  (use-package calfw
-    :commands cfw:open-calendar-buffer
-    ;; :bind ("<C-f12>" . open-calendar)
-    :init
-    (use-package calfw-org
-      :commands (cfw:open-org-calendar cfw:org-create-source))
+;; Better views of calendar
+(use-package calfw
+  :ensure t
+  :commands calfw-open-calendar-buffer
+  ;; :bind ("<C-f12>" . open-calendar)
+  :init
+  (use-package calfw-org
+    :ensure t
+    :commands (calfw-org-open-calendar calfw-org-create-source))
 
-    (use-package calfw-ical
-      :commands (cfw:open-ical-calendar cfw:ical-create-source))
+  (use-package calfw-ical
+    :ensure t
+    :commands (calfw-ical-open-calendar calfw-ical-create-source))
 
-    (defun open-calendar ()
-      "Open calendar."
-      (interactive)
-      (unless (ignore-errors
-                (cfw:open-calendar-buffer
-                 :contents-sources
-                 (list
-                  (when org-agenda-files
-                    (cfw:org-create-source "YellowGreen"))
-                  (when (bound-and-true-p centaur-ical)
-                    (cfw:ical-create-source "gcal" centaur-ical "IndianRed")))))
-        (cfw:open-calendar-buffer)))))
+  (defun open-calendar ()
+    "Open calendar."
+    (interactive)
+    (unless (ignore-errors
+              (calfw-open-calendar-buffer
+               :contents-sources
+               (list
+                (when org-agenda-files
+                  (calfw-org-create-source "YellowGreen"))
+                (when (bound-and-true-p centaur-ical)
+                  (calfw-ical-create-source "gcal" centaur-ical "IndianRed")))))
+      (calfw-open-calendar-buffer))))
 
 
 (provide 'init-calendar)
