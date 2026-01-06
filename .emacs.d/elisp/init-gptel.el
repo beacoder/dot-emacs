@@ -145,7 +145,8 @@ If PROMPT is:
   :model 'deepseek-chat
   :stream t
   :system my-gptel--tool-prompt
-  :tools '("Bash" "Mkdir" "Write" "Read" "Edit" "Insert" "Grep")
+  ;; Include only essential tools to increase tool-calling success rate
+  :tools '("Bash" "Mkdir" "Write" "Read" "Edit" "Insert")
   :temperature 0)
 
 ;; Preset for general QA tasks
