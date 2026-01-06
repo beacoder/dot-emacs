@@ -100,8 +100,7 @@ INFO contains metadata about the request."
          (visual-line-mode 1)
          (goto-char (point-max))
          (ignore-errors
-           (insert response)
-           (insert "\n"))
+           (insert response))
          (markdown-mode)
          (gptel-mode)
          (current-buffer)))
