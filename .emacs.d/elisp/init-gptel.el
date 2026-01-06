@@ -144,7 +144,7 @@ If PROMPT is:
   :backend "DeepSeek"
   :model 'deepseek-chat
   :stream t
-  :system my-gptel--tool-promp
+  :system my-gptel--tool-prompt
   :tools '("Bash" "Mkdir" "Write" "Read" "Edit" "Insert" "Grep")
   :temperature 0)
 
