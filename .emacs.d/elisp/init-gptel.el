@@ -173,7 +173,7 @@ If PROMPT is:
 ;;; Preset selection
 ;;  "gtpel-qa"         => general QA/code-completion
 ;;  "gptel-coding"     => handle simple coding tasks
-;;  "gptel-plan"       => handle complicated tasks with read tools
+;;  "gptel-plan"       => handle complicated tasks with read-only tools
 ;;  "gptel-agent"      => handle complicated tasks
 
 ;; Preset for coding tasks with tool support
