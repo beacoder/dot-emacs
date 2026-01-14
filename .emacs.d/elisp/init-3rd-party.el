@@ -646,6 +646,10 @@
   :hook (after-init . mcp-hub-start-all-server))
 
 
+;;; add yang-mode
+(use-package yang-mode :ensure t)
+
+
 ;;; other setting
 (require 'init-hydra)
 (require 'init-git)
