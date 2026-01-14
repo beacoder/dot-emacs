@@ -583,7 +583,7 @@
     (require 'exwm)
     ;; replace existing window manager by default
     (customize-set-variable 'exwm-replace t)
-    (exwm-enable)
+    (exwm-wm-mode)
     ;;; enable editing for app inside EXWM
     ;;  "C-c C-RET" => start editing
     ;;  "C-c C-c"   => finish editing
