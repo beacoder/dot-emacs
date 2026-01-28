@@ -44,23 +44,18 @@
   :config
   (progn
     (gptel-agent-update)
-    ;; prefer git-grep vs rg vs grep
-    (defun gptel-agent--grep (regex path &optional glob context-lines)
+    ;; use git-grep since it's much faster in git repo
+    (defalias 'gptel-agent--grep 'gptel-agent--git-grep)
+    (defun gptel-agent--git-grep (regex path &optional glob context-lines)
       (unless (file-readable-p path)
         (error "Error: File or directory %s is not readable" path))
       (let* ((path (expand-file-name (substitute-in-file-name path)))
              (git-root (vc-git-root path))
-             (grepper
-              (cond
-               (git-root "git")
-               ((executable-find "rg") "rg")
-               ((executable-find "grep") "grep")
-               (t (error "Error: no grep tool available")))))
+             (grepper "git"))
         (with-temp-buffer
           (let* ((default-directory (or git-root default-directory))
                  (args
                   (pcase grepper
-                    ;; ---------------- git grep ----------------
                     ("git"
                      (delq nil
                            (append
@@ -76,30 +71,7 @@
                             (list (file-relative-name path git-root))
                             ;; glob restriction
                             (when glob
-                              (list (format ":(glob)%s" glob))))))
-                    ;; ---------------- ripgrep ----------------
-                    ("rg"
-                     (delq nil
-                           (list "--sort=modified"
-                                 (and (natnump context-lines)
-                                      (format "--context=%d" context-lines))
-                                 (and glob (format "--glob=%s" glob))
-                                 "--max-count=1000"
-                                 "--heading"
-                                 "--line-number"
-                                 "-e" regex
-                                 path)))
-                    ;; ---------------- grep ----------------
-                    ("grep"
-                     (delq nil
-                           (list "--recursive"
-                                 (and (natnump context-lines)
-                                      (format "--context=%d" context-lines))
-                                 (and glob (format "--include=%s" glob))
-                                 "--max-count=1000"
-                                 "--line-number"
-                                 "--regexp" regex
-                                 path))))))
+                              (list (format ":(glob)%s" glob)))))))))
             (let ((exit-code (apply #'call-process grepper nil '(t t) nil args)))
               (when (and (/= exit-code 0)
                          ;; git grep returns 1 if no matches
