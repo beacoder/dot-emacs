@@ -42,7 +42,71 @@
 (use-package gptel-agent
   :ensure t
   :config
-  (gptel-agent-update))
+  (progn
+    (gptel-agent-update)
+    ;; prefer git-grep vs rg vs grep
+    (defun gptel-agent--grep (regex path &optional glob context-lines)
+      (unless (file-readable-p path)
+        (error "Error: File or directory %s is not readable" path))
+      (let* ((path (expand-file-name (substitute-in-file-name path)))
+             (git-root (vc-git-root path))
+             (grepper
+              (cond
+               (git-root "git")
+               ((executable-find "rg") "rg")
+               ((executable-find "grep") "grep")
+               (t (error "Error: no grep tool available")))))
+        (with-temp-buffer
+          (let* ((default-directory (or git-root default-directory))
+                 (args
+                  (pcase grepper
+                    ;; ---------------- git grep ----------------
+                    ("git"
+                     (delq nil
+                           (append
+                            (list "grep"
+                                  "--line-number"
+                                  "--no-color"
+                                  (and (natnump context-lines)
+                                       (format "-C%d" context-lines))
+                                  "--max-count=1000"
+                                  "-e" regex
+                                  "--")
+                            ;; restrict path
+                            (list (file-relative-name path git-root))
+                            ;; glob restriction
+                            (when glob
+                              (list (format ":(glob)%s" glob))))))
+                    ;; ---------------- ripgrep ----------------
+                    ("rg"
+                     (delq nil
+                           (list "--sort=modified"
+                                 (and (natnump context-lines)
+                                      (format "--context=%d" context-lines))
+                                 (and glob (format "--glob=%s" glob))
+                                 "--max-count=1000"
+                                 "--heading"
+                                 "--line-number"
+                                 "-e" regex
+                                 path)))
+                    ;; ---------------- grep ----------------
+                    ("grep"
+                     (delq nil
+                           (list "--recursive"
+                                 (and (natnump context-lines)
+                                      (format "--context=%d" context-lines))
+                                 (and glob (format "--include=%s" glob))
+                                 "--max-count=1000"
+                                 "--line-number"
+                                 "--regexp" regex
+                                 path))))))
+            (let ((exit-code (apply #'call-process grepper nil '(t t) nil args)))
+              (when (and (/= exit-code 0)
+                         ;; git grep returns 1 if no matches
+                         (not (and (string= grepper "git") (= exit-code 1))))
+                (goto-char (point-min))
+                (insert (format "Error: search failed with exit-code %d\n\n" exit-code)))
+              (buffer-string))))))))
 
 (use-package gptel-cpp-complete
   :ensure t
