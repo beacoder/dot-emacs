@@ -78,7 +78,10 @@
                          (not (and (string= grepper "git") (= exit-code 1))))
                 (goto-char (point-min))
                 (insert (format "Error: search failed with exit-code %d\n\n" exit-code)))
-              (buffer-string))))))))
+              (buffer-string))))))
+    ;; add project related information as llm context, e.g: coding guideline, etc.
+    (require 'gptel-context)
+    (gptel-context--add-directory (expand-file-name "~/.emacs.d/contexts") 'add)))
 
 (use-package gptel-cpp-complete
   :ensure t
