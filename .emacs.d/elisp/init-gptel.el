@@ -67,11 +67,10 @@
                                   "--max-count=1000"
                                   "-e" regex
                                   "--")
-                            ;; restrict path
-                            (list (file-relative-name path git-root))
                             ;; glob restriction
                             (when glob
                               (list (format "%s" glob)))))))))
+            (message (format "running: git %s"(mapconcat 'identity args " ")))
             (let ((exit-code (apply #'call-process grepper nil '(t t) nil args)))
               (when (and (/= exit-code 0)
                          ;; git grep returns 1 if no matches
