@@ -70,7 +70,7 @@
                             ;; glob restriction
                             (when glob
                               (list (format "%s" glob)))))))))
-            (message (format "running: git %s"(mapconcat 'identity args " ")))
+            (message (format "running: git %s" (mapconcat 'identity args " ")))
             (let ((exit-code (apply #'call-process grepper nil '(t t) nil args)))
               (when (and (/= exit-code 0)
                          ;; git grep returns 1 if no matches
