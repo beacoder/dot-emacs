@@ -546,7 +546,7 @@
 ;; emacs-29 new features
 (when (>= emacs-major-version 29)
   ;; tree-sitter: language parser
-  ;; @see https://github.com/casouri/tree-sitter-module
+  ;; @see https://github.com/casouri/tree-sitter-module/releases
   ;;      https://git.savannah.gnu.org/cgit/emacs.git/tree/admin/notes/tree-sitter/starter-guide?h=feature/tree-sitter
   ;;      https://blog.markhepburn.com/posts/experimenting-with-the-built-in-treesitter-support-in-emacs
   (when (treesit-available-p)
