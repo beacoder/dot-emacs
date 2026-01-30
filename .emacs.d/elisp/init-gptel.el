@@ -65,7 +65,8 @@
                                   (and (natnump context-lines)
                                        (format "-C%d" context-lines))
                                   "--max-count=1000"
-                                  "-E" regex
+                                  ;; pcre regex
+                                  "-P" regex
                                   "--")
                             ;; glob restriction
                             (when glob
