@@ -223,7 +223,7 @@ If PROMPT is:
   :stream t
   :system my-gptel--tool-prompt
   ;; Include only essential tools to increase tool-calling success rate
-  :tools '("Bash" "Mkdir" "Write" "Read" "Edit" "Insert")
+  :tools '("Bash" "Mkdir" "Write" "Read" "Edit" "Insert" "Grep")
   :temperature 0)
 
 ;; Preset for general QA tasks
