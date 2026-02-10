@@ -39,6 +39,13 @@
 ;; Additional Packages
 ;; ============================================================================
 
+(use-package gptel-cpp-complete
+  :ensure t
+  :config
+  (when (display-graphic-p)
+    (dolist (c-mode-hook '(c-mode-common-hook c-ts-mode-hook c++-ts-mode-hook))
+      (add-hook c-mode-hook #'gptel-cpp-complete-mode))))
+
 (use-package gptel-agent
   :ensure t
   :config
@@ -84,34 +91,42 @@
     (defun gptel-agent---git-glob (pattern &optional path depth)
       (when (string-empty-p pattern)
         (error "Error: pattern must not be empty"))
-      (let* ((path (or path "."))
-             (full-path (expand-file-name path))
+      (if path
+          (unless (and (file-readable-p path) (file-directory-p path))
+            (error "Error: path %s is not readable" path))
+        (setq path "."))
+      (unless (or (executable-find "git") (executable-find "tree"))
+        (error "Error: Neither `git` nor `tree` not found.  This tool cannot be used"))
+      (let* ((full-path (expand-file-name path))
              (is-git (and (executable-find "git")
                           (zerop (call-process "git" nil nil nil "-C" full-path "rev-parse" "--is-inside-work-tree")))))
-        (unless (or is-git (executable-find "tree"))
-          (error "Error: Neither `git` (in a repo) nor `tree` executable found"))
         (with-temp-buffer
           (if is-git
               ;; --- Git Strategy ---
-              (let ((default-directory full-path))
-                (apply #'call-process "git" nil t nil
-                       "ls-files" "-z"
-                       "--full-name"
-                       "--cached"      ; Tracked files
-                       "--others"      ; Untracked files
-                       "--exclude-standard" ; Respect .gitignore
-                       (list (concat "*" pattern "*")))
-                ;; Convert null-terminated strings to newline-separated full paths
-                (goto-char (point-min))
-                (while (search-forward "\0" nil t)
-                  (replace-match "\n"))
-                ;; Prepend the path to make them absolute
-                (goto-char (point-min))
-                (let ((path-prefix (file-name-as-directory full-path)))
-                  (while (not (eobp))
-                    (unless (looking-at-p "^$") ; Skip empty lines
-                      (insert path-prefix))
-                    (forward-line 1))))
+              (let* ((default-directory full-path)
+                     (exit-code
+                      (apply #'call-process "git" nil t nil
+                             "ls-files" "-z"
+                             "--full-name"
+                             "--cached"      ; Tracked files
+                             "--others"      ; Untracked files
+                             "--exclude-standard" ; Respect .gitignore
+                             (list (concat "*" pattern "*")))))
+                (if (/= exit-code 0)
+                    (progn (goto-char (point-min))
+                           (insert (format "Glob failed with exit code %d\n.STDOUT:\n\n"
+                                           exit-code)))
+                  ;; Convert null-terminated strings to newline-separated full paths
+                  (goto-char (point-min))
+                  (while (search-forward "\0" nil t)
+                    (replace-match "\n"))
+                  ;; Prepend the path to make them absolute
+                  (goto-char (point-min))
+                  (let ((path-prefix (file-name-as-directory full-path)))
+                    (while (not (eobp))
+                      (unless (looking-at-p "^$") ; Skip empty lines
+                        (insert path-prefix))
+                      (forward-line 1)))))
             ;; --- Tree Strategy (Fallback) ---
             (let* ((args (list "-l" "-f" "-i" "-I" ".git"
                                "--sort=mtime" "--ignore-case"
@@ -124,37 +139,36 @@
                 (goto-char (point-min))
                 (insert (format "Glob failed with exit code %d\n.STDOUT:\n\n"
                                 exit-code)))))
-          ;; --- Existing Truncation Logic ---
           (when (> (buffer-size) 20000)
-            (let* ((temp-dir (expand-file-name "gptel-agent-temp" (temporary-file-directory)))
+            ;; Too large - save to temp file and return truncated info
+            (let* ((temp-dir (expand-file-name "gptel-agent-temp"
+                                               (temporary-file-directory)))
                    (temp-file (expand-file-name
-                               (format "glob-%s-%s.txt" (format-time-string "%Y%m%d-%H%M%S") (random 10000))
+                               (format "glob-%s-%s.txt"
+                                       (format-time-string "%Y%m%d-%H%M%S")
+                                       (random 10000))
                                temp-dir)))
               (unless (file-directory-p temp-dir) (make-directory temp-dir t))
               (write-region nil nil temp-file)
               (let ((max-lines 50)
                     (orig-size (buffer-size))
-                    (orig-lines (count-lines (point-min) (point-max))))
+                    (orig-lines (line-number-at-pos (point-max))))
+                ;; Insert header
                 (goto-char (point-min))
-                (delete-region (point-min) (point-max))
-                (insert (format "Glob results too large (%d chars, %d lines) for context window.\nStored in: %s\n\nFirst %d lines:\n\n"
+                (insert (format "Glob results too large (%d chars, %d lines)\
+for context window.\nStored in: %s\n\nFirst %d lines:\n\n"
                                 orig-size orig-lines temp-file max-lines))
-                (insert-file-contents temp-file nil 0 5000) ; Quick insert of first chunk
+                ;; Truncate to first max-lines lines
                 (forward-line max-lines)
                 (delete-region (point) (point-max))
+                ;; Insert footer
                 (goto-char (point-max))
-                (insert (format "\n\n[Use Read tool with file_path=\"%s\" to view full results]" temp-file)))))
+                (insert (format "\n\n[Use Read tool with file_path=\"%s\" to view full results]"
+                                temp-file)))))
           (buffer-string))))
     ;; add project related information as llm context, e.g: coding guideline, etc.
     (require 'gptel-context)
     (gptel-context--add-directory (expand-file-name "~/.emacs.d/contexts") 'add)))
-
-(use-package gptel-cpp-complete
-  :ensure t
-  :config
-  (when (display-graphic-p)
-    (dolist (c-mode-hook '(c-mode-common-hook c-ts-mode-hook c++-ts-mode-hook))
-      (add-hook c-mode-hook #'gptel-cpp-complete-mode))))
 
 ;; ============================================================================
 ;; Custom Prompts and Variables
