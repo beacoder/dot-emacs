@@ -156,7 +156,7 @@
                 ;; Insert header
                 (goto-char (point-min))
                 (insert (format "Glob results too large (%d chars, %d lines)\
-for context window.\nStored in: %s\n\nFirst %d lines:\n\n"
+ for context window.\nStored in: %s\n\nFirst %d lines:\n\n"
                                 orig-size orig-lines temp-file max-lines))
                 ;; Truncate to first max-lines lines
                 (forward-line max-lines)
