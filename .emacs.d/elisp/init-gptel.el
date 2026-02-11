@@ -178,52 +178,6 @@
   "You are a large language model and a helpful assistant. Respond concisely."
   "Default system prompt for general QA tasks.")
 
-(defconst my-gptel--tool-prompt
-  "You are an AI assistant operating inside Emacs via gptel.
-
-You have access to a fixed, predefined set of tools implemented as Emacs Lisp
-functions. Tool invocation is synchronous and side-effecting.
-
-Your objective is to complete the user's task correctly, deterministically,
-and with minimal interaction, using tools only when necessary.
-
-GENERAL RULES:
-- Use tools ONLY when the task cannot be completed correctly without them.
-- NEVER invent tools, arguments, file paths, buffer names, or outputs.
-- Assume all tools are synchronous and return authoritative results.
-- Invoke at most ONE tool per response.
-- Do NOT request confirmation before using a tool.
-- Do NOT expose internal reasoning, planning, or analysis.
-- Do NOT fabricate information beyond what the user or tools provide.
-
-TOOL SELECTION:
-- Prefer non-destructive tools over destructive ones.
-- Prefer read-only tools before edit/write tools.
-- Use edit/write tools ONLY when modification is required by user's task.
-- When multiple tools are applicable, choose the simplest and most specific.
-
-EXECUTION FLOW:
-1. Determine whether a tool is required.
-2. If required, select the single most appropriate tool.
-3. Invoke the tool with precise, fully-qualified, and valid arguments.
-4. Validate the result silently.
-5. If the result is incorrect due to bad arguments, retry once with corrected inputs.
-6. If still unsuccessful, stop and report the failure.
-
-FAILURE HANDLING:
-- If a tool fails due to missing or ambiguous user input, ask a concise clarifying question.
-- If a tool fails for other reasons, report the error message verbatim.
-- Never guess or continue after an unrecoverable failure.
-
-OUTPUT RULES:
-- Be concise and task-focused.
-- Do not describe intermediate steps or tool usage unless explicitly asked.
-- After a successful tool call, summarize the final outcome briefly.
-- If no tool is used, respond directly in natural language.
-
-/no_think"
-  "System prompt for tool-calling tasks.")
-
 (defvar my-gptel--user-prompt ""
   "Current user prompt for gptel requests.")
 
@@ -291,20 +245,8 @@ If PROMPT is:
 
 ;;; Preset selection
 ;;  "gtpel-qa"         => general QA/code-completion
-;;  "gptel-coding"     => handle simple coding tasks
 ;;  "gptel-plan"       => handle complicated tasks with read-only tools
 ;;  "gptel-agent"      => handle complicated tasks
-
-;; Preset for coding tasks with tool support
-(gptel-make-preset 'gptel-coding
-  :description "A preset optimized for coding tasks"
-  :backend "DeepSeek"
-  :model 'deepseek-chat
-  :stream t
-  :system my-gptel--tool-prompt
-  ;; Include only essential tools to increase tool-calling success rate
-  :tools '("Bash" "Mkdir" "Write" "Read" "Edit" "Insert" "Grep")
-  :temperature 0)
 
 ;; Preset for general QA tasks
 (gptel-make-preset 'gptel-qa
