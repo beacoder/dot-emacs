@@ -472,6 +472,11 @@
 (when (maybe-require-package 'indent-guide)
   (when (display-graphic-p)
     (require 'indent-guide)
+    ;; disable for certain modes
+    (add-to-list 'indent-guide-inhibit-modes 'gptel-mode)
+    (add-to-list 'indent-guide-inhibit-modes 'org-mode)
+    (add-to-list 'indent-guide-inhibit-modes 'markdown-mode)
+    (add-to-list 'indent-guide-inhibit-modes 'compilation-mode)
     (indent-guide-global-mode)))
 
 
