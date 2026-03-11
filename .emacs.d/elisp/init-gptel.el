@@ -178,9 +178,7 @@
                                 full-path)))
                (t (error "Error: failed to identify grepper"))))
              (exit-code (apply #'call-process grepper nil '(t t) nil args)))
-        (when (and (/= exit-code 0)
-                   ;; git grep returns 1 if no matches
-                   (not (and (string= grepper "git") (= exit-code 1))))
+        (when (/= exit-code 0)
           (goto-char (point-min))
           (insert (format "Error: search failed with exit-code %d.  Tool output:\n\n" exit-code)))
         (truncate-large-buffer "grep")
