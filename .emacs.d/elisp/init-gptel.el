@@ -195,7 +195,7 @@
     (defalias 'gptel-agent--glob 'gptel-agent--git-glob)
     ;; add project related information as llm context, e.g: coding guideline, etc.
     (require 'gptel-context)
-    (gptel-context--add-directory (expand-file-name "~/.emacs.d/contexts") 'add)
+    (gptel-add-file (expand-file-name "~/.emacs.d/contexts") 'add)
     ;; add agent skills, e.g: https://github.com/anthropics/skills
     (add-to-list 'gptel-agent-skill-dirs "~/.emacs.d/skills")))
 
