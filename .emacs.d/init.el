@@ -89,13 +89,6 @@
       ggtags-exclude-modes '(ttcn-3-mode))
 
 
-;;; Allow access from emacsclient
-(when (is-modern-emacs)
-  (require 'server)
-  (unless (server-running-p)
-    (server-start)))
-
-
 ;;; Kill all processes when closing emacs
 ;;  @see https://stackoverflow.com/questions/2706527/make-emacs-stop-asking-active-processes-exist-kill-them-and-exit-anyway
 (require 'cl-lib)
