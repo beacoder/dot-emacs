@@ -180,6 +180,7 @@ async def send_in_chunks(text: str, update: Update):
         await update.message.reply_text(chunk)
         time.sleep(0.3)  # avoid flooding telegram
 
+
 # ----------Python polling ----------
 async def poll_agent_output(update: Update):
     last_size = 0
