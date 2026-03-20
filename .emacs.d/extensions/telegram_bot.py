@@ -106,9 +106,9 @@ import time
 
 # ================= CONFIG =================
 # Replace with your actual token from BotFather
-TOKEN = '8239334558:AAGpG05JEE15M-tLT_CcUNjSD4g58eqnolI'
+TOKEN = 'xxxxxxxx'
 # Replace with your actual Telegram User ID
-AUTHORIZED_USER_ID = 7263861926
+AUTHORIZED_USER_ID = 123213123
 
 PROXY_URL = "http://127.0.0.1:1080"
 
