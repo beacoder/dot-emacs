@@ -202,7 +202,6 @@ async def send_in_chunks(text: str, update: Update):
 
 # ----------Python polling ----------
 async def poll_agent_output(update: Update):
-    last_size = 0
     max_polls = 120  # about 2 minutes
     poll_count = 0
 
@@ -211,17 +210,15 @@ async def poll_agent_output(update: Update):
     while poll_count < max_polls:
         if os.path.exists(AGENT_OUTPUT_FILE):
             size = os.path.getsize(AGENT_OUTPUT_FILE)
-            if size > last_size:
+            if size > 0:
                 with open(AGENT_OUTPUT_FILE, "r") as f:
-                    f.seek(last_size)
-                    new_text = f.read()
-                    if new_text.strip():
+                    agent_response = f.read()
+                    if agent_response.strip():
                         try:
-                            await send_in_chunks(new_text, update)
+                            await send_in_chunks(agent_response, update)
+                            break
                         except Exception:
                             pass
-                last_size = size
-                last_change_time = time.time()
         time.sleep(1)
         poll_count += 1
 
