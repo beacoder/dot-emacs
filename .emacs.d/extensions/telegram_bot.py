@@ -116,10 +116,30 @@ TELEGRAM_MAX_LENGTH = 4000
 AGENT_OUTPUT_FILE = os.path.expanduser("~/workspace/agent-session.md")
 # =========================================
 
+# ================= COMMAND =================
+CLEAR_SESSION_COMMAND = "clear"
+# =========================================
+
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     level=logging.INFO
 )
+
+
+# ---------- Clear agent ----------
+def clear_agent_session():
+    elisp = f"""
+(progn
+  (dolist (b (buffer-list))
+    (when (string-match-p "^\\*gptel-agent:" (buffer-name b))
+      (kill-buffer b))))
+"""
+
+    subprocess.Popen(
+        ["emacsclient", "--eval", elisp],
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL
+    )
 
 
 # ---------- Emacs agent ----------
@@ -128,10 +148,6 @@ def start_agent(prompt: str):
 
     elisp = f"""
 (progn
-  (dolist (b (buffer-list))
-    (when (string-match-p "^\\*gptel-agent:" (buffer-name b))
-      (kill-buffer b)))
-
   (defun extract_agent_response (beg end)
     (let ((pos beg)
           (result "")
@@ -159,23 +175,28 @@ def start_agent(prompt: str):
     "Append the latest gptel response to a file."
     (let ((txt (extract_agent_response beg end)))
       (with-temp-buffer
-        (insert "\\n---\\n")
         (insert (format "Date: %s\\n" (current-time-string)))
+        (insert "---\\n")
         (insert txt)
         (append-to-file (point-min) (point-max) "{AGENT_OUTPUT_FILE}"))))
 
   (remove-hook 'gptel-post-response-functions #'append-agent-output-to-file)
   (add-hook 'gptel-post-response-functions #'append-agent-output-to-file)
 
-  (gptel-agent "./")
-  (let ((buf (seq-find
-               (lambda (b) (string-match-p "^\\*gptel-agent:" (buffer-name b)))
-               (buffer-list))))
-    (when buf
-      (with-current-buffer buf
-        (erase-buffer)
-        (insert "{prompt}")
-        (gptel-send)))))
+  (defun get-agent-buffer ()
+    (let ((buf (seq-find
+                (lambda (b) (string-match-p "^\\*gptel-agent:" (buffer-name b)))
+                (buffer-list))))
+      buf))
+
+  (unless (get-agent-buffer) (gptel-agent "./"))
+
+  (when-let ((buf (get-agent-buffer)))
+    (with-current-buffer buf
+      (goto-char (point-max))
+      (insert "\\n")
+      (insert "{prompt}")
+      (gptel-send))))
 """
 
     subprocess.Popen(
@@ -243,8 +264,12 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if os.path.exists(AGENT_OUTPUT_FILE):
         os.remove(AGENT_OUTPUT_FILE)
 
-    start_agent(prompt)
+    if prompt.strip() == CLEAR_SESSION_COMMAND:
+        clear_agent_session()
+        await update.message.reply_text("✅ Agent cleared.")
+        return
 
+    start_agent(prompt)
     await poll_agent_output(update)
 
 
