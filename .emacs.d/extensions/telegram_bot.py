@@ -106,9 +106,9 @@ import time
 
 # ================= CONFIG =================
 # Replace with your actual token from BotFather
-TOKEN = 'xxxxxxxx'
+TOKEN = 'xxxxx'
 # Replace with your actual Telegram User ID
-AUTHORIZED_USER_ID = 123213123
+AUTHORIZED_USER_ID = 12345678
 
 PROXY_URL = "http://127.0.0.1:1080"
 
@@ -124,30 +124,49 @@ logging.basicConfig(
 
 # ---------- Emacs agent ----------
 def start_agent(prompt: str):
-    """start Emacs gptel-agent, save output to file."""
     prompt = prompt.replace("\\", "\\\\").replace('"', '\\"').replace("\n", "\\n")
 
     elisp = f"""
 (progn
-  ;; remove old gptel-agent buffers
   (dolist (b (buffer-list))
     (when (string-match-p "^\\*gptel-agent:" (buffer-name b))
       (kill-buffer b)))
 
+  (defun extract_agent_response (beg end)
+    (let ((pos beg)
+          (result "")
+          (last-prop nil))
+      (while (< pos end)
+        (let* ((next (next-single-property-change pos 'gptel nil end))
+               (next (or next end))
+               (prop (get-text-property pos 'gptel))
+               (chunk (buffer-substring-no-properties pos next)))
+          (when (and last-prop
+                     (not (eq prop last-prop))
+                     (> (length result) 0)
+                     (not (string-suffix-p "\n" result))
+                     (not (string-prefix-p "\n" chunk)))
+            (setq result (concat result "\n")))
+          (when (eq prop 'response)
+            (setq result (concat result chunk)))
+          (setq last-prop prop)
+          (if (= pos next)
+              (setq pos (1+ pos))
+            (setq pos next))))
+      result))
+
   (defun append-agent-output-to-file (beg end)
     "Append the latest gptel response to a file."
-    (let ((txt (buffer-substring-no-properties beg end)))
+    (let ((txt (extract_agent_response beg end)))
       (with-temp-buffer
         (insert "\\n---\\n")
         (insert (format "Date: %s\\n" (current-time-string)))
         (insert txt)
         (append-to-file (point-min) (point-max) "{AGENT_OUTPUT_FILE}"))))
 
-  ;; prevent duplication
   (remove-hook 'gptel-post-response-functions #'append-agent-output-to-file)
   (add-hook 'gptel-post-response-functions #'append-agent-output-to-file)
 
-  ;; trigger agent to work
   (gptel-agent "./")
   (let ((buf (seq-find
                (lambda (b) (string-match-p "^\\*gptel-agent:" (buffer-name b)))
