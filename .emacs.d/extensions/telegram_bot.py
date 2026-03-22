@@ -129,10 +129,11 @@ logging.basicConfig(
 # ---------- Clear agent ----------
 def clear_agent_session():
     elisp = f"""
-(progn
-  (dolist (b (buffer-list))
-    (when (string-match-p "^\\*gptel-agent:" (buffer-name b))
-      (kill-buffer b))))
+(when-let ((buf (seq-find
+                 (lambda (b) (string-match-p "^\\*gptel-agent:" (buffer-name b)))
+                 (buffer-list))))
+  (with-current-buffer buf
+    (erase-buffer)))
 """
 
     subprocess.Popen(
@@ -194,7 +195,6 @@ def start_agent(prompt: str):
   (when-let ((buf (get-agent-buffer)))
     (with-current-buffer buf
       (goto-char (point-max))
-      (insert "\\n")
       (insert "{prompt}")
       (gptel-send))))
 """
