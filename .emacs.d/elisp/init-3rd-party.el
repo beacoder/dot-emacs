@@ -639,12 +639,23 @@
          ([remap move-end-of-line] . mwim-end)))
 
 
-;;; connect to mcp server
+;;; use tools from mcp servers
 (use-package mcp
   :ensure t
   :after gptel
   :custom (mcp-hub-servers
-           '(("weather" :command "python" :args ("/github.com/beacoder/llm/blob/main/misc/mcp_weather_server.py"))))
+           '(;;; weather mcp sample
+             ;; ("weather" :command "python" :args ("/home/huming/workspace/ai/misc/mcp_weather_server.py"))
+             ;;; chrome-devtools-mcp for controlling chrome with mcp
+             ;; 1.install chrome (in WSL2):
+             ;;   wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+             ;;   sudo apt install -f ./google-chrome-stable_current_amd64.deb
+             ;; 2.install node.js and chrome-devtools-mcp package
+             ;; 3.start chrome with: /usr/bin/google-chrome --remote-debugging-port=9222 --user-data-dir=/tmp/chrome-profile-stable
+             ;; 4.start telegram_bot with: ~/.emacs.d/extensions/telegram_bot.py
+             ;; 5.start gptel-agent and enable tools from chrome
+             ;; 6.start your prompt with chrome so that chrome tools have higher priority
+             ("chrome"  :command "chrome-devtools-mcp" :args ("--stdio"))))
   :config (progn
             (require 'gptel-integrations)
             (require 'mcp-hub))
