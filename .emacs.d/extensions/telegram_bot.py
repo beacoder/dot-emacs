@@ -285,8 +285,10 @@ async def poll_agent_output(update: Update):
 
             if media_ready:
                 await send_media_from_folder(update)
-
-            break
+            
+            # response should always contain text
+            if text_ready:
+                break
 
         time.sleep(1)
         poll_count += 1
