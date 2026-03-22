@@ -113,12 +113,15 @@ AUTHORIZED_USER_ID = 12345678
 PROXY_URL = "http://127.0.0.1:1080"
 
 TELEGRAM_MAX_LENGTH = 4000
-AGENT_OUTPUT_FILE = os.path.expanduser("~/workspace/agent-session.md")
+AGENT_OUTPUT_FILE = os.path.expanduser("~/agent/agent-session.md")
+AGENT_MEDIA_DIR = os.path.expanduser("~/agent/media-file/")
 # =========================================
 
 # ================= COMMAND =================
 CLEAR_SESSION_COMMAND = "clear"
 # =========================================
+
+os.makedirs(AGENT_MEDIA_DIR, exist_ok=True)
 
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -206,8 +209,8 @@ def start_agent(prompt: str):
     )
 
 
-# ---------- Send in batch ----------
-async def send_in_chunks(text: str, update: Update):
+# ---------- Send text ----------
+async def send_text(text: str, update: Update):
     if not text.strip():
         return
 
@@ -221,30 +224,78 @@ async def send_in_chunks(text: str, update: Update):
         time.sleep(0.3)  # avoid flooding telegram
 
 
+# ---------- Send media ----------
+async def send_media_file(update: Update, path: str):
+    if not os.path.isfile(path):
+        return
+
+    with open(path, "rb") as f:
+        try:
+            await update.message.reply_photo(photo=f)
+            return
+        except Exception:
+            pass
+
+        try:
+            await update.message.reply_video(video=f)
+            return
+        except Exception:
+            pass
+
+        try:
+            await update.message.reply_document(document=f)
+            return
+        except Exception:
+            await update.message.reply_text(f"❌ Failed to send file: {path}")
+
+
+# ---------- Send all media ----------
+async def send_media_from_folder(update: Update):
+    files = sorted(
+        [os.path.join(AGENT_MEDIA_DIR, f) for f in os.listdir(AGENT_MEDIA_DIR)],
+        key=os.path.getmtime
+    )
+
+    for path in files:
+        await send_media_file(update, path)
+
+
 # ----------Python polling ----------
 async def poll_agent_output(update: Update):
     max_polls = 120  # about 2 minutes
     poll_count = 0
 
-    msg = await update.message.reply_text("🧠 Thinking...")
+    await update.message.reply_text("🧠 Thinking...")
 
     while poll_count < max_polls:
+        text_ready = False
+
         if os.path.exists(AGENT_OUTPUT_FILE):
-            size = os.path.getsize(AGENT_OUTPUT_FILE)
-            if size > 0:
+            if os.path.getsize(AGENT_OUTPUT_FILE) > 0:
+                text_ready = True
+
+        media_ready = len(os.listdir(AGENT_MEDIA_DIR)) > 0
+
+        if text_ready or media_ready:
+            if text_ready:
                 with open(AGENT_OUTPUT_FILE, "r") as f:
-                    agent_response = f.read()
-                    if agent_response.strip():
-                        try:
-                            await send_in_chunks(agent_response, update)
-                            break
-                        except Exception:
-                            pass
+                    text = f.read()
+                    if text.strip():
+                        await send_text(text, update)
+
+            if media_ready:
+                await send_media_from_folder(update)
+
+            break
+
         time.sleep(1)
         poll_count += 1
 
     if os.path.exists(AGENT_OUTPUT_FILE):
         os.remove(AGENT_OUTPUT_FILE)
+
+    for f in os.listdir(AGENT_MEDIA_DIR):
+        os.remove(os.path.join(AGENT_MEDIA_DIR, f))
 
     await update.message.reply_text("✅ Agent finished.")
 
@@ -263,6 +314,9 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     if os.path.exists(AGENT_OUTPUT_FILE):
         os.remove(AGENT_OUTPUT_FILE)
+
+    for f in os.listdir(AGENT_MEDIA_DIR):
+        os.remove(os.path.join(AGENT_MEDIA_DIR, f))
 
     if prompt.strip() == CLEAR_SESSION_COMMAND:
         clear_agent_session()
