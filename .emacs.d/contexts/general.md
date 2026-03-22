@@ -1,7 +1,9 @@
 # General Rules
 
 ## Directory Configuration
-- **Default Search Path**: `~/workspace/testing` (used when no specific directory is provided)
+- **Default Search Path**: `~/agent/` (used when no specific directory is provided)
+- **Default Path for storing pictures/videos**: `~/agent/media-file/`
+- **Forbidden Path**: `/mnt/` (no read/write/modify is allowed for this path)
 
 ## Coding Standards
 - **C++**: Use C++20 conventions and features where applicable
