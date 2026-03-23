@@ -102,6 +102,7 @@ from telegram.ext import (
 )
 import logging
 import time
+import shutil
 
 
 # ================= CONFIG =================
@@ -113,8 +114,8 @@ AUTHORIZED_USER_ID = 12345678
 PROXY_URL = "http://127.0.0.1:1080"
 
 TELEGRAM_MAX_LENGTH = 4000
-AGENT_OUTPUT_FILE = os.path.expanduser("~/agent/agent-session.md")
-AGENT_MEDIA_DIR = os.path.expanduser("~/agent/media-file/")
+AGENT_OUTPUT_FILE = os.path.expanduser("/tmp/agent/agent-session.md")
+AGENT_MEDIA_DIR = os.path.expanduser("/tmp/agent/media-file/")
 # =========================================
 
 # ================= COMMAND =================
@@ -281,8 +282,12 @@ async def poll_agent_output(update: Update):
     if os.path.exists(AGENT_OUTPUT_FILE):
         os.remove(AGENT_OUTPUT_FILE)
 
-    for f in os.listdir(AGENT_MEDIA_DIR):
-        os.remove(os.path.join(AGENT_MEDIA_DIR, f))
+    for item in os.listdir(AGENT_MEDIA_DIR):
+        item_path = os.path.join(AGENT_MEDIA_DIR, item)
+        if os.path.isdir(item_path):
+            shutil.rmtree(item_path)
+        else:
+            os.remove(item_path)
 
     await update.message.reply_text("✅ Agent finished.")
 
@@ -302,8 +307,12 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if os.path.exists(AGENT_OUTPUT_FILE):
         os.remove(AGENT_OUTPUT_FILE)
 
-    for f in os.listdir(AGENT_MEDIA_DIR):
-        os.remove(os.path.join(AGENT_MEDIA_DIR, f))
+    for item in os.listdir(AGENT_MEDIA_DIR):
+        item_path = os.path.join(AGENT_MEDIA_DIR, item)
+        if os.path.isdir(item_path):
+            shutil.rmtree(item_path)
+        else:
+            os.remove(item_path)
 
     if prompt.lower().strip() == CLEAR_SESSION_COMMAND:
         clear_agent_session()
