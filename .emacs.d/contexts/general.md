@@ -12,4 +12,4 @@
 /usr/bin/google-chrome --remote-debugging-port=9222 --user-data-dir=/tmp/chrome-profile-stable
 
 ## Command to start telegram bot
-python3 ~/.emacs.d/extensions/telegram_bot.py
+python3 ~/.emacs.d/extensions/telegram_bot.py > /dev/null 2>&1
