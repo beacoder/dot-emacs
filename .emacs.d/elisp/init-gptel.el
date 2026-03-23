@@ -197,7 +197,35 @@
     (require 'gptel-context)
     (gptel-add-file (expand-file-name "~/.emacs.d/contexts"))
     ;; add agent skills, e.g: https://github.com/anthropics/skills
-    (add-to-list 'gptel-agent-skill-dirs "~/.emacs.d/skills")))
+    (add-to-list 'gptel-agent-skill-dirs "~/.emacs.d/skills")
+    ;; add gptel-telegram agent
+    (add-to-list 'gptel-agent-dirs "~/.emacs.d/agent")
+    ;; start gptel-telegram agent
+    (defun gptel-telegram (&optional project-dir)
+      (interactive
+       (list (if-let ((proj (project-current)))
+                 (project-root proj)
+               default-directory)))
+      (let ((gptel-buf
+             (gptel (generate-new-buffer-name
+                     (format "*gptel-telegram:%s*"
+                             (cadr (nreverse (file-name-split project-dir)))))
+                    nil
+                    (and (use-region-p)
+                         (buffer-substring (region-beginning)
+                                           (region-end)))
+                    'interactive)))
+        (with-current-buffer gptel-buf
+          (setq default-directory project-dir)
+          (gptel-agent-update)              ;Update all agent definitions
+          ;; Apply gptel-agent preset if it exists
+          (when-let* ((gptel-agent-plist (assoc-default "gptel-telegram" gptel-agent--agents nil nil)))
+            (apply #'gptel-make-preset 'gptel-telegram gptel-agent-plist))
+          (gptel--apply-preset              ;Apply the gptel-agent preset
+           'gptel-telegram
+           (lambda (sym val) (set (make-local-variable sym) val)))
+          (unless gptel-max-tokens          ;Agent tasks typically need a higher than usual value
+            (setq gptel-max-tokens 8192)))))))
 
 (defun my/gptel-clean-temp-files ()
   "Remove old gptel temp files owned by current user."
