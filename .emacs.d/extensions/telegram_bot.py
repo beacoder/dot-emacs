@@ -1,5 +1,4 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python3 -*- coding: utf-8 -*-
 
 """
 Telegram ↔ Emacs gptel-agent Bridge (File-based Streaming Version)
@@ -119,6 +118,11 @@ AGENT_MEDIA_DIR = os.path.expanduser("~/agent/media-file/")
 
 # ================= COMMAND =================
 CLEAR_SESSION_COMMAND = "clear"
+PROLONG_SESSION_COMMAND = "prolong"
+# =========================================
+
+# ================= GLOBAL =================
+SESSION_PROLONGED = False
 # =========================================
 
 os.makedirs(AGENT_MEDIA_DIR, exist_ok=True)
@@ -249,8 +253,12 @@ async def send_media_from_folder(update: Update):
 
 # ----------Python polling ----------
 async def poll_agent_output(update: Update):
-    max_polls = 120  # about 2 minutes
+    global SESSION_PROLONGED
+
+    # wait 5 minutes for long session, 2 minutes for normal session
+    max_polls = 300 if SESSION_PROLONGED else 120
     poll_count = 0
+    SESSION_PROLONGED = False
 
     await update.message.reply_text("🧠 Thinking...")
 
@@ -296,9 +304,15 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     for f in os.listdir(AGENT_MEDIA_DIR):
         os.remove(os.path.join(AGENT_MEDIA_DIR, f))
 
-    if prompt.strip() == CLEAR_SESSION_COMMAND:
+    if prompt.lower().strip() == CLEAR_SESSION_COMMAND:
         clear_agent_session()
         await update.message.reply_text("✅ Agent cleared.")
+        return
+
+    if prompt.lower().strip() == PROLONG_SESSION_COMMAND:
+        global SESSION_PROLONGED;
+        SESSION_PROLONGED = True
+        await update.message.reply_text("✅ Agent prolonged.")
         return
 
     start_agent(prompt)
