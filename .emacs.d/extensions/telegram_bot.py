@@ -138,7 +138,7 @@ logging.basicConfig(
 def clear_agent_session():
     elisp = f"""
 (when-let ((buf (seq-find
-                 (lambda (b) (string-match-p "^\\*gptel-agent:" (buffer-name b)))
+                 (lambda (b) (string-match-p "^\\*gptel-telegram:" (buffer-name b)))
                  (buffer-list))))
   (with-current-buffer buf
     (erase-buffer)))
@@ -194,11 +194,11 @@ def start_agent(prompt: str):
 
   (defun get-agent-buffer ()
     (let ((buf (seq-find
-                (lambda (b) (string-match-p "^\\*gptel-agent:" (buffer-name b)))
+                (lambda (b) (string-match-p "^\\*gptel-telegram:" (buffer-name b)))
                 (buffer-list))))
       buf))
 
-  (unless (get-agent-buffer) (gptel-agent "./"))
+  (unless (get-agent-buffer) (gptel-telegram "./"))
 
   (when-let ((buf (get-agent-buffer)))
     (with-current-buffer buf
