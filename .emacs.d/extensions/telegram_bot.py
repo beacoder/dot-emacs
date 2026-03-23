@@ -229,24 +229,12 @@ async def send_media_file(update: Update, path: str):
     if not os.path.isfile(path):
         return
 
-    with open(path, "rb") as f:
-        try:
-            await update.message.reply_photo(photo=f)
-            return
-        except Exception:
-            pass
-
-        try:
-            await update.message.reply_video(video=f)
-            return
-        except Exception:
-            pass
-
-        try:
+    try:
+        with open(path, "rb") as f:
             await update.message.reply_document(document=f)
-            return
-        except Exception:
-            await update.message.reply_text(f"❌ Failed to send file: {path}")
+            os.remove(path)
+    except Exception as e:
+        await update.message.reply_text(f"❌ Failed to send file: {path}")
 
 
 # ---------- Send all media ----------
