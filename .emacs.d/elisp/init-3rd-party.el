@@ -653,7 +653,7 @@
              ;; 2.install node.js and chrome-devtools-mcp package
              ;; 3.start chrome with: /usr/bin/google-chrome --remote-debugging-port=9222 --user-data-dir=/tmp/chrome-profile-stable
              ;; 4.start telegram_bot with: ~/.emacs.d/extensions/telegram_bot.py
-             ;; 5.start gptel-agent and enable tools from chrome
+             ;; 5.start gptel-telegram and enable tools from chrome
              ;; 6.start your prompt with chrome so that chrome tools have higher priority
              ("chrome"  :command "chrome-devtools-mcp" :args ("--stdio"))))
   :config (progn
