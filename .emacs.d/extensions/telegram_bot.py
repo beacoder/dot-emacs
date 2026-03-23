@@ -232,7 +232,6 @@ async def send_media_file(update: Update, path: str):
     try:
         with open(path, "rb") as f:
             await update.message.reply_document(document=f)
-            os.remove(path)
     except Exception as e:
         await update.message.reply_text(f"❌ Failed to send file: {path}")
 
@@ -256,27 +255,16 @@ async def poll_agent_output(update: Update):
     await update.message.reply_text("🧠 Thinking...")
 
     while poll_count < max_polls:
-        text_ready = False
+        if os.path.exists(AGENT_OUTPUT_FILE) and (os.path.getsize(AGENT_OUTPUT_FILE) > 0):
+            with open(AGENT_OUTPUT_FILE, "r") as f:
+                text = f.read()
+                if text.strip():
+                    await send_text(text, update)
 
-        if os.path.exists(AGENT_OUTPUT_FILE):
-            if os.path.getsize(AGENT_OUTPUT_FILE) > 0:
-                text_ready = True
-
-        media_ready = len(os.listdir(AGENT_MEDIA_DIR)) > 0
-
-        if text_ready or media_ready:
-            if text_ready:
-                with open(AGENT_OUTPUT_FILE, "r") as f:
-                    text = f.read()
-                    if text.strip():
-                        await send_text(text, update)
-
-            if media_ready:
+            if len(os.listdir(AGENT_MEDIA_DIR)) > 0:
                 await send_media_from_folder(update)
-            
-            # response should always contain text
-            if text_ready:
-                break
+
+            break
 
         time.sleep(1)
         poll_count += 1
