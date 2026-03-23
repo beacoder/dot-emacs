@@ -1,8 +1,8 @@
 # General Rules
 
 ## Directory Configuration
-- **Default Search Path**: `~/agent/` (used when no specific directory is provided)
-- **Default Path for storing pictures/videos**: `~/agent/media-file/`
+- **Default Search Path**: `/tmp/agent/` (used when no specific directory is provided)
+- **Default Path for storing pictures/videos**: `/tmp/agent/media-file/`
 - **Forbidden Path**: `/mnt/` (no read/write/modify is allowed for this path)
 
 ## Coding Standards
