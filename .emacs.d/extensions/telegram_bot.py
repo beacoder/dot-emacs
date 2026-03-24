@@ -150,9 +150,7 @@ def clear_agent_session():
 
 
 # ---------- Emacs agent ----------
-def start_agent(prompt: str):
-    prompt = prompt.replace("\\", "\\\\").replace('"', '\\"').replace("\n", "\\n")
-
+def setup_agent():
     elisp = f"""
 (progn
   (defun extract_agent_response (beg end)
@@ -187,14 +185,27 @@ def start_agent(prompt: str):
         (insert txt)
         (append-to-file (point-min) (point-max) "{AGENT_OUTPUT_FILE}"))))
 
-  (remove-hook 'gptel-post-response-functions #'append-agent-output-to-file)
-  (add-hook 'gptel-post-response-functions #'append-agent-output-to-file)
-
   (defun get-agent-buffer ()
     (let ((buf (seq-find
                 (lambda (b) (string-match-p "^\\*gptel-telegram:" (buffer-name b)))
                 (buffer-list))))
-      buf))
+      buf)))
+"""
+
+    subprocess.Popen(
+        ["emacsclient", "--eval", elisp],
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL
+    )
+
+
+def start_agent(prompt: str):
+    prompt = prompt.replace("\\", "\\\\").replace('"', '\\"').replace("\n", "\\n")
+
+    elisp = f"""
+(progn
+  (remove-hook 'gptel-post-response-functions #'append-agent-output-to-file)
+  (add-hook 'gptel-post-response-functions #'append-agent-output-to-file)
 
   (unless (get-agent-buffer) (gptel-telegram "./"))
 
@@ -250,6 +261,18 @@ async def send_media_from_folder(update: Update):
         await send_media_file(update, path)
 
 
+def cleanup():
+    if os.path.exists(AGENT_OUTPUT_FILE):
+        os.remove(AGENT_OUTPUT_FILE)
+
+    for item in os.listdir(AGENT_MEDIA_DIR):
+        item_path = os.path.join(AGENT_MEDIA_DIR, item)
+        if os.path.isdir(item_path):
+            shutil.rmtree(item_path)
+        else:
+            os.remove(item_path)
+
+
 # ----------Python polling ----------
 async def poll_agent_output(update: Update):
     global SESSION_PROLONGED
@@ -276,15 +299,7 @@ async def poll_agent_output(update: Update):
         time.sleep(1)
         poll_count += 1
 
-    if os.path.exists(AGENT_OUTPUT_FILE):
-        os.remove(AGENT_OUTPUT_FILE)
-
-    for item in os.listdir(AGENT_MEDIA_DIR):
-        item_path = os.path.join(AGENT_MEDIA_DIR, item)
-        if os.path.isdir(item_path):
-            shutil.rmtree(item_path)
-        else:
-            os.remove(item_path)
+    cleanup()
 
     await update.message.reply_text("✅ Agent finished.")
 
@@ -301,15 +316,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     prompt = update.message.text
 
-    if os.path.exists(AGENT_OUTPUT_FILE):
-        os.remove(AGENT_OUTPUT_FILE)
-
-    for item in os.listdir(AGENT_MEDIA_DIR):
-        item_path = os.path.join(AGENT_MEDIA_DIR, item)
-        if os.path.isdir(item_path):
-            shutil.rmtree(item_path)
-        else:
-            os.remove(item_path)
+    cleanup()
 
     if prompt.lower().strip() == CLEAR_SESSION_COMMAND:
         clear_agent_session()
@@ -337,6 +344,7 @@ def main():
 
     app.add_handler(CommandHandler("start", start))
     app.add_handler(MessageHandler(filters.TEXT & (~filters.COMMAND), handle_message))
+    setup_agent()
 
     print(f"🚀 Telegram Streaming Agent Running with proxy {PROXY_URL}")
     app.run_polling()
