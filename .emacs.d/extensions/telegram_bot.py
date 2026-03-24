@@ -98,6 +98,8 @@ from telegram.ext import (
 import logging
 import asyncio
 import shutil
+import json
+from datetime import datetime
 
 
 # ================= CONFIG =================
@@ -111,8 +113,8 @@ PROXY_URL = "http://127.0.0.1:1080"
 TELEGRAM_MAX_LENGTH = 4000
 AGENT_OUTPUT_FILE = os.path.expanduser("/tmp/agent/agent-session.md")
 AGENT_MEDIA_DIR = os.path.expanduser("/tmp/agent/media-file/")
-SCHEDULE_FILE = os.path.expanduser("/tmp/agent/schedule.json")
-LOCK_FILE = os.path.expanduser("/tmp/agent/.lock")
+AGENT_SCHEDULE_FILE = os.path.expanduser("/tmp/agent/schedule.json")
+AGENT_LOCK_FILE = os.path.expanduser("/tmp/agent/.lock")
 # =========================================
 
 # ================= COMMAND =================
@@ -240,7 +242,7 @@ async def send_text(text: str, update: Update, app = None):
             await app.bot.send_message(
                 chat_id=AUTHORIZED_USER_ID,
                 text=chunk)
-        asyncio.sleep(0.3)  # avoid flooding telegram
+        await asyncio.sleep(0.3)  # avoid flooding telegram
 
 
 # ---------- Send file ----------
@@ -279,15 +281,15 @@ def cleanup():
 
 
 # ----------Python polling ----------
-async def poll_agent_output(update: Update, app: ApplicationBuilder):
+async def poll_agent_output(update: Update, app: ApplicationBuilder = None):
     global SESSION_PROLONGED
 
-    # wait 5 minutes for long session, 2 minutes for normal session
-    max_polls = 300 if SESSION_PROLONGED else 120
+    # wait 5 minutes for long session, 3 minutes for normal session
+    max_polls = 300 if SESSION_PROLONGED else 180
     poll_count = 0
     SESSION_PROLONGED = False
 
-    send_text("🧠 Thinking...", update, app)
+    await send_text("🧠 Thinking...", update, app)
 
     while poll_count < max_polls:
         if os.path.exists(AGENT_OUTPUT_FILE) and (os.path.getsize(AGENT_OUTPUT_FILE) > 0):
@@ -301,7 +303,7 @@ async def poll_agent_output(update: Update, app: ApplicationBuilder):
 
             break
 
-        asyncio.sleep(1)
+        await asyncio.sleep(1)
         poll_count += 1
 
     cleanup()
@@ -311,16 +313,27 @@ async def poll_agent_output(update: Update, app: ApplicationBuilder):
 
 # ----------Task scheduling ----------
 def load_schedule():
-    if not os.path.exists(SCHEDULE_FILE):
+    if not os.path.exists(AGENT_SCHEDULE_FILE):
         return []
 
-    with open(SCHEDULE_FILE, "r") as f:
-        return json.load(f)
+    try:
+        with open(AGENT_SCHEDULE_FILE, "r") as f:
+            content = f.read().strip()
+            if content:
+                return json.loads(content)
+            return []
+    except Exception as e:
+        print(f"[schedule] load failed: {e}")
+        return []
 
 
 def update_schedule(tasks):
-    with open(SCHEDULE_FILE, "w") as f:
+    tmp_file = AGENT_SCHEDULE_FILE + ".tmp"
+
+    with open(tmp_file, "w") as f:
         json.dump(tasks, f, indent=2)
+
+    os.replace(tmp_file, AGENT_SCHEDULE_FILE)
 
 
 def is_due(task):
@@ -332,24 +345,24 @@ def is_due(task):
 
 
 async def run_task(task, app):
-    if os.path.exists(LOCK_FILE):
-        send_text("⚠️ Another task running, skip", None, app)
+    if os.path.exists(AGENT_LOCK_FILE):
+        await send_text("⚠️ Another task running, skip", None, app)
         return
 
     # create lock
-    open(LOCK_FILE, "w").close()
+    open(AGENT_LOCK_FILE, "w").close()
 
     try:
         cleanup()
         prompt = task["prompt"]
-        send_text(f"🚀 Running task: {prompt}", None, app)
+        await send_text(f"🚀 Running task: {prompt}", None, app)
         start_agent(prompt)
         await poll_agent_output(None, app)
         task["done"] = True
     finally:
         # release lock
-        if os.path.exists(LOCK_FILE):
-            os.remove(LOCK_FILE)
+        if os.path.exists(AGENT_LOCK_FILE):
+            os.remove(AGENT_LOCK_FILE)
 
 
 async def check_and_run_tasks(app):
@@ -361,7 +374,8 @@ async def check_and_run_tasks(app):
             await run_task(task, app)
         updated.append(task)
 
-    update_schedule(updated)
+    if len(updated) > 0:
+        update_schedule(updated)
 
 
 async def scheduler_loop(app):
@@ -369,9 +383,9 @@ async def scheduler_loop(app):
         try:
             await check_and_run_tasks(app)
         except Exception as e:
-            send_text(f"Scheduler error: {e}", None, app)
+            await send_text(f"Scheduler error: {e}", None, app)
 
-        await asyncio.sleep(60)
+        await asyncio.sleep(30)
 
 
 # ---------- Telegram handlers ----------
