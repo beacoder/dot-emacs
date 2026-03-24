@@ -457,8 +457,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return
 
     if os.path.exists(AGENT_LOCK_FILE):
-        await send_text("⚠️ Another task running, try later", update)
-        return
+        await send_text("⚠️ Another task running, but we will continue", update)
 
     prompt = update.message.text
 
