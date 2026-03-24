@@ -99,7 +99,8 @@ import logging
 import asyncio
 import shutil
 import json
-from datetime import datetime
+from datetime import datetime, timedelta
+from calendar import monthrange
 
 
 # ================= CONFIG =================
@@ -344,6 +345,55 @@ def is_due(task):
     return datetime.now() >= run_at
 
 
+def compute_next_run(task):
+    repeat = task.get("repeat")
+    if not repeat:
+        return None
+
+    current_run = datetime.strptime(task["run_at"], "%Y-%m-%d %H:%M")
+
+    # Daily
+    if repeat == "daily":
+        next_run = current_run + timedelta(days=1)
+
+    # Weekly: "weekly:1" (Monday=1)
+    elif repeat.startswith("weekly:"):
+        weekday = int(repeat.split(":")[1])
+        next_run = current_run + timedelta(days=1)
+        while next_run.isoweekday() != weekday:
+            next_run += timedelta(days=1)
+
+    # Monthly: "monthly:15"
+    elif repeat.startswith("monthly:"):
+        day = int(repeat.split(":")[1])
+        year, month = current_run.year, current_run.month
+        month += 1
+        if month > 12:
+            month = 1
+            year += 1
+        max_day = monthrange(year, month)[1]
+        next_day = min(day, max_day)
+        next_run = current_run.replace(year=year, month=month, day=next_day)
+
+    # Interval: "interval:10m" or "interval:2h"
+    elif repeat.startswith("interval:"):
+        val = repeat.split(":")[1]
+        if val.endswith("m"):
+            minutes = int(val[:-1])
+            next_run = current_run + timedelta(minutes=minutes)
+        elif val.endswith("h"):
+            hours = int(val[:-1])
+            next_run = current_run + timedelta(hours=hours)
+        else:
+            next_run = None
+    else:
+        next_run = None
+
+    if next_run:
+        return next_run.strftime("%Y-%m-%d %H:%M")
+    return None
+
+
 async def run_task(task, app):
     if os.path.exists(AGENT_LOCK_FILE):
         await send_text("⚠️ Another task running, skip", None, app)
@@ -359,7 +409,6 @@ async def run_task(task, app):
         cleanup()
         start_agent(prompt)
         await poll_agent_output(None, app)
-        task["done"] = True
     finally:
         # release lock
         if os.path.exists(AGENT_LOCK_FILE):
@@ -373,6 +422,14 @@ async def check_and_run_tasks(app):
     for task in tasks:
         if is_due(task):
             await run_task(task, app)
+
+            next_run = compute_next_run(task)
+            if next_run:
+                task["run_at"] = next_run
+                task["done"] = False
+            else:
+                task["done"] = True
+
         updated.append(task)
 
     if len(updated) > 0:
