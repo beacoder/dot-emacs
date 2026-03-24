@@ -63,8 +63,6 @@ Limitations
 - No real-time streaming
 - Entire response sent at once
 - Telegram message size limit (~4000 chars per chunk)
-- Blocking polling (time.sleep, not async-friendly)
-
 
 Possible Improvements
 ---------------------
@@ -98,7 +96,7 @@ from telegram.ext import (
     filters,
 )
 import logging
-import time
+import asyncio
 import shutil
 
 
@@ -113,6 +111,8 @@ PROXY_URL = "http://127.0.0.1:1080"
 TELEGRAM_MAX_LENGTH = 4000
 AGENT_OUTPUT_FILE = os.path.expanduser("/tmp/agent/agent-session.md")
 AGENT_MEDIA_DIR = os.path.expanduser("/tmp/agent/media-file/")
+SCHEDULE_FILE = os.path.expanduser("/tmp/agent/schedule.json")
+LOCK_FILE = os.path.expanduser("/tmp/agent/.lock")
 # =========================================
 
 # ================= COMMAND =================
@@ -224,7 +224,7 @@ def start_agent(prompt: str):
 
 
 # ---------- Send text ----------
-async def send_text(text: str, update: Update):
+async def send_text(text: str, update: Update, app = None):
     if not text.strip():
         return
 
@@ -234,31 +234,36 @@ async def send_text(text: str, update: Update):
     ]
 
     for chunk in chunks:
-        await update.message.reply_text(chunk)
-        time.sleep(0.3)  # avoid flooding telegram
+        if update:
+            await update.message.reply_text(chunk)
+        elif app:
+            await app.bot.send_message(
+                chat_id=AUTHORIZED_USER_ID,
+                text=chunk)
+        asyncio.sleep(0.3)  # avoid flooding telegram
 
 
-# ---------- Send media ----------
-async def send_media_file(update: Update, path: str):
-    if not os.path.isfile(path):
-        return
-
-    try:
-        with open(path, "rb") as f:
-            await update.message.reply_document(document=f)
-    except Exception as e:
-        await update.message.reply_text(f"❌ Failed to send file: {path}")
-
-
-# ---------- Send all media ----------
-async def send_media_from_folder(update: Update):
+# ---------- Send file ----------
+async def send_files(update: Update, app):
     files = sorted(
         [os.path.join(AGENT_MEDIA_DIR, f) for f in os.listdir(AGENT_MEDIA_DIR)],
         key=os.path.getmtime
     )
 
     for path in files:
-        await send_media_file(update, path)
+        if not os.path.isfile(path):
+            continue
+
+        try:
+            with open(path, "rb") as f:
+                if update:
+                    await update.message.reply_document(document=f)
+                elif app:
+                    await app.bot.send_document(
+                        chat_id=AUTHORIZED_USER_ID,
+                        document=f)
+        except Exception as e:
+            await send_text(f"❌ Failed to send file: {path}", update, app)
 
 
 def cleanup():
@@ -274,7 +279,7 @@ def cleanup():
 
 
 # ----------Python polling ----------
-async def poll_agent_output(update: Update):
+async def poll_agent_output(update: Update, app: ApplicationBuilder):
     global SESSION_PROLONGED
 
     # wait 5 minutes for long session, 2 minutes for normal session
@@ -282,36 +287,105 @@ async def poll_agent_output(update: Update):
     poll_count = 0
     SESSION_PROLONGED = False
 
-    await update.message.reply_text("🧠 Thinking...")
+    send_text("🧠 Thinking...", update, app)
 
     while poll_count < max_polls:
         if os.path.exists(AGENT_OUTPUT_FILE) and (os.path.getsize(AGENT_OUTPUT_FILE) > 0):
             with open(AGENT_OUTPUT_FILE, "r") as f:
                 text = f.read()
                 if text.strip():
-                    await send_text(text, update)
+                    await send_text(text, update, app)
 
             if len(os.listdir(AGENT_MEDIA_DIR)) > 0:
-                await send_media_from_folder(update)
+                await send_files(update, app)
 
             break
 
-        time.sleep(1)
+        asyncio.sleep(1)
         poll_count += 1
 
     cleanup()
 
-    await update.message.reply_text("✅ Agent finished.")
+    await send_text("✅ Agent finished.", update, app)
+
+
+# ----------Task scheduling ----------
+def load_schedule():
+    if not os.path.exists(SCHEDULE_FILE):
+        return []
+
+    with open(SCHEDULE_FILE, "r") as f:
+        return json.load(f)
+
+
+def update_schedule(tasks):
+    with open(SCHEDULE_FILE, "w") as f:
+        json.dump(tasks, f, indent=2)
+
+
+def is_due(task):
+    if task.get("done"):
+        return False
+
+    run_at = datetime.strptime(task["run_at"], "%Y-%m-%d %H:%M")
+    return datetime.now() >= run_at
+
+
+async def run_task(task, app):
+    if os.path.exists(LOCK_FILE):
+        print("⚠️ Another task running, skip")
+        return
+
+    # create lock
+    open(LOCK_FILE, "w").close()
+
+    try:
+        cleanup()
+
+        print("🚀 Running task:", task["prompt"])
+
+        start_agent(task["prompt"])
+
+        await poll_agent_output(None, app)
+
+        task["done"] = True
+
+    finally:
+        # release lock
+        if os.path.exists(LOCK_FILE):
+            os.remove(LOCK_FILE)
+
+
+async def check_and_run_tasks(app):
+    tasks = load_schedule()
+    updated = []
+
+    for task in tasks:
+        if is_due(task):
+            await run_task(task, app)
+        updated.append(task)
+
+    update_schedule(updated)
+
+
+async def scheduler_loop(app):
+    while True:
+        try:
+            await check_and_run_tasks(app)
+        except Exception as e:
+            print("Scheduler error:", e)
+
+        await asyncio.sleep(60)
 
 
 # ---------- Telegram handlers ----------
 async def start(update: Update):
-    await update.message.reply_text("🚀 Emacs Streaming Agent Ready (Proxy Enabled)")
+    await send_text("🚀 Emacs Agent Ready (Proxy Enabled)", update)
 
 
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if update.message.from_user.id != AUTHORIZED_USER_ID:
-        await update.message.reply_text("Unauthorized")
+        await send_text("Unauthorized", update)
         return
 
     prompt = update.message.text
@@ -320,13 +394,13 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     if prompt.lower().strip() == CLEAR_SESSION_COMMAND:
         clear_agent_session()
-        await update.message.reply_text("✅ Agent cleared.")
+        await send_text("✅ Agent cleared.", update)
         return
 
     if prompt.lower().strip() == PROLONG_SESSION_COMMAND:
         global SESSION_PROLONGED;
         SESSION_PROLONGED = True
-        await update.message.reply_text("✅ Agent prolonged.")
+        await send_text("✅ Agent prolonged.", update)
         return
 
     start_agent(prompt)
@@ -345,6 +419,11 @@ def main():
     app.add_handler(CommandHandler("start", start))
     app.add_handler(MessageHandler(filters.TEXT & (~filters.COMMAND), handle_message))
     setup_agent()
+
+    async def post_init(app):
+        asyncio.create_task(scheduler_loop(app))
+
+    app.post_init = post_init
 
     print(f"🚀 Telegram Streaming Agent Running with proxy {PROXY_URL}")
     app.run_polling()
