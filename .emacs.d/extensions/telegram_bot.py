@@ -36,7 +36,6 @@ Configuration
 
 Dependencies
 ------------
-
 - python-telegram-bot >= v20
 - Emacs with gptel and gptel-agent configured
 - emacsclient (Emacs daemon must be running)
@@ -60,7 +59,6 @@ Trade-offs:
 
 Limitations
 -----------
-
 - Single session only (shared file)
 - No real-time streaming
 - Entire response sent at once
