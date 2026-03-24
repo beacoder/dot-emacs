@@ -352,10 +352,11 @@ async def run_task(task, app):
     # create lock
     open(AGENT_LOCK_FILE, "w").close()
 
+    prompt = task["prompt"]
+    await send_text(f"🚀 Running task: {prompt}", None, app)
+
     try:
         cleanup()
-        prompt = task["prompt"]
-        await send_text(f"🚀 Running task: {prompt}", None, app)
         start_agent(prompt)
         await poll_agent_output(None, app)
         task["done"] = True
@@ -402,6 +403,8 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await send_text("⚠️ Another task running, try later", update)
         return
 
+    prompt = update.message.text
+
     if prompt.lower().strip() == CLEAR_SESSION_COMMAND:
         clear_agent_session()
         await send_text("✅ Agent cleared.", update)
@@ -418,7 +421,6 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     try:
         cleanup()
-        prompt = update.message.text
         start_agent(prompt)
         await poll_agent_output(update)
     finally:
