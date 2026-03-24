@@ -2,7 +2,7 @@
 
 ## Directory Configuration
 - Default Search Path: /tmp/agent/
-- Default Path for storing pictures/videos/mis files: /tmp/agent/media-file/
+- Default Path for storing pictures/videos/... files: /tmp/agent/media-file/
 - Forbidden Path: /mnt/ (no read/write/modify is allowed for this path)
 
 ## Coding Standards
