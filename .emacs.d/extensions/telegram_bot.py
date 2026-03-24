@@ -341,15 +341,10 @@ async def run_task(task, app):
 
     try:
         cleanup()
-
         print("🚀 Running task:", task["prompt"])
-
         start_agent(task["prompt"])
-
         await poll_agent_output(None, app)
-
         task["done"] = True
-
     finally:
         # release lock
         if os.path.exists(LOCK_FILE):
