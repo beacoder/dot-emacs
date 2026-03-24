@@ -398,9 +398,9 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await send_text("Unauthorized", update)
         return
 
-    prompt = update.message.text
-
-    cleanup()
+    if os.path.exists(AGENT_LOCK_FILE):
+        await send_text("⚠️ Another task running, try later", update)
+        return
 
     if prompt.lower().strip() == CLEAR_SESSION_COMMAND:
         clear_agent_session()
@@ -413,8 +413,18 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await send_text("✅ Agent prolonged.", update)
         return
 
-    start_agent(prompt)
-    await poll_agent_output(update)
+    # create lock
+    open(AGENT_LOCK_FILE, "w").close()
+
+    try:
+        cleanup()
+        prompt = update.message.text
+        start_agent(prompt)
+        await poll_agent_output(update)
+    finally:
+        # release lock
+        if os.path.exists(AGENT_LOCK_FILE):
+            os.remove(AGENT_LOCK_FILE)
 
 
 # ---------- Main ----------
