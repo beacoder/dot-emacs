@@ -199,7 +199,7 @@
     ;; add agent skills, e.g: https://github.com/anthropics/skills
     (add-to-list 'gptel-agent-skill-dirs "~/.emacs.d/skills")
     ;; add gptel-telegram agent
-    (add-to-list 'gptel-agent-dirs "~/.emacs.d/agent")
+    (add-to-list 'gptel-agent-dirs "~/.emacs.d/agents")
     ;; start gptel-telegram agent
     (defun gptel-telegram (&optional project-dir)
       (interactive
