@@ -333,7 +333,7 @@ def is_due(task):
 
 async def run_task(task, app):
     if os.path.exists(LOCK_FILE):
-        print("⚠️ Another task running, skip")
+        send_text("⚠️ Another task running, skip", None, app)
         return
 
     # create lock
@@ -341,8 +341,9 @@ async def run_task(task, app):
 
     try:
         cleanup()
-        print("🚀 Running task:", task["prompt"])
-        start_agent(task["prompt"])
+        prompt = task["prompt"]
+        send_text(f"🚀 Running task: {prompt}", None, app)
+        start_agent(prompt)
         await poll_agent_output(None, app)
         task["done"] = True
     finally:
@@ -368,7 +369,7 @@ async def scheduler_loop(app):
         try:
             await check_and_run_tasks(app)
         except Exception as e:
-            print("Scheduler error:", e)
+            send_text(f"Scheduler error: {e}", None, app)
 
         await asyncio.sleep(60)
 
@@ -419,8 +420,6 @@ def main():
         asyncio.create_task(scheduler_loop(app))
 
     app.post_init = post_init
-
-    print(f"🚀 Telegram Streaming Agent Running with proxy {PROXY_URL}")
     app.run_polling()
 
 
