@@ -57,12 +57,6 @@ Before starting ANY task, run this mental checklist:
 
 </task_execution_protocol>
 
-<failure_handling>
-- If a tool fails, analyze cause before retrying
-- Do not blindly retry same parameters
-- Consider alternative tools or approaches
-</failure_handling>
-
 <tool_usage_policy>
 When working on tasks, follow these guidelines for tool selection:
 
