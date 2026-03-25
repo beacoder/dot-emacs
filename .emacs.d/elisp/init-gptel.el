@@ -46,37 +46,6 @@
     (dolist (c-mode-hook '(c-mode-common-hook c-ts-mode-hook c++-ts-mode-hook))
       (add-hook c-mode-hook #'gptel-cpp-complete-mode))))
 
-(defun truncate-large-buffer (prefix &optional max-lines)
-  (when (> (buffer-size) 20000)
-    (let* ((max-lines (or max-lines 50))
-           (temp-dir (expand-file-name "gptel-agent-temp"
-                                       (temporary-file-directory)))
-           (temp-file (expand-file-name
-                       (format "%s-%s-%s.txt"
-                               prefix
-                               (format-time-string "%Y%m%d-%H%M%S")
-                               (random 10000))
-                       temp-dir))
-           (orig-size (buffer-size))
-           (orig-lines (line-number-at-pos (point-max))))
-      ;; Create temp directory if needed
-      (unless (file-directory-p temp-dir)
-        (make-directory temp-dir t))
-      ;; Save full content
-      (write-region nil nil temp-file)
-      ;; Insert truncated header
-      (goto-char (point-min))
-      (insert (format "%s results too large (%d chars, %d lines) \
- for context window.\nStored in: %s\n\nFirst %d lines:\n\n"
-                      prefix orig-size orig-lines temp-file max-lines))
-      ;; Truncate to max-lines
-      (forward-line max-lines)
-      (delete-region (point) (point-max))
-      ;; Add footer with read instruction
-      (goto-char (point-max))
-      (insert (format "\n\n[Use Read tool with file_path=\"%s\" to view full results]"
-                      temp-file)))))
-
 (defun gptel-agent--git-glob (pattern &optional path depth)
   (when (string-empty-p pattern)
     (error "Error: pattern must not be empty"))
@@ -128,7 +97,7 @@
             (goto-char (point-min))
             (insert (format "Glob failed with exit code %d\n.STDOUT:\n\n"
                             exit-code)))))
-      (truncate-large-buffer "glob")
+      (gptel-agent--truncate-buffer "glob")
       (buffer-string))))
 
 (defun gptel-agent--git-grep (regex path &optional glob context-lines)
@@ -182,7 +151,7 @@
         (when (/= exit-code 0)
           (goto-char (point-min))
           (insert (format "Error: search failed with exit-code %d.  Tool output:\n\n" exit-code)))
-        (truncate-large-buffer "grep")
+        (gptel-agent--truncate-buffer "grep")
         (buffer-string)))))
 
 (use-package gptel-agent
