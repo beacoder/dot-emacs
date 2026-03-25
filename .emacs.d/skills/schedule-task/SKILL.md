@@ -52,7 +52,7 @@ Interval (hours) | "interval:2h" | 每2小时
 - "run_at" must always be the next occurrence
 
 ## Step 4: File Operation (STRICT)
-Target file: /tmp/agent/schedule.json
+Target file: ~/agent/schedule.json
 
 1. If file exists:
    - Read file
