@@ -114,7 +114,7 @@ PROXY_URL = "http://127.0.0.1:1080"
 TELEGRAM_MAX_LENGTH = 4000
 AGENT_OUTPUT_FILE = os.path.expanduser("/tmp/agent/agent-session.md")
 AGENT_MEDIA_DIR = os.path.expanduser("/tmp/agent/media-file/")
-AGENT_SCHEDULE_FILE = os.path.expanduser("/tmp/agent/schedule.json")
+AGENT_SCHEDULE_FILE = os.path.expanduser("~/agent/schedule.json")
 AGENT_LOCK_FILE = os.path.expanduser("/tmp/agent/.lock")
 # =========================================
 
