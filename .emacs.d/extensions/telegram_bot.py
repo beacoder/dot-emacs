@@ -101,6 +101,7 @@ import shutil
 import json
 from datetime import datetime, timedelta
 from calendar import monthrange
+import sys
 
 
 # ================= CONFIG =================
@@ -121,6 +122,7 @@ AGENT_LOCK_FILE = os.path.expanduser("/home/huming/agent/.lock")
 # ================= COMMAND =================
 CLEAR_SESSION_COMMAND = "clear"
 PROLONG_SESSION_COMMAND = "prolong"
+RESTART_AGENT_COMMAND = "restart"
 # =========================================
 
 # ================= GLOBAL =================
@@ -133,6 +135,30 @@ logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     level=logging.INFO
 )
+
+
+# ---------- Restart agent ----------
+async def restart_agent():
+    subprocess.run(
+        ["pkill", "-f", "emacs"],
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL
+    )
+    await asyncio.sleep(2)
+
+    subprocess.Popen(
+        ["emacs"],
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL
+    )
+    await asyncio.sleep(30)
+
+    def _restart_process():
+        os.execv(sys.executable, [sys.executable] + sys.argv)
+
+    # schedule restart AFTER current task finishes
+    loop = asyncio.get_running_loop()
+    loop.call_soon(_restart_process)
 
 
 # ---------- Clear agent ----------
@@ -441,19 +467,15 @@ async def scheduler_loop(app):
         try:
             await check_and_run_tasks(app)
         except Exception as e:
-            await send_text(f"Scheduler error: {e}", None, app)
+            await send_text(f"❌ Scheduler error: {e}", None, app)
 
         await asyncio.sleep(30)
 
 
 # ---------- Telegram handlers ----------
-async def start(update: Update):
-    await send_text("🚀 Emacs Agent Ready (Proxy Enabled)", update)
-
-
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if update.message.from_user.id != AUTHORIZED_USER_ID:
-        await send_text("Unauthorized", update)
+        await send_text("❌ Unauthorized.", update)
         return
 
     if os.path.exists(AGENT_LOCK_FILE):
@@ -463,13 +485,18 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     if prompt.lower().strip() == CLEAR_SESSION_COMMAND:
         clear_agent_session()
-        await send_text("✅ Agent cleared.", update)
+        await send_text("✅ Agent session cleared.", update)
         return
 
     if prompt.lower().strip() == PROLONG_SESSION_COMMAND:
         global SESSION_PROLONGED;
         SESSION_PROLONGED = True
-        await send_text("✅ Agent prolonged.", update)
+        await send_text("✅ Agent session prolonged.", update)
+        return
+
+    if prompt.lower().strip() == RESTART_AGENT_COMMAND:
+        await send_text("⚠️ Agent restarting...", update)
+        await restart_agent()
         return
 
     # create lock
@@ -494,14 +521,19 @@ def main():
         .build()
     )
 
-    app.add_handler(CommandHandler("start", start))
     app.add_handler(MessageHandler(filters.TEXT & (~filters.COMMAND), handle_message))
     setup_agent()
 
-    async def post_init(app):
+    async def _post_init(app):
         asyncio.create_task(scheduler_loop(app))
 
-    app.post_init = post_init
+        # send startup message
+        await app.bot.send_message(
+            chat_id=AUTHORIZED_USER_ID,
+            text="🚀 Agent ready."
+        )
+
+    app.post_init = _post_init
     app.run_polling()
 
 
