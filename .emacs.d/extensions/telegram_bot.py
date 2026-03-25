@@ -528,10 +528,7 @@ def main():
         asyncio.create_task(scheduler_loop(app))
 
         # send startup message
-        await app.bot.send_message(
-            chat_id=AUTHORIZED_USER_ID,
-            text="🚀 Agent ready."
-        )
+        await send_text("🚀 Agent ready.", None, app)
 
     app.post_init = _post_init
     app.run_polling()
