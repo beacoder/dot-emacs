@@ -112,10 +112,10 @@ AUTHORIZED_USER_ID = 12345678
 PROXY_URL = "http://127.0.0.1:1080"
 
 TELEGRAM_MAX_LENGTH = 4000
-AGENT_OUTPUT_FILE = os.path.expanduser("/tmp/agent/agent-session.md")
-AGENT_MEDIA_DIR = os.path.expanduser("/tmp/agent/media-file/")
-AGENT_SCHEDULE_FILE = os.path.expanduser("~/agent/schedule.json")
-AGENT_LOCK_FILE = os.path.expanduser("/tmp/agent/.lock")
+AGENT_OUTPUT_FILE = os.path.expanduser("/home/huming/agent/agent-session.md")
+AGENT_MEDIA_DIR = os.path.expanduser("/home/huming/agent/media-file/")
+AGENT_SCHEDULE_FILE = os.path.expanduser("/home/huming/agent/schedule.json")
+AGENT_LOCK_FILE = os.path.expanduser("/home/huming/agent/.lock")
 # =========================================
 
 # ================= COMMAND =================
