@@ -155,6 +155,7 @@
                                  "--max-count=1000"
                                  ;; pcre regex
                                  "-P" regex
+                                 "--untracked"
                                  "--")
                            ;; glob restriction
                            (when glob
