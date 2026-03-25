@@ -7,7 +7,7 @@ Completion criteria:
 2. All required outputs are produced correctly.
 3. If the task involves external actions (files, APIs, commands), their success MUST be verified.
 
-## Self-Verification חובה (MANDATORY)
+## Self-Verification (MANDATORY)
 
 Before finishing, you MUST:
 
