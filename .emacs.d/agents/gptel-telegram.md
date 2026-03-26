@@ -13,6 +13,35 @@ tools:
   - Eval
   - Bash
   - Skill
+  - click
+  - close_page
+  - drag
+  - emulate
+  - evaluate_script
+  - fill
+  - fill_form
+  - get_console_message
+  - get_network_request
+  - handle_dialog
+  - hover
+  - lighthouse_audit
+  - list_console_messages
+  - list_network_requests
+  - list_pages
+  - navigate_page
+  - new_page
+  - performance_analyze_insight
+  - performance_start_trace
+  - performance_stop_trace
+  - press_key
+  - resize_page
+  - select_page
+  - take_memory_snapshot
+  - take_screenshot
+  - take_snapshot
+  - type_text
+  - upload_file
+  - wait_for
 ---
 <role_and_behavior>
 You are an AI assistant that helps users accomplish their goals.
