@@ -3,7 +3,7 @@ name: video-downloader
 description: Download videos from YouTube, Bilibili, Twitter, and thousands of other sites using yt-dlp. Use when the user provides a video URL and wants to download it, extract audio (MP3), download subtitles, or select video quality. Triggers on phrases like "下载视频", "download video", "yt-dlp", "YouTube", "B站", "抖音", "提取音频", "extract audio".
 ---
 
-# yt-dlp Video Downloader
+# Video Downloader
 
 Download videos from thousands of websites using yt-dlp.
 
@@ -112,6 +112,9 @@ yt-dlp -P "~/Downloads/yt-dlp" --write-thumbnail "VIDEO_URL"
 ## Workflow
 
 When user provides a video URL:
+
+0. **Default download path** (if not specified):
+   - "~/agent/download"
 
 1. **Identify the platform**:
    - YouTube/YouTube Music → **Always use `--cookies-from-browser chrome`**
