@@ -3,7 +3,7 @@ name: schedule-task
 description: Task scheduling rules for reminders and delayed execution. Triggers on phrases like "reminders", "scheduling", "run later", "定时执行", "稍后执行", "定时任务", "提醒".
 ---
 
-# Task Scheduling Rules
+# Task Scheduler
 
 Schedule task for delayed execution.
 
