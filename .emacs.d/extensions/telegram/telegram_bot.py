@@ -107,7 +107,7 @@ def is_agent_running():
 def setup_agent():
     elisp = f"""
 (progn
-  (defun extract_agent_response (beg end)
+  (defun agent_extract_response (beg end)
     (let ((pos beg)
           (result "")
           (last-prop nil))
@@ -130,31 +130,34 @@ def setup_agent():
             (setq pos next))))
       result))
 
-  (defun append-agent-output-to-file (beg end)
+  (defun agent-append-output-to-file (beg end)
     "Append the latest gptel response to a file."
-    (let ((txt (extract_agent_response beg end)))
+    (let ((txt (agent_extract_response beg end)))
       (with-temp-buffer
         (insert (format "Date: %s\\n" (current-time-string)))
         (insert "---\\n")
         (insert txt)
         (append-to-file (point-min) (point-max) "{AGENT_OUTPUT_FILE}"))))
 
-  (defun remove-tool-blocks ()
-    (goto-char (point-min))
-    (let ((start nil))
-      (while (re-search-forward "^``` *tool.*$" nil t)
-        (setq start (match-beginning 0))
-        (forward-line 1)
-        ;; now scan for closing fence
-        (while (and (not (eobp))
-                    (not (looking-at "^```$")))
-          (forward-line 1))
-        (when (looking-at "^```$")
-          (forward-line 1)
-          (delete-region start (point))
-          (goto-char start)))))
+  (defun agent-sanitize-buffer ()
+    (let ((pos (point-min)))
+      (while (< pos (point-max))
+        (let* ((end (point-max))
+               (next (next-single-property-change pos 'gptel nil end))
+               (next (or next end))
+               (prop (get-text-property pos 'gptel)))
+          (cond
+           ((and (consp prop)
+                 (eq (car prop) 'tool)
+                 (stringp (cdr prop))
+                 (string-prefix-p "call_" (cdr prop)))
+            (delete-region pos next))
+           ((eq prop 'ignore)
+            (delete-region pos next))
+           (t
+            (setq pos next)))))))
 
-  (defun get-agent-buffer ()
+  (defun agent-get-buffer ()
     (let ((buf (seq-find
                 (lambda (b) (string-match-p "^\\*gptel-telegram:" (buffer-name b)))
                 (buffer-list))))
@@ -177,14 +180,14 @@ async def start_agent(prompt: str):
 
     elisp = f"""
 (progn
-  (remove-hook 'gptel-post-response-functions #'append-agent-output-to-file)
-  (add-hook 'gptel-post-response-functions #'append-agent-output-to-file)
+  (remove-hook 'gptel-post-response-functions #'agent-append-output-to-file)
+  (add-hook 'gptel-post-response-functions #'agent-append-output-to-file)
 
-  (unless (get-agent-buffer) (gptel-telegram "./"))
+  (unless (agent-get-buffer) (gptel-telegram "./"))
 
-  (when-let ((buf (get-agent-buffer)))
+  (when-let ((buf (agent-get-buffer)))
     (with-current-buffer buf
-      (remove-tool-blocks)
+      (agent-sanitize-buffer)
       (goto-char (point-max))
       (insert "{prompt}")
       (gptel-send))))
