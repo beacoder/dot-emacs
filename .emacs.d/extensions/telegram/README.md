@@ -1,4 +1,4 @@
-Telegram ↔ Emacs gptel-agent Bridge (File-based Polling Version)
+# Telegram ↔ Emacs gptel-agent Bridge (File-based Polling Version)
 
 Overview
 --------
