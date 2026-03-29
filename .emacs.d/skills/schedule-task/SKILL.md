@@ -1,7 +1,6 @@
 ---
 name: schedule-task
 description: Task scheduling rules for reminders and delayed execution
-tools: []
 ---
 
 # Task Scheduling Rules
