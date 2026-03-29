@@ -214,6 +214,21 @@ def setup_agent():
         (insert txt)
         (append-to-file (point-min) (point-max) "{AGENT_OUTPUT_FILE}"))))
 
+  (defun remove-tool-blocks ()
+    (goto-char (point-min))
+    (let ((start nil))
+      (while (re-search-forward "^``` *tool.*$" nil t)
+        (setq start (match-beginning 0))
+        (forward-line 1)
+        ;; now scan for closing fence
+        (while (and (not (eobp))
+                    (not (looking-at "^```$")))
+          (forward-line 1))
+        (when (looking-at "^```$")
+          (forward-line 1)
+          (delete-region start (point))
+          (goto-char start)))))
+
   (defun get-agent-buffer ()
     (let ((buf (seq-find
                 (lambda (b) (string-match-p "^\\*gptel-telegram:" (buffer-name b)))
@@ -240,6 +255,7 @@ def start_agent(prompt: str):
 
   (when-let ((buf (get-agent-buffer)))
     (with-current-buffer buf
+      (remove-tool-blocks)
       (goto-char (point-max))
       (insert "{prompt}")
       (gptel-send))))
