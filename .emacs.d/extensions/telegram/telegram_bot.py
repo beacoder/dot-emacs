@@ -276,7 +276,6 @@ async def poll_agent_output(update: Update, app: ApplicationBuilder = None):
         poll_count += 1
 
     cleanup()
-
     await send_text("✅ Agent finished.", update, app)
 
 
