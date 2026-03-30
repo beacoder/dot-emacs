@@ -30,9 +30,6 @@ tools:
   - list_pages
   - navigate_page
   - new_page
-  - performance_analyze_insight
-  - performance_start_trace
-  - performance_stop_trace
   - press_key
   - resize_page
   - select_page
