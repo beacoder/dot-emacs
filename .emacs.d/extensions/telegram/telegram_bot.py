@@ -37,12 +37,7 @@ AGENT_LOCK_FILE = os.path.expanduser("/home/huming/agent/.lock")
 
 # ================= COMMAND =================
 CLEAR_SESSION_COMMAND = "clear"
-PROLONG_SESSION_COMMAND = "prolong"
 RESTART_AGENT_COMMAND = "restart"
-# =========================================
-
-# ================= GLOBAL =================
-SESSION_PROLONGED = False
 # =========================================
 
 os.makedirs(AGENT_MEDIA_DIR, exist_ok=True)
@@ -253,15 +248,8 @@ def cleanup():
             os.remove(item_path)
 
 
-async def poll_agent_output(update: Update, app: ApplicationBuilder = None):
-    global SESSION_PROLONGED
-
-    # wait 5 minutes for long session, 3 minutes for normal session
-    max_polls = 300 if SESSION_PROLONGED else 180
+async def poll_agent_output(max_polls: int, update: Update, app: ApplicationBuilder = None):
     poll_count = 0
-    SESSION_PROLONGED = False
-
-    await send_text("🧠 Thinking...", update, app)
 
     while poll_count < max_polls:
         if os.path.exists(AGENT_OUTPUT_FILE) and (os.path.getsize(AGENT_OUTPUT_FILE) > 0):
@@ -279,7 +267,6 @@ async def poll_agent_output(update: Update, app: ApplicationBuilder = None):
         poll_count += 1
 
     cleanup()
-    await send_text("✅ Agent finished.", update, app)
 
 
 def load_schedule():
@@ -377,7 +364,9 @@ async def run_task(task, app):
     try:
         cleanup()
         await start_agent(prompt)
-        await poll_agent_output(None, app)
+        await send_text("🧠 Thinking...", None, app)
+        await poll_agent_output(120, None, app)
+        await send_text("✅ Agent finished.", None, app)
     finally:
         # release lock
         if os.path.exists(AGENT_LOCK_FILE):
@@ -385,6 +374,8 @@ async def run_task(task, app):
 
 
 async def check_and_run_tasks(app):
+    await poll_agent_output(2, None, app)
+
     tasks = load_schedule()
     updated = []
 
@@ -431,12 +422,6 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await send_text("✅ Agent session cleared.", update)
         return
 
-    if prompt.lower().strip() == PROLONG_SESSION_COMMAND:
-        global SESSION_PROLONGED;
-        SESSION_PROLONGED = True
-        await send_text("✅ Agent session prolonged.", update)
-        return
-
     if prompt.lower().strip() == RESTART_AGENT_COMMAND:
         await send_text("⚠️ Agent restarting...", update)
         await restart_agent()
@@ -448,7 +433,9 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     try:
         cleanup()
         await start_agent(prompt)
-        await poll_agent_output(update)
+        await send_text("🧠 Thinking...", update)
+        await poll_agent_output(120, update)
+        await send_text("✅ Agent finished.", update)
     finally:
         # release lock
         if os.path.exists(AGENT_LOCK_FILE):
