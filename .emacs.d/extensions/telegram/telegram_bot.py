@@ -47,7 +47,6 @@ logging.basicConfig(
     level=logging.INFO
 )
 
-
 async def restart_agent():
     subprocess.run(
         ["pkill", "-f", "emacs"],
@@ -70,7 +69,6 @@ async def restart_agent():
     loop = asyncio.get_running_loop()
     loop.call_soon(_restart_process)
 
-
 def clear_agent_session():
     elisp = f"""
 (when-let ((buf (seq-find
@@ -86,7 +84,6 @@ def clear_agent_session():
         stderr=subprocess.DEVNULL
     )
 
-
 def is_agent_running():
     try:
         result = subprocess.run(
@@ -97,7 +94,6 @@ def is_agent_running():
         return result.returncode == 0
     except Exception:
         return False
-
 
 def setup_agent():
     elisp = f"""
@@ -165,7 +161,6 @@ def setup_agent():
         stderr=subprocess.DEVNULL
     )
 
-
 async def start_agent(prompt: str):
     if not is_agent_running():
         await restart_agent()
@@ -194,7 +189,6 @@ async def start_agent(prompt: str):
         stderr=subprocess.DEVNULL
     )
 
-
 async def send_text(text: str, update: Update, app = None):
     if not text.strip():
         return
@@ -211,8 +205,7 @@ async def send_text(text: str, update: Update, app = None):
             await app.bot.send_message(
                 chat_id=AUTHORIZED_USER_ID,
                 text=chunk)
-        await asyncio.sleep(0.3)  # avoid flooding telegram
-
+        await asyncio.sleep(0.6)  # avoid flooding telegram
 
 async def send_files(update: Update, app):
     files = sorted(
@@ -235,7 +228,6 @@ async def send_files(update: Update, app):
         except Exception as e:
             await send_text(f"❌ Failed to send file: {path}", update, app)
 
-
 def cleanup():
     if os.path.exists(AGENT_OUTPUT_FILE):
         os.remove(AGENT_OUTPUT_FILE)
@@ -246,7 +238,6 @@ def cleanup():
             shutil.rmtree(item_path)
         else:
             os.remove(item_path)
-
 
 async def poll_agent_output(max_polls: int, update: Update, app: ApplicationBuilder = None):
     poll_count = 0
@@ -268,7 +259,6 @@ async def poll_agent_output(max_polls: int, update: Update, app: ApplicationBuil
 
     cleanup()
 
-
 def load_schedule():
     if not os.path.exists(AGENT_SCHEDULE_FILE):
         return []
@@ -283,7 +273,6 @@ def load_schedule():
         print(f"[schedule] load failed: {e}")
         return []
 
-
 def update_schedule(tasks):
     tmp_file = AGENT_SCHEDULE_FILE + ".tmp"
 
@@ -292,14 +281,12 @@ def update_schedule(tasks):
 
     os.replace(tmp_file, AGENT_SCHEDULE_FILE)
 
-
 def is_due(task):
     if task.get("done"):
         return False
 
     run_at = datetime.strptime(task["run_at"], "%Y-%m-%d %H:%M")
     return datetime.now() >= run_at
-
 
 def compute_next_run(task):
     repeat = task.get("repeat")
@@ -349,7 +336,6 @@ def compute_next_run(task):
         return next_run.strftime("%Y-%m-%d %H:%M")
     return None
 
-
 async def run_task(task, app):
     if os.path.exists(AGENT_LOCK_FILE):
         await send_text("⚠️ Another task running, skip", None, app)
@@ -363,15 +349,14 @@ async def run_task(task, app):
 
     try:
         cleanup()
-        await start_agent(prompt)
         await send_text("🧠 Thinking...", None, app)
+        await start_agent(prompt)
         await poll_agent_output(120, None, app)
         await send_text("✅ Agent finished.", None, app)
     finally:
         # release lock
         if os.path.exists(AGENT_LOCK_FILE):
             os.remove(AGENT_LOCK_FILE)
-
 
 async def check_and_run_tasks(app):
     await poll_agent_output(2, None, app)
@@ -395,7 +380,6 @@ async def check_and_run_tasks(app):
     if len(updated) > 0:
         update_schedule(updated)
 
-
 async def scheduler_loop(app):
     while True:
         try:
@@ -404,7 +388,6 @@ async def scheduler_loop(app):
             await send_text(f"❌ Scheduler error: {e}", None, app)
 
         await asyncio.sleep(30)
-
 
 # ---------- Telegram handlers ----------
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -432,15 +415,14 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     try:
         cleanup()
-        await start_agent(prompt)
         await send_text("🧠 Thinking...", update)
+        await start_agent(prompt)
         await poll_agent_output(120, update)
         await send_text("✅ Agent finished.", update)
     finally:
         # release lock
         if os.path.exists(AGENT_LOCK_FILE):
             os.remove(AGENT_LOCK_FILE)
-
 
 # ---------- Main ----------
 def main():
@@ -454,13 +436,15 @@ def main():
     app.add_handler(MessageHandler(filters.TEXT & (~filters.COMMAND), handle_message))
     setup_agent()
 
+    async def error_handler(update, context):
+        logging.error(f"Exception: {context.error}")
+    app.add_error_handler(error_handler)
+
     async def _post_init(app):
         asyncio.create_task(scheduler_loop(app))
-
-        # send startup message
         await send_text("🚀 Agent ready.", None, app)
-
     app.post_init = _post_init
+
     app.run_polling()
 
 
