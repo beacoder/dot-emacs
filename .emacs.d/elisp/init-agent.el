@@ -116,9 +116,9 @@
                                  (and (natnump context-lines)
                                       (format "-C%d" context-lines))
                                  "--max-count=1000"
+                                 "--untracked"
                                  ;; pcre regex
                                  "-P" regex
-                                 "--untracked"
                                  "--")
                            ;; glob restriction
                            (when glob
