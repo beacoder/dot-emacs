@@ -7,7 +7,7 @@
 ;; ============================================================================
 
 (defmacro gptel-define-agent (name mcp-servers)
-  "Define a gptel chat function named gptel-NAME connecting to MCP-SERVERS."
+  "Define a gptel agent function named gptel-NAME connecting to MCP-SERVERS."
   (let ((func-name (intern (format "gptel-%s" name)))
         (agent-name (format "gptel-%s" name)))
     `(defun ,func-name (&optional project-dir)
