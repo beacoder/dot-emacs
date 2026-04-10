@@ -6,39 +6,41 @@
 ;; Package Configuration
 ;; ============================================================================
 
-;; start gptel-telegram agent
-(defun gptel-telegram (&optional project-dir)
-  (interactive
-   (list (if-let ((proj (project-current)))
-             (project-root proj)
-           default-directory)))
-  (progn                            ;; load tools from mcp
-    (require 'gptel-integrations)
-    (gptel-mcp-connect '("chrome"))
-    (while (not (gptel-mcp--get-tools '("chrome")))
-      (sleep-for 0.1)))
-  (let ((gptel-use-tools t)         ;; ensure tools are visible
-        (gptel-tools gptel-tools)   ;; force binding
-        (gptel-buf
-         (gptel (generate-new-buffer-name
-                 (format "*gptel-telegram:%s*"
-                         (cadr (nreverse (file-name-split project-dir)))))
-                nil
-                (and (use-region-p)
-                     (buffer-substring (region-beginning)
-                                       (region-end)))
-                'interactive)))
-    (with-current-buffer gptel-buf
-      (setq default-directory project-dir)
-      (gptel-agent-update)              ;Update all agent definitions
-      ;; Apply gptel-agent preset if it exists
-      (when-let* ((gptel-agent-plist (assoc-default "gptel-telegram" gptel-agent--agents nil nil)))
-        (apply #'gptel-make-preset 'gptel-telegram gptel-agent-plist))
-      (gptel--apply-preset              ;Apply the gptel-agent preset
-       'gptel-telegram
-       (lambda (sym val) (set (make-local-variable sym) val)))
-      (unless gptel-max-tokens          ;Agent tasks typically need a higher than usual value
-        (setq gptel-max-tokens 8192)))))
+(defmacro gptel-define-agent (name mcp-servers)
+  "Define a gptel chat function named gptel-NAME connecting to MCP-SERVERS."
+  (let ((func-name (intern (format "gptel-%s" name)))
+        (agent-name (format "gptel-%s" name)))
+    `(defun ,func-name (&optional project-dir)
+       (interactive
+        (list (if-let ((proj (project-current)))
+                  (project-root proj)
+                default-directory)))
+       (progn
+         (require 'gptel-integrations)
+         (gptel-mcp-connect ',mcp-servers)
+         (while (not (gptel-mcp--get-tools ',mcp-servers))
+           (sleep-for 0.1)))
+       (let ((gptel-use-tools t)
+             (gptel-tools gptel-tools)
+             (gptel-buf
+              (gptel (generate-new-buffer-name
+                      (format ,(format "*%s:%%s*" agent-name)
+                              (cadr (nreverse (file-name-split project-dir)))))
+                     nil
+                     (and (use-region-p)
+                          (buffer-substring (region-beginning) (region-end)))
+                     'interactive)))
+         (with-current-buffer gptel-buf
+           (setq default-directory project-dir)
+           (gptel-agent-update)
+           (when-let* ((gptel-agent-plist
+                        (assoc-default ,agent-name gptel-agent--agents nil nil)))
+             (apply #'gptel-make-preset ',func-name gptel-agent-plist))
+           (gptel--apply-preset
+            ',func-name
+            (lambda (sym val) (set (make-local-variable sym) val)))
+           (unless gptel-max-tokens
+             (setq gptel-max-tokens 8192)))))))
 
 (defun gptel-agent--git-glob (pattern &optional path depth)
   (when (string-empty-p pattern)
@@ -164,6 +166,8 @@
     (add-to-list 'gptel-agent-skill-dirs "~/.emacs.d/skills")
     ;; add gptel-telegram agent
     (add-to-list 'gptel-agent-dirs "~/.emacs.d/agents")
+    ;; define gptel-telegram agent
+    (gptel-define-agent telegram ("chrome"))
 ))
 
 ;; ============================================================================
