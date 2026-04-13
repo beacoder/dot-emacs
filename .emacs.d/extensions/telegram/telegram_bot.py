@@ -130,24 +130,6 @@ def setup_agent():
         (insert txt)
         (append-to-file (point-min) (point-max) "{AGENT_OUTPUT_FILE}"))))
 
-  (defun agent-sanitize-buffer ()
-    (let ((pos (point-min)))
-      (while (< pos (point-max))
-        (let* ((end (point-max))
-               (next (next-single-property-change pos 'gptel nil end))
-               (next (or next end))
-               (prop (get-text-property pos 'gptel)))
-          (cond
-           ((and (consp prop)
-                 (eq (car prop) 'tool)
-                 (stringp (cdr prop))
-                 (string-prefix-p "call_" (cdr prop)))
-            (delete-region pos next))
-           ((eq prop 'ignore)
-            (delete-region pos next))
-           (t
-            (setq pos next)))))))
-
   (defun agent-get-buffer ()
     (let ((buf (seq-find
                 (lambda (b) (string-match-p "^\\*gptel-telegram:" (buffer-name b)))
@@ -177,7 +159,6 @@ async def start_agent(prompt: str):
 
   (when-let ((buf (agent-get-buffer)))
     (with-current-buffer buf
-      (agent-sanitize-buffer)
       (goto-char (point-max))
       (insert "{prompt}")
       (gptel-send))))
