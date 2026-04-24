@@ -112,6 +112,8 @@
     (add-to-list 'gptel-agent-dirs "~/.emacs.d/agents")
     ;; define gptel-telegram agent
     (gptel-define-agent telegram ("chrome"))
+    ;; suppress gptel warning
+    (add-to-list 'warning-suppress-types '(gptel))
 ))
 
 ;; ============================================================================
