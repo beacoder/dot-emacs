@@ -7,7 +7,6 @@ from telegram import Update
 from telegram.ext import (
     ApplicationBuilder,
     ContextTypes,
-    CommandHandler,
     MessageHandler,
     filters,
 )
@@ -411,6 +410,9 @@ def main():
         ApplicationBuilder()
         .token(TOKEN)
         .proxy(PROXY_URL)
+        .connect_timeout(30)
+        .read_timeout(30)
+        .get_updates_read_timeout(60)
         .build()
     )
 
@@ -426,7 +428,7 @@ def main():
         await send_text("🚀 Agent ready.", None, app)
     app.post_init = _post_init
 
-    app.run_polling()
+    app.run_polling(drop_pending_updates=True)
 
 
 if __name__ == "__main__":
