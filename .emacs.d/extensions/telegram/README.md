@@ -60,14 +60,6 @@ Limitations
 - Entire response sent at once
 - Telegram message size limit (~4000 chars per chunk)
 
-Possible Improvements
----------------------
-- Per-user or per-session output files (multi-user support)
-- Smarter diffing (only send delta instead of full text)
-- Overflow handling (split into multiple Telegram messages)
-- Add /stop command to terminate agent
-- Switch to file watcher (inotify) instead of polling
-
 Security Notes
 --------------
 - Never commit your TOKEN to version control
