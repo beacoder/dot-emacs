@@ -1,1 +1,1 @@
-[opencode skills](https://github.com/beacoder/llm/tree/main/opencode/skills)
+# Check: [OpenCode skills](https://github.com/beacoder/llm/tree/main/opencode/skills)
