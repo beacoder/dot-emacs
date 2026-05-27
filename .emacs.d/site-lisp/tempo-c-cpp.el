@@ -40,7 +40,7 @@
 ;;
 ;; To use the templates defined here:
 ;; - either run M-x tempo-template-c-<xx> where <xx> is the name of the template (use TAB to have the list)
-;; - or start to type the corresponding abbreviation (list follows) and hit C-RET or F5
+;; - or start to type the corresponding abbreviation (list follows) and hit M-RET
 ;;
 ;;; Code:
 ;;
@@ -86,6 +86,32 @@
 ;;            sort                    std::sort(container.begin(), container.end());
 ;;            find                    std::find(container.begin(), container.end(), ...);
 ;;            erase                   std::erase(container, ...);
+;; --- Modern C++ (C++17/20/23)
+;;            lambda                  [capture](...) { }
+;;            ifinit                  if (init; cond) { }
+;;            bind                    auto [...] = expr;
+;;            optional                std::optional<T> ...;
+;;            variant                 std::variant<...> name;
+;;            cif                     if constexpr (...) { }
+;;            enumclass               enum class Name { };
+;;            sassert                 static_assert(..., "msg");
+;;            concept                 template<T> concept Name = requires ...
+;;            requires                template<T> requires ... func(T)
+;;            span                    std::span<T> ...
+;;            fmt                     std::format("...", args);
+;;            expected                std::expected<V, E> ...;
+;;            consteval               consteval T name(...) { }
+;;            tclass                  template<T> class Name { };
+;;            ns                      namespace name { }
+;;            lock                    std::lock_guard<std::mutex> lock(...);
+;;            slock                   std::scoped_lock lock(...);
+;;            jthread                 std::jthread name([](stop_token) { });
+;;            coro                    coroutine skeleton with co_return
+;;            view                    auto x = range | std::views::...;
+;;            overloaded              overloaded pattern for std::visit
+;;            visit                   std::visit(overloaded{...}, variant);
+;;            crtp                    CRTP base class template
+;;            moveonly                move-only class (deleted copy)
 
 (require 'tempo)
 
@@ -468,6 +494,198 @@
                            (p "container: " container) ", " ~ ");")
                        "erase"
                        "C++ STL erase"
+                       'c++-tempo-tags)
+
+;;; Modern C++ Templates (C++17/20/23)
+
+(tempo-define-template "c++-lambda"
+                       '(> "[" (p "capture: " capture) "]("
+                           ~ ") {" > n> n> "}" > n>)
+                       "lambda"
+                       "Insert a C++ lambda expression"
+                       'c++-tempo-tags)
+
+(tempo-define-template "c++-if-init"
+                       '(> "if (" (p "init: " init) "; " ~ ")" > n
+                           > "{" > n> n> "}" > n>)
+                       "ifinit"
+                       "Insert a C++17 if with initializer"
+                       'c++-tempo-tags)
+
+(tempo-define-template "c++-structured-binding"
+                       '(> "auto [" ~ "] = " (p "expression: " expr) ";" > n>)
+                       "bind"
+                       "Insert a C++17 structured binding"
+                       'c++-tempo-tags)
+
+(tempo-define-template "c++-optional"
+                       '(> "std::optional<" (p "type: " type) "> " ~ ";" > n>)
+                       "optional"
+                       "Insert a std::optional declaration"
+                       'c++-tempo-tags)
+
+(tempo-define-template "c++-variant"
+                       '(> "std::variant<" ~ "> " (p "name: " name) ";" > n>)
+                       "variant"
+                       "Insert a std::variant declaration"
+                       'c++-tempo-tags)
+
+(tempo-define-template "c++-constexpr-if"
+                       '(> "if constexpr (" ~ ")" > n
+                           > "{" > n> n> "}" > n>)
+                       "cif"
+                       "Insert a C++17 constexpr if"
+                       'c++-tempo-tags)
+
+(tempo-define-template "c++-enum-class"
+                       '(> "enum class " (p "name: " name) > n
+                           > "{" > n> ~ n> "};" > n>)
+                       "enumclass"
+                       "Insert a C++ scoped enum"
+                       'c++-tempo-tags)
+
+(tempo-define-template "c++-static-assert"
+                       '(> "static_assert(" ~ ", \"" (p "message: " msg) "\");" > n>)
+                       "sassert"
+                       "Insert a static_assert"
+                       'c++-tempo-tags)
+
+(tempo-define-template "c++-concept"
+                       '(> "template <typename T>" > n
+                           > "concept " (p "name: " name) " = requires(T " (p "param: " param) ") {" > n
+                           > ~ ";" > n> "};" > n>)
+                       "concept"
+                       "Insert a C++20 concept"
+                       'c++-tempo-tags)
+
+(tempo-define-template "c++-requires"
+                       '(> "template <typename T>" > n
+                           > "  requires " ~ > n
+                           > (p "return type: " ret) " " (p "name: " name) "(T " (p "param: " param) ")" > n
+                           > "{" > n> n> "}" > n>)
+                       "requires"
+                       "Insert a C++20 requires clause function"
+                       'c++-tempo-tags)
+
+(tempo-define-template "c++-span"
+                       '(> "std::span<" (p "type: " type) "> " ~ > n>)
+                       "span"
+                       "Insert a C++20 std::span"
+                       'c++-tempo-tags)
+
+(tempo-define-template "c++-format"
+                       '(> "std::format(\"" ~ "\"" (p "args: " args) ");" > n>)
+                       "fmt"
+                       "Insert a C++20 std::format"
+                       'c++-tempo-tags)
+
+(tempo-define-template "c++-expected"
+                       '(> "std::expected<" (p "value type: " val) ", " (p "error type: " err) "> " ~ ";" > n>)
+                       "expected"
+                       "Insert a C++23 std::expected"
+                       'c++-tempo-tags)
+
+(tempo-define-template "c++-consteval"
+                       '(> "consteval " (p "return type: " type) " " (p "name: " name) "(" ~ ")" > n
+                           > "{" > n> n> "}" > n>)
+                       "consteval"
+                       "Insert a C++20 consteval function"
+                       'c++-tempo-tags)
+
+(tempo-define-template "c++-template-class"
+                       '(> "template <typename " (p "type param: " T) ">" > n
+                           > "class " (p "name: " name) > n
+                           > "{" > n
+                           > "public:" > n> ~ n
+                           > "private:" > n> n
+                           > "};" > n>)
+                       "tclass"
+                       "Insert a C++ template class"
+                       'c++-tempo-tags)
+
+(tempo-define-template "c++-namespace"
+                       '(> "namespace " (p "name: " name) " {" > n> n
+                           > ~ n> n
+                           > "} // namespace " (s name) > n>)
+                       "ns"
+                       "Insert a C++ namespace block"
+                       'c++-tempo-tags)
+
+(tempo-define-template "c++-lock-guard"
+                       '(> "std::lock_guard<std::mutex> lock(" ~ ");" > n>)
+                       "lock"
+                       "Insert a std::lock_guard"
+                       'c++-tempo-tags)
+
+(tempo-define-template "c++-scoped-lock"
+                       '(> "std::scoped_lock lock(" ~ ");" > n>)
+                       "slock"
+                       "Insert a C++17 std::scoped_lock"
+                       'c++-tempo-tags)
+
+(tempo-define-template "c++-jthread"
+                       '(> "std::jthread " (p "name: " name) "([" ~ "](std::stop_token stoken) {" > n
+                           > n> "});" > n>)
+                       "jthread"
+                       "Insert a C++20 std::jthread"
+                       'c++-tempo-tags)
+
+(tempo-define-template "c++-coroutine"
+                       '(> (p "return type: " ret) " " (p "name: " name) "(" ~ ")" > n
+                           > "{" > n> "co_return;" > n> "}" > n>)
+                       "coro"
+                       "Insert a C++20 coroutine skeleton"
+                       'c++-tempo-tags)
+
+(tempo-define-template "c++-ranges-view"
+                       '(> "auto " (p "name: " name) " = " (p "range: " range)
+                           " | std::views::" ~ ";" > n>)
+                       "view"
+                       "Insert a C++20 ranges view pipeline"
+                       'c++-tempo-tags)
+
+(tempo-define-template "c++-overload-set"
+                       '(> "template <typename... Ts>" > n
+                           > "struct overloaded : Ts... { using Ts::operator()...; };" > n
+                           > "template <typename... Ts>" > n
+                           > "overloaded(Ts...) -> overloaded<Ts...>;" > n> ~)
+                       "overloaded"
+                       "Insert the overloaded pattern for std::visit"
+                       'c++-tempo-tags)
+
+(tempo-define-template "c++-visit"
+                       '(> "std::visit(overloaded{" > n
+                           > "[](auto&& " ~ ") { }," > n
+                           > "}, " (p "variant: " var) ");" > n>)
+                       "visit"
+                       "Insert a std::visit with overloaded lambdas"
+                       'c++-tempo-tags)
+
+(tempo-define-template "c++-crtp"
+                       '(> "template <typename Derived>" > n
+                           > "class " (p "base name: " name) > n
+                           > "{" > n
+                           > "public:" > n
+                           > "  auto& self() { return static_cast<Derived&>(*this); }" > n
+                           > ~ n
+                           > "};" > n>)
+                       "crtp"
+                       "Insert a CRTP base class"
+                       'c++-tempo-tags)
+
+(tempo-define-template "c++-move-only"
+                       '(> "class " (p "class: " var) > n
+                           > "{" > n
+                           > "public:" > n
+                           > (s var) "() = default;" > n
+                           > (s var) "(" (s var) "&&) = default;" > n
+                           > (s var) "& operator=(" (s var) "&&) = default;" > n
+                           > (s var) "(const " (s var) "&) = delete;" > n
+                           > (s var) "& operator=(const " (s var) "&) = delete;" > n
+                           > ~ n
+                           > "};" > n>)
+                       "moveonly"
+                       "Insert a move-only class"
                        'c++-tempo-tags)
 
 
