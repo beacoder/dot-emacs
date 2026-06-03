@@ -44,7 +44,7 @@
   (setq eglot-stay-out-of '(imenu)
         read-process-output-max (* 1024 1024) ; 1MB
         eglot-autoshutdown t
-        eglot-events-buffer-size 0
+        eglot-events-buffer-size 20000
         eglot-send-changes-idle-time 0.5)
   :config
   (progn
