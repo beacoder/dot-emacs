@@ -463,7 +463,8 @@ Use in `isearch-mode-end-hook'."
   (set-register ?h '(file . "~/.sh_history"))
   (set-register ?o '(file . "~/.emacs.d/tutorials/org-tutorial.org"))
   (set-register ?w '(file . "~/workspace")))
-(add-hook 'after-init-hook #'setup-my-registers)
+;; (add-hook 'after-init-hook #'setup-my-registers) seems not working
+(setup-my-registers)
 
 
 ;; remove the ELPA directory to eliminate any outdated packages it may contain.
