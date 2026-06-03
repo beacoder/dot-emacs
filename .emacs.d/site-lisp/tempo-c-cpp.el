@@ -1,12 +1,12 @@
 ;;; tempo-c-cpp.el --- Abbrevs for c/c++ programming -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (C) 2008      Sebastien Varrette
-;; Copyright (C) 2018-2023 Huming Chen
+;; Copyright (C) 2018-2026 Huming Chen
 ;;
 ;; Author: Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;; Maintainer: Huming Chen <chenhuming@gmail.com>
 ;; Created: 18 Jan 2008
-;; Version: 0.1
+;; Version: 0.2
 ;; Keywords: template, C, C++
 
 ;; This file is free software; you can redistribute it and/or modify
@@ -123,35 +123,37 @@
 (defvar c++-tempo-tags nil
   "Tempo tags for C++ mode.")
 
+;;;###autoload
 (defun my-tempo-c-cpp-bindings ()
   "My tempo c-cpp-bindings."
-  (local-set-key (read-kbd-macro "M-<return>") 'tempo-complete-tag)
-  (local-set-key (read-kbd-macro "M-RET") 'tempo-complete-tag)
+  (local-set-key (kbd "M-RET") 'tempo-complete-tag)
   (tempo-use-tag-list 'c-tempo-tags)
   (tempo-use-tag-list 'c++-tempo-tags))
 
-(dolist (c-mode-hook '(c-mode-common-hook c-ts-mode-hook c++-ts-mode-hook))
-  (add-hook c-mode-hook #'my-tempo-c-cpp-bindings))
+(dolist (hook '(c-mode-common-hook c-ts-mode-hook c++-ts-mode-hook))
+  (add-hook hook #'my-tempo-c-cpp-bindings))
 
 ;; the following macros allow to set point using the ~ character in tempo templates
 (defvar tempo-initial-pos nil
   "Initial position in template after expansion.")
 
-(defadvice tempo-insert( around tempo-insert-pos act )
-  "Define initial position."
+(defun tempo-insert--handle-pos (orig-fun element &rest args)
+  "Handle ~ marker for initial position."
   (if (eq element '~)
       (setq tempo-initial-pos (point-marker))
-    ad-do-it))
+    (apply orig-fun element args)))
+(advice-add 'tempo-insert :around #'tempo-insert--handle-pos)
 
-(defadvice tempo-insert-template (around tempo-insert-template-pos act )
-  "Set initial position when defined.  ChristophConrad."
+(defun tempo-insert-template--set-pos (orig-fun template &rest args)
+  "Set initial position when defined."
   (setq tempo-initial-pos nil)
-  ad-do-it
+  (apply orig-fun template args)
   (if tempo-initial-pos
       (progn
         (put template 'no-self-insert t)
         (goto-char tempo-initial-pos))
     (put template 'no-self-insert nil)))
+(advice-add 'tempo-insert-template :around #'tempo-insert-template--set-pos)
 
 ;;; Preprocessor Templates (appended to c-tempo-tags)
 (tempo-define-template "c-include"
@@ -295,42 +297,35 @@
 ;;;C++-Mode Templates
 ;;(setq max-lisp-eval-depth 500)
 (tempo-define-template "c++-class-noncopyable"
-                       '(> "class " (p "class " var) n
+                       '(> "class " (p "class: " var) > n
                            > "{" > n
                            > "public:" > n
-                           > (s var) "();" n
-                           > "virtual ~" (s var) "();" n> n
-                           > "private:" > n>
-                           > (s var) "(const " (s var) " &);" n
-                           > (s var) "& operator=(const " (s var) " &);" n
-                           > "};" > n> n>
-                           > "inline " (s var) "::" (s var) "()" n
-                           > "{" > n> n> "};" > n> n
-                           > "inline " (s var) "::~" (s var) "()" n
-                           > "{" > n> n> "};" > n> ~
-                           )
+                           > (s var) "() = default;" > n
+                           > "virtual ~" (s var) "() = default;" > n> n
+                           > (s var) "(const " (s var) "&) = delete;" > n
+                           > (s var) "& operator=(const " (s var) "&) = delete;" > n
+                           > ~ n
+                           > "};" > n>)
                        "nocopy"
-                       "New C++ class with private copy and assign"
+                       "New C++ non-copyable class (= delete)"
                        'c++-tempo-tags)
 
 (tempo-define-template "c++-class-singleton"
-                       '(> "class " (p "class " var) n
+                       '(> "class " (p "class: " var) > n
                            > "{" > n
                            > "public:" > n
                            > "static " (s var) "& instance();" > n
+                           > (s var) "(const " (s var) "&) = delete;" > n
+                           > (s var) "& operator=(const " (s var) "&) = delete;" > n
                            > n> "private:" > n
-                           > (s var) "();" n
-                           > "~" (s var) "();" n
+                           > (s var) "() = default;" > n
+                           > "~" (s var) "() = default;" > n
                            > "};" > n
-                           > n> "inline " (s var) "::" (s var) "()" n
-                           > "{" > n> n> "};" > n> n
-                           > "inline " (s var) "::~" (s var) "()" n
-                           > "{" > n> n> "};" > n> n>
-                           > "/*static*/ " (s var) "& " (s var) "::instance();" n
+                           > n> "/*static*/ " (s var) "& " (s var) "::instance()" n
                            > "{" > n>
                            > "static " (s var) " unique;" n
-                           > "return (unique);" n
-                           > "};" > n> ~
+                           > "return unique;" n
+                           > "}" > n> ~
                            )
                        "singleton"
                        "New singleton C++ class"
@@ -379,7 +374,7 @@
 
 (tempo-define-template "c++-doxygen-class"
                        '(> "/** @brief " ~ n> n
-                           > "@author " (getenv "USERNAME") n
+                           > "@author " (user-login-name) n
                            > "*/" > n>
                            )
                        "doc"
@@ -688,6 +683,13 @@
                        "Insert a move-only class"
                        'c++-tempo-tags)
 
+
+(defun tempo-c-cpp-unload-function ()
+  "Remove advice and hooks when unloading."
+  (advice-remove 'tempo-insert #'tempo-insert--handle-pos)
+  (advice-remove 'tempo-insert-template #'tempo-insert-template--set-pos)
+  (dolist (hook '(c-mode-common-hook c-ts-mode-hook c++-ts-mode-hook))
+    (remove-hook hook #'my-tempo-c-cpp-bindings)))
 
 (provide 'tempo-c-cpp)
 ;;; tempo-c-cpp.el ends here
