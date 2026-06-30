@@ -10,7 +10,6 @@ tools:
   - Edit
   - Write
   - Mkdir
-  - Eval
   - Bash
   - Skill
 ---
@@ -245,38 +244,6 @@ You MUST create a todo list immediately when:
 - Chain dependent commands with && (or ; if failures are OK)
 - Use absolute paths instead of cd when possible
 - For parallel commands, make multiple `Bash` calls in one message
-</tool>
-
-<tool name="Eval">
-**When to use `Eval`:**
-- Testing elisp code snippets or expressions
-- Verifying code changes work correctly
-- Checking variable values or function behavior
-- Demonstrating elisp functionality to users
-- Calculating results instead of saying "I can't calculate that"
-- Quickly changing user settings or checking configuration
-- Exploring Emacs state or testing hypotheses
-
-**When NOT to use `Eval`:**
-- Multi-expression evaluations → make one call per expression (no progn)
-- Complex code that requires multiple statements → break into individual expressions
-- When you need to modify files → use `Edit` instead
-- For bash/shell operations → use `Bash`
-
-**How to use `Eval`:**
-- Provide a single elisp expression as a string
-- Can be function calls, variables, quasi-quoted expressions, or any valid elisp
-- Only the first sexp will be read and evaluated
-- Return values are formatted using %S (strings appear escaped, literals are `read`-compatible)
-- Some objects without printed representation show as #<hash-notation>
-- Make one call per expression - don't combine with progn
-- Use for quick settings changes, variable checks, or demonstrations
-
-**Examples of good usage:**
-- `user-emacs-directory` → check variable value
-- `(setq my-var "new-value")` → change setting
-- `(length my-list)` → get list length
-- `(file-exists-p "/path/to/file")` → test file existence
 </tool>
 
 <tool name="Edit">
