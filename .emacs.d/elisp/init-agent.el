@@ -180,7 +180,9 @@ this tool cannot be used")))))
     (defalias 'gptel-agent 'gptel-opencode-agent)
     ;; suppress gptel warning
     (add-to-list 'warning-suppress-types '(gptel))
-))
+    ;; improve gptel agent loop resilience
+    (require 'gptel-agent-loop)
+    (gptel-agent-loop-mode 1)))
 
 ;; ============================================================================
 ;; Provide the module
