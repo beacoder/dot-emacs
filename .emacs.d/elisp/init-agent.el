@@ -15,7 +15,7 @@
         (list (if-let ((proj (project-current)))
                   (project-root proj)
                 default-directory)))
-       (progn
+       (when ',mcp-servers
          (require 'gptel-integrations)
          (gptel-mcp-connect ',mcp-servers)
          (while (not (gptel-mcp--get-tools ',mcp-servers))
@@ -171,10 +171,13 @@ this tool cannot be used")))))
     (gptel-add-file (expand-file-name "~/.emacs.d/contexts"))
     ;; add agent skills, e.g: https://github.com/anthropics/skills
     (add-to-list 'gptel-agent-skill-dirs "~/.emacs.d/skills")
-    ;; add gptel-telegram agent
+    ;; load additional agents
     (add-to-list 'gptel-agent-dirs "~/.emacs.d/agents")
-    ;; define gptel-telegram agent
+    ;; define and use gptel-telegram
     (gptel-define-agent telegram ("chrome"))
+    ;; define and use gptel-opencode-agent
+    (gptel-define-agent opencode-agent nil)
+    (defalias 'gptel-agent 'gptel-opencode-agent)
     ;; suppress gptel warning
     (add-to-list 'warning-suppress-types '(gptel))
 ))
