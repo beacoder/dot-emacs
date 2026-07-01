@@ -29,12 +29,9 @@ Reset to 0 whenever the LLM makes a tool call (real progress)."
   :type 'integer)
 
 (defcustom gptel-agent-loop-nudge-message
-  "Review the entire conversation above from the beginning. \
-The original user request is at the top. \
-Compare what was asked with what has been accomplished so far. \
-If the task is NOT fully complete, continue working by making tool calls. \
-If a previous tool call failed, retry with corrected arguments. \
-Only stop if the original request has been fully addressed."
+  "Review the original user request and the Task Completion Rules \
+in the context. Verify whether all completion criteria are satisfied. \
+If not, continue by making tool calls. Do not stop until the rules are fully met."
   "Message injected when the LLM would stop.
 
 Appended as a user turn.  Should instruct the LLM to review the
