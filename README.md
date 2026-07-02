@@ -141,13 +141,8 @@ This configuration provides a feature-rich development environment optimized for
 │   └── gptel-opencode-agent.md
 ├── contexts/                # LLM context files (auto-loaded)
 │   ├── task-completion-rules.md
-│   ├── general-rules.md
-│   ├── development-rules.md → (symlink)
-│   └── README.md → (symlink)
-├── skills/                  # Agent skills (symlink)
-├── elpa-30.1/               # Installed packages (Emacs 30.1)
-├── backups/                 # File backups
-└── transient/               # Transient state
+│   └── general-rules.md
+└── skills/                  # Agent skills (symlink)
 ```
 
 ## Key Bindings
