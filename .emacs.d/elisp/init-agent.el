@@ -166,7 +166,7 @@ this tool cannot be used")))))
     (defalias 'gptel-agent--glob 'gptel-agent--git-glob)
     ;; use git-grep since it's much faster in git repo
     (defalias 'gptel-agent--grep 'gptel-agent--git-grep)
-    ;; add project related information as llm context, e.g: coding guideline, etc.
+    ;; add project related information into llm context, e.g: coding guideline, etc.
     (require 'gptel-context)
     (gptel-add-file (expand-file-name "~/.emacs.d/contexts"))
     ;; add agent skills, e.g: https://github.com/anthropics/skills
@@ -182,7 +182,14 @@ this tool cannot be used")))))
     (add-to-list 'warning-suppress-types '(gptel))
     ;; improve gptel agent loop resilience
     (require 'gptel-agent-loop)
-    (gptel-agent-loop-mode 1)))
+    (gptel-agent-loop-mode 1)
+    ;; add task-completion-rules into llm context
+    (gptel-add-file
+     (expand-file-name
+      "task-completion-rules.md"
+      (file-name-directory
+       (or (locate-library "gptel-agent-loop")
+           (error "gptel‑agent‑loop not found")))))))
 
 ;; ============================================================================
 ;; Provide the module
