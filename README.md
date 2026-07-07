@@ -132,6 +132,7 @@ This configuration provides a feature-rich development environment optimized for
 │   └── init-benchmarking.el # Startup profiling
 ├── site-lisp/               # Custom/local packages
 │   ├── gptel-agent-loop.el  # Agent loop resilience
+│   ├── task-completion-rules.md
 │   ├── tempo-c-cpp.el       # C/C++ templates
 │   ├── ivy-preview.el       # Ivy file preview
 │   ├── ipc-udp.el           # UDP IPC utilities
@@ -140,7 +141,6 @@ This configuration provides a feature-rich development environment optimized for
 ├── agents/                  # LLM agent definitions
 │   └── gptel-opencode-agent.md
 ├── contexts/                # LLM context files (auto-loaded)
-│   ├── task-completion-rules.md
 │   └── general-rules.md
 └── skills/                  # Agent skills (symlink)
 ```
