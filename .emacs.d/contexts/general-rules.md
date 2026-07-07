@@ -6,4 +6,4 @@
 - Forbidden Path: /mnt/ (no read/write/modify is allowed for this path)
 
 ## Coding Standards
-- C++: Use C++20 conventions and features where applicable
+- C++: Use C++23 conventions and features where applicable
