@@ -24,14 +24,14 @@
   "Compile with mode specific commands."
   (interactive)
   (let ((command "make debug"))
-    (case major-mode
-      ('c++-mode
+    (cl-case major-mode
+      (c++-mode
        (if current-prefix-arg
            ;; do full check
            (setq command (concat (getenv "WS_ROOT") "/tools/bin/build_all -v -n test -M -O"))
          ;; just build code
          (setq command (concat (getenv "WS_ROOT") "/tools/bin/build -v -c Linux_x86_64"))))
-      ('ttcn-3-mode (setq command
+      (ttcn-3-mode (setq command
                           (concat (getenv "TTCN3_GGSN_ROOT_PATH") "/scripts/compile_ttcn.sh build" " && "
                                   (getenv "TTCN3_GGSN_ROOT_PATH") "/scripts/copy_ttcn3.sh"))))
     (compile command)))
