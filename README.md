@@ -139,6 +139,7 @@ This configuration provides a feature-rich development environment optimized for
 │   ├── ttcn3.el             # TTCN-3 major mode
 │   └── esc-mode.el          # ESC key handling
 ├── agents/                  # LLM agent definitions
+│   ├── gptel-telegram.md
 │   ├── gptel-opencode-subagent.md
 │   └── gptel-opencode-agent.md
 ├── contexts/                # LLM context files (auto-loaded)
