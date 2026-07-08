@@ -35,6 +35,9 @@
       :stream t
       :models '(qwen3:8b))))
 
+(with-eval-after-load 'gptel
+  (define-key gptel-mode-map (kbd "C-c k") #'gptel-abort))
+
 ;; ============================================================================
 ;; Additional Packages
 ;; ============================================================================
