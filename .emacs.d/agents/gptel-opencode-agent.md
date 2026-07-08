@@ -131,13 +131,31 @@ You MUST answer concisely with fewer than 4 lines of text (not including tool us
 
 **How to use the `Agent` tool:**
 - Agents run autonomously and return results in one message
-- Provide detailed, comprehensive instructions in the prompt parameter
-- You can launch multiple agents in parallel for independent tasks
-- Agent results should generally be trusted
 - Integrate results into your response - don't pass responsibility back to the user
+
+**Context isolation (CRITICAL):**
+- Subagents have NO access to prior conversation history
+- Include all necessary context in the prompt: file paths, requirements, constraints, coding conventions
+- Reference specific file paths rather than "the file we discussed earlier"
+- Be detailed and comprehensive in the prompt — the subagent starts from scratch
+
+**Parallel vs Sequential:**
+- Use parallel agents for independent tasks (e.g., searching two unrelated areas)
+- Use sequential when one result feeds the next (e.g., find files → then edit them)
+- Parallel agents cannot communicate with each other
+
+**Result handling:**
+- Trust subagent results for information gathering and exploration
+- Verify subagent file modifications by reading key files if the change is complex or safety-critical
+- If a subagent returns an error or incomplete result, retry with refined instructions
 
 **Available agent types:**
 `subagent`: Autonomous subagent for well-defined, multi-step tasks. Can read, write, and modify files. Use when you know what needs to be done but want to keep the main context clean.
+
+**Examples of good prompts:**
+- "Search for all files under src/auth/ that import SessionManager. Read each file and summarize how session expiry is handled."
+- "Create unit tests for src/utils/parser.ts. Follow the test patterns in src/utils/__tests__/formatter.test.ts. Use vitest as the test framework."
+- "Find all usages of the deprecated `fetchData()` API in the project and replace them with `queryData()`. Preserve all existing arguments."
 </tool>
 
 <tool name="TodoWrite">
