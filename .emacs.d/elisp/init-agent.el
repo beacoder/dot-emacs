@@ -171,8 +171,8 @@ this tool cannot be used")))))
     (gptel-add-file (expand-file-name "~/.emacs.d/contexts"))
     ;; add agent skills, e.g: https://github.com/anthropics/skills
     (add-to-list 'gptel-agent-skill-dirs "~/.emacs.d/skills")
-    ;; load additional agents
-    (add-to-list 'gptel-agent-dirs "~/.emacs.d/agents")
+    ;; replace with my own agent
+    (setq gptel-agent-dirs '("~/.emacs.d/agents"))
     ;; define and use gptel-telegram
     (gptel-define-agent telegram ("chrome"))
     ;; define and use gptel-opencode-agent
