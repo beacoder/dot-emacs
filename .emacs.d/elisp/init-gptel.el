@@ -24,6 +24,7 @@
           ;; free 2000 request per-day, each model 500
           (gptel-make-openai "Free"
             :host "api-inference.modelscope.cn"
+            ;; set stream to nil when using zai-org/GLM-5.2
             :stream t
             :key ""
             :models '(Qwen/Qwen2.5-32B-Instruct
