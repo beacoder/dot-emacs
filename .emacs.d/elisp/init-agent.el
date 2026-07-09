@@ -40,7 +40,7 @@
             ',func-name
             (lambda (sym val) (set (make-local-variable sym) val)))
            (unless gptel-max-tokens
-             (setq gptel-max-tokens 8192)))))))
+             (setq gptel-max-tokens 16384)))))))
 
 (defun gptel-agent--git-glob (pattern &optional path depth)
   (when (string-empty-p pattern)
