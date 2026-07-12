@@ -180,7 +180,6 @@ this tool cannot be used")))))
     (defalias 'gptel-agent 'gptel-opencode-agent)
     ;; suppress gptel warning
     (add-to-list 'warning-suppress-types '(gptel))
-    ;; improve gptel agent loop resilience
     (require 'gptel-agent-harness)
     (gptel-agent-harness-mode 1)
     ;; add task-completion-rules into llm context
