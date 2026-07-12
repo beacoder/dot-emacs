@@ -181,14 +181,14 @@ this tool cannot be used")))))
     ;; suppress gptel warning
     (add-to-list 'warning-suppress-types '(gptel))
     ;; improve gptel agent loop resilience
-    (require 'gptel-agent-loop)
-    (gptel-agent-loop-mode 1)
+    (require 'gptel-agent-harness)
+    (gptel-agent-harness-mode 1)
     ;; add task-completion-rules into llm context
     (gptel-add-file
      (expand-file-name
       "task-completion-rules.md"
       (file-name-directory
-       (or (locate-library "gptel-agent-loop")
+       (or (locate-library "gptel-agent-harness")
            (error "gptel‑agent‑loop not found")))))))
 
 ;; ============================================================================
