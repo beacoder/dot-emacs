@@ -7,7 +7,7 @@
 ;; ============================================================================
 
 (defmacro gptel-define-agent (name mcp-servers)
-  "Define a gptel agent function named gptel-NAME connecting to MCP-SERVERS."
+  "Define a gptel agent function with gptel-name as NAME and connect it to MCP-SERVERS."
   (let ((func-name (intern (format "gptel-%s" name)))
         (agent-name (format "gptel-%s" name)))
     `(defun ,func-name (&optional project-dir)
@@ -38,9 +38,7 @@
              (apply #'gptel-make-preset ',func-name gptel-agent-plist))
            (gptel--apply-preset
             ',func-name
-            (lambda (sym val) (set (make-local-variable sym) val)))
-           (unless gptel-max-tokens
-             (setq gptel-max-tokens 16384)))))))
+            (lambda (sym val) (set (make-local-variable sym) val))))))))
 
 (defun gptel-agent--git-glob (pattern &optional path depth)
   (when (string-empty-p pattern)
