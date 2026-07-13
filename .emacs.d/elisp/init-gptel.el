@@ -17,24 +17,24 @@
   (progn
     (setq gptel-log-level 'info
           gptel-confirm-tool-calls nil
-          gptel-model 'deepseek-ai/DeepSeek-V3.2
+          gptel-model 'deepseek-v4-flash
           ;; Randomness in response text, 0 to 2
           gptel-temperature 0
           gptel-backend
-          ;; free 2000 request per-day, each model 500
-          (gptel-make-openai "Free"
-            :host "api-inference.modelscope.cn"
+          (gptel-make-deepseek "DeepSeek"
             ;; set stream to nil when using zai-org/GLM-5.2
             :stream t
-            :key ""
-            :models '(Qwen/Qwen2.5-32B-Instruct
-                      deepseek-ai/DeepSeek-V3.2)))
-    (gptel-make-deepseek "DeepSeek"
+            :key ""))
+    ;; free 2000 request per-day, each model 500
+    (gptel-make-openai "Free"
+      :host "api-inference.modelscope.cn"
       :stream t
-      :key "")
+      :key ""
+      :models '(deepseek-ai/DeepSeek-V3.2
+                ZhipuAI/GLM-5.2))
     (gptel-make-ollama "Ollama"
       :stream t
-      :models '(qwen3:8b))))
+      :models '(qwen2.5:7b))))
 
 (with-eval-after-load 'gptel
   (define-key gptel-mode-map (kbd "C-c k") #'gptel-abort))
