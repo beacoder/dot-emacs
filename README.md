@@ -1,4 +1,4 @@
-# dot-emacs
+# emacs.d
 
 A comprehensive Emacs 30.1 configuration focused on C++ development with AI-powered agentic coding and modern tooling.
 
