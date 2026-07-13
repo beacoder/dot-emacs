@@ -632,10 +632,11 @@
 
 
 ;;; move to the beginning/end of code
-(use-package mwim
-  :ensure t
-  :bind (([remap move-beginning-of-line] . mwim-beginning)
-         ([remap move-end-of-line] . mwim-end)))
+(when (>= emacs-major-version 30)
+  (use-package mwim
+    :ensure t
+    :bind (([remap move-beginning-of-line] . mwim-beginning)
+           ([remap move-end-of-line] . mwim-end))))
 
 
 ;;; use tools from mcp servers
