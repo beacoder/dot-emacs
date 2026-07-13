@@ -378,17 +378,14 @@
 ;; stock-tracker
 (when (maybe-require-package 'stock-tracker)
   (customize-set-variable 'stock-tracker-list-of-stocks
-                          '("0688516"
-                            "0601012"
-                            "0601058"
-                            "0603707"
-                            "0603131"
-                            "1002585"
-                            "0600905"
-                            "1002594"
-                            "1300014"
-                            "1300750"
-                            "0600563")))
+                          '("GOOG"
+                            "META"
+                            "NVDA"
+                            "AMZN"
+                            "AAPL"
+                            "TSLA"
+                            "MSFT"
+                            "SPCX")))
 
 
 ;; lua-mode
