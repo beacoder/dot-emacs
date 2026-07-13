@@ -26,13 +26,15 @@
 
 
 ;;; Directory structure
-(add-to-list 'load-path (expand-file-name "./elisp"))
-(add-to-list 'load-path (expand-file-name "./site-lisp"))
+(add-to-list 'load-path (expand-file-name "~/.emacs.d/elisp"))
+(add-to-list 'load-path (expand-file-name "~/.emacs.d/site-lisp"))
 (when (<= emacs-major-version 21)
-  (add-to-list 'load-path (expand-file-name "./emacs-21")))
+  (add-to-list 'load-path (expand-file-name "~/.emacs.d/emacs-21")))
 (require 'init-utils)
 ;; Machinery for installing required packages
-(when (is-modern-emacs) (require 'init-elpa))
+(when (is-modern-emacs)
+  (require 'init-elpa)
+  (require 'init-3rd-party))
 
 ;;----------------------------------------------------------------------------
 ;; create tags
@@ -111,7 +113,6 @@
   (require 'missing)
   (require 'syntax))
 (when (is-modern-emacs)
-  (require 'init-3rd-party)
   (require 'init-windows)
   (require 'init-nxml)
   (require 'init-css)
