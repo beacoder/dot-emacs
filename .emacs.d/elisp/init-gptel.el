@@ -165,7 +165,7 @@ If PROMPT is:
 (gptel-make-preset 'gptel-qa
   :description "A preset optimized for general QA tasks"
   :backend "Free"
-  :model 'deepseek-ai/DeepSeek-V3.2
+  :model gptel-model
   :stream t
   :system my-gptel--default-prompt
   :tools nil
