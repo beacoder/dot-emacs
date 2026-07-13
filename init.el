@@ -33,8 +33,12 @@
 (require 'init-utils)
 ;; Machinery for installing required packages
 (when (is-modern-emacs)
-  (require 'init-elpa)
-  (require 'init-3rd-party))
+  (condition-case err
+      (progn
+        (require 'init-elpa)
+        (require 'init-3rd-party))
+    (file-missing
+     (message "Warning: Failed to load packages: %s" (error-message-string err)))))
 
 ;;----------------------------------------------------------------------------
 ;; create tags
