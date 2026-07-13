@@ -624,6 +624,7 @@
 ;;; replacement for replace-regexp
 (use-package visual-regexp
   :ensure t
+  :if (>= emacs-major-version 30)
   :config
   (define-key global-map (kbd "C-c r") 'vr/replace)
   (define-key global-map (kbd "C-c q") 'vr/query-replace)
@@ -632,16 +633,17 @@
 
 
 ;;; move to the beginning/end of code
-(when (>= emacs-major-version 30)
-  (use-package mwim
-    :ensure t
-    :bind (([remap move-beginning-of-line] . mwim-beginning)
-           ([remap move-end-of-line] . mwim-end))))
+(use-package mwim
+  :ensure t
+  :if (>= emacs-major-version 30)
+  :bind (([remap move-beginning-of-line] . mwim-beginning)
+         ([remap move-end-of-line] . mwim-end)))
 
 
 ;;; use tools from mcp servers
 (use-package mcp
   :ensure t
+  :if (>= emacs-major-version 30)
   :after gptel
   :custom (mcp-hub-servers
            '(;;; weather mcp sample
