@@ -31,6 +31,9 @@ jobs:
 
     - uses: actions/checkout@v7
     - name: Setup emacs.d structure
-      run: mkdir -p elisp site-lisp emacs-21
+      run: |
+        mkdir -p elisp site-lisp emacs-21
+        # Clean up any stale compiled files
+        find . -name "*.elc" -delete
     - name: Check startup
       run: ./test-startup.sh
