@@ -294,10 +294,12 @@
 
 ;; Docker
 (when (maybe-require-package 'docker)
-  (use-package docker
-    :bind ("C-c d" . docker)
-    :init (setq docker-image-run-arguments '("-i" "-t" "--rm")
-                docker-container-shell-file-name "/bin/bash")))
+  (condition-case err
+    (use-package docker
+      :bind ("C-c d" . docker)
+      :init (setq docker-image-run-arguments '("-i" "-t" "--rm")
+                  docker-container-shell-file-name "/bin/bash"))
+    (error (message "Failed to load docker package: %S" err))))
 
 
 ;; PDF reader
