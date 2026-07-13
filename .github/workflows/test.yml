@@ -30,5 +30,7 @@ jobs:
         version: ${{ matrix.emacs_version }}
 
     - uses: actions/checkout@v7
+    - name: Setup emacs.d structure
+      run: mkdir -p elisp site-lisp emacs-21
     - name: Check startup
       run: ./test-startup.sh
