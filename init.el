@@ -26,8 +26,8 @@
 
 
 ;;; Directory structure
-(add-to-list 'load-path (expand-file-name "elisp" user-emacs-directory))
 (add-to-list 'load-path (expand-file-name "site-lisp" user-emacs-directory))
+(add-to-list 'load-path (expand-file-name "elisp" user-emacs-directory))
 (when (<= emacs-major-version 21)
   (add-to-list 'load-path (expand-file-name "emacs-21" user-emacs-directory)))
 (require 'init-utils)
