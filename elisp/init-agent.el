@@ -49,21 +49,25 @@
     (setq path "."))
   (unless (executable-find "tree")
     (error "Error: Executable `tree` not found.  This tool cannot be used"))
-  (let* ((full-path (expand-file-name path))
+  (let* ((full-path (directory-file-name (expand-file-name path)))
          (git-root
           (and (executable-find "git") (locate-dominating-file full-path ".git"))))
     (with-temp-buffer
       (if git-root
           ;; --- Git Strategy ---
           (let* ((default-directory git-root)
+                 (relative-dir (file-relative-name full-path git-root))
+                 (pathspec (if (string= relative-dir ".")
+                               pattern
+                             (concat relative-dir "/" pattern)))
                  (exit-code
-                  (apply #'call-process "git" nil t nil
+                  (call-process "git" nil t nil
                          "ls-files" "-z"
                          "--full-name"
                          "--cached"      ; Tracked files
                          "--others"      ; Untracked files
                          "--exclude-standard" ; Respect .gitignore
-                         (list (concat "*" pattern "*")))))
+                         "--" pathspec)))
             (if (/= exit-code 0)
                 (progn (goto-char (point-min))
                        (insert (format "Glob failed with exit code %d\n.STDOUT:\n\n"
@@ -72,9 +76,24 @@
               (goto-char (point-min))
               (while (search-forward "\0" nil t)
                 (replace-match "\n"))
-              ;; Prepend the path to make them absolute
+              ;; Filter by depth if specified
+              (when (natnump depth)
+                (let ((base-depth (if (string= relative-dir ".")
+                                      0
+                                    (1+ (cl-count ?/ relative-dir)))))
+                  (goto-char (point-min))
+                  (while (not (eobp))
+                    (if (and (not (looking-at-p "^$"))
+                             (>= (cl-count ?/ (buffer-substring
+                                              (line-beginning-position)
+                                              (line-end-position)))
+                                 (+ base-depth depth)))
+                        (delete-region (line-beginning-position)
+                                       (min (1+ (line-end-position)) (point-max)))
+                      (forward-line 1)))))
+              ;; Prepend git-root to make paths absolute
               (goto-char (point-min))
-              (let ((path-prefix (file-name-as-directory full-path)))
+              (let ((path-prefix (file-name-as-directory git-root)))
                 (while (not (eobp))
                   (unless (looking-at-p "^$") ; Skip empty lines
                     (insert path-prefix))
