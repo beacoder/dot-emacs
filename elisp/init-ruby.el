@@ -57,7 +57,7 @@
 (maybe-require-package 'goto-gem)
 
 
-(require-package 'bundler)
+(maybe-require-package 'bundler)
 
 
 (when (maybe-require-package 'yard-mode)
@@ -65,7 +65,7 @@
 
 
 ;;; ERB
-(require-package 'mmm-mode)
+(maybe-require-package 'mmm-mode)
 (defun sanityinc/ensure-mmm-erb-loaded ()
   (require 'mmm-erb))
 
