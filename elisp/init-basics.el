@@ -226,9 +226,7 @@ The argument has the same meaning as in `apropos'."
 ;; @see https://stackoverflow.com/questions/294664/how-to-set-the-font-size-in-emacs
 ;; set font size to 12 pt
 (when (display-graphic-p)
-  (set-face-attribute 'default nil
-                      :font "Bold"
-                      :height 120))
+  (set-face-attribute 'default nil :font "Bold" :height 120))
 
 ;; set minibuffer-prompt color
 (set-face-foreground 'minibuffer-prompt "pink")
