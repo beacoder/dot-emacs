@@ -147,7 +147,7 @@ this tool cannot be used")))))
                                     (format "-C%d" context-lines))
                                "--max-count=1000"
                                "--untracked"
-                               "-P" regex
+                               "-P" "-e" regex
                                "--")
                          pathspecs))))
                ((string= "rg" grepper)
