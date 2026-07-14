@@ -131,7 +131,7 @@ This configuration provides a feature-rich development environment optimized for
 │   ├── init-whitespace.el   # Whitespace handling
 │   └── init-benchmarking.el # Startup profiling
 ├── site-lisp/               # Custom/local packages
-│   ├── gptel-agent-loop.el  # Agent loop resilience
+│   ├── gptel-agent-harness.el  # Agent loop resilience
 │   ├── task-completion-rules.md
 │   ├── tempo-c-cpp.el       # C/C++ templates
 │   ├── ivy-preview.el       # Ivy file preview
@@ -199,8 +199,8 @@ Available models (configurable):
 
 ## Custom Packages
 
-### gptel-agent-loop.el
-Prevents gptel's agentic loop from stopping prematurely. Intercepts terminal FSM states (DONE/ERRS) and nudges the LLM to review the conversation and verify task completion before actually stopping. Resets after every successful tool call.
+### gptel-agent-harness.el
+gptel-agent-harness improves the reliability of gptel agent sessions by providing two execution supervisors: Completion supervision, Context supervision.
 
 ### tempo-c-cpp.el
 C/C++ code template system using Emacs tempo. Provides quick insertion of common patterns (class definitions, function stubs, include guards, etc.).
