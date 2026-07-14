@@ -186,7 +186,7 @@ this tool cannot be used")))))
       "task-completion-rules.md"
       (file-name-directory
        (or (locate-library "gptel-agent-harness")
-           (error "gptel‑agent‑loop not found")))))))
+           (error "gptel‑agent‑harness not found")))))))
 
 ;; ============================================================================
 ;; Provide the module
