@@ -168,7 +168,7 @@ this tool cannot be used")))))
                                 "--line-number" "--regexp" regex
                                 (file-local-name full-path))))))
              (exit-code (apply #'process-file grepper nil '(t t) nil args)))
-        (when (/= exit-code 0)
+        (when (>= exit-code 2)
           (goto-char (point-min))
           (insert (format "Error: search failed with exit-code %d.  Tool output:\n\n" exit-code)))
         (gptel-agent--truncate-buffer "grep")
