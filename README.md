@@ -11,7 +11,7 @@ This configuration provides a feature-rich development environment optimized for
 ### AI-Powered Development
 - **gptel**: LLM client connecting to an OpenAI-compatible backend with models like DeepSeek-V3.2, Qwen3-32B, GLM-5.2, Kimi-K2.6
 - **gptel-agent**: Full agentic coding with tool use (file read/write, grep, glob, shell execution)
-- **gptel-agent-loop**: Custom package to prevent agents from stopping prematurely — nudges the LLM to review task completion
+- **gptel-agent-harness**: Custom package to mproves the reliability of gptel agent
 - **gptel-cpp-complete**: AI-powered C/C++ completion using tree-sitter
 - **Agent presets**: `gptel-qa` for general Q&A, `gptel-agent` for agentic tasks with tools
 - **Context system**: `contexts/` directory with project rules automatically added to LLM context
@@ -131,7 +131,7 @@ This configuration provides a feature-rich development environment optimized for
 │   ├── init-whitespace.el   # Whitespace handling
 │   └── init-benchmarking.el # Startup profiling
 ├── site-lisp/               # Custom/local packages
-│   ├── gptel-agent-harness.el  # Agent loop resilience
+│   ├── gptel-agent-harness.el  # Agent harness
 │   ├── task-completion-rules.md
 │   ├── tempo-c-cpp.el       # C/C++ templates
 │   ├── ivy-preview.el       # Ivy file preview
