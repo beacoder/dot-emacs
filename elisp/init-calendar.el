@@ -48,9 +48,12 @@
   :commands calfw-open-calendar-buffer
   ;; :bind ("<C-f12>" . open-calendar)
   :init
-  (use-package calfw-org
-    :ensure t
-    :commands (calfw-org-open-calendar calfw-org-create-source))
+  ;; calfw-org has compatibility issues with org 9.8+ on Emacs < 30
+  ;; @see https://github.com/beacoder/emacs.d/issues/XXX
+  (when (>= emacs-major-version 30)
+    (use-package calfw-org
+      :ensure t
+      :commands (calfw-org-open-calendar calfw-org-create-source)))
 
   (use-package calfw-ical
     :ensure t
@@ -63,7 +66,7 @@
               (calfw-open-calendar-buffer
                :contents-sources
                (list
-                (when org-agenda-files
+                (when (and org-agenda-files (>= emacs-major-version 30))
                   (calfw-org-create-source "YellowGreen"))
                 (when (bound-and-true-p centaur-ical)
                   (calfw-ical-create-source "gcal" centaur-ical "IndianRed")))))
