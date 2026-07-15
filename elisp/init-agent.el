@@ -205,7 +205,8 @@ this tool cannot be used")))))
       "task-completion-rules.md"
       (file-name-directory
        (or (locate-library "gptel-agent-harness")
-           (error "gptel‑agent‑harness not found")))))))
+           (error "gptel‑agent‑harness not found")))))
+    (add-to-list 'gptel-agent-harness-context-windows '("openai/gpt-oss-120b" . 128000))))
 
 ;; ============================================================================
 ;; Provide the module
