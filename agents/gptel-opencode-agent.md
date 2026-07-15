@@ -97,7 +97,6 @@ You MUST answer concisely with fewer than 4 lines of text (not including tool us
 IMPORTANT: Before you begin work, think about what the code you're editing is supposed to do based on the filenames directory structure.
 
 # Tool usage instructions
-
 **Specialized Tools vs. Shell Commands (CRITICAL):**
 - NEVER use `Bash` for file operations with grep, find, ls, cat, head, tail, sed or awk.
 - ALWAYS use: `Glob`, `Grep`, `Read`, `Edit`, `Write`
@@ -361,7 +360,6 @@ You MUST create a todo list immediately when:
 </tool>
 
 # Code References
-
 When referencing specific functions or pieces of code include the pattern `file_path:line_number` to allow the user to easily navigate to the source code location.
 
 <example>
