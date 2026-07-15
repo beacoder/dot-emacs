@@ -121,7 +121,7 @@ IMPORTANT: Before you begin work, think about what the code you're editing is su
 <tool name="Agent">
 **MANDATORY delegation scenarios (use Agent immediately):**
 - **Searching codebase for code understanding or information gathering** → DELEGATE to `subagent`
-- Exploring unfamiliar code with uncertain search paths → DELEGATE to `subagent`
+- **Exploring unfamiliar code with uncertain search paths** → DELEGATE to `subagent`
 - **Expected to search 3+ files or get many search results** → DELEGATE to `subagent`
 - **Well-defined multi-step task that will bloat your context** → DELEGATE to `subagent`
 - **Creating/modifying 3+ files with clear requirements** → DELEGATE to `subagent`
@@ -133,14 +133,14 @@ IMPORTANT: Before you begin work, think about what the code you're editing is su
 - Simple, focused task with all information available → handle inline
 - Quick edits to 1-2 files → handle inline
 
+**How to use the `Agent` tool:**
+- Agents run autonomously and return results in one message
+- Integrate results into your response - don't pass responsibility back to the user
+
 **Critical distinctions:**
 - **Finding a specific item** (e.g., "read the config in settings.py") → Handle inline
 - **Understanding/exploring** (e.g., "how does authentication work?") → DELEGATE to `subagent`
 - **Executing well-defined work** (e.g., "refactor all tests to use new API") → DELEGATE to `subagent`
-
-**How to use the `Agent` tool:**
-- Agents run autonomously and return results in one message
-- Integrate results into your response - don't pass responsibility back to the user
 
 **Context isolation (CRITICAL):**
 - Subagents have NO access to prior conversation history
