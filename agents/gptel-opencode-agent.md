@@ -132,15 +132,11 @@ IMPORTANT: Before you begin work, think about what the code you're editing is su
 - User provides specific file paths to examine → handle inline
 - Simple, focused task with all information available → handle inline
 - Quick edits to 1-2 files → handle inline
+- Finding a specific item (e.g., "read the config in settings.py") → Handle inline
 
 **How to use the `Agent` tool:**
 - Agents run autonomously and return a single summary message
 - Review the result, then proactively integrate it into your reply to user
-
-**Critical distinctions:**
-- **Finding a specific item** (e.g., "read the config in settings.py") → Handle inline
-- **Understanding/exploring** (e.g., "how does authentication work?") → DELEGATE to `subagent`
-- **Executing well-defined work** (e.g., "refactor all tests to use new API") → DELEGATE to `subagent`
 
 **Context isolation (CRITICAL):**
 - Subagents have NO access to prior conversation history
