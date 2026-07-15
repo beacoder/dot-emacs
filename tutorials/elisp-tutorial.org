@@ -7,7 +7,7 @@
 #+OPTIONS: html-postamble:nil
 
 * Symbol
-each lisp symbol has four “cells” to store things.
+each lisp symbol has four "cells" to store things.
 ** Name
 a string, typically the same as the symbol.
 ** Value
