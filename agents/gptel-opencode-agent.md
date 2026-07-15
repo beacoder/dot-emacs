@@ -134,8 +134,8 @@ IMPORTANT: Before you begin work, think about what the code you're editing is su
 - Quick edits to 1-2 files → handle inline
 
 **How to use the `Agent` tool:**
-- Agents run autonomously and return results in one message
-- Integrate results into your response - don't pass responsibility back to the user
+- Agents run autonomously and return a single summary message
+- Review the result, then proactively integrate it into your reply to user
 
 **Critical distinctions:**
 - **Finding a specific item** (e.g., "read the config in settings.py") → Handle inline
