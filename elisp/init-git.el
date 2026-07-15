@@ -27,6 +27,7 @@
 ;; "C-x v t" => git timemachine
 (when (maybe-require-package 'magit)
   (setq-default magit-diff-refine-hunk 'all)
+  (setq-default magit-diff-visit-prefer-worktree t)
 
   (global-set-key (kbd "C-x g") #'magit-status)
   (global-set-key (kbd "C-x M-g") #'magit-dispatch)
@@ -48,13 +49,6 @@
 (with-eval-after-load 'magit
   (define-key magit-status-mode-map (kbd "C-M-<up>") #'magit-section-up)
   (add-hook 'magit-popup-mode-hook 'sanityinc/no-trailing-whitespace)
-
-  ;; change magit diff colors
-  ;; (set-face-foreground 'magit-diff-add "green3")
-  ;; (set-face-foreground 'magit-diff-del "red3")
-  ;; (when (not window-system)
-  ;;   (set-face-background 'magit-item-highlight "black"))
-
   (custom-set-faces
    '(magit-diff-added ((t (:background "black" :foreground "green3"))))
    '(magit-diff-removed ((t (:background "black" :foreground "red3"))))
@@ -64,12 +58,11 @@
 
 (maybe-require-package 'magit-todos)
 
+(add-hook 'git-commit-mode-hook 'goto-address-mode)
 
 (require-package 'fullframe)
 (with-eval-after-load 'magit
   (fullframe magit-status magit-mode-quit-window))
-
-(add-hook 'git-commit-mode-hook 'goto-address-mode)
 
 
 (when *is-a-mac*
