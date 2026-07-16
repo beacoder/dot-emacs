@@ -647,7 +647,7 @@
     :after gptel
     :custom (mcp-hub-servers
              '(;;; weather mcp sample
-               ;; ("weather" :command "python" :args ("/home/huming/workspace/ai/misc/mcp_weather_server.py"))
+               ;; ("weather" :command "python" :args ("https://github.com/beacoder/llm/blob/main/misc/mcp_weather_server.py"))
              ;;; chrome-devtools-mcp for controlling chrome with mcp
                ;; 1.install chrome (in WSL2):
                ;;   wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
