@@ -426,11 +426,11 @@ Use in `isearch-mode-end-hook'."
 
 
 ;;; config modeline format
-(display-time-mode t);; config time format
-(setq display-time-format "[%A %Y/%m/%d %H:%M Time-Zone:'%Z']"
-      display-time-interval 60
-      display-time-default-load-average nil
-      display-time-mail-face 'custom-themed)
+(display-time-mode t)
+(setq display-time-format "[%a %y/%m/%d %H:%M %Z]"
+      display-time-interval 5
+      display-time-default-load-average 0
+      display-time-mail-face nil)
 
 
 ;;; auto-save settings
