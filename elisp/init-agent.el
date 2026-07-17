@@ -40,149 +40,11 @@
             ',func-name
             (lambda (sym val) (set (make-local-variable sym) val))))))))
 
-(defun gptel-agent--git-glob (pattern &optional path depth)
-  (when (string-empty-p pattern)
-    (error "Error: pattern must not be empty"))
-  (if path
-      (unless (and (file-readable-p path) (file-directory-p path))
-        (error "Error: path %s is not readable" path))
-    (setq path "."))
-  (unless (executable-find "tree")
-    (error "Error: Executable `tree` not found.  This tool cannot be used"))
-  (let* ((full-path (directory-file-name (expand-file-name path)))
-         (git-root
-          (and (executable-find "git") (locate-dominating-file full-path ".git"))))
-    (with-temp-buffer
-      (if git-root
-          ;; --- Git Strategy ---
-          (let* ((default-directory git-root)
-                 (relative-dir (file-relative-name full-path git-root))
-                 (pathspec (if (string= relative-dir ".")
-                               pattern
-                             (concat relative-dir "/" pattern)))
-                 (exit-code
-                  (call-process "git" nil t nil
-                         "ls-files" "-z"
-                         "--full-name"
-                         "--cached"      ; Tracked files
-                         "--others"      ; Untracked files
-                         "--exclude-standard" ; Respect .gitignore
-                         "--" pathspec)))
-            (if (/= exit-code 0)
-                (progn (goto-char (point-min))
-                       (insert (format "Glob failed with exit code %d\n.STDOUT:\n\n"
-                                       exit-code)))
-              ;; Convert null-terminated strings to newline-separated full paths
-              (goto-char (point-min))
-              (while (search-forward "\0" nil t)
-                (replace-match "\n"))
-              ;; Filter by depth if specified
-              (when (natnump depth)
-                (let ((base-depth (if (string= relative-dir ".")
-                                      0
-                                    (1+ (cl-count ?/ relative-dir)))))
-                  (goto-char (point-min))
-                  (while (not (eobp))
-                    (if (and (not (looking-at-p "^$"))
-                             (>= (cl-count ?/ (buffer-substring
-                                              (line-beginning-position)
-                                              (line-end-position)))
-                                 (+ base-depth depth)))
-                        (delete-region (line-beginning-position)
-                                       (min (1+ (line-end-position)) (point-max)))
-                      (forward-line 1)))))
-              ;; Prepend git-root to make paths absolute
-              (goto-char (point-min))
-              (let ((path-prefix (file-name-as-directory git-root)))
-                (while (not (eobp))
-                  (unless (looking-at-p "^$") ; Skip empty lines
-                    (insert path-prefix))
-                  (forward-line 1)))))
-        ;; --- Tree Strategy (Fallback) ---
-        (let* ((args (list "-l" "-f" "-i" "-I" ".git"
-                           "--sort=mtime" "--ignore-case"
-                           "--prune" "-P" pattern full-path))
-               (args (if (natnump depth)
-                         (nconc args (list "-L" (number-to-string depth)))
-                       args))
-               (exit-code (apply #'call-process "tree" nil t nil args)))
-          (when (/= exit-code 0)
-            (goto-char (point-min))
-            (insert (format "Glob failed with exit code %d\n.STDOUT:\n\n"
-                            exit-code)))))
-      (gptel-agent--truncate-buffer "glob")
-      (buffer-string))))
-
-(defun gptel-agent--git-grep (regex path &optional glob context-lines)
-  (unless (file-readable-p path)
-    (error "Error: File or directory %s is not readable" path))
-  (let* ((full-path (expand-file-name (substitute-in-file-name path)))
-         ;; Explicitly set remote to save ourselves multiple file-remote-p
-         ;; checks inside `executable-find'
-         (remote (file-remote-p default-directory))
-         (git-root (and (executable-find "git" remote)
-                        (locate-dominating-file full-path ".git")))
-         (grepper (cond
-                   (git-root "git")
-                   ((executable-find "rg" remote) "rg")
-                   ((executable-find "grep" remote) "grep")
-                   (t (error "Error: ripgrep/grep/git-grep not available, \
-this tool cannot be used")))))
-    (with-temp-buffer
-      (let* ((default-directory (or git-root default-directory))
-             (args
-              (cond
-               ((string= "git" grepper)
-                (let* ((rel-path (file-relative-name full-path git-root))
-                       (pathspecs
-                        (list (if (and glob (file-directory-p full-path))
-                                  (file-name-concat rel-path glob)
-                                rel-path))))
-                  (delq nil
-                        (nconc
-                         (list "grep"
-                               "--line-number"
-                               "--no-color"
-                               (and (natnump context-lines)
-                                    (format "-C%d" context-lines))
-                               "--max-count=1000"
-                               "--untracked"
-                               "-P" "-e" regex
-                               "--")
-                         pathspecs))))
-               ((string= "rg" grepper)
-                (delq nil (list "--sort=modified"
-                                (and (natnump context-lines)
-                                     (format "--context=%d" context-lines))
-                                (and glob (format "--glob=%s" glob))
-                                ;; "--files-with-matches"
-                                "--max-count=1000"
-                                "--heading" "--line-number" "-e" regex
-                                (file-local-name full-path))))
-               ((string= "grep" grepper)
-                (delq nil (list "--recursive"
-                                (and (natnump context-lines)
-                                     (format "--context=%d" context-lines))
-                                (and glob (format "--include=%s" glob))
-                                "--max-count=1000"
-                                "--line-number" "--regexp" regex
-                                (file-local-name full-path))))))
-             (exit-code (apply #'process-file grepper nil '(t t) nil args)))
-        (when (>= exit-code 2)
-          (goto-char (point-min))
-          (insert (format "Error: search failed with exit-code %d.  Tool output:\n\n" exit-code)))
-        (gptel-agent--truncate-buffer "grep")
-        (buffer-string)))))
-
 (use-package gptel-agent
   :ensure t
   :config
   (progn
     (gptel-agent-update)
-    ;; use git-ls-files since it's much faster in git repo
-    (defalias 'gptel-agent--glob 'gptel-agent--git-glob)
-    ;; use git-grep since it's much faster in git repo
-    (defalias 'gptel-agent--grep 'gptel-agent--git-grep)
     ;; add project related information into llm context, e.g: coding guideline, etc.
     (require 'gptel-context)
     (gptel-add-file (expand-file-name "~/.emacs.d/contexts"))
@@ -194,7 +56,7 @@ this tool cannot be used")))))
     (gptel-define-agent telegram ("chrome"))
     ;; define and use gptel-opencode-agent
     (gptel-define-agent opencode-agent nil)
-    (defalias 'gptel-agent 'gptel-opencode-agent)
+    (fset 'gptel-agent #'gptel-opencode-agent)
     ;; suppress gptel warning
     (add-to-list 'warning-suppress-types '(gptel))
     (require 'gptel-agent-harness)
