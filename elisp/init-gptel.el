@@ -40,7 +40,35 @@
 ;; Additional Packages
 ;; ============================================================================
 
-(require 'init-agent)
+(use-package gptel-agent
+  :ensure t
+  :config
+  (progn
+    (gptel-agent-update)
+    ;; add project related information into llm context, e.g: coding guideline, etc.
+    (require 'gptel-context)
+    (gptel-add-file (expand-file-name "~/.emacs.d/contexts"))
+    ;; add agent skills, e.g: https://github.com/anthropics/skills
+    (add-to-list 'gptel-agent-skill-dirs "~/.emacs.d/skills")
+    ;; replace with my own agent
+    (setq gptel-agent-dirs '("~/.emacs.d/agents"))
+    ;; define and use gptel-telegram
+    (gptel-define-agent telegram ("chrome"))
+    ;; define and use gptel-opencode-agent
+    (gptel-define-agent opencode-agent nil)
+    (fset 'gptel-agent #'gptel-opencode-agent)
+    ;; suppress gptel warning
+    (add-to-list 'warning-suppress-types '(gptel))
+    (require 'gptel-agent-harness)
+    (gptel-agent-harness-mode 1)
+    ;; add task-completion-rules into llm context
+    (gptel-add-file
+     (expand-file-name
+      "task-completion-rules.md"
+      (file-name-directory
+       (or (locate-library "gptel-agent-harness")
+           (error "gptel‑agent‑harness not found")))))
+    (add-to-list 'gptel-agent-harness-context-windows '("openai/gpt-oss-120b" . 128000))))
 
 (use-package gptel-cpp-complete
   :ensure t
