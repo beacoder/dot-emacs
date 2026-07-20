@@ -54,15 +54,13 @@
       (file-name-directory
        (or (locate-library "gptel-agent-harness")
            (error "gptel‑agent‑harness not found")))))
-    ;; add agent skills, e.g: https://github.com/anthropics/skills
+    (add-to-list 'gptel-agent-dirs "~/.emacs.d/agents")
     (add-to-list 'gptel-agent-skill-dirs "~/.emacs.d/skills")
-    ;; suppress gptel warning
     (add-to-list 'warning-suppress-types '(gptel))
     (require 'gptel-agent-harness)
     (gptel-agent-harness-mode 1)
-    (gptel-agent-update)
-    ;; define and use gptel-telegram
     (gptel-agent-harness-extras--define-agent telegram ("chrome"))
+    (gptel-agent-update)
     (add-to-list 'gptel-agent-harness-context-windows '("openai/gpt-oss-120b" . 128000))))
 
 (use-package gptel-cpp-complete
