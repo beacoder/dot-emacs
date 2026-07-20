@@ -44,7 +44,6 @@
   :ensure t
   :config
   (progn
-    (gptel-agent-update)
     ;; add project related information into llm context, e.g: coding guideline, etc.
     (require 'gptel-context)
     (gptel-add-file (expand-file-name "~/.emacs.d/contexts"))
@@ -61,6 +60,7 @@
     (add-to-list 'warning-suppress-types '(gptel))
     (require 'gptel-agent-harness)
     (gptel-agent-harness-mode 1)
+    (gptel-agent-update)
     ;; define and use gptel-telegram
     (gptel-agent-harness-extras--define-agent telegram ("chrome"))
     (add-to-list 'gptel-agent-harness-context-windows '("openai/gpt-oss-120b" . 128000))))
