@@ -14,27 +14,33 @@
 (use-package gptel
   :ensure t
   :config
-  (progn
-    (setq gptel-log-level 'info
-          gptel-confirm-tool-calls nil
-          gptel-model 'deepseek-v4-flash
-          ;; Randomness in response text, 0 to 2
-          gptel-temperature 0
-          gptel-backend
-          (gptel-make-deepseek "DeepSeek"
-            ;; set stream to nil when using zai-org/GLM-5.2
-            :stream t
-            :key ""))
-    ;; free 2000 request per-day, each model 500
-    (gptel-make-openai "Free"
-      :host "api-inference.modelscope.cn"
-      :stream t
-      :key ""
-      :models '(deepseek-ai/DeepSeek-V3.2
-                ZhipuAI/GLM-5.2))
-    (gptel-make-ollama "Ollama"
-      :stream t
-      :models '(qwen2.5:7b))))
+  (setq gptel-log-level 'info
+        gptel-confirm-tool-calls nil
+        gptel-model 'deepseek-v4-flash
+        ;; Randomness in response text, 0 to 2
+        gptel-temperature 0
+        gptel-backend
+        (gptel-make-deepseek "DeepSeek"
+          ;; set stream to nil when using zai-org/GLM-5.2
+          :stream t
+          :key ""))
+  ;; free 2000 request per-day, each model 500
+  (gptel-make-openai "Free"
+    :host "api-inference.modelscope.cn"
+    :stream t
+    :key ""
+    :models '(deepseek-ai/DeepSeek-V3.2
+              ZhipuAI/GLM-5.2))
+  ;; moonshot models require gptel-temperature=1
+  (gptel-make-openai "Moonshot"
+    :host "api.moonshot.cn"
+    :stream t
+    :key ""
+    :models '(kimi-k2.6
+              kimi-k2.7-code))
+  (gptel-make-ollama "Ollama"
+    :stream t
+    :models '(qwen2.5:7b)))
 
 ;; ============================================================================
 ;; Additional Packages
