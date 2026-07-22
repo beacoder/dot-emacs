@@ -56,7 +56,7 @@
     ;; add task-completion-rules into llm context
     (gptel-add-file
      (expand-file-name
-      "task-completion-rules.md"
+      "rules/task-completion-rules.md"
       (file-name-directory
        (or (locate-library "gptel-agent-harness")
            (error "gptel‑agent‑harness not found")))))
