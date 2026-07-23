@@ -38,6 +38,13 @@
     :key ""
     :models '(kimi-k2.6
               kimi-k2.7-code))
+  (gptel-make-openai "Z.AI"
+    :host "open.bigmodel.cn"
+    :endpoint "/api/paas/v4/chat/completions"
+    :stream t
+    :key ""
+    :models '(glm-5.2
+              glm-5.1))
   (gptel-make-ollama "Ollama"
     :stream t
     :models '(qwen2.5:7b)))
